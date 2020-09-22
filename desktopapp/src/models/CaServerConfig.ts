@@ -1,6 +1,13 @@
 import fs from 'fs';
 import YAML from 'yaml';
-class CaServerConfig {
+import YamlConfig from './YamlConfig'
+class CaServerConfig implements YamlConfig{
+   fileName:string;
+   defaultOutputPath:string; 
+   constructor(){
+     this.fileName ="fabric-ca-server-config.yaml";
+   }
+
 //  version : string
 //  port : number 
 //  cors : {
@@ -23,7 +30,7 @@ class CaServerConfig {
   //console.log(fs);
 
   const file = fs.readFileSync('./src/models/fabric-ca-server-config.yaml', 'utf8');
-  console.log(file);
+  console.log(file)
   YAML.parse(file);
   }
   
