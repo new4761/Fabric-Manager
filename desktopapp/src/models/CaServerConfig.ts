@@ -23,9 +23,10 @@ class CaServerConfig implements YamlConfig{
    createFile() {
      
    }
-   saveFile(){
+   saveFile(outputPath = this.defaultOutputPath){
 
    }
+
    editFile(filePath:string,inputFileData:object)  {
      
    }

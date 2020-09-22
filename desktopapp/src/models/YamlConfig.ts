@@ -1,4 +1,4 @@
-//version 0.1.6  
+//version 0.1.7  
 // interface for make all config.yaml file in hyperledger 
 
 
@@ -17,11 +17,9 @@ interface YamlConfig {
   // user process) 
   createFile:() =>void;
   // save function to config dir  with input pa
-  // (optional)
+  // use default parameter trick
   // if Config need to realative path use this
-  saveFile?:(outputPath: string) => void;
-  // save function overload with out user input file path (use default file path)
-  saveFile:()=> void;
+  saveFile:(outputPath = this.defaultOutputPath ) => void;
   // edit file  for make new config
   // parameter string = url+filename to edit , object = new input to config
   editFile:(filePath: string,inputFileData: object) => void;
