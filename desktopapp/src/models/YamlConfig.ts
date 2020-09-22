@@ -1,4 +1,4 @@
-//version 0.1.2  
+//version 0.1.6  
 // interface for make all config.yaml file in hyperledger 
 
 
@@ -9,9 +9,13 @@ interface YamlConfig {
   fileName:string;
   // default output path 
   defaultOutputPath:string
-  // make all yaml process in this function and call save() 
-  // parameter is object of data file
-  createFile:(dataFile: object) =>void;
+  // afther this write self class vairables
+ 
+
+
+  // make all yaml process in this function and call save() (not call here we will call on 
+  // user process) 
+  createFile:() =>void;
   // save function to config dir  with input pa
   // (optional)
   // if Config need to realative path use this
@@ -20,7 +24,7 @@ interface YamlConfig {
   saveFile:()=> void;
   // edit file  for make new config
   // parameter string = url+filename to edit , object = new input to config
-  editFile:(filePath: string,dataFile: object) => void;
+  editFile:(filePath: string,inputFileData: object) => void;
   //update networkConfig pass NewData to main project config
   //don't do anything on this function right now we will deal with it later
   updateNetworkConfig:() => void ;
