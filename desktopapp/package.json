@@ -14,10 +14,12 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "file-system": "^2.2.2",
     "primeicons": "^4.0.0",
     "primevue": "^2.0.9",
-    "vue": "^3.0.0-0",
-    "vue-class-component": "^8.0.0-0"
+    "vue": "^3.0.0",
+    "vue-class-component": "^8.0.0-beta.3",
+    "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
