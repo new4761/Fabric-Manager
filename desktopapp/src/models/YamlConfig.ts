@@ -21,3 +21,4 @@ interface YamlConfig {
 
 
 }
+export default YamlConfig; 
