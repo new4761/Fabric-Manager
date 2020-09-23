@@ -1,4 +1,4 @@
-// version 0.1.5
+// version 0.2.1
 // Class for create Config.yaml for Ca Sererver Config
 // type of ca = root TLS | CA / intermediate CA
 import fs from 'fs';
@@ -17,7 +17,9 @@ class CaServerConfig implements YamlConfig{
    crlsizelimit:number = 512000;
    crl={
       expiry:"24h"
-      }
+      };
+   csr:CrossOriginConfig = new CrossOriginConfig();
+   tls:TlsSettingConfig = new TlsSettingConfig();
    //****************************************   
    //YamlConfig defalut Function
    constructor(){
@@ -42,14 +44,16 @@ class CaServerConfig implements YamlConfig{
 
   
   myReadFile  ()  {
-  //console.log(YAML);
   //console.log(fs);
 
-  const file = fs.readFileSync('./src/models/fabric-ca-server-config.yaml', 'utf8');
-  console.log(file)
-  YAML.parse(file);
-  }
+   //const file = fs.readFileSync('./src/models/fabric-ca-server-config.yaml', 'utf8');
+   let src =YAML.stringify(new CaServerConfig());
+   src += "## this is test comment";
+
+   fs.writeFileSync('newfile.yaml',src,'utf-8');
+
   
+   }
 }
 class CrossOriginConfig {
   enable:boolean = true;
