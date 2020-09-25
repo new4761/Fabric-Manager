@@ -30,15 +30,16 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-@Options({
-  props: {
-    msg: String
+
+@Component({
+  components: {
   }
 })
 export default class HelloWorld extends Vue {
-  msg!: string
+
 }
 </script>
 

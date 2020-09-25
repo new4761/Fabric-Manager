@@ -1,21 +1,21 @@
 <template>
   <div>
-  <button @click="testFunnction()">sadsasd</button>
+  <Button label="Submit" icon="pi pi-check" iconPos="right" @click="testFunnction()"/>
   </div>
 </template>
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import HelloWorld from './components/HelloWorld.vue';
-import  CaServerConfig  from './models/CaServerConfig';
+import CaServerConfig  from './models/CaServerConfig';
 
-
-
-@Options({
+@Component({
   components: {
-    HelloWorld,
-  },
+    HelloWorld
+  }
 })
 export default class App extends Vue {
+
   testFunnction() {
   //console.log("called"); 
   CaServerConfig.myReadFile();

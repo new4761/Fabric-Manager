@@ -1,4 +1,3 @@
-// version 0.2.1
 // Class for create Config.yaml for Ca Sererver Config
 // type of ca = root TLS | CA / intermediate CA
 import fs from 'fs';
@@ -20,11 +19,14 @@ class CaServerConfig implements YamlConfig{
       };
    csr:CrossOriginConfig = new CrossOriginConfig();
    tls:TlsSettingConfig = new TlsSettingConfig();
-   //****************************************   
+   // ****************************************   
    //YamlConfig defalut Function
    constructor(){
     this.fileName ="fabric-ca-server-config.yaml";
     this.defaultOutputPath = "";
+   }
+   getUserInput(userInput:CaServerConfig){
+      console.log(userInput);
    }
    createFile() {
      
@@ -39,7 +41,7 @@ class CaServerConfig implements YamlConfig{
    updateNetworkConfig(){
 
    }
-   //*********************************************
+   // *********************************************
    // Self function
 
   
@@ -107,7 +109,7 @@ class Identities {
       }
 }
 class DatabasConfig {
-   type:string="sqlite3"
+   type:string="sqlite3" // mysql || postgesql wait enum
    datasource:string ="fabric-ca-server.db"
    tls= {
        enabled:false,
