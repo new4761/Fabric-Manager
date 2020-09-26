@@ -18,7 +18,7 @@ interface YamlConfig {
   // save function to config dir  with input pa
   // use default parameter trick
   // if Config need to realative path use this
-  saveFile:(outputPath : string) => void;
+  saveFile:(outputPath : string,inputFileData: string) => void;
   // edit file  for make new config
   // parameter string = url+filename to edit , object = new input to config
   editFile:(filePath: string,inputFileData: object) => void;

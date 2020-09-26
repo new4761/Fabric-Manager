@@ -6,12 +6,19 @@ crl:
   expiry: 24h
 csr: {}
 tls:
-  enable: false
+  enabled: false
   certfile: ca-cert.pem
   keyfile: ca-key.pem
   clientauth:
     type: noclientcert
     certfiles: {}
+affiliations:
+  businessunit1:
+    department1:
+      - team1
+  businessunit2:
+    - department2
+    - department3
 fileName: fabric-ca-server-config.yaml
-defaultOutputPath: ''
+defaultOutputPath: ./test
 ## this is test comment

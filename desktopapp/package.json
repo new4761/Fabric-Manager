@@ -15,12 +15,12 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "file-system": "^2.2.2",
+    "js-yaml": "^3.14.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.0.0",
     "primevue": "^2.0.9",
     "vue": "^2.6.12",
-    "vue-class-component": "^7.2.6",
-    "yaml": "^1.10.0"
+    "vue-class-component": "^7.2.6"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
