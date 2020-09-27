@@ -1,18 +1,28 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div>
+  <Button label="Submit" icon="pi pi-check" iconPos="right" @click="testFunnction()"/>
+  </div>
 </template>
-
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import HelloWorld from './components/HelloWorld.vue';
+import CaServerConfig  from './models/CaServerConfig';
 
-@Options({
+@Component({
   components: {
-    HelloWorld,
-  },
+    HelloWorld
+  }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+
+  testFunnction() {
+  //console.log("called"); 
+  CaServerConfig.createFile();
+    
+  }
+
+}
 </script>
 
 <style>

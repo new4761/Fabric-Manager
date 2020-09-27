@@ -1,0 +1,17 @@
+version: 1.4.7
+port: 7052
+debug: true
+crlsizelimit: 512000
+crl:
+  expiry: 24h
+csr: {}
+tls:
+  enable: false
+  certfile: ca-cert.pem
+  keyfile: ca-key.pem
+  clientauth:
+    type: noclientcert
+    certfiles: {}
+fileName: fabric-ca-server-config.yaml
+defaultOutputPath: ''
+## this is test comment
