@@ -1,18 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div>
+    <Button
+      label="Submit"
+      icon="pi pi-check"
+      iconPos="right"
+      @click="testFunnction()"
+    />
+
+    <ScrollPanel style="width: 100%; height: 200px">
+      {{ output }}
+    </ScrollPanel>
+  </div>
 </template>
-
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from './components/HelloWorld.vue';
+import Vue from "vue";
+import Component from "vue-class-component";
+import HelloWorld from "./components/HelloWorld.vue";
+import OrdererConfig from "./models/OrdererConfig";
 
-@Options({
+@Component({
   components: {
     HelloWorld,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  output: string = "";
+  testFunnction() {
+    console.log("called");
+    this.output = OrdererConfig.createFile();
+    OrdererConfig.saveFile(undefined, this.output);
+  }
+}
 </script>
 
 <style>
