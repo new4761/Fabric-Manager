@@ -5,7 +5,7 @@ import fs from 'fs';
 const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig'
 class CaServerConfig implements YamlConfig {
-   //************************************************* 
+   //*************************************************
    // variables for export file
    fileName: string;
    defaultOutputPath: string;
@@ -44,7 +44,7 @@ class CaServerConfig implements YamlConfig {
    cfg: CFG = new CFG();
    operations: Operations = new Operations();
    metrics: Metrics = new Metrics();
-   // ****************************************   
+   // ****************************************
    //YamlConfig defalut Function
    constructor() {
       this.fileName = "fabric-ca-server-config.yaml";
