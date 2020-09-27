@@ -18,8 +18,12 @@ class CaServerConfig implements YamlConfig {
    crl = {
       expiry: "24h"
    };
-   csr: CrossOriginConfig = new CrossOriginConfig();
+   cors: CrossOriginConfig = new CrossOriginConfig();
    tls: TlsSettingConfig = new TlsSettingConfig();
+   ca: CertificatesConfig = new CertificatesConfig();
+   registry: RegistryConfig = new RegistryConfig();
+   db: DatabaseConfig = new DatabaseConfig();
+   ldap: LDAPConfig = new LDAPConfig();
    affiliations: Affiliations = {
       "businessunit1":
       {
@@ -30,8 +34,16 @@ class CaServerConfig implements YamlConfig {
             "department3"
          ]
    }
-   cacount: null;
-   cafiles: null;
+   signing: SigningConfig = new SigningConfig();
+   csr: CSRConfig = new CSRConfig();
+   idemix: IdemixConifg = new IdemixConfig();
+   bccsp: BCCSPConfig = new BCCSPConfig();
+   intermediate: IntermediateCA = new IntermediateCA();
+   cacount = null;
+   cafiles = null;
+   cfg: CFG = new CFG();
+   operations: Operations = new Operations();
+   metrics: Metrics = new Metrics();
    // ****************************************   
    //YamlConfig defalut Function
    constructor() {
@@ -42,6 +54,53 @@ class CaServerConfig implements YamlConfig {
       console.log(userInput);
    }
    createFile() {
+      let src = "# This file is Generate from YamlClass used to configuration file for the fabric-ca-server command.\n";
+      src += "# Base on fabric-ca-server-config.yaml version:" + this.version + "\n \n";
+      src += "################################################################### \n"
+      src += "\n # Version of config file \n"
+      src += yaml.dump({ "version": this.version });
+      src += "\n # Server's listening port \n";
+      src += yaml.dump({ 'port': this.port });
+      src += this.cors.getComment();
+      src += yaml.dump({ "cors": this.cors });
+      src += "\n # Enables debug logging  \n"
+      src += yaml.dump({ 'debug': this.debug });
+      src += "\n # Size limit of an acceptable CRL in bytes \n"
+      src += yaml.dump({ "crlsizelimit": this.crlsizelimit });
+      src += this.tls.getComment();
+      src += yaml.dump({ "tls": this.tls });
+      src += this.ca.getComment();
+      src += yaml.dump({ "ca": this.ca });
+      src += "\n #  The gencrl REST endpoint configuration options \n";
+      src += yaml.dump({ "crl": this.crl });
+      src += this.registry.getComment();
+      src += yaml.dump({ "registry": this.registry });
+      src += this.db.getComment();
+      src += yaml.dump({ "db": this.db });
+      src += this.ldap.getComment();
+      src += yaml.dump({ "ldap": this.ldap });
+      src += "\n # Affiliations specified in this section are specified as maps.\n";
+      src += yaml.dump({ "affilations": this.affiliations });
+      src += this.signing.getComment();
+      src += yaml.dump({ "signing": this.signing })
+      src += this.csr.getComment();
+      src += yaml.dump({ "csr": this.csr });
+      src += this.idemix.getComment();
+      src += yaml.dump({ "idemix": this.idemix });
+      src += this.bccsp.getComment();
+      src += yaml.dump({ "bccsp": this.bccsp });
+      src += "\n # Multi CA section \n";
+      src += yaml.dump({ "cacount": this.cacount });
+      src += yaml.dump({ "cafiles": this.cafiles });
+      src += this.intermediate.getComment();
+      src += yaml.dump({ "intermediate": this.intermediate });
+      src += this.cfg.getComment();
+      src += yaml.dump({ "cfg": this.cfg });
+      src += this.operations.getComment();
+      src += yaml.dump({ "operations": this.operations });
+      src += this.metrics.getComment();
+      src += yaml.dump({ "metrics": this.metrics })
+      this.saveFile(undefined, src);
 
    }
    saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
@@ -63,22 +122,20 @@ class CaServerConfig implements YamlConfig {
    // *********************************************
    // Self function
 
+}
+interface ConfigData {
+   getComment: () => string;
+}
+class CrossOriginConfig implements ConfigData {
+   enabled: boolean = false;
+   origins: string[] = ["*"];
+   getComment() {
+      let comment = "\n # Cross-Origin Resource Sharing (CORS) \n"
+      return comment;
 
-   myReadFile() {
-      //console.log(fs);
-
-      //const file = fs.readFileSync('./src/models/fabric-ca-server-config.yaml', 'utf8');
-      let src = yaml.dump(new CaServerConfig());
-      src += "## this is test comment";
-      this.saveFile(undefined, src);
    }
-
 }
-class CrossOriginConfig {
-
-
-}
-class TlsSettingConfig {
+class TlsSettingConfig implements ConfigData {
    enabled: boolean = false;
    //if root TLS ca should blank
    certfile: string = "ca-cert.pem";
@@ -87,50 +144,71 @@ class TlsSettingConfig {
       type: "noclientcert",
       certfiles: {}
    };
+   getComment() {
+      let comment = "\n # TLS section for the server's listening port \n"
+      return comment;
+   }
 }
-class CertificatesConfig {
-   name: string;
+class CertificatesConfig implements ConfigData {
+   name: string | null = null;
    keyfile: string = "ca-key.pem";
    certfile: string = "ca-cert.pem";
    chainfile: string = "ca-chain.pem";
-   constructor(org_name: string) {
-      this.name = org_name;
+   getComment() {
+      let comment = "\n #  The CA section contains information related to the Certificate Authority \n"
+      return comment;
    }
+
 }
-class RegistryConfig {
+class RegistryConfig implements ConfigData {
    maxenrollments: number = -1;
-   identities: Identities[] = [];
+   identities: Identities[] = [
+      {
+         name: "admin",
+         pass: "adminpw",
+         type: "client",
+         affiliation: "",
+         attrs: {
+            "hf.Registrar.Roles": "*",
+            "hf.Registrar.DelegateRoles": "*",
+            "hf.Revoker": true,
+            "hf.IntermediateCA": true,
+            "hf.GenCRL": true,
+            "hf.Registrar.Attributes": "*",
+            "hf.AffiliationMgr": true
+         }
+      }
+   ];
+   getComment() {
+      let comment = "\n#  The registry section controls how the fabric-ca-server things \n"
+      return comment;
+   }
 }
 
 interface Attrs {
-   hf_Registrar_Roles: string,
-   hf_Registrar_DelegateRoles: string,
-   hf_Revoker: boolean,
-   hf_IntermediateCA: boolean,
-   hf_GenCRL: boolean,
-   hf_Registrar_Attributes: string,
-   hf_AffiliationMgr: boolean
+   "hf.Registrar.Roles": string,
+   "hf.Registrar.DelegateRoles": string,
+   "hf.Revoker": boolean,
+   "hf.IntermediateCA": boolean,
+   "hf.GenCRL": boolean,
+   "hf.Registrar.Attributes": string,
+   "hf.AffiliationMgr": boolean
 }
 
 class Identities {
    name: string;
    pass: string;
    type: string;
-   affiliation: string = "";
+   affiliation: string;
    attrs: Attrs;
-   constructor(name: string, pass: string, type: string, attrs: Attrs) {
-      this.name = name;
-      this.pass = pass;
-      this.type = type;
-      this.attrs = attrs;
-   }
 }
 enum dataBaseType {
    sqlite3 = "sqlite3",
    mysql = "mysql",
    postgres = "postgres"
 }
-class DatabasConfig {
+class DatabaseConfig implements ConfigData {
+
    type: dataBaseType = dataBaseType.sqlite3; // mysql || postgesql wait enum
    datasource: string = "fabric-ca-server.db";
    tls = {
@@ -142,30 +220,44 @@ class DatabasConfig {
       }
 
    }
+   getComment() {
+      let comment = "\n# Database section  Supported types are: 'sqlite3', 'postgres', and 'mysql'. \n"
+      return comment;
+   }
 }
-interface ldapValue {
-   name: string
-   value: string
+interface ldapConfigValue {
+   name: string | null,
+   value: string | null
 }
 interface groupValue {
-   [key: string]: ldapValue[];
+   [key: string]: ldapConfigValue[];
 }
-class LDAP {
+class LDAPConfig implements ConfigData {
    enabled: boolean = false;
-   url: string = "ldap://<adminDN>:<adminPassword>@<host>:<port>/<base>"
+   url: string = "ldap://<adminDN>:<adminPassword>@<host>:<port>/<base>";
    tls = {
-      certfiles: ["ladp-server-cert.pem"],
+      certfiles: ["ldap-server-cert.pem"],
       client: {
-         certfile: "ladp-client-cert.pem",
-         keyfile: "ladp-client-key.pem"
+         certfile: "ldap-client-cert.pem",
+         keyfile: "ldap-client-key.pem"
 
       }
    }
    attribute = {
       name: ['uid', 'member']
    }
-   converters: ldapValue[] = [{ name: null, value: null }]
-   maps: groupValue[] = {}
+   converters: ldapConfigValue[] = [{ name: null, value: null }]
+   maps: groupValue =
+      {
+         "groups": [{
+            name: null,
+            value: null
+         }]
+      }
+   getComment() {
+      let comment = "\n #  LDAPConfig section\n";
+      return comment;
+   }
 }
 interface Affiliations {
    [key: string]: object | string[];
@@ -184,7 +276,7 @@ interface SigningProfiles {
       }
    }
 }
-class Signing {
+class SigningConfig implements ConfigData {
    default: SigningDefault = {
       usage:
          ["digital signature"],
@@ -208,6 +300,10 @@ class Signing {
       expiry: "8760h"
 
    }
+   getComment() {
+      let commnet = "\n # Signing section is used to sign certificates \n"
+      return commnet;
+   }
 }
 interface CSRKey {
    algo: string,
@@ -224,7 +320,7 @@ interface CSRCa {
    expiry: string,
    pathlength: number
 }
-class CSR {
+class CSRConfig implements ConfigData {
    cn: string = "demoname";
    keyrequest: CSRKey = {
       algo: "ecdsa",
@@ -233,10 +329,10 @@ class CSR {
    names: CSRNames[] = [
       {
          C: "US",
-         ST: "\" North Carolina \"",
+         ST: "\"North Carolina\"",
          L: "\"demo\"",
          O: "Hyperledger",
-         OU: " Fabric"
+         OU: "Fabric"
       }
    ];
    host: string[] = ["localhost"];
@@ -244,11 +340,19 @@ class CSR {
       expiry: "131400h",
       pathlength: 1
    }
+   getComment() {
+      let comment = "\n #  Certificate Signing Request (CSR) section.\n";
+      return comment;
+   }
 }
-class Idemix {
+class IdemixConfig implements ConfigData {
    rhpoolsize: number = 1000;
    nonceexpiration: string = "15s";
-   noncesweepinterval: string = "15m"
+   noncesweepinterval: string = "15m";
+   getComment() {
+      let comment = "\n # Credential. This section specifies configuration for the issuer component \n";
+      return comment;
+   }
 }
 interface BccspSw {
    hash: string,
@@ -257,7 +361,7 @@ interface BccspSw {
       keystore: string
    }
 }
-class BCCSP {
+class BCCSPConfig implements ConfigData {
    default: string = "SW";
    sw: BccspSw = {
       hash: "SHA2",
@@ -265,6 +369,10 @@ class BCCSP {
       filekeystore: {
          keystore: "msp/keystore"
       }
+   }
+   getComment() {
+      let comment = "\n # BCCSP (BlockChain Crypto Service Provider) section is used to select which \n # crypto library implementation to use \n"
+      return comment;
    }
 
 }
@@ -277,7 +385,7 @@ interface IcaEnrollment {
    profile: string | null,
    label: string | null,
 }
-class IntermediateCA {
+class IntermediateCA implements ConfigData {
    parentserver: IcaParentServer = {
       url: null,
       caname: null
@@ -294,14 +402,22 @@ class IntermediateCA {
          keyfile: "ica-client-key.pem"
       }
    }
+   getComment() {
+      let comment = "\n # Intermediate CA section \n";
+      return comment;
+   }
 }
 interface CFGiden {
    passwordattempts: number
 }
-class CFG {
-   identities: CGiden = {
+class CFG implements ConfigData {
+   identities: CFGiden = {
       passwordattempts: 10
 
+   }
+   getComment() {
+      let comment = "\n # CA configuration section \n"
+      return comment;
    }
 }
 interface OperationTLS {
@@ -317,7 +433,7 @@ interface OperationTLS {
       files: string[]
    }
 }
-class Operations {
+class Operations implements ConfigData {
    listenAddress: string = "127.0.0.1:9443";
    tls: OperationTLS = {
       enabled: false,
@@ -332,7 +448,10 @@ class Operations {
          files: []
       }
    }
-
+   getComment() {
+      let comment = "\n # Operations section \n"
+      return comment;
+   }
 }
 interface MetricsStats {
    network: string,
@@ -340,13 +459,17 @@ interface MetricsStats {
    writeInterval: string,
    prefix: string
 }
-class Metrics {
+class Metrics implements ConfigData {
    provider: string = "disabled";
    statsd: MetricsStats = {
       network: "udp",
       address: "127.0.0.1:8125",
       writeInterval: "10s",
       prefix: "server"
+   }
+   getComment() {
+      let comment = "\n #    Metrics section \n";
+      return comment;
    }
 }
 

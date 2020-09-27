@@ -18,7 +18,7 @@ export default class App extends Vue {
 
   testFunnction() {
   //console.log("called"); 
-  CaServerConfig.myReadFile();
+  CaServerConfig.createFile();
     
   }
 
