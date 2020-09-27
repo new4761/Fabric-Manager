@@ -36,7 +36,7 @@ class CaServerConfig implements YamlConfig {
    }
    signing: SigningConfig = new SigningConfig();
    csr: CSRConfig = new CSRConfig();
-   idemix: IdemixConifg = new IdemixConfig();
+   idemix: IdemixConfig = new IdemixConfig();
    bccsp: BCCSPConfig = new BCCSPConfig();
    intermediate: IntermediateCA = new IntermediateCA();
    cacount = null;
