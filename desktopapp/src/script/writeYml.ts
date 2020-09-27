@@ -33,9 +33,9 @@ interface ordererYml {
       BootstrapFile: string|null,
       LocalMSPDir: string,
       LocalMSPID: string,
-      Profile: { 
-        Enabled: boolean, 
-        Address: string 
+      Profile: {
+        Enabled: boolean,
+        Address: string
       },
       BCCSP: {
         Default: string,
@@ -44,7 +44,7 @@ interface ordererYml {
           Security: number,
           FileKeyStore: string|null,
           KeyStore: string|null
-        }, 
+        },
         PKCS11: {
           Library: string|null,
           Label: string|null,
@@ -157,9 +157,9 @@ interface ordererYml {
           BootstrapFile: null,
           LocalMSPDir: 'msp',
           LocalMSPID: 'SampleOrg',
-          Profile: { 
-            Enabled: false, 
-            Address: '0.0.0.0:6060' 
+          Profile: {
+            Enabled: false,
+            Address: '0.0.0.0:6060'
           },
           BCCSP: {
             Default: 'SW',
@@ -168,7 +168,7 @@ interface ordererYml {
               Security: 256,
               FileKeyStore: null,
               KeyStore: null
-            }, 
+            },
             PKCS11: {
               Library: null,
               Label: null,
