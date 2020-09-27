@@ -1,4 +1,4 @@
-// interface for make all config.yaml file in hyperledger 
+// interface for make all config.yaml file in hyperledger
 
 
 interface YamlConfig {
@@ -6,14 +6,14 @@ interface YamlConfig {
   // file name for output file name eaxmple xxx.yaml
   // define is on constructor
   fileName:string;
-  // default output path 
+  // default output path
   defaultOutputPath:string
   // afther this write self class vairables
  
 
   getUserInput:(userInput:any) => void;
-  // make all yaml process in this function and call save() (not call here we will call on 
-  // user process) 
+  // make all yaml process in this function and call save() (not call here we will call on
+  // user process)
   createFile:() =>void;
   // save function to config dir  with input pa
   // use default parameter trick
@@ -28,4 +28,4 @@ interface YamlConfig {
 
 
 }
-export default YamlConfig; 
+export default YamlConfig;
