@@ -195,7 +195,7 @@ interface Attrs {
    "hf.AffiliationMgr": boolean
 }
 
-class Identities {
+interface Identities {
    name: string;
    pass: string;
    type: string;
