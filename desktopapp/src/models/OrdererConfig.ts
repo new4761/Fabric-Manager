@@ -6,7 +6,7 @@ const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig'
 
 class OrdererConfig implements YamlConfig {
-  //************************************************* 
+  //*************************************************
   // variables for export file
   fileName: string;
   defaultOutputPath: string;
@@ -23,7 +23,7 @@ class OrdererConfig implements YamlConfig {
   Consensus: ConsensusConfig = new ConsensusConfig();
 
 
-  //****************************************   
+  //****************************************
   //YamlConfig default Function
 
   constructor() {
@@ -121,7 +121,7 @@ class ClusterConfig {
 }
 
 class ProfileConfig {
-  Enabled:boolean = false; 
+  Enabled:boolean = false;
   Address:string = '0.0.0.0:6060';
 
 }
@@ -133,7 +133,7 @@ class BCCSPConfig {
     Security: 256,
     FileKeyStore: null,
     KeyStore: null
-  }; 
+  };
   PKCS11:object = {
     Library: null,
     Label: null,
