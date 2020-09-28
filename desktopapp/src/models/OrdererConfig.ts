@@ -4,6 +4,8 @@
 import fs from 'fs';
 const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig'
+var Datastore = require('nedb');
+var users = new Datastore();
 
 class OrdererConfig implements YamlConfig {
   //************************************************* 
@@ -78,7 +80,11 @@ class OrdererConfig implements YamlConfig {
 
   }
   updateNetworkConfig() {
-
+    users.find({}).sort({name: 1}).exec(function(err: any, docs: any[]) {
+      docs.forEach(function(d) {
+          console.log('Found user:', d.name);
+      });
+  });
   }
 
 }
