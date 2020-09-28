@@ -44,7 +44,7 @@ class CaServerConfig implements YamlConfig {
    //  **************************
    //  keyfile: ca-key.pem
    //  certfile: ca-cert.pem
-   //  chainfile: ca-chain.pem 
+   //  chainfile: ca-chain.pem
    ca: CertificatesConfig = new CertificatesConfig();
    //  # The registry section controls
    //  # if Used LDAP this "registry" section is ignored (default used registry)
@@ -52,7 +52,7 @@ class CaServerConfig implements YamlConfig {
    //  # Maximum number of times a password/secret can be reused for enrollment
    //  # (default: -1, which means there is no limit)
    //  maxenrollments: -1
-   //  # add default identities (this version add name:admin pass:adminpw 
+   //  # add default identities (this version add name:admin pass:adminpw
    //  type:client affilition:"" attrs:can do every thing) remove default if user input admins details
    //  identities:Contains *Array* of identity information
    //  *** identities details ****
@@ -62,7 +62,7 @@ class CaServerConfig implements YamlConfig {
    //           affiliation : option (base on affiliation section in org data)
    //            attrs: user premisson config (read doc in api design for options)
    registry: RegistryConfig = new RegistryConfig();
-   //  # Database section  Supported types are: 'sqlite3', 'postgres', and 'mysql'. 
+   //  # Database section  Supported types are: 'sqlite3', 'postgres', and 'mysql'.
    //  # don't make any input right now
    //  # wait to upgrade
    //  ************************************
@@ -105,41 +105,41 @@ class CaServerConfig implements YamlConfig {
    // *********************
    // host and ca wait to upgrade (use default right now)
    csr: CSRConfig = new CSRConfig();
-   // # Credential. This section specifies configuration for the issuer component 
+   // # Credential. This section specifies configuration for the issuer component
    // # use default right now (wait to upgrade)
    idemix: IdemixConfig = new IdemixConfig();
-   // # BCCSP (BlockChain Crypto Service Provider) section is used to select which 
-   // # crypto library implementation to use 
+   // # BCCSP (BlockChain Crypto Service Provider) section is used to select which
+   // # crypto library implementation to use
    // # use default right now (wait to upgrade)
    bccsp: BCCSPConfig = new BCCSPConfig();
-   // # Intermediate CA section 
+   // # Intermediate CA section
    // # use default right now (wait to upgrade)
    // *****************************************
    // tls:
    //   certfile: ica-server-cert.pem
    //   client:
    //     certfile: ica-client-cert.pem
-   //     keyfile: ica-client-key.pem 
+   //     keyfile: ica-client-key.pem
    intermediate: IntermediateCA = new IntermediateCA();
-   // # Multi CA section 
+   // # Multi CA section
    // # use default right now (wait to upgrade)
    cacount = null;
    cafiles = null;
-   // # CA configuration section 
+   // # CA configuration section
    // # use default right now (wait to upgrade)
    cfg: CFG = new CFG();
-   // # Operations section  
+   // # Operations section
    // # use default right now (wait to upgrade)
    // # need to know port to use
    operations: Operations = new Operations();
-   // # Metrics section 
+   // # Metrics section
    // # use default right now (wait to upgrade)
    // # need to know port to use
    metrics: Metrics = new Metrics();
    // ****************************************
    //YamlConfig defalut Function
    constructor() {
-      // define file name and dafault path 
+      // define file name and dafault path
       this.fileName = "fabric-ca-server-config.yaml";
       this.defaultOutputPath = "./tests";
    }
