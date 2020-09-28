@@ -1,4 +1,10 @@
-General:
+# This file is Generate from YamlClass used to configuration file for the ordering service.
+# Base on Orderer.yaml
+ 
+################################################################### 
+
+ # General config  
+Genetal:
   ListenAddress: 127.0.0.1
   ListenPort: 7052
   TLS:
@@ -45,9 +51,13 @@ General:
       KeyStore: null
   Authentication:
     TimeWindow: 15m
+
+ # FileLedger config  
 FileLedger:
   Location: /var/hyperledger/production/orderer
   Prefix: hyperledger-fabric-ordererledger
+
+ # Kafka config  
 Kafka:
   Retry:
     ShortInterval: 5s
@@ -79,9 +89,13 @@ Kafka:
     User: null
     Password: null
   Version: null
+
+ # Debug config  
 Debug:
   BroadcastTraceDir: null
   DeliverTraceDir: null
+
+ # Operations config  
 Operations:
   ListenAddress: '127.0.0.1:8443'
   TLS:
@@ -90,6 +104,8 @@ Operations:
     PrivateKey: null
     ClientAuthRequired: false
     ClientRootCAs: null
+
+ # Metrics config  
 Metrics:
   Provider: disabled
   Statsd:
@@ -97,8 +113,3 @@ Metrics:
     Address: '127.0.0.1:8125'
     WriteInterval: 30s
     Prefix: null
-Consensus:
-  WALDir: /var/hyperledger/production/orderer/etcdraft/wal
-  SnapDir: /var/hyperledger/production/orderer/etcdraft/snapshot
-fileName: orderer.yaml
-defaultOutputPath: ./test
