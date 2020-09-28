@@ -23,9 +23,9 @@ crlsizelimit: 512000
 
  # TLS section for the server's listening port 
 tls:
-  enabled: false
-  certfile: ca-cert.pem
-  keyfile: ca-key.pem
+  enabled: true
+  certfile: tls-ca-cert.pem
+  keyfile: tls-ca-key.pem
   clientauth:
     type: noclientcert
     certfiles: {}
@@ -48,7 +48,7 @@ registry:
     - name: admin
       pass: adminpw
       type: client
-      affilition: ''
+      affiliation: ''
       attrs:
         hf.Registrar.Roles: '*'
         hf.Registrar.DelegateRoles: '*'
