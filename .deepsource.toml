@@ -1,0 +1,11 @@
+version = 1
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  environment = ["nodejs"]
+  plugins = ["vue"]
+  dialect = "typescript"
+  style_guide = "standard"

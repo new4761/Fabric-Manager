@@ -40,10 +40,10 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
-import OrdererConfig from "./models/OrdererConfig";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import HelloWorld from './components/HelloWorld.vue';
+import CaServerConfig  from './models/CaServerConfig';
 
 var Datastore = require("nedb");
 var users = new Datastore();
@@ -69,16 +69,16 @@ var jack = {
 
 @Component({
   components: {
-    HelloWorld,
-  },
+    HelloWorld
+  }
 })
 export default class App extends Vue {
   output: string = "";
   
   testFunnction() {
-    console.log("called");
-    this.output = OrdererConfig.createFile();
-    OrdererConfig.saveFile(undefined, this.output);
+  //console.log("called"); 
+  CaServerConfig.createFile();
+    
   }
 
   pushObject() {

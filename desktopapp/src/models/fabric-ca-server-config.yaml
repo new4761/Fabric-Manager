@@ -96,7 +96,7 @@ ca:
 
 #############################################################################
 #  The gencrl REST endpoint is used to generate a CRL that contains revoked
-#  certificates. This section contains configuration options that are used
+#  certificates. This section contains  that are used
 #  during gencrl request processing.
 #############################################################################
 crl:

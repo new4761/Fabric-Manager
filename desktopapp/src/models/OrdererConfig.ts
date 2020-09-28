@@ -8,7 +8,7 @@ var Datastore = require('nedb');
 var users = new Datastore();
 
 class OrdererConfig implements YamlConfig {
-  //************************************************* 
+  //*************************************************
   // variables for export file
   fileName: string;
   defaultOutputPath: string;
@@ -26,7 +26,7 @@ class OrdererConfig implements YamlConfig {
   Consensus: ConsensusConfig = new ConsensusConfig();
 
 
-  //****************************************   
+  //****************************************
   //YamlConfig default Function
 
   constructor() {
@@ -141,8 +141,10 @@ class ClusterConfig {
 
 //Enable an HTTP service for Go "pprof"
 class ProfileConfig {
+
   Enabled: boolean = false;
   Address: string = '0.0.0.0:6060';
+
 
 }
 //BCCSP configures the blockchain crypto service providers
@@ -154,6 +156,7 @@ class BCCSPConfig {
     FileKeyStore: null,
     KeyStore: null
   };
+
   PKCS11: object = {
     Library: null,
     Label: null,

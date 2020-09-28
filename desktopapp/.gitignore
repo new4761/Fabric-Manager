@@ -24,3 +24,7 @@ package-lock.json
 
 #Electron-builder output
 /dist_electron
+
+#Test output
+tests/*
+!*.md
