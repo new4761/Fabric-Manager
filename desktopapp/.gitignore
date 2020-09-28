@@ -26,4 +26,4 @@ package-lock.json
 /dist_electron
 
 #Test output
-/tests/*
+tests/*
