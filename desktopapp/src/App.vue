@@ -45,8 +45,8 @@ import Component from 'vue-class-component'
 import HelloWorld from './components/HelloWorld.vue';
 import CaServerConfig  from './models/CaServerConfig';
 
-var Datastore = require("nedb");
-var users = new Datastore();
+// var Datastore = require("nedb");
+// var users = new Datastore();
 var people: { name: string; age: number; twitter: string }[] = [];
 
 var scott = {
@@ -86,23 +86,23 @@ export default class App extends Vue {
   }
 
   insertObject() {
-    users.insert(people, function (err: any, docs: any[]) {
-      docs.forEach(function (d) {
-        console.log("Saved user:", d.name);
-      });
-    });
+    // users.insert(people, function (err: any, docs: any[]) {
+    //   docs.forEach(function (d) {
+    //     console.log("Saved user:", d.name);
+    //   });
+    // });
   }
 
   checkObject() {
-    //OrdererConfig.updateNetworkConfig();
-    users
-      .find({})
-      .sort({ name: 1 })
-      .exec(function (err: any, docs: any[]) {
-        docs.forEach(function (d) {
-          console.log("Found user:", d.name);
-        });
-      });
+    // //OrdererConfig.updateNetworkConfig();
+    // users
+    //   .find({})
+    //   .sort({ name: 1 })
+    //   .exec(function (err: any, docs: any[]) {
+    //     docs.forEach(function (d) {
+    //       console.log("Found user:", d.name);
+    //     });
+    //   });
   }
 }
 </script>

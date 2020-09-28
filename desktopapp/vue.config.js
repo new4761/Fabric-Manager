@@ -1,13 +1,14 @@
 module.exports = {
   pluginOptions: {
     electronBuilder: {
-      asar:false,
       nodeIntegration: true,
-      externals: ['better-sqlite3'],
-      extraFiles: {
-        from: 'extraResources',
-        to: '/resources/extraResources'
+        externals: ["better-sqlite3",],
+      builderOptions: {
+      // asar: false,
+      // Config this section for make built in dir for app (need to have some file in dir )  
+      extraFiles: [{ from: "extraResources", to: "bin/extraResources" }],
+      extraResources: [{ from: "extraResources", to: "bin/extraResources" }],
       }
-    }
-  }
-}
+    },
+  },
+};

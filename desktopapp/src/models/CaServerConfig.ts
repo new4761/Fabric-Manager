@@ -6,6 +6,9 @@ const path = require('path');
 const Database = require('better-sqlite3');
 const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig'
+// check is  isDevelopment?
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
 class CaServerConfig implements YamlConfig {
    //*************************************************
    // variables for export file
@@ -202,8 +205,12 @@ class CaServerConfig implements YamlConfig {
    saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
 
       try {
+         // example for check dev mode function
+         // used this style for base to write function who work with files
+         if(!isDevelopment){
          console.log(path.dirname(__dirname));
-         let filePath = path.join(path.dirname(__dirname),outputPath, this.fileName);
+         }
+         let filePath = path.join(!isDevelopment?path.dirname(__dirname):'',outputPath, this.fileName);
          fs.writeFileSync(filePath, inputFileData, 'utf-8');
          this.updateNetworkConfig();
       }
