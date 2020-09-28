@@ -141,7 +141,7 @@ class CaServerConfig implements YamlConfig {
    constructor() {
       // define file name and dafault path 
       this.fileName = "fabric-ca-server-config.yaml";
-      this.defaultOutputPath = "./test";
+      this.defaultOutputPath = "./tests";
    }
    // call funtion to get user input
    getUserInput(userInput: CaServerConfig) {
