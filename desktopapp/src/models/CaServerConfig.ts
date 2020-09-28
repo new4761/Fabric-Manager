@@ -2,6 +2,8 @@
 // type of ca = root TLS | CA / intermediate CA
 import fs from 'fs';
 //import YAML from 'yaml';
+const path = require('path');
+const Database = require('better-sqlite3');
 const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig'
 class CaServerConfig implements YamlConfig {
@@ -200,18 +202,26 @@ class CaServerConfig implements YamlConfig {
    saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
 
       try {
-         fs.writeFileSync(outputPath + '/' + this.fileName, inputFileData, 'utf-8');
+         console.log(path.dirname(__dirname));
+         let filePath = path.join(path.dirname(__dirname),outputPath, this.fileName);
+         fs.writeFileSync(filePath, inputFileData, 'utf-8');
+         this.updateNetworkConfig();
       }
       catch (e) {
          console.log(e);
       }
    }
- 
+
    editFile(filePath: string, inputFileData: object) {
 
    }
    updateNetworkConfig() {
-
+      let filePath = path.join(this.defaultOutputPath, 'test.db');
+      const db = new Database(filePath, { verbose: console.log });
+      db.prepare('CREATE TABLE greetings(message text)').run();
+      const stmt = db.prepare((`INSERT INTO greetings(message) VALUES('Hi'),('Hello'),('Welcome')`));
+      const info = stmt.run();
+      console.log(info.changes); // => 1
    }
    // *********************************************
    // Self function

@@ -135,13 +135,10 @@ class ClusterConfig {
 
 //Enable an HTTP service for Go "pprof"
 class ProfileConfig {
-<<<<<<< HEAD
-  Enabled:boolean = false;
-  Address:string = '0.0.0.0:6060';
-=======
+
   Enabled: boolean = false;
   Address: string = '0.0.0.0:6060';
->>>>>>> win
+
 
 }
 //BCCSP configures the blockchain crypto service providers
@@ -153,11 +150,8 @@ class BCCSPConfig {
     FileKeyStore: null,
     KeyStore: null
   };
-<<<<<<< HEAD
-  PKCS11:object = {
-=======
+
   PKCS11: object = {
->>>>>>> win
     Library: null,
     Label: null,
     Pin: null,
