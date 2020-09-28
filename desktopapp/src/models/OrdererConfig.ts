@@ -12,7 +12,7 @@ class OrdererConfig implements YamlConfig {
   // variables for export file
   fileName: string;
   defaultOutputPath: string;
-  ymlString: string = ""; 
+  ymlString: string = "";
   //************************************************
   // Class variables
 
@@ -90,7 +90,7 @@ class OrdererConfig implements YamlConfig {
 }
 
 
-//************************************************* 
+//*************************************************
 // general config
 class GeneralConfig {
 
@@ -174,7 +174,7 @@ class AuthenticationConfig {
 }
 
 
-//************************************************* 
+//*************************************************
 // FileLedger config
 // The directory to store the blocks in and prefix
 class FileLedgerConfig {
@@ -182,7 +182,7 @@ class FileLedgerConfig {
   Prefix: string = 'hyperledger-fabric-ordererledger';
 }
 
-//************************************************* 
+//*************************************************
 // Kafka config
 // configuration of the Kafka-based orderer, and its interaction with the Kafka cluster
 class KafkaConfig {
@@ -225,7 +225,7 @@ class KafkaConfig {
 
 }
 
-//************************************************* 
+//*************************************************
 // Debug config
 // debugging options for the orderer
 class DebugConfig {
@@ -234,7 +234,7 @@ class DebugConfig {
 
 }
 
-//************************************************* 
+//*************************************************
 // Operation config
 // operations server endpoint for the orderer
 class OperationConfig {
@@ -248,7 +248,7 @@ class OperationConfig {
   };
 }
 
-//************************************************* 
+//*************************************************
 // Metrics config
 // metrics collection for the orderer
 class MetricsConfig {
@@ -261,7 +261,7 @@ class MetricsConfig {
   }
 }
 
-//************************************************* 
+//*************************************************
 // Consensus config
 // config options for a consensus plugin
 class ConsensusConfig {
