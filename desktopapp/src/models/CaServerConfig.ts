@@ -2,6 +2,8 @@
 // type of ca = root TLS | CA / intermediate CA
 import fs from 'fs';
 //import YAML from 'yaml';
+const path = require('path');
+const Database = require('better-sqlite3');
 const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig'
 class CaServerConfig implements YamlConfig {
@@ -11,19 +13,76 @@ class CaServerConfig implements YamlConfig {
    defaultOutputPath: string;
    //************************************************
    // self Class variables
+   // Base fabric ca version file
    version: string = "1.4.7";
+   // port to provide ca
+   // need to unique port
    port: number = 7052;
+   // set Debug to log error and server status
+   // set is true for healthcare debug
    debug: boolean = true;
+   // Size limit of an acceptable CRL (Certificate Revocation List)  in bytes
    crlsizelimit: number = 512000;
+   //used during gencrl request processing
+   //Specifies expiration for the generated CRL. The number of hours (UTC time)
    crl = {
       expiry: "24h"
    };
+   // # Cross-Origin Resource Sharing (CORS) -> HTTPS call HTTP
+   // ** optionals **
+   // default : disabled
    cors: CrossOriginConfig = new CrossOriginConfig();
+   // # TLS section for the ca server
+   // ** optionals **
+   // default enabled (for best pratice)
+   // ********************************
+   // keyfile: tls-ca-key.pem
+   // certfile: tls-ca-cert.pem
+   // type : noclientcert (wait to upgrade)
    tls: TlsSettingConfig = new TlsSettingConfig();
+   //  # The CA section contains information
+   //  ** auto input **
+   //  name : org-name
+   //  **************************
+   //  keyfile: ca-key.pem
+   //  certfile: ca-cert.pem
+   //  chainfile: ca-chain.pem
    ca: CertificatesConfig = new CertificatesConfig();
+   //  # The registry section controls
+   //  # if Used LDAP this "registry" section is ignored (default used registry)
+   //  ** optionals **
+   //  # Maximum number of times a password/secret can be reused for enrollment
+   //  # (default: -1, which means there is no limit)
+   //  maxenrollments: -1
+   //  # add default identities (this version add name:admin pass:adminpw
+   //  type:client affilition:"" attrs:can do every thing) remove default if user input admins details
+   //  identities:Contains *Array* of identity information
+   //  *** identities details ****
+   //           name: request
+   //           pass: request
+   //           type: request (base type on Network Config)
+   //           affiliation : option (base on affiliation section in org data)
+   //            attrs: user premisson config (read doc in api design for options)
    registry: RegistryConfig = new RegistryConfig();
+   //  # Database section  Supported types are: 'sqlite3', 'postgres', and 'mysql'.
+   //  # don't make any input right now
+   //  # wait to upgrade
+   //  ************************************
+   //  certfiles: db-server-cert.pem
+   //  clien
+   //  certfile: db-client-cert.pem
+   //  keyfile: db-client-key.pem
    db: DatabaseConfig = new DatabaseConfig();
+   //  # LDAPConfig section
+   //  # don't make any input right now
+   //  # wait to upgrade
+   //  # If LDAP is enabled, the fabric-ca-server calls LDAP to do registry section work
    ldap: LDAPConfig = new LDAPConfig();
+   //  # Affiliations specified in this section are specified as maps.
+   //  # ** don't use default data is sample for log yaml file
+   //  # make data to blank if user not input
+   //  ** optionals **
+   //  affilations:array of Affilations interface (object | array of string)
    affiliations: Affiliations = {
       "businessunit1":
       {
@@ -34,22 +93,59 @@ class CaServerConfig implements YamlConfig {
             "department3"
          ]
    }
+   // # Signing section used to sign enrollment certificates;
+   // # don't make any input right now
    signing: SigningConfig = new SigningConfig();
+   // # Certificate Signing Request (CSR) section.
+   // cn is the Common Name (request)
+   // O is the organization name (auto input)
+   // ******** optionals ***************
+   // OU is the organizational unit
+   // L is the location or city
+   // ST is the state
+   // C is the country
+   // *********************
+   // host and ca wait to upgrade (use default right now)
    csr: CSRConfig = new CSRConfig();
+   // # Credential. This section specifies configuration for the issuer component
+   // # use default right now (wait to upgrade)
    idemix: IdemixConfig = new IdemixConfig();
+   // # BCCSP (BlockChain Crypto Service Provider) section is used to select which
+   // # crypto library implementation to use
+   // # use default right now (wait to upgrade)
    bccsp: BCCSPConfig = new BCCSPConfig();
+   // # Intermediate CA section
+   // # use default right now (wait to upgrade)
+   // *****************************************
+   // tls:
+   //   certfile: ica-server-cert.pem
+   //   client:
+   //     certfile: ica-client-cert.pem
+   //     keyfile: ica-client-key.pem
    intermediate: IntermediateCA = new IntermediateCA();
+   // # Multi CA section
+   // # use default right now (wait to upgrade)
    cacount = null;
    cafiles = null;
+   // # CA configuration section
+   // # use default right now (wait to upgrade)
    cfg: CFG = new CFG();
+   // # Operations section
+   // # use default right now (wait to upgrade)
+   // # need to know port to use
    operations: Operations = new Operations();
+   // # Metrics section
+   // # use default right now (wait to upgrade)
+   // # need to know port to use
    metrics: Metrics = new Metrics();
    // ****************************************
    //YamlConfig defalut Function
    constructor() {
+      // define file name and dafault path
       this.fileName = "fabric-ca-server-config.yaml";
-      this.defaultOutputPath = "./test";
+      this.defaultOutputPath = "./tests";
    }
+   // call funtion to get user input
    getUserInput(userInput: CaServerConfig) {
       console.log(userInput);
    }
@@ -106,7 +202,10 @@ class CaServerConfig implements YamlConfig {
    saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
 
       try {
-         fs.writeFileSync(outputPath + '/' + this.fileName, inputFileData, 'utf-8');
+         console.log(path.dirname(__dirname));
+         let filePath = path.join(path.dirname(__dirname),outputPath, this.fileName);
+         fs.writeFileSync(filePath, inputFileData, 'utf-8');
+         this.updateNetworkConfig();
       }
       catch (e) {
          console.log(e);
@@ -117,15 +216,22 @@ class CaServerConfig implements YamlConfig {
 
    }
    updateNetworkConfig() {
-
+      let filePath = path.join(this.defaultOutputPath, 'test.db');
+      const db = new Database(filePath, { verbose: console.log });
+      db.prepare('CREATE TABLE greetings(message text)').run();
+      const stmt = db.prepare((`INSERT INTO greetings(message) VALUES('Hi'),('Hello'),('Welcome')`));
+      const info = stmt.run();
+      console.log(info.changes); // => 1
    }
    // *********************************************
    // Self function
 
 }
+// Interface for call data class
 interface ConfigData {
    getComment: () => string;
 }
+// data class for define cors section
 class CrossOriginConfig implements ConfigData {
    enabled: boolean = false;
    origins: string[] = ["*"];
@@ -135,11 +241,12 @@ class CrossOriginConfig implements ConfigData {
 
    }
 }
+// data class for define tls section
 class TlsSettingConfig implements ConfigData {
-   enabled: boolean = false;
+   enabled: boolean = true;
    //if root TLS ca should blank
-   certfile: string = "ca-cert.pem";
-   keyfile: string = "ca-key.pem";
+   certfile: string = "tls-ca-cert.pem";
+   keyfile: string = "tls-ca-key.pem";
    clientauth = {
       type: "noclientcert",
       certfiles: {}
@@ -149,6 +256,7 @@ class TlsSettingConfig implements ConfigData {
       return comment;
    }
 }
+// data class for define ca section
 class CertificatesConfig implements ConfigData {
    name: string | null = null;
    keyfile: string = "ca-key.pem";
@@ -160,6 +268,7 @@ class CertificatesConfig implements ConfigData {
    }
 
 }
+// data class for define registry section
 class RegistryConfig implements ConfigData {
    maxenrollments: number = -1;
    identities: Identities[] = [
@@ -185,6 +294,8 @@ class RegistryConfig implements ConfigData {
    }
 }
 
+// interface for define attrs patten data (all input in api design)
+// Used in Identities interface
 interface Attrs {
    "hf.Registrar.Roles": string,
    "hf.Registrar.DelegateRoles": string,
@@ -194,7 +305,7 @@ interface Attrs {
    "hf.Registrar.Attributes": string,
    "hf.AffiliationMgr": boolean
 }
-
+// interface for create user identities used in RegistryConfig
 interface Identities {
    name: string;
    pass: string;
@@ -202,13 +313,14 @@ interface Identities {
    affiliation: string;
    attrs: Attrs;
 }
+// type of data base for ca server
 enum dataBaseType {
    sqlite3 = "sqlite3",
    mysql = "mysql",
    postgres = "postgres"
 }
+// data class for db section
 class DatabaseConfig implements ConfigData {
-
    type: dataBaseType = dataBaseType.sqlite3; // mysql || postgesql wait enum
    datasource: string = "fabric-ca-server.db";
    tls = {
@@ -225,13 +337,16 @@ class DatabaseConfig implements ConfigData {
       return comment;
    }
 }
+// need to write later
 interface ldapConfigValue {
    name: string | null,
    value: string | null
 }
+// need to write later
 interface groupValue {
    [key: string]: ldapConfigValue[];
 }
+// data class for ldap section
 class LDAPConfig implements ConfigData {
    enabled: boolean = false;
    url: string = "ldap://<adminDN>:<adminPassword>@<host>:<port>/<base>";
@@ -259,13 +374,17 @@ class LDAPConfig implements ConfigData {
       return comment;
    }
 }
+// interface for affiliation section
 interface Affiliations {
    [key: string]: object | string[];
 }
+
+// interface for default object in signing section
 interface SigningDefault {
    usage: string[],
    expiry: string;
 }
+// interface for profiles object in signing section
 interface SigningProfiles {
    ca: {
       usage: string[],
@@ -276,6 +395,7 @@ interface SigningProfiles {
       }
    }
 }
+// data class for signing section
 class SigningConfig implements ConfigData {
    default: SigningDefault = {
       usage:
@@ -305,10 +425,12 @@ class SigningConfig implements ConfigData {
       return commnet;
    }
 }
+// interface for define algoritem in csr
 interface CSRKey {
    algo: string,
    size: number
 }
+// interface for details to csr
 interface CSRNames {
    C: string;
    ST: string;
@@ -316,10 +438,12 @@ interface CSRNames {
    O: string;
    OU: string;
 }
+// ca details for old and ica
 interface CSRCa {
    expiry: string,
    pathlength: number
 }
+// data class for csr section
 class CSRConfig implements ConfigData {
    cn: string = "demoname";
    keyrequest: CSRKey = {
@@ -345,6 +469,7 @@ class CSRConfig implements ConfigData {
       return comment;
    }
 }
+// data class for idemix section
 class IdemixConfig implements ConfigData {
    rhpoolsize: number = 1000;
    nonceexpiration: string = "15s";
@@ -361,6 +486,7 @@ interface BccspSw {
       keystore: string
    }
 }
+//data class for bccsp section
 class BCCSPConfig implements ConfigData {
    default: string = "SW";
    sw: BccspSw = {
@@ -385,6 +511,7 @@ interface IcaEnrollment {
    profile: string | null,
    label: string | null,
 }
+// data class for intermediate section
 class IntermediateCA implements ConfigData {
    parentserver: IcaParentServer = {
       url: null,
@@ -410,6 +537,7 @@ class IntermediateCA implements ConfigData {
 interface CFGiden {
    passwordattempts: number
 }
+// data class for cfg section
 class CFG implements ConfigData {
    identities: CFGiden = {
       passwordattempts: 10
@@ -433,6 +561,7 @@ interface OperationTLS {
       files: string[]
    }
 }
+//data class for operations section
 class Operations implements ConfigData {
    listenAddress: string = "127.0.0.1:9443";
    tls: OperationTLS = {
@@ -459,6 +588,7 @@ interface MetricsStats {
    writeInterval: string,
    prefix: string
 }
+// data class for metrics section
 class Metrics implements ConfigData {
    provider: string = "disabled";
    statsd: MetricsStats = {
