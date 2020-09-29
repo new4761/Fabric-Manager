@@ -1,108 +1,82 @@
 <template>
   <div>
-    <Button
-      label="Submit"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="testFunnction()"
-    />
+    <Breadcrumb :home="home" :model="items" />
+    <Toast position="top-right" />
 
     <Button
-      label="create"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="pushObject()"
+      label="Orderer"
+      @click="testOrderer()"
+      class="p-mx-5 p-button-info"
     />
+
+    <Button label="CA" @click="testCa()" class="p-mx-5 p-button-success" />
 
     <Button
-      label="save"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="insertObject()"
+      label="database"
+      @click="testDatabase()"
+      class="p-mx-5 p-button-warning"
     />
 
-    <Button
-      label="check"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="checkObject()"
-    />
+    <transition-group name="p-message" tag="div">
+      <Message
+        v-for="msg of messages"
+        :severity="msg.severity"
+        :key="msg.content"
+        >{{ msg.content }}</Message
+      >
+    </transition-group>
 
-    <ScrollPanel style="width: 100%; height: 200px">
-      {{ output }}
-
-
-    </ScrollPanel>
-
-
-
-
+    {{ output }}
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import HelloWorld from './components/HelloWorld.vue';
-import CaServerConfig  from './models/CaServerConfig';
-
-// var Datastore = require("nedb");
-// var users = new Datastore();
-var people: { name: string; age: number; twitter: string }[] = [];
-
-var scott = {
-  name: "Scott Robinson",
-  age: 28,
-  twitter: "@ScottWRobinson",
-};
-
-var elon = {
-  name: "Elon Musk",
-  age: 44,
-  twitter: "@elonmusk",
-};
-
-var jack = {
-  name: "Jack Dorsey",
-  age: 39,
-  twitter: "@jack",
-};
+import Vue from "vue";
+import Component from "vue-class-component";
+import HelloWorld from "./components/HelloWorld.vue";
+import OrdererConfig from "./models/OrdererConfig";
+import CaServerConfig from "./models/CaServerConfig";
 
 @Component({
   components: {
-    HelloWorld
-  }
+    HelloWorld,
+  },
 })
 export default class App extends Vue {
   output: string = "";
-  
-  testFunnction() {
-  //console.log("called"); 
-  CaServerConfig.createFile();
-    
+  messages: object[] = [];
+  count: number = 0;
+  $toast: any;
+
+  testOrderer() {
+    console.log("test orderer");
+    this.output = OrdererConfig.createFile();
+    OrdererConfig.saveFile(undefined, this.output);
+    this.$toast.add({severity:'success', summary: 'Success Message', detail:'Orderer.yaml created', life: 3000});
   }
 
-  pushObject() {
-    people.push(scott, elon, jack);
+  testCa() {
+    console.log("test ca");
+    CaServerConfig.createFile();
+    this.$toast.add({severity:'success', summary: 'Success Message', detail:'fabric-ca-server-config.yaml created', life: 3000});
   }
 
-  insertObject() {
-    // users.insert(people, function (err: any, docs: any[]) {
-    //   docs.forEach(function (d) {
-    //     console.log("Saved user:", d.name);
-    //   });
-    // });
+  testDatabase() {
+    console.log("test database");
+    CaServerConfig.updateNetworkConfig();
+    this.$toast.add({severity:'success', summary: 'Success Message', detail:'table created', life: 3000});
   }
 
-  checkObject() {
-    // //OrdererConfig.updateNetworkConfig();
-    // users
-    //   .find({})
-    //   .sort({ name: 1 })
-    //   .exec(function (err: any, docs: any[]) {
-    //     docs.forEach(function (d) {
-    //       console.log("Found user:", d.name);
-    //     });
-    //   });
+  data() {
+    return {
+      home: { icon: "pi pi-home" },
+      items: [
+        { label: "Computer" },
+        { label: "Notebook" },
+        { label: "Accessories" },
+        { label: "Backpacks" },
+        { label: "Item" },
+      ],
+    };
   }
 }
 </script>
@@ -115,5 +89,49 @@ export default class App extends Vue {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.box {
+  background-color: var(--surface-e);
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+.box-stretched {
+  height: 100%;
+}
+
+.vertical-container {
+  margin: 0;
+  height: 200px;
+  background: var(--surface-d);
+  border-radius: 4px;
+}
+
+.nested-grid .p-col-4 {
+  padding-bottom: 1rem;
+}
+
+.dynamic-box-enter-active,
+.dynamic-box-leave-active {
+  transition: all 0.5s;
+}
+
+.dynamic-box-enter,
+.dynamic-box-leave-to {
+  opacity: 0;
+}
+
+.dynamic-box-enter,
+.dynamic-box-leave-to {
+  transform: translateX(30px);
+}
+
+p {
+  margin: 0;
 }
 </style>
