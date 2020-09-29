@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 const yaml = require('js-yaml');
-import YamlConfig from './YamlConfig'
+import { YamlConfig } from "yaml-config";
 
 class OrdererConfig implements YamlConfig {
   //*************************************************
