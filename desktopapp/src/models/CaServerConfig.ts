@@ -1,6 +1,8 @@
 // Class for create fabric-ca-server.yaml for Server CA Config
 // type of ca = root TLS | CA / intermediate CA
 //import YAML from 'yaml';
+const EntityPersist = require('./database/EntityPersist');
+const CARepository = require("./database/CARepository");
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
 import { ConfigData,CSRKey,CSRNames,CSRCa } from "ConfigData";
@@ -203,6 +205,10 @@ class CaServerConfig extends FileYamlBuilder implements YamlConfig  {
 
    }
    updateNetworkConfig() {
+           const entity = new EntityPersist();
+      const caRepo = new CARepository(entity);
+      caRepo.create("CA server", "Root", "./test/ca", this.port);
+     
   }
    // *********************************************
    // Self function
@@ -548,5 +554,4 @@ interface MetricsStats {
    writeInterval: string,
    prefix: string
 }
-
 export default new CaServerConfig();
