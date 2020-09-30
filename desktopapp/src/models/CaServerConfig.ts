@@ -8,7 +8,9 @@ const yaml = require('js-yaml');
 import YamlConfig from './YamlConfig';
 
 const EntityPersist = require('./database/EntityPersist');
-const NetworkRepository = require('./database/NetworkRepository');
+const CARepository = require("./database/CARepository");
+
+
 
 // check is  isDevelopment?
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -226,36 +228,12 @@ class CaServerConfig implements YamlConfig {
    editFile(filePath: string, inputFileData: object) {
 
    }
+   
    updateNetworkConfig() {
       const entity = new EntityPersist();
-      const networkRepo = new NetworkRepository(entity);
-      networkRepo.createTable();
-
-      const projectmeta = {
-         name: 'project9',
-         dir: 'desktop'
-      }
-
-      const updateprojectmeta = {
-         id: 1,
-         name: 'project9',
-         directory: 'sadsadkasodkoaskdokoask'
-      }
-
-      networkRepo.create(projectmeta.name, projectmeta.dir);
-      networkRepo.update(updateprojectmeta);
-      networkRepo.create("project2", "desktop");
-      networkRepo.create("project3", "desktop");
-      networkRepo.create("project4", "desktop");
-      networkRepo.create("project5", "desktop");
-
-      // let filePath = path.join(!isDevelopment?path.dirname(__dirname):'',this.defaultOutputPath, 'NetworkConfig.db');
-      // const db = new Database(filePath, { verbose: console.log });
-      // db.prepare('CREATE TABLE IF NOT EXISTS greetings(message text)').run();
-      // const stmt = db.prepare((`INSERT INTO greetings(message) VALUES($this.hi),('Hello'),('Welcome')`));
-      // const info = stmt.run();
-      // console.log(info.changes); // => 1
-      // EntityPersist.insert();
+      const caRepo = new CARepository(entity);
+      caRepo.create("CA server", "Root", "./test/ca", this.port);
+     
    }
    // *********************************************
    // Self function

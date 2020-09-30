@@ -9,11 +9,18 @@ import 'primeflex/primeflex.css';
 import Button from 'primevue/button';
 import Menubar from 'primevue/menubar';
 import Message from 'primevue/message';
-import Breadcrumb from 'primevue/breadcrumb';
+import ScrollPanel from 'primevue/scrollpanel';
 import Toast from 'primevue/toast';
+import Sidebar from 'primevue/sidebar';
+import Card from 'primevue/card';
+import Menu from 'primevue/menu';
 
+
+Vue.component('Menu',Menu);
+Vue.component('Card',Card);
+Vue.component('Sidebar',Sidebar);
 Vue.component('Toast',Toast);
-Vue.component('Breadcrumb',Breadcrumb);
+Vue.component('ScrollPanel',ScrollPanel);
 Vue.component('Message',Message);
 Vue.component('Menubar',Menubar);
 Vue.component('Button', Button);
