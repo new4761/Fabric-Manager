@@ -1,17 +1,12 @@
 import { dir } from 'console';
 // Class for create Config.yaml for Ca Sererver Config
 // type of ca = root TLS | CA / intermediate CA
-import fs from 'fs';
-const path = require('path');
-
 const yaml = require('js-yaml');
-import YamlConfig from './YamlConfig';
-
 const EntityPersist = require('./database/EntityPersist');
 const CARepository = require("./database/CARepository");
-
-
-
+import { YamlConfig } from "yaml-config";
+import { ConfigData } from "ConfigData";
+import { BCCSPConfig } from "../module/BCCSPConfig"
 // check is  isDevelopment?
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -152,7 +147,7 @@ class CaServerConfig implements YamlConfig {
    constructor() {
       // define file name and dafault path
       this.fileName = "fabric-ca-server-config.yaml";
-      this.defaultOutputPath = "./tests";
+      this.defaultOutputPath = "./bin";
    }
    // call funtion to get user input
    getUserInput(userInput: CaServerConfig) {
@@ -237,12 +232,15 @@ class CaServerConfig implements YamlConfig {
    }
    // *********************************************
    // Self function
+}
 
+//****************************************************
+// interface for affiliation section
+
+interface Affiliations {
+   [key: string]: object | string[];
 }
-// Interface for call data class
-interface ConfigData {
-   getComment: () => string;
-}
+
 // data class for define cors section
 class CrossOriginConfig implements ConfigData {
    enabled: boolean = false;
@@ -305,26 +303,6 @@ class RegistryConfig implements ConfigData {
       return comment;
    }
 }
-
-// interface for define attrs patten data (all input in api design)
-// Used in Identities interface
-interface Attrs {
-   "hf.Registrar.Roles": string,
-   "hf.Registrar.DelegateRoles": string,
-   "hf.Revoker": boolean,
-   "hf.IntermediateCA": boolean,
-   "hf.GenCRL": boolean,
-   "hf.Registrar.Attributes": string,
-   "hf.AffiliationMgr": boolean
-}
-// interface for create user identities used in RegistryConfig
-interface Identities {
-   name: string;
-   pass: string;
-   type: string;
-   affiliation: string;
-   attrs: Attrs;
-}
 // type of data base for ca server
 enum dataBaseType {
    sqlite3 = "sqlite3",
@@ -349,15 +327,7 @@ class DatabaseConfig implements ConfigData {
       return comment;
    }
 }
-// need to write later
-interface ldapConfigValue {
-   name: string | null,
-   value: string | null
-}
-// need to write later
-interface groupValue {
-   [key: string]: ldapConfigValue[];
-}
+
 // data class for ldap section
 class LDAPConfig implements ConfigData {
    enabled: boolean = false;
@@ -384,27 +354,6 @@ class LDAPConfig implements ConfigData {
    getComment() {
       let comment = "\n #  LDAPConfig section\n";
       return comment;
-   }
-}
-// interface for affiliation section
-interface Affiliations {
-   [key: string]: object | string[];
-}
-
-// interface for default object in signing section
-interface SigningDefault {
-   usage: string[],
-   expiry: string;
-}
-// interface for profiles object in signing section
-interface SigningProfiles {
-   ca: {
-      usage: string[],
-      expiry: string,
-      caconstraint: {
-         isca: boolean,
-         maxpathlen: number
-      }
    }
 }
 // data class for signing section
@@ -437,24 +386,7 @@ class SigningConfig implements ConfigData {
       return commnet;
    }
 }
-// interface for define algoritem in csr
-interface CSRKey {
-   algo: string,
-   size: number
-}
-// interface for details to csr
-interface CSRNames {
-   C: string;
-   ST: string;
-   L: string;
-   O: string;
-   OU: string;
-}
-// ca details for old and ica
-interface CSRCa {
-   expiry: string,
-   pathlength: number
-}
+
 // data class for csr section
 class CSRConfig implements ConfigData {
    cn: string = "demoname";
@@ -491,38 +423,7 @@ class IdemixConfig implements ConfigData {
       return comment;
    }
 }
-interface BccspSw {
-   hash: string,
-   security: number,
-   filekeystore: {
-      keystore: string
-   }
-}
-//data class for bccsp section
-class BCCSPConfig implements ConfigData {
-   default: string = "SW";
-   sw: BccspSw = {
-      hash: "SHA2",
-      security: 256,
-      filekeystore: {
-         keystore: "msp/keystore"
-      }
-   }
-   getComment() {
-      let comment = "\n # BCCSP (BlockChain Crypto Service Provider) section is used to select which \n # crypto library implementation to use \n"
-      return comment;
-   }
 
-}
-interface IcaParentServer {
-   url: string | null,
-   caname: string | null
-}
-interface IcaEnrollment {
-   hosts: string | null,
-   profile: string | null,
-   label: string | null,
-}
 // data class for intermediate section
 class IntermediateCA implements ConfigData {
    parentserver: IcaParentServer = {
@@ -546,9 +447,7 @@ class IntermediateCA implements ConfigData {
       return comment;
    }
 }
-interface CFGiden {
-   passwordattempts: number
-}
+
 // data class for cfg section
 class CFG implements ConfigData {
    identities: CFGiden = {
@@ -560,19 +459,7 @@ class CFG implements ConfigData {
       return comment;
    }
 }
-interface OperationTLS {
-   enabled: boolean,
-   cert: {
-      file: string | null
-   },
-   key: {
-      file: string | null
-   },
-   clientAuthRequired: boolean,
-   clientRootCAs: {
-      files: string[]
-   }
-}
+
 //data class for operations section
 class Operations implements ConfigData {
    listenAddress: string = "127.0.0.1:9443";
@@ -594,14 +481,9 @@ class Operations implements ConfigData {
       return comment;
    }
 }
-interface MetricsStats {
-   network: string,
-   address: string,
-   writeInterval: string,
-   prefix: string
-}
+
 // data class for metrics section
-class Metrics implements ConfigData {
+ class Metrics implements ConfigData {
    provider: string = "disabled";
    statsd: MetricsStats = {
       network: "udp",
@@ -613,6 +495,101 @@ class Metrics implements ConfigData {
       let comment = "\n #    Metrics section \n";
       return comment;
    }
+}
+// ************************************
+// interface for define attrs patten data (all input in api design)
+// Used in Identities interface
+interface Attrs {
+   "hf.Registrar.Roles": string,
+   "hf.Registrar.DelegateRoles": string,
+   "hf.Revoker": boolean,
+   "hf.IntermediateCA": boolean,
+   "hf.GenCRL": boolean,
+   "hf.Registrar.Attributes": string,
+   "hf.AffiliationMgr": boolean
+}
+// interface for create user identities used in RegistryConfig
+interface Identities {
+   name: string;
+   pass: string;
+   type: string;
+   affiliation: string;
+   attrs: Attrs;
+}
+// need to write later
+interface ldapConfigValue {
+   name: string | null,
+   value: string | null
+}
+// need to write later
+interface groupValue {
+   [key: string]: ldapConfigValue[];
+}
+
+// interface for default object in signing section
+interface SigningDefault {
+   usage: string[],
+   expiry: string;
+}
+// interface for profiles object in signing section
+interface SigningProfiles {
+   ca: {
+      usage: string[],
+      expiry: string,
+      caconstraint: {
+         isca: boolean,
+         maxpathlen: number
+      }
+   }
+}
+// interface for define algoritem in csr
+interface CSRKey {
+   algo: string,
+   size: number
+}
+// interface for details to csr
+interface CSRNames {
+   C: string;
+   ST: string;
+   L: string;
+   O: string;
+   OU: string;
+}
+// ca details for old and ica
+interface CSRCa {
+   expiry: string,
+   pathlength: number
+}
+interface IcaParentServer {
+   url: string | null,
+   caname: string | null
+}
+interface IcaEnrollment {
+   hosts: string | null,
+   profile: string | null,
+   label: string | null,
+}
+interface CFGiden {
+   passwordattempts: number
+}
+interface OperationTLS {
+   enabled: boolean,
+   cert: {
+      file: string | null
+   },
+   key: {
+      file: string | null
+   },
+   clientAuthRequired: boolean,
+   clientRootCAs: {
+      files: string[]
+   }
+}
+interface MetricsStats {
+   network: string,
+   address: string,
+   writeInterval: string,
+   prefix: string
 }
 
 export default new CaServerConfig();
