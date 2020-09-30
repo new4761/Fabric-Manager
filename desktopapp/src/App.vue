@@ -35,7 +35,7 @@ import Component from "vue-class-component";
 import HelloWorld from "./components/HelloWorld.vue";
 import OrdererConfig from "./models/OrdererConfig";
 import CaServerConfig from "./models/CaServerConfig";
-
+import CaClientConfig from "./models/CaClientConfig";
 @Component({
   components: {
     HelloWorld,
@@ -57,6 +57,7 @@ export default class App extends Vue {
   testCa() {
     console.log("test ca");
     CaServerConfig.createFile();
+    CaClientConfig.createFile();
     this.$toast.add({severity:'success', summary: 'Success Message', detail:'fabric-ca-server-config.yaml created', life: 3000});
   }
 

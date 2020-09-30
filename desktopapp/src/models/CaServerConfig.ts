@@ -6,7 +6,7 @@ const path = require('path');
 const Database = require('better-sqlite3');
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
-import { ConfigData } from "ConfigData";
+import { ConfigData,CSRKey,CSRNames,CSRCa } from "ConfigData";
 import { BCCSPConfig } from "../module/BCCSPConfig"
 // check is  isDevelopment?
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -155,7 +155,7 @@ class CaServerConfig implements YamlConfig {
       console.log(userInput);
    }
    createFile() {
-      let src = "# This file is Generate from YamlClass used to configuration file for the fabric-ca-server command.\n";
+      let src = "# This file is Generate from YamlClass used to configuration file fabric-ca-server \n";
       src += "# Base on fabric-ca-server-config.yaml version:" + this.version + "\n \n";
       src += "################################################################### \n"
       src += "\n # Version of config file \n"
@@ -212,7 +212,7 @@ class CaServerConfig implements YamlConfig {
          if (!isDevelopment) {
             console.log(path.dirname(__dirname));
          }
-         let filePath = path.join(!isDevelopment ? path.dirname(__dirname) : '', outputPath, this.fileName);
+         let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname),outputPath) :'tests', this.fileName);
          fs.writeFileSync(filePath, inputFileData, 'utf-8');
          this.updateNetworkConfig();
       }
@@ -544,24 +544,8 @@ interface SigningProfiles {
       }
    }
 }
-// interface for define algoritem in csr
-interface CSRKey {
-   algo: string,
-   size: number
-}
-// interface for details to csr
-interface CSRNames {
-   C: string;
-   ST: string;
-   L: string;
-   O: string;
-   OU: string;
-}
-// ca details for old and ica
-interface CSRCa {
-   expiry: string,
-   pathlength: number
-}
+
+
 interface IcaParentServer {
    url: string | null,
    caname: string | null
