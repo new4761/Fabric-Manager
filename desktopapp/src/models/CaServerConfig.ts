@@ -1,19 +1,13 @@
 // Class for create Config.yaml for Ca Sererver Config
 // type of ca = root TLS | CA / intermediate CA
-import fs from 'fs';
 //import YAML from 'yaml';
-const path = require('path');
-const Database = require('better-sqlite3');
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
 import { ConfigData,CSRKey,CSRNames,CSRCa } from "ConfigData";
 import { BCCSPConfig } from "../module/BCCSPConfig"
-// check is  isDevelopment?
-const isDevelopment = process.env.NODE_ENV !== 'production'
-
-class CaServerConfig implements YamlConfig {
+import {FileYamlBuilder} from "../module/FileYamlBuilder"
+class CaServerConfig extends FileYamlBuilder implements YamlConfig  {
    //*************************************************
-   // variables for export file
    fileName: string;
    defaultOutputPath: string;
    //************************************************
@@ -146,6 +140,7 @@ class CaServerConfig implements YamlConfig {
    // ****************************************
    //YamlConfig defalut Function
    constructor() {
+      super();
       // define file name and dafault path
       this.fileName = "fabric-ca-server-config.yaml";
       this.defaultOutputPath = "./bin";
@@ -201,40 +196,18 @@ class CaServerConfig implements YamlConfig {
       src += yaml.dump({ "operations": this.operations });
       src += this.metrics.getComment();
       src += yaml.dump({ "metrics": this.metrics })
-      this.saveFile(undefined, src);
+      this.saveFile(this.defaultOutputPath, src,this.fileName);
 
    }
-   saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
-
-      try {
-         // example for check dev mode function
-         // used this style for base to write function who work with files
-         if (!isDevelopment) {
-            console.log(path.dirname(__dirname));
-         }
-         let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname),outputPath) :'tests', this.fileName);
-         fs.writeFileSync(filePath, inputFileData, 'utf-8');
-         this.updateNetworkConfig();
-      }
-      catch (e) {
-         console.log(e);
-      }
-   }
-
    editFile(filePath: string, inputFileData: object) {
 
    }
    updateNetworkConfig() {
-      let filePath = path.join(this.defaultOutputPath, 'test.db');
-      const db = new Database(filePath, { verbose: console.log });
-      db.prepare('CREATE TABLE greetings(message text)').run();
-      const stmt = db.prepare((`INSERT INTO greetings(message) VALUES('Hi'),('Hello'),('Welcome')`));
-      const info = stmt.run();
-      console.log(info.changes); // => 1
-   }
+  }
    // *********************************************
    // Self function
 }
+import { format } from 'path';
 
 //****************************************************
 // interface for affiliation section

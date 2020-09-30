@@ -1,15 +1,11 @@
 // Class for create Config.yaml for Client Config
 //import YAML from 'yaml';
-import fs from 'fs';
-//import YAML from 'yaml';
-const path = require('path');
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
-// check is  isDevelopment?
-const isDevelopment = process.env.NODE_ENV !== 'production';
 import { BCCSPConfig } from "../module/BCCSPConfig";
 import { ConfigData, CSRKey, CSRNames, CSRCa } from "ConfigData";
-class CaClientConfig implements YamlConfig {
+import {FileYamlBuilder} from "../module/FileYamlBuilder"
+class CaClientConfig extends FileYamlBuilder implements YamlConfig {
 
    //*************************************************
    // variables for export file
@@ -27,6 +23,7 @@ class CaClientConfig implements YamlConfig {
    bccsp: BCCSPConfig = new BCCSPConfig();
    //YamlConfig defalut Function
    constructor() {
+      super();
       // define file name and dafault path
       this.fileName = "fabric-ca-client-config.yaml";
       this.defaultOutputPath = "./tests";
@@ -54,27 +51,8 @@ class CaClientConfig implements YamlConfig {
       src += yaml.dump({ 'caname': this.caname });
       src += this.bccsp.getComment();
       src += yaml.dump({ 'bccsp': this.bccsp });
-      this.saveFile(undefined, src);
+      this.saveFile(this.defaultOutputPath, src,this.fileName);
    }
-
-   saveFile(outputPath =this.defaultOutputPath,inputFileData: string) {
-
-      try {
-         // example for check dev mode function
-         // used this style for base to write function who work with files
-         if (!isDevelopment) {
-            console.log(path.dirname(__dirname));
-         }
-         let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname),outputPath) :'tests', this.fileName);
-         fs.writeFileSync(filePath, inputFileData, 'utf-8');
-         this.updateNetworkConfig();
-      }
-      catch (e) {
-         console.log(e);
-      }
- 
-   }
-
    editFile(filePath: string, inputFileData: object) {
 
    }
