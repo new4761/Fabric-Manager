@@ -54,6 +54,8 @@ import Component from "vue-class-component";
 import HelloWorld from "./components/HelloWorld.vue";
 import OrdererConfig from "./models/OrdererConfig";
 import CaServerConfig from "./models/CaServerConfig";
+import CaClientConfig from "./models/CaClientConfig";
+
 
 const EntityPersist = require("./models/database/EntityPersist");
 const NetworkRepository = require("./models/database/NetworkRepository");
@@ -69,6 +71,7 @@ const projectmeta = {
   name: "test-project",
   dir: "desktop",
 };
+
 
 @Component({
   components: {
@@ -101,8 +104,10 @@ export default class App extends Vue {
     CaServerConfig.port = 66666;
     CaServerConfig.db.datasource = "dkaisjduhjasidjasdjij";
     CaServerConfig.getUserInput(CaServerConfig);
-
     CaServerConfig.createFile();
+    CaClientConfig.createFile();
+    this.$toast.add({severity:'success', summary: 'Success Message', detail:'fabric-ca-server-config.yaml created', life: 3000});
+
     CaServerConfig.updateNetworkConfig();
     this.$toast.add({
       severity: "success",
@@ -110,6 +115,7 @@ export default class App extends Vue {
       detail: "fabric-ca-server-config.yaml created",
       life: 3000,
     });
+
   }
 
   createTable() {

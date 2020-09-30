@@ -1,14 +1,11 @@
-// version 0.1
 // Class for create Config.yaml for orderer Config
-
-import fs from 'fs';
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
 
 const EntityPersist = require('./database/EntityPersist');
 const OrdererRepository = require("./database/OrdererRepository");
-
-class OrdererConfig implements YamlConfig {
+import {FileYamlBuilder} from "../module/FileYamlBuilder"
+class OrdererConfig extends FileYamlBuilder implements YamlConfig {
   //*************************************************
   // variables for export file
   fileName: string;
@@ -31,6 +28,7 @@ class OrdererConfig implements YamlConfig {
   //YamlConfig default Function
 
   constructor() {
+    super();
     this.fileName = "orderer.yaml";
     this.defaultOutputPath = "./tests";
   }
@@ -64,18 +62,6 @@ class OrdererConfig implements YamlConfig {
 
     //return a string to component
     return this.ymlString;
-  }
-
-  //saving a file to a given path and yamldata.
-  //if variable is not declare, use default variable.
-  saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
-
-    try {
-      fs.writeFileSync(outputPath + '/' + this.fileName, inputFileData, 'utf-8');
-    }
-    catch (e) {
-      console.log(e);
-    }
   }
 
   editFile(filePath: string, inputFileData: object) {

@@ -19,7 +19,6 @@
     "electron-rebuild": "^2.0.3",
     "file-system": "^2.2.2",
     "js-yaml": "^3.14.0",
-    "mitt": "^2.1.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.0.0",
     "primevue": "^2.0.9",

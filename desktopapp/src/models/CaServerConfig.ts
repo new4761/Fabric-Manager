@@ -1,18 +1,15 @@
-import { dir } from 'console';
-// Class for create Config.yaml for Ca Sererver Config
+// Class for create fabric-ca-server.yaml for Server CA Config
 // type of ca = root TLS | CA / intermediate CA
-const yaml = require('js-yaml');
+//import YAML from 'yaml';
 const EntityPersist = require('./database/EntityPersist');
 const CARepository = require("./database/CARepository");
+const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
-import { ConfigData } from "ConfigData";
+import { ConfigData,CSRKey,CSRNames,CSRCa } from "ConfigData";
 import { BCCSPConfig } from "../module/BCCSPConfig"
-// check is  isDevelopment?
-const isDevelopment = process.env.NODE_ENV !== 'production'
-
-class CaServerConfig implements YamlConfig {
+import {FileYamlBuilder} from "../module/FileYamlBuilder"
+class CaServerConfig extends FileYamlBuilder implements YamlConfig  {
    //*************************************************
-   // variables for export file
    fileName: string;
    defaultOutputPath: string;
    //************************************************
@@ -145,6 +142,7 @@ class CaServerConfig implements YamlConfig {
    // ****************************************
    //YamlConfig defalut Function
    constructor() {
+      super();
       // define file name and dafault path
       this.fileName = "fabric-ca-server-config.yaml";
       this.defaultOutputPath = "./bin";
@@ -154,7 +152,7 @@ class CaServerConfig implements YamlConfig {
       console.log(userInput);
    }
    createFile() {
-      let src = "# This file is Generate from YamlClass used to configuration file for the fabric-ca-server command.\n";
+      let src = "# This file is Generate from YamlClass used to configuration file fabric-ca-server \n";
       src += "# Base on fabric-ca-server-config.yaml version:" + this.version + "\n \n";
       src += "################################################################### \n"
       src += "\n # Version of config file \n"
@@ -200,40 +198,21 @@ class CaServerConfig implements YamlConfig {
       src += yaml.dump({ "operations": this.operations });
       src += this.metrics.getComment();
       src += yaml.dump({ "metrics": this.metrics })
-      this.saveFile(undefined, src);
+      this.saveFile(this.defaultOutputPath, src,this.fileName);
 
    }
-   saveFile(outputPath = this.defaultOutputPath, inputFileData: string) {
-
-      try {
-         // example for check dev mode function
-         // used this style for base to write function who work with files
-         if (!isDevelopment) {
-            console.log(path.dirname(__dirname));
-         }
-         let filePath = path.join(!isDevelopment ? path.dirname(__dirname) : '', outputPath, this.fileName);
-         fs.writeFileSync(filePath, inputFileData, 'utf-8');
-         //this.updateNetworkConfig();
-      }
-      catch (e) {
-         console.log(e);
-      }
-   }
-
    editFile(filePath: string, inputFileData: object) {
 
    }
-   
    updateNetworkConfig() {
-      const entity = new EntityPersist();
+           const entity = new EntityPersist();
       const caRepo = new CARepository(entity);
       caRepo.create("CA server", "Root", "./test/ca", this.port);
      
-   }
+  }
    // *********************************************
    // Self function
 }
-
 //****************************************************
 // interface for affiliation section
 
@@ -542,24 +521,8 @@ interface SigningProfiles {
       }
    }
 }
-// interface for define algoritem in csr
-interface CSRKey {
-   algo: string,
-   size: number
-}
-// interface for details to csr
-interface CSRNames {
-   C: string;
-   ST: string;
-   L: string;
-   O: string;
-   OU: string;
-}
-// ca details for old and ica
-interface CSRCa {
-   expiry: string,
-   pathlength: number
-}
+
+
 interface IcaParentServer {
    url: string | null,
    caname: string | null
@@ -591,5 +554,4 @@ interface MetricsStats {
    writeInterval: string,
    prefix: string
 }
-
 export default new CaServerConfig();
