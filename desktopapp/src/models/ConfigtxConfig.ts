@@ -1,16 +1,8 @@
-
-// Class for create Config.yaml for Ca Sererver Config
-// type of ca = root TLS | CA / intermediate CA
-import fs from 'fs';
-//import YAML from 'yaml';
-const path = require('path');
-const Database = require('better-sqlite3');
+// Class for create configtx,yaml for NetworkConfig
 const yaml = require('js-yaml');
-// check is  isDevelopment?
-const isDevelopment = process.env.NODE_ENV !== 'production'
 import { YamlConfig } from "yaml-config";
-
-class ConfigtxConfig implements YamlConfig {
+import {FileYamlBuilder} from "../module/FileYamlBuilder"
+class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
     //**********************************
     // variable for export file 
     fileName:string;
@@ -20,12 +12,15 @@ class ConfigtxConfig implements YamlConfig {
     // self class variable
 
     constructor () {
+        super();
         this.fileName = "configtx.yaml";
         this.defaultOutputPath = "bin"
     }
     getUserInput(){}
     createFile(){}
-    saveFile(){}
     editFile(){}
     updateNetworkConfig(){}
+}
+// default data for yaml file 
+class Capabilities {
 }

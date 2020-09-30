@@ -1,4 +1,4 @@
-// Class for create Config.yaml for Client Config
+// Class for create fabric-ca-client.yaml for Client CA Config
 //import YAML from 'yaml';
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";

@@ -1,4 +1,4 @@
-// Class for create Config.yaml for Ca Sererver Config
+// Class for create fabric-ca-server.yaml for Server CA Config
 // type of ca = root TLS | CA / intermediate CA
 //import YAML from 'yaml';
 const yaml = require('js-yaml');
@@ -207,8 +207,6 @@ class CaServerConfig extends FileYamlBuilder implements YamlConfig  {
    // *********************************************
    // Self function
 }
-import { format } from 'path';
-
 //****************************************************
 // interface for affiliation section
 
