@@ -1,10 +1,9 @@
+import { dir } from 'console';
 // Class for create Config.yaml for Ca Sererver Config
 // type of ca = root TLS | CA / intermediate CA
-import fs from 'fs';
-//import YAML from 'yaml';
-const path = require('path');
-const Database = require('better-sqlite3');
 const yaml = require('js-yaml');
+const EntityPersist = require('./database/EntityPersist');
+const CARepository = require("./database/CARepository");
 import { YamlConfig } from "yaml-config";
 import { ConfigData } from "ConfigData";
 import { BCCSPConfig } from "../module/BCCSPConfig"
@@ -214,7 +213,7 @@ class CaServerConfig implements YamlConfig {
          }
          let filePath = path.join(!isDevelopment ? path.dirname(__dirname) : '', outputPath, this.fileName);
          fs.writeFileSync(filePath, inputFileData, 'utf-8');
-         this.updateNetworkConfig();
+         //this.updateNetworkConfig();
       }
       catch (e) {
          console.log(e);
@@ -224,13 +223,12 @@ class CaServerConfig implements YamlConfig {
    editFile(filePath: string, inputFileData: object) {
 
    }
+   
    updateNetworkConfig() {
-      let filePath = path.join(this.defaultOutputPath, 'test.db');
-      const db = new Database(filePath, { verbose: console.log });
-      db.prepare('CREATE TABLE greetings(message text)').run();
-      const stmt = db.prepare((`INSERT INTO greetings(message) VALUES('Hi'),('Hello'),('Welcome')`));
-      const info = stmt.run();
-      console.log(info.changes); // => 1
+      const entity = new EntityPersist();
+      const caRepo = new CARepository(entity);
+      caRepo.create("CA server", "Root", "./test/ca", this.port);
+     
    }
    // *********************************************
    // Self function
