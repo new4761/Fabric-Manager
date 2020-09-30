@@ -29,7 +29,7 @@ class OrdererConfig implements YamlConfig {
 
   constructor() {
     this.fileName = "orderer.yaml";
-    this.defaultOutputPath = "./test";
+    this.defaultOutputPath = "./tests";
   }
 
   getUserInput(userInput: OrdererConfig) {
@@ -39,6 +39,7 @@ class OrdererConfig implements YamlConfig {
   //writing a string from objects and bundle them together and return the string to component.
   createFile() {
 
+    this.ymlString ="";
     //file header
     this.ymlString += "# This file is Generate from YamlClass used to configuration file for the ordering service.\n";
     this.ymlString += "# Base on Orderer.yaml" + "\n \n";
@@ -78,11 +79,7 @@ class OrdererConfig implements YamlConfig {
 
   }
   updateNetworkConfig() {
-  //   users.find({}).sort({name: 1}).exec(function(err: any, docs: any[]) {
-  //     docs.forEach(function(d) {
-  //         console.log('Found user:', d.name);
-  //     });
-  // });
+
   }
 
 }

@@ -1,11 +1,15 @@
+import { dir } from 'console';
 // Class for create Config.yaml for Ca Sererver Config
 // type of ca = root TLS | CA / intermediate CA
 import fs from 'fs';
-//import YAML from 'yaml';
 const path = require('path');
-const Database = require('better-sqlite3');
+
 const yaml = require('js-yaml');
-import YamlConfig from './YamlConfig'
+import YamlConfig from './YamlConfig';
+
+const EntityPersist = require('./database/EntityPersist');
+const NetworkRepository = require('./database/NetworkRepository');
+
 // check is  isDevelopment?
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -207,12 +211,12 @@ class CaServerConfig implements YamlConfig {
       try {
          // example for check dev mode function
          // used this style for base to write function who work with files
-         if(!isDevelopment){
-         console.log(path.dirname(__dirname));
+         if (!isDevelopment) {
+            console.log(path.dirname(__dirname));
          }
-         let filePath = path.join(!isDevelopment?path.dirname(__dirname):'',outputPath, this.fileName);
+         let filePath = path.join(!isDevelopment ? path.dirname(__dirname) : '', outputPath, this.fileName);
          fs.writeFileSync(filePath, inputFileData, 'utf-8');
-         this.updateNetworkConfig();
+         //this.updateNetworkConfig();
       }
       catch (e) {
          console.log(e);
@@ -223,12 +227,35 @@ class CaServerConfig implements YamlConfig {
 
    }
    updateNetworkConfig() {
-      let filePath = path.join(this.defaultOutputPath, 'test.db');
-      const db = new Database(filePath, { verbose: console.log });
-      db.prepare('CREATE TABLE greetings(message text)').run();
-      const stmt = db.prepare((`INSERT INTO greetings(message) VALUES('Hi'),('Hello'),('Welcome')`));
-      const info = stmt.run();
-      console.log(info.changes); // => 1
+      const entity = new EntityPersist();
+      const networkRepo = new NetworkRepository(entity);
+      networkRepo.createTable();
+
+      const projectmeta = {
+         name: 'project9',
+         dir: 'desktop'
+      }
+
+      const updateprojectmeta = {
+         id: 1,
+         name: 'project9',
+         directory: 'sadsadkasodkoaskdokoask'
+      }
+
+      networkRepo.create(projectmeta.name, projectmeta.dir);
+      networkRepo.update(updateprojectmeta);
+      networkRepo.create("project2", "desktop");
+      networkRepo.create("project3", "desktop");
+      networkRepo.create("project4", "desktop");
+      networkRepo.create("project5", "desktop");
+
+      // let filePath = path.join(!isDevelopment?path.dirname(__dirname):'',this.defaultOutputPath, 'NetworkConfig.db');
+      // const db = new Database(filePath, { verbose: console.log });
+      // db.prepare('CREATE TABLE IF NOT EXISTS greetings(message text)').run();
+      // const stmt = db.prepare((`INSERT INTO greetings(message) VALUES($this.hi),('Hello'),('Welcome')`));
+      // const info = stmt.run();
+      // console.log(info.changes); // => 1
+      // EntityPersist.insert();
    }
    // *********************************************
    // Self function
