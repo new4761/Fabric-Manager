@@ -88,7 +88,7 @@ export default class App extends Vue {
     console.log("test orderer");
     OrdererConfig.General.ListenPort = 66666;
     this.output = OrdererConfig.createFile();
-    OrdererConfig.saveFile(undefined, this.output);
+    OrdererConfig.saveFile(, this.output,OrdererConfig.fileName);
     OrdererConfig.updateNetworkConfig();
     this.$toast.add({
       severity: "success",

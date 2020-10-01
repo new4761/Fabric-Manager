@@ -36,7 +36,8 @@ declare module 'ConfigData' {
     interface OrganizationData{
         [key:string]:{
             Name:string,
-            ID:string,
+	    SkipAsForeign?:boolean,		
+	    ID:string,
             MSPDir:string,
             Polices:Polices,
             OrdererEndpoints?:string[],
@@ -47,4 +48,5 @@ declare module 'ConfigData' {
         Host:string,
         Port:number
     }
+
 }
