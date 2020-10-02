@@ -7,12 +7,11 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
     // variable for export file 
     fileName: string;
     defaultOutputPath: string;
-
     //****************************************
     // self class variable
     testData = {
         Name:"sad",
-         SkipiAsForeign: false,
+        SkipiAsForeign: false,
         ID: "asad",
         MSPDir: "msp"
     }
@@ -22,14 +21,12 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
         this.fileName = "configtx.yaml";
         this.defaultOutputPath = "bin"
     }
-    d1 = new ChannelCapabilities ();
     getUserInput() { }
     createFile() {
-        let src = "\n # This file is Generate from YamlClass";
+        let src = "\n # This file is Generate from YamlClass \n";
  //       src += yaml.safeDump({"sas":this.Organization})
-        src += yaml.safeDump({"Channle":this.d1})     
-          
-        src += yaml.safeDump({"Channle":this.d1})     
+        src += yaml.safeDump({"Channle":this.Organization})     
+         
  this.saveFile(this.defaultOutputPath, src, this.fileName);
     }
     editFile() { }
@@ -37,6 +34,7 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
 }
 // default data for yaml file
 class  ChannelCapabilities {
-    V2_0:boolean=true
+  constructor(version:string,value:boolean){
+  }
 }
 export default new ConfigtxConfig();

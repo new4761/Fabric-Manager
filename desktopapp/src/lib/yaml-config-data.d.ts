@@ -48,5 +48,7 @@ declare module 'ConfigData' {
         Host:string,
         Port:number
     }
-
+    interface CapabilitiesData{
+    
+    }
 }
