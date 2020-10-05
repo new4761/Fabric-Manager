@@ -49,4 +49,10 @@ declare module 'ConfigData' {
     interface CapabilitiesData{
         [key:string]:boolean    
     }
+    interface Consrtiums{
+    
+        [key:string]:{
+            Organizations:[]
+        }
+    }
 }

@@ -4,6 +4,7 @@ import { YamlConfig } from "yaml-config";
 import { FileYamlBuilder } from "../module/FileYamlBuilder";
 import { CapabilitiesData} from "ConfigData";
 import {OrdererOrg, Organization, PeerOrg} from "../module/OrganizationsConfig"
+import {Gennesis_Solo, ProfileChannel_Cap} from "../module/ProfileConfig"
 const path = require('path');
 class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
     //**********************************
@@ -24,14 +25,18 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
         this.defaultOutputPath = "bin";
         this.capabilities = new Capabilities("V2_0");
         this.channel = new Channel(this.capabilities.Channel);
-      let demoOrg0 = new  OrdererOrg("Orderer","test.com",7050);
+      //  this.application = new Application(this.capabilities.Application);
+        this.application = new Application();
+        let demoOrg0 = new  OrdererOrg("Orderer","test.com",7050);
         this.addOrganization(demoOrg0);
         let demoOrg1 = new PeerOrg ("Peer","test2.com",7053);
         this.addOrganization(demoOrg1);
        this.orderer = new Orderer(demoOrg0.OrdererEndpoints)
-       
-      //  this.application = new Application(this.capabilities.Application);
-        this.application = new Application();
+      let orgList1 = this.createOrgList(demoOrg0,demoOrg1); 
+      let orderGen = new Gennesis_Solo (this.channel,this.orderer,orgList1,this.capabilities.Orderer,"testCon",orgList1);
+      let channelDemo = new ProfileChannel_Cap("testCon",this.channel,this.application,orgList1,this.capabilities.Application);
+      this.setProfile("testGenesis",orderGen ) ;
+      this.setProfile("demoChannel", channelDemo);
         this.ConfigtxData.Capabilities = this.capabilities;
         this.ConfigtxData.Organizations = this.organizations;
         this.ConfigtxData.Application  = this.application;
@@ -50,6 +55,17 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
     addOrganization(org:Organization){
         this.organizations.push(org);
     }
+    setProfile(name:string,data:any){
+    this.ConfigtxData.Profiles[name]=data;
+    }
+    createOrgList(...orgs:Organization[]){
+      let data =[]
+      for (let org of orgs){
+      data.push(org);
+      }
+      console.log("orglist:"+data)
+      return data;
+    }
 }
 // default data for yaml file
 class Capabilities {
@@ -62,7 +78,7 @@ class Capabilities {
         this.Application = { [version]: true };
     }
 }
-class Application {
+export class Application {
     Organization:string|null = null;
  //   Polices:Polices;
  //   Capabilities:CapabilitiesData;
@@ -99,9 +115,9 @@ class ConfigtxData {
     Application = {};
     Orderer ={};
     Channel = {};
-    Profiles = {};
+    Profiles:any = {};
 }
-class Channel {
+export class Channel {
     Polices = {       Readers:
             { Type: "ImplicitMeta",
             
@@ -123,7 +139,7 @@ class Channel {
 
 }
 
-class Orderer {
+export class Orderer {
     OrdererType = "solo";
     Addresses:string[]=[];
     BatchTimeout = "2s";
@@ -134,10 +150,11 @@ class Orderer {
     }
     Organization =null;
     constructor(address:string[]){
-    this.Addresses = address;
+    this.Addresses = this.cloneArray(address);
     }
-    addAddresses(host:string,port:number){
-        this.Addresses.push(host+":"+port);
-    }
-}
+    cloneArray(data: string[]) {
+        let temp: string[] = [];
+        data.forEach(val => temp.push(val));
+        return temp;
+    }}
 export default new ConfigtxConfig();
