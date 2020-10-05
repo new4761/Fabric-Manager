@@ -55,7 +55,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 import OrdererConfig from "./models/OrdererConfig";
 import CaServerConfig from "./models/CaServerConfig";
 import CaClientConfig from "./models/CaClientConfig";
-
+import ConfigtxConfig from "./models/ConfigtxConfig";
 
 const EntityPersist = require("./models/database/EntityPersist");
 const NetworkRepository = require("./models/database/NetworkRepository");
@@ -88,7 +88,7 @@ export default class App extends Vue {
     console.log("test orderer");
     OrdererConfig.General.ListenPort = 66666;
     this.output = OrdererConfig.createFile();
-    OrdererConfig.saveFile(undefined, this.output);
+    OrdererConfig.saveFile(OrdererConfig.defaultOutputPath, this.output,OrdererConfig.fileName);
     OrdererConfig.updateNetworkConfig();
     this.$toast.add({
       severity: "success",
@@ -104,6 +104,7 @@ export default class App extends Vue {
     CaServerConfig.port = 66666;
     CaServerConfig.db.datasource = "dkaisjduhjasidjasdjij";
     CaServerConfig.getUserInput(CaServerConfig);
+    ConfigtxConfig.createFile();
     CaServerConfig.createFile();
     CaClientConfig.createFile();
     this.$toast.add({severity:'success', summary: 'Success Message', detail:'fabric-ca-server-config.yaml created', life: 3000});
