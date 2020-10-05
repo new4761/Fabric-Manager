@@ -24,7 +24,7 @@ declare module 'ConfigData' {
     interface Polices{
         Readers:PolicesData,
         Writers:PolicesData,
-        Admin:PolicesData,
+        Admins:PolicesData,
         LifecycleEndorsement?:PolicesData,
         BlockValidation?:PolicesData,
         Endorsement:PolicesData
@@ -34,17 +34,25 @@ declare module 'ConfigData' {
         Rule:string
     }
     interface OrganizationData{
-        [key:string]:{
             Name:string,
-            ID:string,
+	    SkipAsForeign?:boolean,		
+	    ID:string,
             MSPDir:string,
-            Polices:Polices,
+            Polices?:Polices,
             OrdererEndpoints?:string[],
-            AnchorPees?:[]
-        }
+            AnchorPees?:AnchorPees[]
     }
     interface AnchorPees {
         Host:string,
         Port:number
+    }
+    interface CapabilitiesData{
+        [key:string]:boolean    
+    }
+    interface Consrtiums{
+    
+        [key:string]:{
+            Organizations:[]
+        }
     }
 }
