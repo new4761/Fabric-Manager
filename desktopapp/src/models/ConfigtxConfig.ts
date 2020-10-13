@@ -5,7 +5,6 @@ import { FileYamlBuilder } from "../module/FileYamlBuilder";
 import { CapabilitiesData} from "ConfigData";
 import {OrdererOrg, Organization, PeerOrg} from "../module/OrganizationsConfig"
 import {Gennesis_Solo, ProfileChannel_Cap} from "../module/ProfileConfig"
-const path = require('path');
 class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
     //**********************************
     // variable for export file 
@@ -80,34 +79,6 @@ class Capabilities {
 }
 export class Application {
     Organization:string|null = null;
- //   Polices:Polices;
- //   Capabilities:CapabilitiesData;
- //   constructor(capabilitie:CapabilitiesData){
- //      this.Organization = null,
- //       this.Polices ={        Readers:
- //           { Type: "ImplicitMeta",
- //           
- //               Rule: "ANY Readers"
- //       },
- //       Writers:{
- //           Type: "ImplicitMeta",
- //           Rule: "ANY Writers"
- //       },
- //       Admins:{
- //           Type: "ImplicitMeta",
- //           Rule: "MAJORITY Admins"
- //       },
- //       LifecycleEndorsement:{
- //           Type: "ImplicitMeta",
- //           Rule: "MAJORITY Endorsement"
- //       },
- //       Endorsement:{
- //           Type: "ImplicitMeta",
- //           Rule: "MAJORITY Endorsement"
- //       }
- //       }
- //     this.Capabilities = capabilitie;
- //}  
 }
 class ConfigtxData {
     Organizations:any[]= [];

@@ -1,18 +1,20 @@
 <template>
   <div class="app">
-
-      <!-- <div class="p-mr-2"><Button label="Submit" @click="goto('/')"/></div>
+    <!-- <div class="p-mr-2"><Button label="Submit" @click="goto('/')"/></div>
       <div class="p-mr-2"><Button label="Submit" @click="goto('/testing')"/></div> -->
-      <Menubar :model="items" class = "p-mb-5">
-        <template #end>
-          <InputText placeholder="Search" type="text" />
-        </template>
-      </Menubar>
+    <Menubar :model="items" class="p-mb-5">
+      <template #end>
+        <InputText placeholder="Search" type="text" />
+      </template>
+    </Menubar>
 
-    <div class="p-d-flex" style="height: 500px">
-      <div class="p-col-2 p-mr-2 p-as-stretch p-shadow-6">bar</div>
+    <div class="p-d-flex" style="height: 600px">
+      <div class="p-col-2 p-mr-2 p-as-stretch p-shadow-6">
+        <h3>Current path</h3>
+        <h5>{{ path }}</h5>
+      </div>
       <div class="p-col p-mr-2 p-as-stretch p-shadow-6">
-        <ScrollPanel style="width: 100%; height: 400px" class="custom">
+        <ScrollPanel style="width: 100%; height: 500px" class="custom">
           <router-view />
         </ScrollPanel>
       </div>
@@ -27,9 +29,8 @@ import Component from "vue-class-component";
   components: {},
 })
 export default class App extends Vue {
-  goto(destination: string) {
-    this.$router.push({ path: destination });
-  }
+  path: any = this.$router.currentRoute.name;
+
   data() {
     return {
       items: [
@@ -44,18 +45,18 @@ export default class App extends Vue {
           to: "/testing",
         },
         {
-          label: "Users",
-          icon: "pi pi-fw pi-briefcase",
-          to:"/orgchart"
+          label: "tab",
+          icon: "pi pi-fw pi-pencil",
+          to: "/orgchart",
         },
         {
-          label: "Events",
-          icon: "pi pi-fw pi-calendar",
-          to:"/orgform"
+          label: "tab",
+          icon: "pi pi-fw pi-pencil",
+          to: "/orgform",
         },
         {
-          label: "Quit",
-          icon: "pi pi-fw pi-power-off",
+          label: "tab",
+          icon: "pi pi-fw pi-pencil",
         },
       ],
     };
@@ -64,7 +65,6 @@ export default class App extends Vue {
 </script>
 
 <style scoped>
-
 .custom .p-scrollpanel-wrapper {
   border-right: 9px solid #f4f4f4;
 }

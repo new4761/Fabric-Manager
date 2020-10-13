@@ -66,6 +66,7 @@ import Tree from 'primevue/tree';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import ScrollPanel from 'primevue/scrollpanel';
+import ProgressSpinner from 'primevue/progressspinner';
 
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -144,6 +145,8 @@ Vue.component('Tree', Tree);
 Vue.component('TreeTable', TreeTable);
 Vue.component('TriStateCheckbox', TriStateCheckbox);
 Vue.component('ScrollPanel', ScrollPanel);
+Vue.component('ProgressSpinner', ProgressSpinner);
+
 
 
 new Vue({

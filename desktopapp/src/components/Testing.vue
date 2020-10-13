@@ -14,18 +14,17 @@
 
     <div class="p-col-4">
       <Button
-        label="Create Networkconfig"
-        @click="createTable()"
+        label="Create org"
+        @click="testOrg()"
         class="p-m-1 p-button-warning"
       />
 
       <Button
-        label="Orderer gen"
-        @click="testOrderer()"
+        label="Create compose"
+        @click="testCompose()"
         class="p-m-1 p-button-info"
       />
 
-      <Button label="CA gen" @click="testCa()" class="p-m-1 p-button-success" />
     </div>
 
     <div class="p-col">
@@ -51,31 +50,12 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import HelloWorld from "../components/HelloWorld.vue";
-import OrdererConfig from "../models/OrdererConfig";
-import CaServerConfig from "../models/CaServerConfig";
-import CaClientConfig from "../models/CaClientConfig";
-import ConfigtxConfig from "../models/ConfigtxConfig";
-
-const EntityPersist = require("../models/database/EntityPersist");
-const NetworkRepository = require("../models/database/NetworkRepository");
-const CARepository = require("../models/database/CARepository");
-const OrdererRepository = require("../models/database/OrdererRepository");
-
-const entity = new EntityPersist();
-const networkRepo = new NetworkRepository(entity);
-const caRepo = new CARepository(entity);
-const ordererRepo = new OrdererRepository(entity);
-
-const projectmeta = {
-  name: "test-project",
-  dir: "desktop",
-};
-
+import OrgConfig from "../models/OrgConfig"
+import ComposeConfig from "../models/ComposeConfig"
 
 @Component({
   components: {
-    HelloWorld,
+
   },
 })
 export default class Testing extends Vue {
@@ -84,12 +64,12 @@ export default class Testing extends Vue {
   count: number = 0;
   $toast: any;
 
-  testOrderer() {
-    console.log("test orderer");
-    OrdererConfig.General.ListenPort = 66666;
-    this.output = OrdererConfig.createFile();
-    OrdererConfig.saveFile(OrdererConfig.defaultOutputPath, this.output,OrdererConfig.fileName);
-    OrdererConfig.updateNetworkConfig();
+  testOrg() {
+    console.log("test Org");
+
+    this.output = OrgConfig.createFile();
+    OrgConfig.saveFile(OrgConfig.defaultOutputPath, this.output,OrgConfig.fileName);
+    OrgConfig.updateNetworkConfig();
     this.$toast.add({
       severity: "success",
       summary: "Success Message",
@@ -98,41 +78,23 @@ export default class Testing extends Vue {
     });
   }
 
-  testCa() {
-    console.log("test ca");
+  testCompose() {
+    console.log("test Compose");
 
-    CaServerConfig.port = 66666;
-    CaServerConfig.db.datasource = "dkaisjduhjasidjasdjij";
-    CaServerConfig.getUserInput(CaServerConfig);
-    ConfigtxConfig.createFile();
-    CaServerConfig.createFile();
-    CaClientConfig.createFile();
-    this.$toast.add({severity:'success', summary: 'Success Message', detail:'fabric-ca-server-config.yaml created', life: 3000});
-
-    CaServerConfig.updateNetworkConfig();
+    this.output = ComposeConfig.createFile();
+    ComposeConfig.saveFile(OrgConfig.defaultOutputPath, this.output,ComposeConfig.fileName);
+    ComposeConfig.updateNetworkConfig();
     this.$toast.add({
       severity: "success",
       summary: "Success Message",
-      detail: "fabric-ca-server-config.yaml created",
-      life: 3000,
-    });
-
-  }
-
-  createTable() {
-    networkRepo.createTable();
-    caRepo.createTable();
-    ordererRepo.createTable();
-
-    networkRepo.create(projectmeta.name, projectmeta.dir);
-
-    this.$toast.add({
-      severity: "info",
-      summary: "Success Message",
-      detail: "table created",
+      detail: "Orderer.yaml created",
       life: 3000,
     });
   }
+
+
+
+
 
   data() {
     return {
