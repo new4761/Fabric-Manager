@@ -48,7 +48,7 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
         let src = "\n # This file is Generate from YamlClass \n";
         //       src += yaml.safeDump({"sas":this.Organization})
         src += yaml.safeDump(this.ConfigtxData);
-        this.saveFile(this.defaultOutputPath, src, this.fileName);
+        this.saveFileWithReplace(this.defaultOutputPath, src, this.fileName,/'<<'/gi,"<<");
     }
     editFile() { }
     updateNetworkConfig() { }
@@ -66,6 +66,8 @@ class ConfigtxConfig extends FileYamlBuilder implements YamlConfig {
       console.log("orglist:"+data)
       return data;
     }
+       
+
 }
 // default data for yaml file
 class Capabilities {
@@ -157,4 +159,5 @@ export class Orderer {
         data.forEach(val => temp.push(val));
         return temp;
     }}
+
 export default new ConfigtxConfig();
