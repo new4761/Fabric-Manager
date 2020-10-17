@@ -1,38 +1,39 @@
 import { CapabilitiesData } from "ConfigData";
 import { Orderer, Application, Channel } from "../models/ConfigtxConfig";
-import { Organization } from "../module/OrganizationsConfig"
+import { Organizations } from "../module/OrganizationsConfig"
 export class Gennesis_Solo {
     Orderer: any = {};
     Consortiums: any = {};
     ["<<"]: Channel;
-    constructor(channelDefault: Channel, orderer: Orderer, ordererOrgList: Organization[],ordererCap:CapabilitiesData, nameConsortium: string, consrtiumsOrgList: Organization[]) {
+    constructor(channelDefault: Channel, orderer: Orderer, ordererOrgList: Organizations[],ordererCap:CapabilitiesData, nameConsortium: string, consrtiumsOrgList: Organizations[]) {
 
         this["<<"] = channelDefault;
-        this.Consortiums[nameConsortium] = this.cloneArray(consrtiumsOrgList);
+        let orglist = this.cloneArray(consrtiumsOrgList);
+        this.Consortiums[nameConsortium]= {Organizations:orglist}
         this.Orderer["<<"] = orderer;
         this.Orderer["Organizations"] = this.cloneArray(ordererOrgList);
         this.Orderer["Capabilities"] = ordererCap;
     }
-    cloneArray(data: Organization[]) {
-        let temp: Organization[] = [];
+    cloneArray(data: Organizations[]) {
+        let temp: Organizations[] = [];
         data.forEach(val => temp.push(val));
         return temp;
     }
 
 }
 export class ProfileChannel_Cap {
-    Consortiums: string;
+    Consortium: string;
     ["<<"]: Channel;
     Application:any ={} ;
-    constructor(consortiumName:string,channelDefault:Channel,applicationDefault:Application,orglist:Organization[],capabilitie:CapabilitiesData){
-    this.Consortiums =consortiumName;
+    constructor(consortiumName:string,channelDefault:Channel,applicationDefault:Application,orglist:Organizations[],capabilitie:CapabilitiesData){
+    this.Consortium =consortiumName;
     this["<<"] = channelDefault;
     this.Application["<<"] = applicationDefault;
-    this.Application["Organization"] =this.cloneArray(orglist);
+    this.Application["Organizations"] =this.cloneArray(orglist);
     this.Application["Capabilities"] =capabilitie; 
     }
-cloneArray(data: Organization[]) {
-        let temp: Organization[] = [];
+cloneArray(data: Organizations[]) {
+        let temp: Organizations[] = [];
         data.forEach(val => temp.push(val));
         return temp;
     }

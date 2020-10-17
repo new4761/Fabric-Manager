@@ -4,18 +4,19 @@
 <h3> Nothing here ATM.</h3> 
 <h5> Minimalist is the best.</h5> 
 <small> I'm accidentally merging a branch so everything is gone. help. </small> 
-
+<br><ButtonConfigtx></ButtonConfigtx>
 </div>
 
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ButtonConfigtx from './components/testItem/ButtonConfigtx'
 
 @Component({
   components: {
+    ButtonConfigtx
   }
 })
 export default class Index extends Vue {

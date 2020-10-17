@@ -1,7 +1,7 @@
 
 import {AnchorPees} from "ConfigData";
 import { OrganizationData, } from "ConfigData";
-export class Organization implements OrganizationData{
+export class Organizations implements OrganizationData{
     Name:string;
     ID:string;
     MSPDir:string;
@@ -17,7 +17,7 @@ export class Organization implements OrganizationData{
     }
 }
 
-export class OrdererOrg extends Organization{
+export class OrdererOrg extends Organizations{
  OrdererEndpoints:string[]=[];
  constructor(name:string,host:string,port:number){
  super(name);
@@ -26,15 +26,11 @@ export class OrdererOrg extends Organization{
  }
 }
 
-export class PeerOrg extends Organization{
+export class PeerOrg extends Organizations{
 
-    AnchorPees:AnchorPees={
-    Host:"",
-    Port:0
-    }
+    AnchorPeers:AnchorPees[]=[];
     constructor(name:string,host:string,port:number){
     super(name);
-    this.AnchorPees.Host = host;
-    this.AnchorPees.Port =port;
+    this.AnchorPeers.push({Host:host,Port:port})
     }
 }
