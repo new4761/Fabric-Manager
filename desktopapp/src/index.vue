@@ -5,6 +5,7 @@
 <h5> Minimalist is the best.</h5> 
 <small> I'm accidentally merging a branch so everything is gone. help. </small> 
 <br><ButtonConfigtx></ButtonConfigtx>
+<br> <DemoSpecButton></DemoSpecButton>
 </div>
 
 </template>
@@ -13,10 +14,11 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import ButtonConfigtx from './components/testItem/ButtonConfigtx'
-
+import DemoSpecButton from './components/testItem/DemoSpecButton'
 @Component({
   components: {
-    ButtonConfigtx
+    ButtonConfigtx,
+    DemoSpecButton
   }
 })
 export default class Index extends Vue {

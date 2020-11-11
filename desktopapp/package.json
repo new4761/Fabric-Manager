@@ -14,9 +14,9 @@
   },
   "main": "background.js",
   "dependencies": {
-    "better-sqlite3": "^7.1.1",
     "core-js": "^3.6.5",
     "electron-rebuild": "^2.0.3",
+    "eslint-plugin-vue": "^7.1.0",
     "file-system": "^2.2.2",
     "js-yaml": "^3.14.0",
     "primeflex": "^2.0.0",
@@ -42,7 +42,6 @@
     "electron": "9.0.0",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0-0",
     "typescript": "~3.9.3",
     "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
     "vue-template-compiler": "^2.6.11"

@@ -19,6 +19,22 @@ export class Organizations implements OrganizationData{
 
 export class OrdererOrg extends Organizations{
  OrdererEndpoints:string[]=[];
+ Policies = {
+    Readers:
+    {
+        Type: "Signature",
+
+        Rule: "OR('"+this.Name+".member')"
+    },
+    Writers: {
+        Type: "Signature",
+        Rule: "OR('"+this.Name+".member')"
+    },
+    Admins: {
+        Type: "Signature",
+        Rule: "OR('"+this.Name+".member')"
+    }
+}
  constructor(name:string,host:string,port:number){
  super(name);
  this.OrdererEndpoints.push (host+":"+port);
@@ -27,7 +43,24 @@ export class OrdererOrg extends Organizations{
 }
 
 export class PeerOrg extends Organizations{
-
+Policies = {
+    Readers:
+    {
+        Type: "Signature",
+        Rule:"OR("+this.Name+".admin, "+this.Name+".peer, "+this.Name+".client)"
+    },
+    Writers: {
+        Type: "Signature",
+        Rule: "OR("+this.Name+".admin"+", "+this.Name+".client)"
+    },
+    Admins: {
+        Type: "Signature",
+        Rule: "OR("+this.Name+".admin)"
+    },Endorsement: {
+      Type: "Signature",
+       Rule: "OR("+this.Name+".peer)"
+    },
+}
     AnchorPeers:AnchorPees[]=[];
     constructor(name:string,host:string,port:number){
     super(name);

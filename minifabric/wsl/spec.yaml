@@ -1,0 +1,12 @@
+fabric:
+  cas:
+    - CA0.new4761
+    - CA0.inwza007
+  peers:
+    - peer0.new4761
+    - peer1.new4761
+    - peer0.inwza007
+    - peer1.inwza007
+  orderers:
+    - orderer0.orgDefault
+    - orderer1.ufo

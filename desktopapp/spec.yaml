@@ -1,0 +1,5 @@
+fabric:
+  cas: []
+  peers: []
+  orderers:
+    - orgDefault

@@ -5,8 +5,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import ConfigtxConfig from '../../models/ConfigtxConfig'
-
+//import ConfigtxConfig from '../../models/ConfigtxConfig'
+//import OSProcess from '../../module/OSProcess'
+import SpecConifg from '../../models/SpecConfig'
 @Component({
   components: {
   }
@@ -16,7 +17,9 @@ data(){
     return{}
 }
 testFunction(){
-    ConfigtxConfig.createFile();
+ //   ConfigtxConfig.createFile();
+ //OSProcess.testfunction();
+ SpecConifg.createFile();
 }
 }
 </script>
