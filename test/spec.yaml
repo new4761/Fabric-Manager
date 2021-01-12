@@ -1,0 +1,18 @@
+fabric:
+  cas:
+    - ca1.asd.example.com
+    - ca1.asdasdasd.example.com
+    - ca1.asdasd.example.com
+  peers:
+    - peer1.asd.example.com
+    - peer2.asd.example.com
+    - peer3.asd.example.com
+    - peer1.asdasdasd.example.com
+    - peer2.asdasdasd.example.com
+    - peer3.asdasdasd.example.com
+    - peer1.asdasd.example.com
+    - peer2.asdasd.example.com
+    - peer3.asdasd.example.com
+  orderers:
+    - orderer1.example.com
+    - orderer2.example.com
