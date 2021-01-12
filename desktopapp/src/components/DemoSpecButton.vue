@@ -51,14 +51,6 @@
         <div class = "p-grid p-mt-5">
         <Button class="p-button-success p-m-2"  label="create" @click="createNetwork()" />
 
-        <Button class="p-button-primary p-m-2"   label="netup" @click="callMini()" />
-
-        <Button class="p-button-primary p-m-2"   label="create channel" @click="createChannel()" />
-
-        <Button class="p-button-primary p-m-2"   label="join channel" @click="joinChannel()" />
-
-        <Button class="p-button-primary p-m-2"   label="explorer" @click="explorer()" />
-
         <Button class="p-button-danger p-ml-auto"   label="close" @click="display = false" />
         </div>
       </Dialog>

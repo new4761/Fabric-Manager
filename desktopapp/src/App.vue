@@ -35,23 +35,9 @@ export default class App extends Vue {
           to: "/",
         },
         {
-          label: "Test-sql",
+          label: "Demo",
           icon: "pi pi-fw pi-pencil",
-          to: "/testing",
-        },
-        {
-          label: "tab",
-          icon: "pi pi-fw pi-pencil",
-          to: "/orgchart",
-        },
-        {
-          label: "tab",
-          icon: "pi pi-fw pi-pencil",
-          to: "/orgform",
-        },
-        {
-          label: "tab",
-          icon: "pi pi-fw pi-pencil",
+          to: "/demo",
         },
       ],
     };
