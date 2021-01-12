@@ -10,11 +10,11 @@ export default new Router({
 			name: 'home',
 			component: () => import('./index.vue')
         },
-		// {
-		// 	path: '/testing',
-		// 	name: 'Testing',
-		// 	component: () => import('./components/Testing.vue')
-        // },
+		{
+			path: '/demo',
+			name: 'Demo',
+			component: () => import('./pages/Demo.vue')
+        },
         // {
 		// 	path: '/caform',
 		// 	name: 'CaForm',

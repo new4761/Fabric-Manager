@@ -1,15 +1,8 @@
 <template>
 <div class="p-m-5">
-<h1> This is an Demo index page V 1.0</h1> 
-<h3> Nothing here ATM.</h3> 
-<!-- <h5> Minimalist is the best.</h5> 
-<small> I'm accidentally merging a branch so everything is gone. help. </small>  -->
-
-<small> Create Network, Create/join channel and explorer. </small> 
 
 <div class = "p-py-5">
-
-<DemoSpecButton></DemoSpecButton>
+   <Button label="goto demo page" @click="$router.push('demo')" />
 </div>
  
 </div>
