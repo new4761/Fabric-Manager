@@ -3,6 +3,7 @@
 
 <div class = "p-py-5">
    <Button label="goto demo page" @click="$router.push('demo')" />
+   <!-- <Button label="test json" @click="test()" /> -->
 </div>
  
 </div>
@@ -19,6 +20,9 @@ import DemoSpecButton from './components/DemoSpecButton.vue'
   }
 })
 export default class Index extends Vue {
+  // test(){
+  //   FileJsonBuilder.addProject();
+  // }
 
 }
 </script>

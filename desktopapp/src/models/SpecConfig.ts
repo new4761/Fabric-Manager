@@ -40,6 +40,7 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     console.log(this.src);
     this.resetData();
   }
+
   saveFile(outputPath: string, inputFileData: string, fileName: string) {
     try {
       // // check dev mode function
@@ -65,7 +66,10 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     fs.copyFileSync(minifabPath, path.join(outputPath, minifabFileName));
     // fs.copyFile();
     this.saveFile(outputPath, this.src, this.fileName);
+    //this.updateNetworkConfig(outputPath);
   }
+
+
   cerateCAOrg() {
     this.orgList.forEach((item) => {
       if (item.useCA == true) {
@@ -73,6 +77,8 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
       }
     });
   }
+
+
   getCAList() {
     this.orgList.forEach((item) => {
       if (item.isOrderer == false) {
@@ -80,6 +86,8 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
       }
     });
   }
+
+
   getPeerList() {
     this.orgList.forEach((item) => {
       if (item.isOrderer == false) {
@@ -89,11 +97,20 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     });
   }
 
-  editFile() {}
+  editFile() {
 
-  updateNetworkConfig() {}
 
-  getUserInput() {}
+  }
+
+  updateNetworkConfig() {
+
+
+  }
+
+  getUserInput() {
+
+
+  }
 
 
   newOrg(name: string, isOrderer: boolean) {

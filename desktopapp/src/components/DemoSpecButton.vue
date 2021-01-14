@@ -66,6 +66,8 @@ import OrgInputText from "./OrgInputText.vue";
 import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
 import OSProcess from "../module/OSProcess";
+import FileJsonBuilder from '../module/FileJsonBuilder';
+
 // import OrgData from "@/models/OrgData";
 @Component({
   components: {
@@ -88,6 +90,12 @@ export default class DemoSpecButton extends Vue {
   createNetwork() {
     this.object.createFile();
     this.object.setUpFileStructure(this.projectDir);
+    let project = {
+       name: "test",
+       date_create: +new Date,
+       directory:this.projectDir,
+    }
+    FileJsonBuilder.addProject(project);
   }
 
   callMini() {

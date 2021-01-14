@@ -10,6 +10,8 @@
 <div class = "p-py-5">
 
 <DemoSpecButton></DemoSpecButton>
+<DemoNetupButton></DemoNetupButton>
+
 </div>
  
 </div>
@@ -20,9 +22,11 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import DemoSpecButton from '../components/DemoSpecButton.vue'
+import DemoNetupButton from '../components/DemoNetupButton.vue'
 @Component({
   components: {
-    DemoSpecButton
+    DemoSpecButton,
+    DemoNetupButton
   }
 })
 export default class Demo extends Vue {
