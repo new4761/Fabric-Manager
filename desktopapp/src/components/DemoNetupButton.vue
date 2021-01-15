@@ -14,12 +14,14 @@ import OSProcess from "../module/OSProcess";
   components: {},
 })
 export default class DemoNetupButton extends Vue {
+
   netup() {
-    console.log("up");
-    let rawdata = fs.readFileSync("./tests/test.json");
+    
+    let rawdata = fs.readFileSync("./tests/net-config.json");
     let data = JSON.parse(rawdata.toString());
-    let projectDir = data.project_config[0].directory;
-    OSProcess.testfunction(projectDir, "minifab netup");
+    console.log(data);
+    let projectDir = data.project_config.directory;
+    OSProcess.run(projectDir, ["netup", "-o org0.example.com","-e 7000"]);
   }
 }
 </script>

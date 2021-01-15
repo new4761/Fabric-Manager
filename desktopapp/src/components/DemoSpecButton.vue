@@ -65,7 +65,6 @@ import Component from "vue-class-component";
 import OrgInputText from "./OrgInputText.vue";
 import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
-import OSProcess from "../module/OSProcess";
 import FileJsonBuilder from '../module/FileJsonBuilder';
 
 // import OrgData from "@/models/OrgData";
@@ -98,9 +97,6 @@ export default class DemoSpecButton extends Vue {
     FileJsonBuilder.addProject(project);
   }
 
-  callMini() {
-    OSProcess.testfunction(this.projectDir,"minifab netup");
-  }
 
 
   getFilepath() {
