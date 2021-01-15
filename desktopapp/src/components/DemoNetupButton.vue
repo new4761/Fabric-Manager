@@ -1,6 +1,8 @@
 <template>
   <div class="p-m-5">
     <Button label="netup" @click="netup()" />
+    <Button label="down" @click="netdown()" />
+    <Button label="clean" @click="cleanup()" />
   </div>
 </template>
 
@@ -14,14 +16,28 @@ import OSProcess from "../module/OSProcess";
   components: {},
 })
 export default class DemoNetupButton extends Vue {
+  projectDir: string = "";
 
-  netup() {
-    
+  mounted() {
+    this.init();
+  }
+
+  init() {
     let rawdata = fs.readFileSync("./tests/net-config.json");
     let data = JSON.parse(rawdata.toString());
-    console.log(data);
-    let projectDir = data.project_config.directory;
-    OSProcess.run(projectDir, ["netup", "-o org0.example.com","-e 7000"]);
+    this.projectDir = data.project_config.directory;
+  }
+
+  netup() {
+    OSProcess.run(this.projectDir, ["netup", "-o org0.example.com", "-e 7000"]);
+  }
+
+  netdown() {
+    OSProcess.run(this.projectDir, ["down"]);
+  }
+
+  cleanup() {
+    OSProcess.run(this.projectDir, ["cleanup"]);
   }
 }
 </script>
