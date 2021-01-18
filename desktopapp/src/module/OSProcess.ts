@@ -1,4 +1,5 @@
-const { exec } = require("child_process");
+import { EventEmitter } from "stream";
+
 const { spawn } = require("child_process");
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -7,24 +8,31 @@ class OSProcess {
   constructor() {}
 
   run(path: string, args: string[]) {
-    const dir = spawn("minifab.cmd", args, { shell: true, cwd: path });
-    dir.stdout.on("data", (data: any) => {
-      console.log(`${data}`);
+    var emitter = new EventEmitter();
+    const child = spawn("minifab.cmd", args, {
+      shell: true,
+      cwd: path,
     });
 
-    dir.stderr.on("data", (data: any) => {
+    child.stdout.setEncoding('utf8');
+
+    child.stdout.on("data", (data: any) => {
+      console.log('stdout: ' + data.toString());
+    });
+
+    child.stderr.on("data", (data: any) => {
       console.log(`spawn stderr: ${data}`);
     });
 
-    dir.on("error", (code: any) => {
+    child.on("error", (code: any) => {
       console.log(`spawn error: ${code}`);
     });
 
-    dir.on("close", (code: any) => {
+    child.on("close", (code: any) => {
       console.log(`spawn child process closed with code ${code}`);
     });
 
-    dir.on("exit", (code: any) => {
+    child.on("exit", (code: any) => {
       console.log(`spawn child process exited with code ${code}`);
     });
   }

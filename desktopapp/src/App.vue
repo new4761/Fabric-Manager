@@ -8,6 +8,7 @@
 
     <div class="p-d-flex" style="height: 600px">
       <div class="p-col-2 p-mr-2 p-as-stretch p-shadow-6">
+        <DemoNetupButton></DemoNetupButton>
       </div>
       <div class="p-col p-mr-2 p-as-stretch p-shadow-6">
         <ScrollPanel style="width: 100%; height: 500px" class="custom">
@@ -21,8 +22,9 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import DemoNetupButton from "./components/DemoNetupButton.vue";
 @Component({
-  components: {},
+  components: { DemoNetupButton },
 })
 export default class App extends Vue {
   path: any = this.$router.currentRoute.name;
