@@ -15,11 +15,11 @@ export default new Router({
 			name: 'Demo',
 			component: () => import('./pages/Demo.vue')
         },
-        // {
-		// 	path: '/caform',
-		// 	name: 'CaForm',
-		// 	component: () => import('./components/CaForm.vue')
-        // },
+        {
+			path: '/channel',
+			name: 'Channel',
+			component: () => import('./pages/ChannelPage.vue')
+        },
         // {
 		// 	path: '/orgchart',
 		// 	name: 'Orgchart',
