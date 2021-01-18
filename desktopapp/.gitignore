@@ -27,4 +27,5 @@ package-lock.json
 
 #Test output
 tests/*
+tests/vars/*
 !*.md

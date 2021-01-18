@@ -1,8 +1,47 @@
 <template>
-  <div class="p-m-5">
-    <Button label="netup" @click="netup()" />
-    <Button label="down" @click="netdown()" />
-    <Button label="clean" @click="cleanup()" />
+  <div>
+    <Button
+      label="network up"
+      @click="display = true"
+      class="p-button-raised p-button-rounded"
+    />
+
+    <div>
+      <Dialog
+        header="Network up"
+        v-bind:visible="display"
+        :closable="false"
+        modal
+        :style="{ width: '30vw' }"
+        :contentStyle="{ overflow: 'visible' }"
+      >
+        <div class="p-col-12"></div>
+
+        <span class="p-float-label">
+          <InputText id="port" type="text" v-model="port" />
+          <label for="port">port</label>
+        </span>
+
+        <span class="p-float-label">
+          <Dropdown v-model="orgSelected" :options="org" />
+          <label for="org">organization</label>
+        </span>
+
+        <div class="p-grid p-mt-5">
+          <Button
+            class="p-button-success p-m-2"
+            label="create"
+            @click="netup()"
+          />
+
+          <Button
+            class="p-button-danger p-ml-auto p-m-2"
+            label="close"
+            @click="display = false"
+          />
+        </div>
+      </Dialog>
+    </div>
   </div>
 </template>
 
@@ -17,6 +56,11 @@ import OSProcess from "../module/OSProcess";
 })
 export default class DemoNetupButton extends Vue {
   projectDir: string = "";
+  output: any = "hey";
+  display: boolean = false;
+  orgSelected: string = "";
+  org: any[] = [];
+  port: string = "";
 
   mounted() {
     this.init();
@@ -26,10 +70,28 @@ export default class DemoNetupButton extends Vue {
     let rawdata = fs.readFileSync("./tests/net-config.json");
     let data = JSON.parse(rawdata.toString());
     this.projectDir = data.project_config.directory;
+
+    this.org = data.project_config.fabric.orderers.concat(
+      data.project_config.fabric.peers
+    );
+
+    this.org.forEach((element, index) => {
+      this.org[index] = element.replace(/^[^.]*./gm, "");
+    });
+    this.org = [...new Set(this.org)];
   }
 
   netup() {
-    OSProcess.run(this.projectDir, ["netup", "-o org0.example.com", "-e 7000"]);
+    let args: string[] = ["netup"];
+    if (this.orgSelected != "") {
+      args.push("-o " + this.orgSelected);
+    }
+    if (this.port != "") {
+      args.push("-e " + this.port);
+    }
+
+    console.log(args);
+    OSProcess.run(this.projectDir, args);
   }
 
   netdown() {
@@ -38,6 +100,10 @@ export default class DemoNetupButton extends Vue {
 
   cleanup() {
     OSProcess.run(this.projectDir, ["cleanup"]);
+  }
+
+  data() {
+    return {};
   }
 }
 </script>

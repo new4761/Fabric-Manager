@@ -1,22 +1,19 @@
 <template>
   <div>
-
     <!-- <div>
       <Button label="Create Project" @click="display = true" />
     </div> -->
-<span @click="display = true">
-<Card style="width: 8rem; height: 8rem; padding-top: 1em; background-color: rgb(0, 162, 273);"  >
-    <template v-slot:content >
-      <div class="p-grid p-jc-center">
-      <Button icon="pi pi-plus" class="p-button-rounded p-button-lg " />
-    </div>
-    </template>
-</Card>
-</span>
-
-
-
-
+    <span @click="display = true">
+      <Card
+        style="width: 8rem; height: 8rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
+      >
+        <template v-slot:content>
+          <div class="p-grid p-jc-center">
+            <Button icon="pi pi-plus" class="p-button-rounded p-button-lg " />
+          </div>
+        </template>
+      </Card>
+    </span>
 
     <div>
       <Dialog
@@ -27,7 +24,7 @@
         :style="{ width: '80vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-col-12"> </div>
+        <div class="p-col-12"></div>
         <div class="p-col-12">
           <div class="p-inputgroup">
             <Button label="SetProjectDirectory" @click="getFilepath()" />
@@ -48,10 +45,18 @@
           <OrgInputText @new-org="newOrgTolist"></OrgInputText>
         </div>
 
-        <div class = "p-grid p-mt-5">
-        <Button class="p-button-success p-m-2"  label="create" @click="createNetwork()" />
+        <div class="p-grid p-mt-5">
+          <Button
+            class="p-button-success p-m-2"
+            label="create"
+            @click="createNetwork()"
+          />
 
-        <Button class="p-button-danger p-ml-auto"   label="close" @click="display = false" />
+          <Button
+            class="p-button-danger p-ml-auto"
+            label="close"
+            @click="display = false"
+          />
         </div>
       </Dialog>
     </div>
@@ -65,7 +70,7 @@ import Component from "vue-class-component";
 import OrgInputText from "./OrgInputText.vue";
 import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
-import FileJsonBuilder from '../module/FileJsonBuilder';
+import FileJsonBuilder from "../module/FileJsonBuilder";
 
 // import OrgData from "@/models/OrgData";
 @Component({
@@ -90,14 +95,12 @@ export default class DemoSpecButton extends Vue {
     this.object.createFile();
     this.object.setUpFileStructure(this.projectDir);
     let project = {
-       name: "test",
-       date_create: +new Date,
-       directory:this.projectDir,
-    }
+      name: "test",
+      date_create: +new Date(),
+      directory: this.projectDir,
+    };
     FileJsonBuilder.addProject(project);
   }
-
-
 
   getFilepath() {
     dialog
