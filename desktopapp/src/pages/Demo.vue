@@ -11,6 +11,8 @@
 
 <DemoSpecButton></DemoSpecButton>
 <DemoNetupButton></DemoNetupButton>
+<ChannelPage></ChannelPage>
+
 
 </div>
  
@@ -23,10 +25,12 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import DemoSpecButton from '../components/DemoSpecButton.vue'
 import DemoNetupButton from '../components/DemoNetupButton.vue'
+import ChannelPage from './ChannelPage.vue'
 @Component({
   components: {
     DemoSpecButton,
-    DemoNetupButton
+    DemoNetupButton,
+    ChannelPage
   }
 })
 export default class Demo extends Vue {
