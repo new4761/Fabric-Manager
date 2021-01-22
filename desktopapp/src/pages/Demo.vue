@@ -1,44 +1,70 @@
 <template>
-<div class="p-m-5">
-<h1> This is an Demo index page V 1.0</h1> 
-<h3> Nothing here ATM.</h3> 
-<!-- <h5> Minimalist is the best.</h5> 
-<small> I'm accidentally merging a branch so everything is gone. help. </small>  -->
+  <div class="p-m-5">
+    <Card>
+      <template #title>
+        Demo Spec
+      </template>
+      <template #content>
+        <DemoSpecButton></DemoSpecButton>
+      </template>
+    </Card>
 
-<small> Create Network, Create/join channel and explorer. </small> 
+    <Card>
+      <template #title>
+        Demo Netup
+      </template>
+      <template #content>
+        <DemoNetupButton></DemoNetupButton>
+      </template>
+    </Card>
 
-<div class = "p-py-5">
+    <Card>
+      <template #title>
+        Demo Channel
+      </template>
+      <template #content>
+        <ChannelPage></ChannelPage>
+      </template>
+    </Card>
 
-<DemoSpecButton></DemoSpecButton>
-<DemoNetupButton></DemoNetupButton>
-<ChannelPage></ChannelPage>
+        <Card>
+      <template #title>
+        Demo Docker
+      </template>
+      <template #content>
+       <Button
+      label="inspec"
+      @click="list()"
+      class="p-button-raised p-button-rounded p-m-1"
+    />
 
-
-</div>
- 
-</div>
-
+      </template>
+    </Card>
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import DemoSpecButton from '../components/DemoSpecButton.vue'
-import DemoNetupButton from '../components/DemoNetupButton.vue'
-import ChannelPage from './ChannelPage.vue'
+import Vue from "vue";
+import Component from "vue-class-component";
+import DemoSpecButton from "../components/DemoSpecButton.vue";
+import DemoNetupButton from "../components/DemoNetupButton.vue";
+import ChannelPage from "./ChannelPage.vue";
+import DockerProcess from "../module/DockerProcess";
 @Component({
   components: {
     DemoSpecButton,
     DemoNetupButton,
-    ChannelPage
-  }
+    ChannelPage,
+  },
 })
 export default class Demo extends Vue {
 
+
+  list(){
+    DockerProcess.ListContainer()
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
+<style scoped></style>

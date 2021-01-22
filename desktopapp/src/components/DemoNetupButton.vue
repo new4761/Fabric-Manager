@@ -3,8 +3,43 @@
     <Button
       label="network up"
       @click="display = true"
-      class="p-button-raised p-button-rounded"
+      class="p-button-raised p-button-rounded p-m-1"
     />
+
+    <Button
+      label="network down"
+      @click="netdown()"
+      class="p-button-raised p-button-rounded p-m-1"
+    />
+
+    <Button
+      label="clean"
+      @click="cleanup()"
+      class="p-button-raised p-button-rounded p-m-1"
+    />
+    
+
+
+        <div>
+      <Dialog
+        header="log"
+        v-bind:visible="display2"
+        :closable="false"
+        modal
+        :style="{ width: '80vw' }"
+        :contentStyle="{ overflow: 'visible' }"
+      >
+        <div class="p-col-12">{{ output }}</div>
+
+          <Button
+            class="p-button-danger p-ml-auto p-m-2"
+            label="close"
+            @click="display2 = false"
+          />
+
+
+      </Dialog>
+    </div>
 
     <div>
       <Dialog
@@ -56,8 +91,9 @@ import OSProcess from "../module/OSProcess";
 })
 export default class DemoNetupButton extends Vue {
   projectDir: string = "";
-  output: any = "hey";
+  output: string = "hey";
   display: boolean = false;
+  display2: boolean = false;
   orgSelected: string = "";
   org: any[] = [];
   port: string = "";
@@ -91,15 +127,42 @@ export default class DemoNetupButton extends Vue {
     }
 
     console.log(args);
-    OSProcess.run(this.projectDir, args);
+    const child = OSProcess.run(this.projectDir, args);
+
+    child.stdout.setEncoding("utf8");
+
+    child.stdout.on("data", (data: any) => {
+      console.log("stdout: " + data.toString());
+      this.output = data.toString()
+    });
+
+    this.display2 = true;
   }
 
   netdown() {
-    OSProcess.run(this.projectDir, ["down"]);
+    const child = OSProcess.run(this.projectDir, ["down"]);
+
+    child.stdout.setEncoding("utf8");
+
+    child.stdout.on("data", (data: any) => {
+      console.log("stdout: " + data.toString());
+       this.output = data.toString()
+    });
+
+    this.display2 = true;
   }
 
   cleanup() {
-    OSProcess.run(this.projectDir, ["cleanup"]);
+    const child = OSProcess.run(this.projectDir, ["cleanup"]);
+
+    child.stdout.setEncoding("utf8");
+
+    child.stdout.on("data", (data: any) => {
+      console.log("stdout: " + data.toString());
+       this.output += "/n" + data.toString()
+    });
+
+    this.display2 = true;
   }
 
   data() {

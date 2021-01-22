@@ -1,6 +1,5 @@
 <template>
   <div class="p-m-5">
-    <small> Create/join channel . </small>
 
     <div class="p-py-5">
       <div class="p-col-12 p-md-6">
