@@ -8,7 +8,7 @@
 
     <div class="p-d-flex" style="height: 600px">
       <div class="p-col-2 p-mr-2 p-as-stretch p-shadow-6">
-        <DemoNetupButton></DemoNetupButton>
+        <!-- <DemoNetupButton></DemoNetupButton> -->
       </div>
       <div class="p-col p-mr-2 p-as-stretch p-shadow-6">
         <ScrollPanel style="width: 100%; height: 500px" class="custom">
