@@ -1,17 +1,20 @@
 <template>
   <div class="app">
-    <Menubar :model="items" class="p-mb-5">
-      <template #end>
-        <InputText placeholder="Search" type="text" />
-      </template>
-    </Menubar>
+    <div class="p-d-flex">
+      <div class="menu p-col-2 p-mr-2 p-as-stretch">
 
-    <div class="p-d-flex" style="height: 600px">
-      <div class="p-col-2 p-mr-2 p-as-stretch p-shadow-6">
-        <!-- <DemoNetupButton></DemoNetupButton> -->
+        <Card class="p-mb-5"></Card>
+        <div v-for="item in items" :key="item.label" class="p-grid p-jc-center">
+
+           <Button
+        :label=item.label
+        @click="$router.push(item.to)"
+        class="menubutton p-button p-my-2"
+      />
+        </div>
       </div>
-      <div class="p-col p-mr-2 p-as-stretch p-shadow-6">
-        <ScrollPanel style="width: 100%; height: 500px" class="custom">
+      <div class="page p-col p-mr-2 p-as-stretch">
+        <ScrollPanel class="scroll">
           <router-view />
         </ScrollPanel>
       </div>
@@ -37,6 +40,21 @@ export default class App extends Vue {
           to: "/",
         },
         {
+          label: "Organization",
+          icon: "pi pi-fw pi-pencil",
+          to: "/org",
+        },
+        {
+          label: "Channel",
+          icon: "pi pi-fw pi-pencil",
+          to: "/channel",
+        },
+        {
+          label: "ChainCode",
+          icon: "pi pi-fw pi-pencil",
+          to: "/demo",
+        },
+        {
           label: "Demo",
           icon: "pi pi-fw pi-pencil",
           to: "/demo",
@@ -47,16 +65,38 @@ export default class App extends Vue {
 }
 </script>
 
-<style scoped>
-.custom .p-scrollpanel-wrapper {
-  border-right: 9px solid #f4f4f4;
+<style>
+.scroll {
+  width: 100%;
+  height: 90vh;
 }
+.scroll .p-scrollpanel-wrapper {
+  border-right: 15px solid #ffffff00;
+}
+
 .custom .p-scrollpanel-bar {
   background-color: #1976d2;
   opacity: 1;
   transition: background-color 0.3s;
 }
-.custom .p-scrollpanel-bar:hover {
-  background-color: #135ba1;
+
+.scroll .p-scrollpanel-bar:hover {
+  background-color: #1783f0;
+  transition: background-color 0.3s;
+}
+.bg {
+  height: 90vh;
+}
+.menu {
+  background-color: #969696;
+  height: 90vh;
+}
+.page {
+  background-color: #f3f2f2;
+  height: 90vh;
+}
+
+.menubutton{
+  color:#ffffff
 }
 </style>

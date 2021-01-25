@@ -1,32 +1,41 @@
-import fs from "fs";
-const yaml = require("js-yaml");
-const isDevelopment = process.env.NODE_ENV !== "production";
-const editJsonFile = require("edit-json-file");
-const path = require("path");
+
+import fs from 'fs';
+// check is  isDevelopment?
+const isDevelopment = process.env.NODE_ENV !== 'production'
+const path = require('path');
 export class FileJsonBuilder {
-  file: any;
 
-  constructor() {
-    this.file = editJsonFile("./tests/net-config.json");
-  }
 
-  addProject(project: object) {
-    let data = yaml.load(fs.readFileSync("./tests/spec.yaml", "utf8"));
-    console.log(data);
-    data = {
-      ...project,
-      date_modify: +new Date(),
-      ...data,
-    };
-    this.file.set("project_config", data);
-    this.file.save();
-  }
+   saveFile(outputPath: string, inputFileData: string, fileName: string) {
 
-  updateConfig(key:string, value:any) {
-    this.file.set(key, value);
-    this.file.save();
-  }
-
-  
+      try {
+         // check dev mode function
+         // used this style for base to write function who work with files
+         if (!isDevelopment) {
+            console.log(path.dirname(__dirname));
+         }
+         let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname), outputPath) : 'tests', fileName);
+         fs.writeFileSync(filePath, inputFileData, 'utf-8');
+      }
+      catch (e) {
+         console.log(e);
+      }
+   }
+   saveFileWithReplace(outputPath: string, inputFileData: string, fileName: string, target: RegExp, text: string) {
+      try {
+         // check dev mode function
+         // used this style for base to write function who work with files
+         if (!isDevelopment) {
+            console.log(path.dirname(__dirname));
+         }
+         let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname), outputPath) : 'tests', fileName);
+         fs.writeFileSync(filePath, inputFileData, 'utf-8');
+         let data = fs.readFileSync(filePath,'utf-8')
+         var newValue = data.replace(target,text)
+         fs.writeFileSync(filePath, newValue, 'utf-8')          
+                 }
+      catch (e) {
+         console.log(e);
+      }
+   }
 }
-export default new FileJsonBuilder();

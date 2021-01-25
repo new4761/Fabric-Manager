@@ -68,18 +68,23 @@ import TriStateCheckbox from 'primevue/tristatecheckbox';
 import ScrollPanel from 'primevue/scrollpanel';
 import ProgressSpinner from 'primevue/progressspinner';
 
-import 'primevue/resources/themes/saga-blue/theme.css';
+// import 'primevue/resources/themes/saga-blue/theme.css';
+import 'primevue/resources/themes/bootstrap4-light-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
+// import './assets/layout/layout.scss';
+// import './assets/layout/flags/flags.css';
 
 
 Vue.use(ToastService);
 Vue.directive('tooltip', Tooltip);
 Vue.directive('ripple', Ripple);
 
+
+
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
-// Vue.prototype.$primevue = Vue.observable({ripple: true});
+Vue.prototype.$primevue = Vue.observable({ripple: true});
 
 // Vue.config.productionTip = false;
 

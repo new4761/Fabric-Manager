@@ -17,10 +17,8 @@
       @click="cleanup()"
       class="p-button-raised p-button-rounded p-m-1"
     />
-    
 
-
-        <div>
+    <div>
       <Dialog
         header="log"
         v-bind:visible="display2"
@@ -31,13 +29,11 @@
       >
         <div class="p-col-12">{{ output }}</div>
 
-          <Button
-            class="p-button-danger p-ml-auto p-m-2"
-            label="close"
-            @click="display2 = false"
-          />
-
-
+        <Button
+          class="p-button-danger p-ml-auto p-m-2"
+          label="close"
+          @click="display2 = false"
+        />
       </Dialog>
     </div>
 
@@ -82,9 +78,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import fs from "fs";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
+import ProjectConfig from "../models/ProjectConfig";
 
 @Component({
   components: {},
@@ -103,18 +99,8 @@ export default class DemoNetupButton extends Vue {
   }
 
   init() {
-    let rawdata = fs.readFileSync("./tests/net-config.json");
-    let data = JSON.parse(rawdata.toString());
-    this.projectDir = data.project_config.directory;
-
-    this.org = data.project_config.fabric.orderers.concat(
-      data.project_config.fabric.peers
-    );
-
-    this.org.forEach((element, index) => {
-      this.org[index] = element.replace(/^[^.]*./gm, "");
-    });
-    this.org = [...new Set(this.org)];
+    this.projectDir = ProjectConfig.getPath();
+    this.org = ProjectConfig.getOrgName();
   }
 
   netup() {
@@ -133,7 +119,7 @@ export default class DemoNetupButton extends Vue {
 
     child.stdout.on("data", (data: any) => {
       console.log("stdout: " + data.toString());
-      this.output = data.toString()
+      this.output = data.toString();
     });
 
     this.display2 = true;
@@ -146,7 +132,7 @@ export default class DemoNetupButton extends Vue {
 
     child.stdout.on("data", (data: any) => {
       console.log("stdout: " + data.toString());
-       this.output = data.toString()
+      this.output = data.toString();
     });
 
     this.display2 = true;
@@ -159,7 +145,7 @@ export default class DemoNetupButton extends Vue {
 
     child.stdout.on("data", (data: any) => {
       console.log("stdout: " + data.toString());
-       this.output += "/n" + data.toString()
+      this.output += "/n" + data.toString();
     });
 
     this.display2 = true;
