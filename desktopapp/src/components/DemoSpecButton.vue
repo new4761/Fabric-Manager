@@ -6,6 +6,7 @@
     <span @click="display = true">
       <Card
         style="width: 8rem; height: 8rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
+         v-ripple
       >
         <template v-slot:content>
           <div class="p-grid p-jc-center">
@@ -70,7 +71,7 @@ import Component from "vue-class-component";
 import OrgInputText from "./OrgInputText.vue";
 import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
-import FileJsonBuilder from "../module/FileJsonBuilder";
+import ProjectConfig from "../models/ProjectConfig";
 
 // import OrgData from "@/models/OrgData";
 @Component({
@@ -99,7 +100,7 @@ export default class DemoSpecButton extends Vue {
       date_create: +new Date(),
       directory: this.projectDir,
     };
-    FileJsonBuilder.addProject(project);
+    ProjectConfig.addProject(project);
   }
 
   getFilepath() {

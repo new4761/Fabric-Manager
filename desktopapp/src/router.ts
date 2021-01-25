@@ -20,6 +20,18 @@ export default new Router({
 			name: 'Channel',
 			component: () => import('./pages/ChannelPage.vue')
         },
+
+        {
+			path: '/org',
+			name: 'Org',
+			component: () => import('./pages/OrgPage.vue')
+        },
+
+        {
+			path: '/project',
+			name: 'Project',
+			component: () => import('./pages/ProjectsPage.vue')
+        },
         // {
 		// 	path: '/orgchart',
 		// 	name: 'Orgchart',
