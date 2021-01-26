@@ -1,29 +1,15 @@
 <template>
   <div class="layout-overlay-sidebar-active">
     <div class="p-d-flex">
-      <!-- <div class="menu p-col-2 p-mr-2 p-as-stretch">
-
-        <Card class="p-mb-5"></Card>
-        <div v-for="item in items" :key="item.label" class="p-grid p-jc-center">
-
-           <Button
-        :label=item.label
-        @click="$router.push(item.to)"
-        class="menubutton p-button p-my-2"
-      />
-        </div>
-      </div> -->
-
       <transition name="layout-sidebar">
-        <div class="layout-sidebar-dark">
-          <div class="layout-logo">
-            <router-link to="/">
-              <img alt="Logo" />
-            </router-link>
-          </div>
-
+        <div class="layout-sidebar-dark p-d-flex p-flex-column">
           <AppProfile />
-          <AppMenu :model="menu"/>
+          <Card class="p-mx-2 p-mb-5">
+            <template #title>
+              network stuff
+            </template>
+          </Card>
+          <AppMenu :model="menu" />
         </div>
       </transition>
 
@@ -40,8 +26,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import DemoNetupButton from "./components/DemoNetupButton.vue";
-import AppProfile from "./components/AppProfile.vue";
-import AppMenu from "./components/AppMenu.vue";
+import AppProfile from "./components/menu/AppProfile.vue";
+import AppMenu from "./components/menu/AppMenu.vue";
 
 @Component({
   components: { DemoNetupButton, AppProfile, AppMenu },
@@ -50,37 +36,11 @@ export default class App extends Vue {
   path: any = this.$router.currentRoute.name;
   data() {
     return {
-      items: [
-        {
-          label: "Home",
-          icon: "pi pi-fw pi-home",
-          to: "/",
-        },
+      menu: [
+        { label: "Home", icon: "pi pi-fw pi-home", to: "/" },
+        { label: "Demo", icon: "pi pi-fw pi-pencil", to: "/demo" },
         {
           label: "Organization",
-          icon: "pi pi-fw pi-pencil",
-          to: "/org",
-        },
-        {
-          label: "Channel",
-          icon: "pi pi-fw pi-pencil",
-          to: "/channel",
-        },
-        {
-          label: "ChainCode",
-          icon: "pi pi-fw pi-pencil",
-          to: "/demo",
-        },
-        {
-          label: "Demo",
-          icon: "pi pi-fw pi-pencil",
-          to: "/demo",
-        },
-      ],
-      menu: [
-        { label: "Dashboard", icon: "pi pi-fw pi-home", to: "/" },
-        {
-          label: "UI Kit",
           icon: "pi pi-fw pi-sitemap",
           items: [
             {
@@ -108,7 +68,7 @@ export default class App extends Vue {
           ],
         },
         {
-          label: "Utilities",
+          label: "Channel",
           icon: "pi pi-fw pi-globe",
           items: [
             { label: "Display", icon: "pi pi-fw pi-desktop", to: "/display" },
@@ -138,7 +98,7 @@ export default class App extends Vue {
           ],
         },
         {
-          label: "Pages",
+          label: "ChainCode",
           icon: "pi pi-fw pi-clone",
           items: [
             { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
@@ -224,12 +184,12 @@ export default class App extends Vue {
 .custom .p-scrollpanel-bar {
   background-color: #1976d2;
   opacity: 1;
-  transition: background-color 0.3s;
+ 
 }
 
 .scroll .p-scrollpanel-bar:hover {
   background-color: #1783f0;
-  transition: background-color 0.3s;
+
 }
 .bg {
   height: 100vh;

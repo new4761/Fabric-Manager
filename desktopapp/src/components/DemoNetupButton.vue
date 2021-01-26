@@ -1,15 +1,17 @@
 <template>
   <div>
     <Button
-      label="network up"
-      @click="display = true"
-      class="p-button-raised p-button-rounded p-m-1"
+      icon="pi pi-power-off"
+      class="p-button-rounded p-button-success p-button-lg"
+       @click="display = true"
+       v-show="!up"
     />
 
     <Button
-      label="network down"
+      icon="pi pi-power-off"
+      class="p-button-rounded p-button-danger p-button-lg"
       @click="netdown()"
-      class="p-button-raised p-button-rounded p-m-1"
+       v-show="up"
     />
 
     <Button
@@ -86,6 +88,7 @@ import ProjectConfig from "../models/ProjectConfig";
   components: {},
 })
 export default class DemoNetupButton extends Vue {
+  up:boolean = false;
   projectDir: string = "";
   output: string = "hey";
   display: boolean = false;
@@ -123,6 +126,7 @@ export default class DemoNetupButton extends Vue {
     });
 
     this.display2 = true;
+    this.up = true;
   }
 
   netdown() {
@@ -136,6 +140,7 @@ export default class DemoNetupButton extends Vue {
     });
 
     this.display2 = true;
+    this.up = false;
   }
 
   cleanup() {
