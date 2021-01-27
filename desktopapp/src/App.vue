@@ -2,7 +2,7 @@
   <div class="layout-overlay-sidebar-active">
     <div class="p-d-flex">
       <transition name="layout-sidebar">
-        <div class="layout-sidebar-dark p-d-flex p-flex-column">
+        <div class="layout-sidebar-dark  p-d-flex p-flex-column">
           <AppProfile />
           <Card class="p-mx-2 p-mb-5">
             <template #title>
@@ -13,7 +13,7 @@
         </div>
       </transition>
 
-      <div class="page p-col p-mr-2 p-as-stretch">
+      <div class="page layout-main p-col p-as-stretch">
         <ScrollPanel class="scroll">
           <router-view />
         </ScrollPanel>
@@ -178,24 +178,21 @@ export default class App extends Vue {
   height: 90vh;
 }
 .scroll .p-scrollpanel-wrapper {
-  border-right: 15px solid #ffffff00;
+  border-right: 20px solid #ffffff00;
 }
 
 .custom .p-scrollpanel-bar {
   background-color: #1976d2;
   opacity: 1;
- 
 }
 
 .scroll .p-scrollpanel-bar:hover {
   background-color: #1783f0;
-
 }
 .bg {
   height: 100vh;
 }
 .menu {
-  background-color: #969696;
   height: 100vh;
 }
 .page {

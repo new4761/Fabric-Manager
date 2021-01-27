@@ -12,6 +12,7 @@ import Carousel from 'primevue/carousel';
 import Chart from 'primevue/chart';
 import Checkbox from 'primevue/checkbox';
 import Chips from 'primevue/chips';
+import Chip from 'primevue/chip';
 import ColorPicker from 'primevue/colorpicker';
 import Column from 'primevue/column';
 import ContextMenu from 'primevue/contextmenu';
@@ -20,7 +21,7 @@ import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
 import Dialog from 'primevue/dialog';
 import Dropdown from 'primevue/dropdown';
-// import Fieldset from 'primevue/fieldset';
+import Fieldset from 'primevue/fieldset';
 import FileUpload from 'primevue/fileupload';
 import FullCalendar from 'primevue/fullcalendar';
 import InlineMessage from 'primevue/inlinemessage';
@@ -66,7 +67,12 @@ import Tree from 'primevue/tree';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import ScrollPanel from 'primevue/scrollpanel';
+import Skeleton from 'primevue/skeleton';
 import ProgressSpinner from 'primevue/progressspinner';
+
+import Avatar from 'primevue/avatar';
+
+
 
 // import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/themes/bootstrap4-light-blue/theme.css';
@@ -88,6 +94,9 @@ Vue.directive('ripple', Ripple);
 
 // Vue.config.productionTip = false;
 
+Vue.component('Avatar', Avatar);
+Vue.component('Skeleton', Skeleton);
+
 Vue.component('Accordion', Accordion);
 Vue.component('AccordionTab', AccordionTab);
 Vue.component('AutoComplete', AutoComplete);
@@ -99,6 +108,7 @@ Vue.component('Carousel', Carousel);
 Vue.component('Chart', Chart);
 Vue.component('Checkbox', Checkbox);
 Vue.component('Chips', Chips);
+Vue.component('Chip', Chip);
 Vue.component('ColorPicker', ColorPicker);
 Vue.component('Column', Column);
 Vue.component('ContextMenu', ContextMenu);
