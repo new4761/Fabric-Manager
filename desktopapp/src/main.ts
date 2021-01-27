@@ -20,7 +20,7 @@ import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
 import Dialog from 'primevue/dialog';
 import Dropdown from 'primevue/dropdown';
-import Fieldset from 'primevue/fieldset';
+// import Fieldset from 'primevue/fieldset';
 import FileUpload from 'primevue/fileupload';
 import FullCalendar from 'primevue/fullcalendar';
 import InlineMessage from 'primevue/inlinemessage';
@@ -84,7 +84,7 @@ Vue.directive('ripple', Ripple);
 
 
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
-Vue.prototype.$primevue = Vue.observable({ripple: true});
+// Vue.prototype.$primevue = Vue.observable({ripple: true});
 
 // Vue.config.productionTip = false;
 
@@ -107,7 +107,7 @@ Vue.component('DataView', DataView);
 Vue.component('DataViewLayoutOptions', DataViewLayoutOptions);
 Vue.component('Dialog', Dialog);
 Vue.component('Dropdown', Dropdown);
-Vue.component('Fieldset', Fieldset);
+// Vue.component('Fieldset', Fieldset);
 Vue.component('FileUpload', FileUpload);
 Vue.component('FullCalendar', FullCalendar);
 Vue.component('InlineMessage', InlineMessage);
