@@ -40,6 +40,7 @@
 
       </template>
     </Card>
+    <Terminal/>
   </div>
 </template>
 
@@ -48,6 +49,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import DemoSpecButton from "../components/DemoSpecButton.vue";
 import DemoNetupButton from "../components/DemoNetupButton.vue";
+import Terminal from "../components/Terminal.vue";
 import ChannelPage from "./ChannelPage.vue";
 import DockerProcess from "../module/DockerProcess";
 @Component({
@@ -55,6 +57,7 @@ import DockerProcess from "../module/DockerProcess";
     DemoSpecButton,
     DemoNetupButton,
     ChannelPage,
+    Terminal
   },
 })
 export default class Demo extends Vue {
