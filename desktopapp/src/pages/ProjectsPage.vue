@@ -36,7 +36,7 @@
 
       <template #list="slotProps">
         <div class="p-col-12">
-          <div class="list-item">
+          <div class="list-item p-m-3">
             <div class="list-detail">
               <div class="name">{{ slotProps.data.name }}</div>
               <div class="directory">
@@ -56,8 +56,8 @@
       </template>
 
       <template #grid="slotProps">
-        <div class="p-col-2 p-md-4 ">
-          <Card class="p-m-3">
+        <div class="p-col-2 p-md-4">
+          <Card class="p-m-3" v-tooltip.right=slotProps.data.directory >
             <template #header> </template>
             <template #title>
               {{ slotProps.data.name }}
