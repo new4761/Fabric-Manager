@@ -32,6 +32,11 @@ export default new Router({
 			name: 'Project',
 			component: () => import('./pages/ProjectsPage.vue')
         },
+        {
+            path: '/chaincode',
+            name: 'ChainCode',
+            component:()=> import('./pages/ChaincodePage.vue')
+        }
         // {
 		// 	path: '/orgchart',
 		// 	name: 'Orgchart',

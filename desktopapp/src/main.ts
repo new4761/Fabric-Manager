@@ -12,7 +12,7 @@ import Carousel from 'primevue/carousel';
 import Chart from 'primevue/chart';
 import Checkbox from 'primevue/checkbox';
 import Chips from 'primevue/chips';
-import Chip from 'primevue/chip';
+//import Chip from 'primevue/chip';
 import ColorPicker from 'primevue/colorpicker';
 import Column from 'primevue/column';
 import ContextMenu from 'primevue/contextmenu';
@@ -67,10 +67,10 @@ import Tree from 'primevue/tree';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import ScrollPanel from 'primevue/scrollpanel';
-import Skeleton from 'primevue/skeleton';
+//import Skeleton from 'primevue/skeleton';
 import ProgressSpinner from 'primevue/progressspinner';
 
-import Avatar from 'primevue/avatar';
+//import Avatar from 'primevue/avatar';
 
 
 
@@ -97,8 +97,8 @@ Vue.config.productionTip = false;
 
 
 
-Vue.component('Avatar', Avatar);
-Vue.component('Skeleton', Skeleton);
+//Vue.component('Avatar', Avatar);
+//Vue.component('Skeleton', Skeleton);
 
 Vue.component('Accordion', Accordion);
 Vue.component('AccordionTab', AccordionTab);
@@ -111,7 +111,7 @@ Vue.component('Carousel', Carousel);
 Vue.component('Chart', Chart);
 Vue.component('Checkbox', Checkbox);
 Vue.component('Chips', Chips);
-Vue.component('Chip', Chip);
+//Vue.component('Chip', Chip);
 Vue.component('ColorPicker', ColorPicker);
 Vue.component('Column', Column);
 Vue.component('ContextMenu', ContextMenu);

@@ -100,19 +100,20 @@ export default class App extends Vue {
         {
           label: "ChainCode",
           icon: "pi pi-fw pi-clone",
-          items: [
-            { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-            {
-              label: "Calendar",
-              icon: "pi pi-fw pi-calendar-plus",
-              to: "/calendar",
-            },
-            {
-              label: "Empty Page",
-              icon: "pi pi-fw pi-circle-off",
-              to: "/empty",
-            },
-          ],
+          to:'/chaincode'
+        //  items: [
+            //{ label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
+            //{
+              //label: "Calendar",
+              //icon: "pi pi-fw pi-calendar-plus",
+              //to: "/calendar",
+            //},
+            //{
+              //label: "Empty Page",
+              //icon: "pi pi-fw pi-circle-off",
+              //to: "/empty",
+       //     },
+          //]
         },
         {
           label: "Menu Hierarchy",
