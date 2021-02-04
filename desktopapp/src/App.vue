@@ -1,22 +1,32 @@
 <template>
-  <div class="layout-overlay-sidebar-active">
+  <div>
+    <div id="title-bar">
+      <div id="title">test title</div>
+
+      <div id="title-bar-btns">
+        <Button label="-" @click="minimizeWindow()" id="min-btn" />
+        <Button label="+" @click="maximizeWindow()" id="max-btn" />
+        <Button label="x" @click="closeWindow()" id="close-btn" />
+      </div>
+    </div>
+
     <div class="p-d-flex">
       <transition name="layout-sidebar">
-        <div class="layout-sidebar-dark  p-d-flex p-flex-column">
+        <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
           <AppProfile />
           <Card class="p-mx-2 p-mb-5">
             <template #title>
               network stuff
             </template>
           </Card>
-          <AppMenu :model="menu" />
+          <div class="scroll-menu">
+            <AppMenu :model="menu" />
+          </div>
         </div>
       </transition>
 
-      <div class="page layout-main p-col p-as-stretch">
-        <ScrollPanel class="scroll">
-          <router-view />
-        </ScrollPanel>
+      <div class="scroll-main layout-main p-col p-as-stretch">
+        <router-view />
       </div>
     </div>
   </div>
@@ -28,12 +38,36 @@ import Component from "vue-class-component";
 import DemoNetupButton from "./components/DemoNetupButton.vue";
 import AppProfile from "./components/menu/AppProfile.vue";
 import AppMenu from "./components/menu/AppMenu.vue";
+const remote = require("electron").remote;
 
 @Component({
   components: { DemoNetupButton, AppProfile, AppMenu },
 })
 export default class App extends Vue {
-  path: any = this.$router.currentRoute.name;
+  // path: any = this.$router.currentRoute.name;
+
+  maximizeWindow() {
+    console.log("max");
+    const window = remote.getCurrentWindow();
+    if (!window.isMaximized()) {
+      window.maximize();
+    } else {
+      window.unmaximize();
+    }
+  }
+
+  minimizeWindow() {
+    console.log("hide");
+    const window = remote.getCurrentWindow();
+    window.minimize();
+  }
+
+  closeWindow() {
+    console.log("close");
+    const window = remote.getCurrentWindow();
+    window.close();
+  }
+
   data() {
     return {
       menu: [
@@ -173,34 +207,96 @@ export default class App extends Vue {
 </script>
 
 <style>
-.scroll {
+.scroll-main {
+  overflow: scroll;
   width: 100%;
-  height: 90vh;
-}
-.scroll .p-scrollpanel-wrapper {
-  border-right: 20px solid #ffffff00;
+  height: 95vh;
 }
 
-.custom .p-scrollpanel-bar {
-  background-color: #1976d2;
-  opacity: 1;
+.scroll-main::-webkit-scrollbar {
+  width: 20px;
+}
+.scroll-main::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0);
+}
+.scroll-main::-webkit-scrollbar-thumb {
+  background-color: rgb(0, 140, 255);
+  border-radius: 10px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: content-box;
+  min-width: 32px;
+  min-height: 32px;
+  transition: 0.3s;
 }
 
-.scroll .p-scrollpanel-bar:hover {
-  background-color: #1783f0;
+.scroll-main::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(0, 74, 134);
 }
-.bg {
-  height: 100vh;
+.scroll-main::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
 }
+
 .menu {
-  height: 100vh;
+  height: 95vh;
 }
-.page {
-  background-color: #f3f2f2;
-  height: 100vh;
+.scroll-menu {
+  overflow: scroll;
 }
 
-.menubutton {
-  color: #ffffff;
+.scroll-menu::-webkit-scrollbar {
+  width: 15px;
+}
+.scroll-menu::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0);
+}
+.scroll-menu::-webkit-scrollbar-thumb {
+  background-color: rgb(216, 216, 216);
+  border-radius: 6px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: content-box;
+  min-width: 32px;
+  min-height: 32px;
+  transition: 0.3s;
+}
+
+.scroll-menu::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(94, 94, 94);
+}
+
+#title-bar {
+  -webkit-app-region: drag;
+  height: 5vh;
+  padding: 0px;
+  margin: 0px;
+  background-color: rgb(0, 0, 0);
+}
+
+#title {
+  color: rgb(255, 255, 255);
+  position: fixed;
+  top: 0px;
+  left: 12px;
+  line-height: 32px;
+  font-size: 14px;
+}
+
+#title-bar-btns {
+  -webkit-app-region: no-drag;
+  position: fixed;
+  top: 1px;
+  right: 0px;
+}
+
+#title-bar-btns button {
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+  border: none;
+  color: #f1f1f1;
+  font-size: 16px;
+}
+
+#title-bar-btns button:hover {
+  background-color: #3f3f41;
 }
 </style>

@@ -1,5 +1,23 @@
 <template>
   <div class="p-m-5">
+    <Button
+      label="calllog"
+      @click="calllog()"
+      class="p-button-raised p-button-rounded p-m-2"
+    />
+
+    <Button
+      label="set global var id = 0"
+      @click="setGlobal(0)"
+      class="p-button-raised p-button-rounded p-m-2"
+    />
+
+    <Button
+      label="set global var id = 1"
+      @click="setGlobal(555)"
+      class="p-button-raised p-button-rounded p-m-2"
+    />
+
     <Card>
       <template #title>
         Demo Spec
@@ -27,25 +45,19 @@
       </template>
     </Card>
 
-        <Card>
+    <Card>
       <template #title>
         Demo Docker
       </template>
       <template #content>
-       <Button
-      label="inspec"
-      @click="list()"
-      class="p-button-raised p-button-rounded p-m-1"
-    />
-
+        <Button
+          label="inspec"
+          @click="list()"
+          class="p-button-raised p-button-rounded p-m-1"
+        />
       </template>
     </Card>
-    <Terminal/>
-      <Button
-      label="calllog"
-      @click="calllog()"
-      class="p-button-raised p-button-rounded p-m-1"
-    />
+    <Terminal />
   </div>
 </template>
 
@@ -62,18 +74,20 @@ import DockerProcess from "../module/DockerProcess";
     DemoSpecButton,
     DemoNetupButton,
     ChannelPage,
-    Terminal
+    Terminal,
   },
 })
 export default class Demo extends Vue {
 
-calllog(){
-  Vue.prototype.$log.warn('subscription to accepted at ', new Date().toJSON());
-}
 
-  list(){
-    DockerProcess.ListContainer()
+  calllog() {
+    Vue.prototype.$log.info("test: ", new Date().toJSON());
   }
+
+  list() {
+    DockerProcess.ListContainer();
+  }
+
 }
 </script>
 

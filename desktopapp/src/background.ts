@@ -19,7 +19,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 720,
-    titleBarStyle: "customButtonsOnHover",
+    frame: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info

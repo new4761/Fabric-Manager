@@ -85,8 +85,8 @@ Vue.directive("ripple", Ripple);
 
 // app.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
 // app.config.globalProperties.$primevue = reactive({ ripple: true });
-
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
+
 Vue.prototype.$log = require('simple-node-logger').createSimpleLogger('project.log');
 
 Vue.config.productionTip = false;
