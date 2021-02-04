@@ -41,6 +41,11 @@
       </template>
     </Card>
     <Terminal/>
+      <Button
+      label="calllog"
+      @click="calllog()"
+      class="p-button-raised p-button-rounded p-m-1"
+    />
   </div>
 </template>
 
@@ -62,6 +67,9 @@ import DockerProcess from "../module/DockerProcess";
 })
 export default class Demo extends Vue {
 
+calllog(){
+  Vue.prototype.$log.warn('subscription to accepted at ', new Date().toJSON());
+}
 
   list(){
     DockerProcess.ListContainer()

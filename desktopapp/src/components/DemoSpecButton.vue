@@ -71,7 +71,7 @@ import Component from "vue-class-component";
 import OrgInputText from "./OrgInputText.vue";
 import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
-import ProjectConfig from "../models/ProjectConfig";
+import NetworkConfig from "../models/NetworkConfig";
 
 // import OrgData from "@/models/OrgData";
 @Component({
@@ -100,7 +100,7 @@ export default class DemoSpecButton extends Vue {
       date_create: +new Date(),
       directory: this.projectDir,
     };
-    ProjectConfig.addProject(project);
+    NetworkConfig.createConfig(project);
   }
 
   getFilepath() {

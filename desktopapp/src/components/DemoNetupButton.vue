@@ -82,7 +82,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
-import ProjectConfig from "../models/ProjectConfig";
+import NetworkConfig from "../models/NetworkConfig";
+import  ProjectConfig  from "../models/ProjectConfig";
 
 @Component({
   components: {},
@@ -102,8 +103,8 @@ export default class DemoNetupButton extends Vue {
   }
 
   init() {
-    this.projectDir = ProjectConfig.getPath();
-    this.org = ProjectConfig.getOrgName();
+    this.projectDir = ProjectConfig.getPath(0);
+    this.org = NetworkConfig.getOrgName();
   }
 
   netup() {

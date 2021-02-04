@@ -43,10 +43,10 @@
                 {{ slotProps.data.directory }}
               </div>
               <div class="date">
-                <Chip>
+                <Chip class="p-m-1">
                   {{ toDate(slotProps.data.date_create) }}
                 </Chip>
-                <Chip>
+                <Chip class="p-m-1">
                   {{ toDate(slotProps.data.date_modify) }}
                 </Chip>
               </div>
@@ -57,19 +57,24 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <Card class="p-m-3" v-tooltip.right=slotProps.data.directory >
+          <Card class="p-m-3" v-tooltip.right="slotProps.data.directory">
             <template #header> </template>
             <template #title>
               {{ slotProps.data.name }}
             </template>
-            <template #content> </template>
-            <template #footer>
-              <Chip>
+            <template #content>
+              <Chip class="p-m-1">
                 {{ toDate(slotProps.data.date_create) }}
               </Chip>
-              <Chip>
+              <Chip class="p-m-1">
                 {{ toDate(slotProps.data.date_modify) }}
-              </Chip>
+              </Chip></template
+            >
+            <template #footer>
+              <Button
+                icon="pi pi-bookmark"
+                class="p-button-rounded p-button-secondary"
+              />
             </template>
           </Card>
         </div>
@@ -135,7 +140,7 @@ export default class ProjectPage extends Vue {
     }
 
     if (this.sortKey != null) {
-      this.onSortChange({value:this.sortKey})
+      this.onSortChange({ value: this.sortKey });
     }
   }
 }

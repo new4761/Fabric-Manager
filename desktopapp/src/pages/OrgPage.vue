@@ -13,7 +13,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import ProjectConfig from "../models/ProjectConfig";
+import NetworkConfig from "../models/NetworkConfig";
 @Component({
   components: {},
 })
@@ -24,7 +24,7 @@ export default class OrgPage extends Vue {
   }
 
   init() {
-    this.fabric = ProjectConfig.GetValue("project_config.fabric");
+    this.fabric = NetworkConfig.getValue("project_config.fabric");
   }
 }
 </script>

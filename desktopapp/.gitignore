@@ -28,4 +28,6 @@ package-lock.json
 #Test output
 tests/*
 tests/vars/*
+!tests/*.json
+!tests/*.yaml
 !*.md
