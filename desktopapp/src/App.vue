@@ -11,7 +11,7 @@
     </div>
 
     <div class="p-d-flex">
-      <transition name="layout-sidebar">
+      <transition name="layout-sidebar" mode="out-in">
         <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
           <AppProfile />
           <Card class="p-mx-2 p-mb-5">
@@ -222,15 +222,16 @@ export default class App extends Vue {
 .scroll-main::-webkit-scrollbar-thumb {
   background-color: rgb(0, 140, 255);
   border-radius: 10px;
-  border: 4px solid rgba(0, 0, 0, 0);
+  border: 4px solid rgba(250, 206, 206, 0);
   background-clip: content-box;
   min-width: 32px;
   min-height: 32px;
-  transition: 0.3s;
+  transition: color 0.5s;
 }
 
 .scroll-main::-webkit-scrollbar-thumb:hover {
   background-color: rgb(0, 74, 134);
+  transition: color 0.5s;
 }
 .scroll-main::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);

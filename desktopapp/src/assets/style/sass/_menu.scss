@@ -91,7 +91,7 @@
 
             &.layout-submenu-wrapper-leave-active {
                 overflow: hidden;
-                transition: max-height 0.45s cubic-bezier(0, 1, 0, 1);
+                transition: max-height 0.45s ease-in-out;
             }
 
             &.layout-submenu-wrapper-enter-active {

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+import PrimeVue from 'primevue/config';
 import AutoComplete from "primevue/autocomplete";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
@@ -83,10 +84,11 @@ Vue.use(ToastService);
 Vue.directive("tooltip", Tooltip);
 Vue.directive("ripple", Ripple);
 
-// app.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
-// app.config.globalProperties.$primevue = reactive({ ripple: true });
+// App.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
+// App.config.globalProperties.$primevue = reactive({ ripple: true });
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
-
+// Vue.prototype.$appState =  Vue.observable({ ripple: true });
+Vue.use(PrimeVue, {ripple: true});
 Vue.prototype.$log = require('simple-node-logger').createSimpleLogger('project.log');
 
 Vue.config.productionTip = false;
