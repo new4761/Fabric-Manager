@@ -46,6 +46,23 @@ const remote = require("electron").remote;
   components: { DemoNetupButton, AppProfile, AppMenu },
 })
 export default class App extends Vue {
+        {
+          label: "ChainCode",
+          icon: "pi pi-fw pi-clone",
+        //  items: [
+            //{ label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
+            //{
+              //label: "Calendar",
+              //icon: "pi pi-fw pi-calendar-plus",
+              //to: "/calendar",
+            //},
+            //{
+              //label: "Empty Page",
+              //icon: "pi pi-fw pi-circle-off",
+              //to: "/empty",
+       //     },
+          //]
+        },
   // path: any = this.$router.currentRoute.name;
 
   maximizeWindow() {
@@ -56,6 +73,8 @@ export default class App extends Vue {
       window.unmaximize();
     }
   }
+}
+</script>
 
   minimizeWindow() {
     const window = remote.getCurrentWindow();
@@ -203,7 +222,16 @@ export default class App extends Vue {
     };
   }
 }
-</script>
+.bg {
+  height: 100vh;
+}
+.menu {
+  height: 100vh;
+}
+.page {
+  background-color: #f3f2f2;
+  height: 100vh;
+}
 
 <style>
 .scroll-main {

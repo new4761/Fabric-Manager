@@ -7,32 +7,45 @@ export class ProjectConfig {
   file: any;
 
   constructor() {
-    try {
-      // check dev mode function
-      // used this style for base to write function who work with files
-      if (!isDevelopment) {
-        console.log(path.dirname(__dirname));
-      }
-      let filePath = path.join(
-        !isDevelopment ? path.join(path.dirname(__dirname), "bin") : "tests",
-        "projects.json"
-      );
-      this.file = editJsonFile(filePath);
-    } catch (e) {
-      console.log(e);
-    }
+    this.file = editJsonFile("./tests/net-config.json");
   }
 
-  addProject(project: object) {}
-
-  deleteProject(id:number) {}
-
-  getPath(id:number){
-      return this.file.data[0].directory;
+  addProject(project: object) {
+    let data = yaml.load(fs.readFileSync("./tests/spec.yaml", "utf8"));
+    console.log(data);
+    data = {
+      ...project,
+      date_modify: +new Date(),
+      ...data,
+    };
+    this.file.set("project_config", data);
+    this.file.save();
   }
 
-  updateProjectConfig(key: string, value: any) {}
+  updateConfig(key: string, value: any) {
+    this.file.set(key, value);
+    this.file.save();
+  }
 
-  getValue(key: string) {}
+  GetValue(key:string) {
+    let data = this.file.get(key);
+    return data;
+  }
+
+  getPath() {
+    console.log(this.file.data.project_config.directory);
+    return this.file.data.project_config.directory;
+  }
+
+  getOrgName() {
+    let org = this.file.data.project_config.fabric.orderers.concat(
+      this.file.data.project_config.fabric.peers
+    );
+    org.forEach((element: any, index: any) => {
+      org[index] = element.replace(/^[^.]*./gm, "");
+    });
+    org = [...new Set(org)];
+    return org;
+  }
 }
 export default new ProjectConfig();
