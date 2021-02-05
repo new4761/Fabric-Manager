@@ -50,13 +50,13 @@
             }
         }
 
-        &.layout-submenu-wrapper-enter-from,
+        &.layout-submenu-wrapper-enter,
         &.layout-submenu-wrapper-leave-to {
             max-height: 0;
         }
 
         &.layout-submenu-wrapper-enter-to,
-        &.layout-submenu-wrapper-leave-from {
+        &.layout-submenu-wrapper-leave {
             max-height: 1000px;
         }
 

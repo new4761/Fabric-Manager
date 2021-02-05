@@ -1,32 +1,34 @@
 <template>
   <div>
-    <div id="title-bar">
-      <div id="title">test title</div>
-
-      <div id="title-bar-btns">
-        <Button label="-" @click="minimizeWindow()" id="min-btn" />
-        <Button label="+" @click="maximizeWindow()" id="max-btn" />
-        <Button label="x" @click="closeWindow()" id="close-btn" />
+    <div class="title-bar">
+      <div class="title">Current Path : {{ $route.path }}</div>
+      
+      <div class="title-btn">
+        <div class="minimize" @click="minimizeWindow()"></div>
+        <div class="maximize" @click="maximizeWindow()"></div>
+        <div class="close" @click="closeWindow()"></div>
       </div>
     </div>
 
     <div class="p-d-flex">
-      <transition name="layout-sidebar" mode="out-in">
+      <transition name="layout-sidebar">
         <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
-          <AppProfile />
-          <Card class="p-mx-2 p-mb-5">
+          <Card class="p-mx-2 p-my-1">
             <template #title>
               network stuff
             </template>
           </Card>
-          <div class="scroll-menu">
-            <AppMenu :model="menu" />
-          </div>
+
+          <AppProfile />
+
+          <AppMenu :model="menu" class="scroll-menu" />
         </div>
       </transition>
 
       <div class="scroll-main layout-main p-col p-as-stretch">
-        <router-view />
+        <transition name="fade" mode="out-in">
+          <router-view />
+        </transition>
       </div>
     </div>
   </div>
@@ -47,7 +49,6 @@ export default class App extends Vue {
   // path: any = this.$router.currentRoute.name;
 
   maximizeWindow() {
-    console.log("max");
     const window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
       window.maximize();
@@ -57,13 +58,11 @@ export default class App extends Vue {
   }
 
   minimizeWindow() {
-    console.log("hide");
     const window = remote.getCurrentWindow();
     window.minimize();
   }
 
   closeWindow() {
-    console.log("close");
     const window = remote.getCurrentWindow();
     window.close();
   }
@@ -257,47 +256,98 @@ export default class App extends Vue {
   background-clip: content-box;
   min-width: 32px;
   min-height: 32px;
-  transition: 0.3s;
 }
 
-.scroll-menu::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(94, 94, 94);
-}
-
-#title-bar {
+.title-bar {
   -webkit-app-region: drag;
   height: 5vh;
   padding: 0px;
   margin: 0px;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(0, 75, 173);
 }
 
-#title {
+.title {
   color: rgb(255, 255, 255);
   position: fixed;
   top: 0px;
-  left: 12px;
+  left: 30px;
   line-height: 32px;
-  font-size: 14px;
+  font-size: 20px;
 }
 
-#title-bar-btns {
+.title-btn {
   -webkit-app-region: no-drag;
   position: fixed;
   top: 1px;
   right: 0px;
 }
 
-#title-bar-btns button {
-  height: 32px;
-  width: 32px;
-  background-color: transparent;
-  border: none;
-  color: #f1f1f1;
-  font-size: 16px;
+.title-btn div {
+  position: relative;
+  float: left;
+  width: 30px;
+  height: 30px;
+  transition: all 0.3s;
 }
 
-#title-bar-btns button:hover {
-  background-color: #3f3f41;
+.title-btn div:before,
+.title-btn div:after {
+  top: 30%;
+  right: 30%;
+  bottom: 30%;
+  left: 30%;
+  content: " ";
+  position: absolute;
+  border-color: #ffffff;
+  border-style: solid;
+  border-width: 0 0 2px 0;
+}
+
+.title-btn .minimize:before {
+  border-bottom-width: 2px;
+}
+
+.title-btn .maximize:before {
+  border-width: 1px 1px 2px 1px;
+}
+
+.title-btn .close:before,
+.title-btn .close:after {
+  bottom: 50%;
+  top: 50%;
+}
+
+.title-btn .close:before {
+  transform: rotate(45deg);
+}
+
+.title-btn .close:after {
+  transform: rotate(-45deg);
+}
+
+.title-btn div:hover {
+  background-color: #ffffff;
+}
+
+.title-btn .close:hover {
+  background-color: #e04343;
+}
+
+.title-btn div:hover:after,
+.title-btn div:hover:before {
+  border-color: #333333;
+}
+
+.title-btn .close:hover:after,
+.title-btn .close:hover:before {
+  border-color: #ffffff;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

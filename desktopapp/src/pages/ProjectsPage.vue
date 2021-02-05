@@ -57,7 +57,7 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <Card class="p-m-3" v-tooltip.right="slotProps.data.directory">
+          <Card class="p-m-3">
             <template #header> </template>
             <template #title>
               {{ slotProps.data.name }}
@@ -80,6 +80,8 @@
         </div>
       </template>
     </DataView>
+
+
   </div>
 </template>
 
