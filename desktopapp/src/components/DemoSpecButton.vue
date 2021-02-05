@@ -6,7 +6,6 @@
     <span @click="display = true">
       <Card
         style="width: 8rem; height: 8rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
-         v-ripple
       >
         <template v-slot:content>
           <div class="p-grid p-jc-center">

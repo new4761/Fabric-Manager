@@ -3,15 +3,15 @@
     <Button
       icon="pi pi-power-off"
       class="p-button-rounded p-button-success p-button-lg"
-       @click="display = true"
-       v-show="!up"
+      @click="display = true"
+      v-show="!up"
     />
 
     <Button
       icon="pi pi-power-off"
       class="p-button-rounded p-button-danger p-button-lg"
       @click="netdown()"
-       v-show="up"
+      v-show="up"
     />
 
     <Button
@@ -29,7 +29,7 @@
         :style="{ width: '80vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-col-12">{{ output }}</div>
+        <div class="console p-col-12">{{ output }}</div>
 
         <Button
           class="p-button-danger p-ml-auto p-m-2"
@@ -83,13 +83,13 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
 import NetworkConfig from "../models/NetworkConfig";
-import  ProjectConfig  from "../models/ProjectConfig";
+import ProjectConfig from "../models/ProjectConfig";
 
 @Component({
   components: {},
 })
 export default class DemoNetupButton extends Vue {
-  up:boolean = false;
+  up: boolean = false;
   projectDir: string = "";
   output: string = "hey";
   display: boolean = false;
@@ -115,14 +115,12 @@ export default class DemoNetupButton extends Vue {
     if (this.port != "") {
       args.push("-e " + this.port);
     }
-
     console.log(args);
     const child = OSProcess.run(this.projectDir, args);
 
     child.stdout.setEncoding("utf8");
 
     child.stdout.on("data", (data: any) => {
-      console.log("stdout: " + data.toString());
       this.output = data.toString();
     });
 
@@ -136,7 +134,6 @@ export default class DemoNetupButton extends Vue {
     child.stdout.setEncoding("utf8");
 
     child.stdout.on("data", (data: any) => {
-      console.log("stdout: " + data.toString());
       this.output = data.toString();
     });
 
@@ -150,8 +147,7 @@ export default class DemoNetupButton extends Vue {
     child.stdout.setEncoding("utf8");
 
     child.stdout.on("data", (data: any) => {
-      console.log("stdout: " + data.toString());
-      this.output += "/n" + data.toString();
+      this.output += data.toString();
     });
 
     this.display2 = true;
@@ -164,4 +160,16 @@ export default class DemoNetupButton extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.console {
+  background-color: rgb(2, 0, 122);
+  border-radius: 5px;
+  color: aliceblue;
+  font-size: 10;
+  white-space: break-spaces;
+  padding: 1em;
+  font-style: italic;
+  overflow: auto;
+  height: 500px;
+}
+</style>

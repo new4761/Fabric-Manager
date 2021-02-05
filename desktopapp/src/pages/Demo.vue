@@ -1,5 +1,7 @@
 <template>
   <div class="p-m-5">
+    <Terminal />
+
     <Button
       label="calllog"
       @click="calllog()"
@@ -57,7 +59,6 @@
         />
       </template>
     </Card>
-    <Terminal />
   </div>
 </template>
 
@@ -78,8 +79,6 @@ import DockerProcess from "../module/DockerProcess";
   },
 })
 export default class Demo extends Vue {
-
-
   calllog() {
     Vue.prototype.$log.info("test: ", new Date().toJSON());
   }
@@ -87,7 +86,6 @@ export default class Demo extends Vue {
   list() {
     DockerProcess.ListContainer();
   }
-
 }
 </script>
 
