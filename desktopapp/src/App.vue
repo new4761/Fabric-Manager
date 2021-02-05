@@ -46,24 +46,7 @@ const remote = require("electron").remote;
   components: { DemoNetupButton, AppProfile, AppMenu },
 })
 export default class App extends Vue {
-        {
-          label: "ChainCode",
-          icon: "pi pi-fw pi-clone",
-        //  items: [
-            //{ label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-            //{
-              //label: "Calendar",
-              //icon: "pi pi-fw pi-calendar-plus",
-              //to: "/calendar",
-            //},
-            //{
-              //label: "Empty Page",
-              //icon: "pi pi-fw pi-circle-off",
-              //to: "/empty",
-       //     },
-          //]
-        },
-  // path: any = this.$router.currentRoute.name;
+      
 
   maximizeWindow() {
     const window = remote.getCurrentWindow();
@@ -73,9 +56,7 @@ export default class App extends Vue {
       window.unmaximize();
     }
   }
-}
-</script>
-
+  
   minimizeWindow() {
     const window = remote.getCurrentWindow();
     window.minimize();
@@ -149,22 +130,22 @@ export default class App extends Vue {
             { label: "Text", icon: "pi pi-fw pi-pencil", to: "/text" },
           ],
         },
-        {
+     {
           label: "ChainCode",
           icon: "pi pi-fw pi-clone",
-          items: [
-            { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-            {
-              label: "Calendar",
-              icon: "pi pi-fw pi-calendar-plus",
-              to: "/calendar",
-            },
-            {
-              label: "Empty Page",
-              icon: "pi pi-fw pi-circle-off",
-              to: "/empty",
-            },
-          ],
+        //  items: [
+            //{ label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
+            //{
+              //label: "Calendar",
+              //icon: "pi pi-fw pi-calendar-plus",
+              //to: "/calendar",
+            //},
+            //{
+              //label: "Empty Page",
+              //icon: "pi pi-fw pi-circle-off",
+              //to: "/empty",
+       //     },
+          //]
         },
         {
           label: "Menu Hierarchy",
@@ -221,7 +202,11 @@ export default class App extends Vue {
       ],
     };
   }
+
 }
+</script>
+
+<style>
 .bg {
   height: 100vh;
 }
@@ -233,7 +218,6 @@ export default class App extends Vue {
   height: 100vh;
 }
 
-<style>
 .scroll-main {
   overflow: scroll;
   width: 100%;
