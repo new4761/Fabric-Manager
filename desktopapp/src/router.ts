@@ -35,7 +35,7 @@ export default new Router({
         {
             path: '/chaincode',
             name: 'ChainCode',
-            component:()=> import('./pages/ChaincodePage.vue')
+            component:()=> import('./pages/ChainCodePage.vue')
         }
         // {
 		// 	path: '/orgchart',
