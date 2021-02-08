@@ -72,6 +72,9 @@ import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
 
 import Avatar from "primevue/avatar";
+import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from 'primevue/confirmdialog';
+
 
 // import 'primevue/resources/themes/saga-blue/theme.css';
 import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
@@ -79,8 +82,13 @@ import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "./assets/style/style.scss";
+import store from './store'
+// import logger from './module/Logger'
+
+// Vue.prototype.$logger = logger;
 
 Vue.use(ToastService);
+Vue.use(ConfirmationService);
 Vue.directive("tooltip", Tooltip);
 Vue.directive("ripple", Ripple);
 
@@ -89,12 +97,13 @@ Vue.directive("ripple", Ripple);
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
 // Vue.prototype.$appState =  Vue.observable({ ripple: true });
 Vue.use(PrimeVue, {ripple: true});
-Vue.prototype.$log = require('simple-node-logger').createSimpleLogger('project.log');
+
 
 Vue.config.productionTip = false;
 
 Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
+Vue.component("ConfirmDialog", ConfirmDialog);
 
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);
@@ -164,5 +173,6 @@ Vue.component("ProgressSpinner", ProgressSpinner);
 
 new Vue({
   router,
-  render: (h) => h(App),
+  store,
+  render: (h) => h(App)
 }).$mount("#app");

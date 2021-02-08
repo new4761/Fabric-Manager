@@ -70,6 +70,7 @@ import DemoNetupButton from "../components/DemoNetupButton.vue";
 import Terminal from "../components/Terminal.vue";
 import ChannelPage from "./ChannelPage.vue";
 import DockerProcess from "../module/DockerProcess";
+import Logger from "../module/Logger";
 @Component({
   components: {
     DemoSpecButton,
@@ -80,11 +81,24 @@ import DockerProcess from "../module/DockerProcess";
 })
 export default class Demo extends Vue {
   calllog() {
-    Vue.prototype.$log.info("test: ", new Date().toJSON());
+    // Vue.prototype.$logger.info("test: ", new Date().toJSON());
+    Logger.log("info", "test ");
+    Logger.log("warn", "test ");
+    try {
+      Logger.log("error", "test ");
+    } catch (e) {
+      console.log("ERROR:" + e.toString());
+    }
   }
 
   list() {
     DockerProcess.ListContainer();
+  }
+
+  setGlobal(id: number) {
+    console.log("before set: " + this.$store.state.project.id);
+    this.$store.commit("project/setId", id);
+    console.log("after set: " + this.$store.state.project.id);
   }
 }
 </script>

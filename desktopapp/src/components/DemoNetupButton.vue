@@ -84,7 +84,6 @@ import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
 import NetworkConfig from "../models/NetworkConfig";
 import ProjectConfig from "../models/ProjectConfig";
-
 @Component({
   components: {},
 })
@@ -97,16 +96,13 @@ export default class DemoNetupButton extends Vue {
   orgSelected: string = "";
   org: any[] = [];
   port: string = "";
-
   mounted() {
     this.init();
   }
-
   init() {
     this.projectDir = ProjectConfig.getPath(0);
     this.org = NetworkConfig.getOrgName();
   }
-
   netup() {
     let args: string[] = ["netup"];
     if (this.orgSelected != "") {
@@ -117,42 +113,30 @@ export default class DemoNetupButton extends Vue {
     }
     console.log(args);
     const child = OSProcess.run(this.projectDir, args);
-
     child.stdout.setEncoding("utf8");
-
     child.stdout.on("data", (data: any) => {
       this.output = data.toString();
     });
-
     this.display2 = true;
     this.up = true;
   }
-
   netdown() {
     const child = OSProcess.run(this.projectDir, ["down"]);
-
     child.stdout.setEncoding("utf8");
-
     child.stdout.on("data", (data: any) => {
       this.output = data.toString();
     });
-
     this.display2 = true;
     this.up = false;
   }
-
   cleanup() {
     const child = OSProcess.run(this.projectDir, ["cleanup"]);
-
     child.stdout.setEncoding("utf8");
-
     child.stdout.on("data", (data: any) => {
       this.output += data.toString();
     });
-
     this.display2 = true;
   }
-
   data() {
     return {};
   }
