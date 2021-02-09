@@ -8,7 +8,10 @@ export default new Router({
         {
 			path: '/',
 			name: 'home',
-			component: () => import('./index.vue')
+			component: () => import('./index.vue'),
+            meta: {
+                layout: "default-layout"
+              }
         },
 		{
 			path: '/demo',
@@ -30,7 +33,10 @@ export default new Router({
         {
 			path: '/project',
 			name: 'Project',
-			component: () => import('./pages/ProjectsPage.vue')
+			component: () => import('./pages/ProjectsPage.vue'),
+            meta: {
+                layout: "clean-layout"
+              }
         },
         // {
 		// 	path: '/orgchart',

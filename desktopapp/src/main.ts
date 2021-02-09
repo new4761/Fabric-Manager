@@ -75,8 +75,10 @@ import Avatar from "primevue/avatar";
 import ConfirmationService from 'primevue/confirmationservice';
 import ConfirmDialog from 'primevue/confirmdialog';
 
+import CleanLayout from "./layouts/CleanLayout.vue"
+import DefaultLayout from "./layouts/DefaultLayout.vue"
 
-// import 'primevue/resources/themes/saga-blue/theme.css';
+
 import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
@@ -100,6 +102,10 @@ Vue.use(PrimeVue, {ripple: true});
 
 
 Vue.config.productionTip = false;
+
+Vue.component("default-layout", DefaultLayout);
+Vue.component("clean-layout", CleanLayout);
+
 
 Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
@@ -176,3 +182,5 @@ new Vue({
   store,
   render: (h) => h(App)
 }).$mount("#app");
+
+router.replace('/project')

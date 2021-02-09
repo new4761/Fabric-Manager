@@ -84,11 +84,7 @@ export default class Demo extends Vue {
     // Vue.prototype.$logger.info("test: ", new Date().toJSON());
     Logger.log("info", "test ");
     Logger.log("warn", "test ");
-    try {
-      Logger.log("error", "test ");
-    } catch (e) {
-      console.log("ERROR:" + e.toString());
-    }
+    Logger.log("error", "test ");
   }
 
   list() {

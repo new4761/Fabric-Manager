@@ -1,60 +1,40 @@
 <template>
   <div>
-    <div class="title-bar">
-      <div class="title">
-        Current Path : {{ $route.name }} Project ID:
-        {{ this.$store.state.project.id }}
-      </div>
+    <div class="p-d-flex">
+      <transition name="layout-sidebar">
+        <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
+          <Card class="p-mx-2 p-my-1">
+            <template #title>
+              network stuff
+            </template>
+          </Card>
 
-      <div class="title-btn">
-        <div class="minimize" @click="minimizeWindow()"></div>
-        <div class="maximize" @click="maximizeWindow()"></div>
-        <div class="close" @click="closeWindow()"></div>
+          <AppProfile />
+
+          <AppMenu :model="menu" class="scroll-menu" />
+        </div>
+      </transition>
+
+      <div class="scroll-main layout-main p-col p-as-stretch">
+        <transition name="fade" mode="out-in">
+          <slot />
+        </transition>
       </div>
     </div>
-
-    <component :is="layout">
-      <router-view />
-    </component>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import DemoNetupButton from "./components/DemoNetupButton.vue";
-import AppProfile from "./components/menu/AppProfile.vue";
-import AppMenu from "./components/menu/AppMenu.vue";
-const remote = require("electron").remote;
+import DemoNetupButton from "../components/DemoNetupButton.vue";
+import AppProfile from "../components/menu/AppProfile.vue";
+import AppMenu from "../components/menu/AppMenu.vue";
 
 @Component({
   components: { DemoNetupButton, AppProfile, AppMenu },
 })
-export default class App extends Vue {
-  // path: any = this.$router.currentRoute.name;
-  get layout() {
-    return this.$route.meta.layout || "default-layout";
-  }
-
-  maximizeWindow() {
-    const window = remote.getCurrentWindow();
-    if (!window.isMaximized()) {
-      window.maximize();
-    } else {
-      window.unmaximize();
-    }
-  }
-
-  minimizeWindow() {
-    const window = remote.getCurrentWindow();
-    window.minimize();
-  }
-
-  closeWindow() {
-    const window = remote.getCurrentWindow();
-    window.close();
-  }
-
+export default class DefaultLayout extends Vue {
   data() {
     return {
       menu: [

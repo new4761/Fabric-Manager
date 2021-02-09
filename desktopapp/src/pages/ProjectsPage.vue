@@ -60,26 +60,26 @@
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
           <div @click="confirm(slotProps.data.id)">
-          <Card class="p-m-3">
-            <template #header> </template>
-            <template #title>
-              {{ slotProps.data.name }}
-            </template>
-            <template #content>
-              <Chip class="p-m-1">
-                {{ toDate(slotProps.data.date_create) }}
-              </Chip>
-              <Chip class="p-m-1">
-                {{ toDate(slotProps.data.date_modify) }}
-              </Chip></template
-            >
-            <template #footer>
-              <Button
-                icon="pi pi-bookmark"
-                class="p-button-rounded p-button-secondary"
-              />
-            </template>
-          </Card>
+            <Card class="p-m-3">
+              <template #header> </template>
+              <template #title>
+                {{ slotProps.data.name }}
+              </template>
+              <template #content>
+                <Chip class="p-m-1">
+                  {{ toDate(slotProps.data.date_create) }}
+                </Chip>
+                <Chip class="p-m-1">
+                  {{ toDate(slotProps.data.date_modify) }}
+                </Chip></template
+              >
+              <template #footer>
+                <Button
+                  icon="pi pi-bookmark"
+                  class="p-button-rounded p-button-secondary"
+                />
+              </template>
+            </Card>
           </div>
         </div>
       </template>
@@ -116,12 +116,14 @@ export default class ProjectPage extends Vue {
     this.data = data;
   }
 
-  confirm(id:number) {
+  confirm(id: number) {
     this.$confirm.require({
       message: "go to project id: " + id + " ?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
+        this.$store.commit("project/setId", id);
+        this.$router.push("/");
         this.$toast.add({
           severity: "info",
           summary: "Confirmed",
