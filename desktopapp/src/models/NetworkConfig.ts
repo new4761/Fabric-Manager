@@ -12,7 +12,7 @@ export class NetworkConfig {
       // check dev mode function
       // used this style for base to write function who work with files
       if (!isDevelopment) {
-        console.log(path.dirname(__dirname));
+        // console.log(path.dirname(__dirname));
       }
       let filePath = path.join(
         !isDevelopment
@@ -21,14 +21,16 @@ export class NetworkConfig {
         "net-config.json"
       );
       this.file = editJsonFile(filePath);
-      console.log("net-config path: " + filePath);
+      // console.log("net-config path: " + filePath);
     } catch (e) {
       console.log(e);
     }
   }
 
   createConfig(project: object) {
-    let data = yaml.load(fs.readFileSync(path.join(ProjectConfig.getPath,"spec.yaml"), "utf8"));
+    let data = yaml.load(
+      fs.readFileSync(path.join(ProjectConfig.getPath, "spec.yaml"), "utf8")
+    );
     console.log("yaml data: " + data);
     data = {
       ...project,
@@ -51,13 +53,59 @@ export class NetworkConfig {
 
   getOrgName() {
     let org = this.file.data.project_config.fabric.orderers.concat(
+      this.file.data.project_config.fabric.cas,
       this.file.data.project_config.fabric.peers
     );
-    org.forEach((element: any, index: any) => {
-      org[index] = element.replace(/^[^.]*./gm, "");
+
+    let newOrg: {
+      [key: string]: {
+        name: string;
+        child: Set<string>;
+        ca: boolean;
+        peer: number;
+        orderer: boolean;
+      };
+    } = {};
+
+    org.forEach((element: string) => {
+      var isCa: boolean = false;
+      var isOrderer: boolean = false;
+      var isPeer = false;
+
+      let name = element.replace(/^[^.]*./gm, "");
+
+      if (!(name in newOrg)) {
+        newOrg[name] = {
+          name: name,
+          child: new Set(),
+          ca: false,
+          peer: 0,
+          orderer: false,
+        };
+      }
+
+      if (element.includes("orderer")) {
+        isOrderer = true;
+      }
+
+      if (element.includes("ca") || newOrg[name].ca == true) {
+        isCa = true;
+      }
+
+      if (element.includes("peer")) {
+        isPeer = true;
+      }
+
+      newOrg[name] = {
+        name: name,
+        child: newOrg[name].child.add(element),
+        ca: isCa,
+        peer: isPeer ? (newOrg[name].peer += 1) : 0,
+        orderer: isOrderer,
+      };
     });
-    org = [...new Set(org)];
-    return org;
+
+    return newOrg;
   }
 }
 export default new NetworkConfig();

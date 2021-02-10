@@ -101,7 +101,7 @@ export default class DemoNetupButton extends Vue {
   }
   init() {
     this.projectDir = ProjectConfig.getPath(0);
-    this.org = NetworkConfig.getOrgName();
+    this.org = Object.keys(NetworkConfig.getOrgName());
   }
   netup() {
     let args: string[] = ["netup"];
