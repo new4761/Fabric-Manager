@@ -3,6 +3,8 @@
     <h1>
       Projects
     </h1>
+    <ConfirmDialog />
+    <Toast />
 
     <DataView
       :value="data"
@@ -36,7 +38,7 @@
 
       <template #list="slotProps">
         <div class="p-col-12">
-          <div class="list-item p-m-3">
+          <div class="list-item p-m-3" @click="confirm(slotProps.data.id)">
             <div class="list-detail">
               <div class="name">{{ slotProps.data.name }}</div>
               <div class="directory">
@@ -57,31 +59,31 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <Card class="p-m-3">
-            <template #header> </template>
-            <template #title>
-              {{ slotProps.data.name }}
-            </template>
-            <template #content>
-              <Chip class="p-m-1">
-                {{ toDate(slotProps.data.date_create) }}
-              </Chip>
-              <Chip class="p-m-1">
-                {{ toDate(slotProps.data.date_modify) }}
-              </Chip></template
-            >
-            <template #footer>
-              <Button
-                icon="pi pi-bookmark"
-                class="p-button-rounded p-button-secondary"
-              />
-            </template>
-          </Card>
+          <div @click="confirm(slotProps.data.id)">
+            <Card class="p-m-3">
+              <template #header> </template>
+              <template #title>
+                {{ slotProps.data.name }}
+              </template>
+              <template #content>
+                <Chip class="p-m-1">
+                  {{ toDate(slotProps.data.date_create) }}
+                </Chip>
+                <Chip class="p-m-1">
+                  {{ toDate(slotProps.data.date_modify) }}
+                </Chip></template
+              >
+              <template #footer>
+                <Button
+                  icon="pi pi-bookmark"
+                  class="p-button-rounded p-button-secondary"
+                />
+              </template>
+            </Card>
+          </div>
         </div>
       </template>
     </DataView>
-
-
   </div>
 </template>
 
@@ -112,6 +114,32 @@ export default class ProjectPage extends Vue {
 
   init() {
     this.data = data;
+  }
+
+  confirm(id: number) {
+    this.$confirm.require({
+      message: "go to project id: " + id + " ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.$store.commit("project/setId", id);
+        this.$router.push("/");
+        this.$toast.add({
+          severity: "info",
+          summary: "Confirmed",
+          detail: "You have accepted",
+          life: 3000,
+        });
+      },
+      reject: () => {
+        this.$toast.add({
+          severity: "info",
+          summary: "Rejected",
+          detail: "You have rejected",
+          life: 3000,
+        });
+      },
+    });
   }
 
   toDate(stamp: any) {

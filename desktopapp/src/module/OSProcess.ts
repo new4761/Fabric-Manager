@@ -14,9 +14,15 @@ class OSProcess {
       cwd: path,
     });
 
-    return child
+    return child;
 
+    // child.stdout.on("data", (data: any) => {
+    //   this.emitter.emit("data", data.toString());
+    // });
 
+    // child.stderr.on("data", (data: any) => {
+    //   this.emitter.emit("data", data.toString());
+    // });
   }
   run_new(path: string, args: string[], type: OsType): any {
     let ls: any;

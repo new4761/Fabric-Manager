@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import PrimeVue from 'primevue/config';
+import PrimeVue from "primevue/config";
 import AutoComplete from "primevue/autocomplete";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
@@ -72,15 +72,26 @@ import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
 
 import Avatar from "primevue/avatar";
+import ConfirmationService from "primevue/confirmationservice";
+import ConfirmDialog from "primevue/confirmdialog";
 
-// import 'primevue/resources/themes/saga-blue/theme.css';
+import CleanLayout from "./layouts/CleanLayout.vue";
+import DefaultLayout from "./layouts/DefaultLayout.vue";
+
 import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/js/all.js";
 import "./assets/style/style.scss";
+import store from "./store";
+// import logger from './module/Logger'
+
+// Vue.prototype.$logger = logger;
 
 Vue.use(ToastService);
+Vue.use(ConfirmationService);
 Vue.directive("tooltip", Tooltip);
 Vue.directive("ripple", Ripple);
 
@@ -88,13 +99,16 @@ Vue.directive("ripple", Ripple);
 // App.config.globalProperties.$primevue = reactive({ ripple: true });
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
 // Vue.prototype.$appState =  Vue.observable({ ripple: true });
-Vue.use(PrimeVue, {ripple: true});
-Vue.prototype.$log = require('simple-node-logger').createSimpleLogger('project.log');
+Vue.use(PrimeVue, { ripple: true });
 
 Vue.config.productionTip = false;
 
+Vue.component("default-layout", DefaultLayout);
+Vue.component("clean-layout", CleanLayout);
+
 Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
+Vue.component("ConfirmDialog", ConfirmDialog);
 
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);
@@ -161,8 +175,10 @@ Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
 
-
 new Vue({
   router,
+  store,
   render: (h) => h(App),
 }).$mount("#app");
+
+// router.replace('/project')

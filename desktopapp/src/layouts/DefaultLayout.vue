@@ -1,70 +1,40 @@
 <template>
   <div>
-    <div class="title-bar">
-      <div class="title">
-        Current Path : {{ $route.name }} Project ID:
-        {{ this.$store.state.project.id }}
-      </div>
+    <div class="p-d-flex">
+      <transition name="layout-sidebar">
+        <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
+          <Card class="p-mx-2 p-my-1">
+            <template #title>
+              network stuff
+            </template>
+          </Card>
 
-      <div class="title-btn">
-        <div class="minimize" @click="minimizeWindow()"></div>
-        <div class="maximize" @click="maximizeWindow()"></div>
-        <div class="close" @click="closeWindow()"></div>
+          <AppProfile />
+
+          <AppMenu :model="menu" class="scroll-menu" />
+        </div>
+      </transition>
+
+      <div class="scroll-main layout-main p-col p-as-stretch">
+    
+          <slot />
+      
       </div>
     </div>
-    <transition name="fade" mode="out-in">
-      <component :is="layout">
-        <transition name="fade" mode="out-in">
-          <router-view />
-        </transition>
-      </component>
-    </transition>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import DemoNetupButton from "./components/DemoNetupButton.vue";
-import AppProfile from "./components/menu/AppProfile.vue";
-import AppMenu from "./components/menu/AppMenu.vue";
-const remote = require("electron").remote;
+import DemoNetupButton from "../components/DemoNetupButton.vue";
+import AppProfile from "../components/menu/AppProfile.vue";
+import AppMenu from "../components/menu/AppMenu.vue";
 
 @Component({
   components: { DemoNetupButton, AppProfile, AppMenu },
 })
-export default class App extends Vue {
-  // path: any = this.$router.currentRoute.name;
-
-   mounted () {
-     if(this.$store.state.project.id == null){
-       this.$router.push('project')
-     }
-   }
-  
-  get layout() {
-    return this.$route.meta.layout || "default-layout";
-  }
-
-  maximizeWindow() {
-    const window = remote.getCurrentWindow();
-    if (!window.isMaximized()) {
-      window.maximize();
-    } else {
-      window.unmaximize();
-    }
-  }
-  
-  minimizeWindow() {
-    const window = remote.getCurrentWindow();
-    window.minimize();
-  }
-
-  closeWindow() {
-    const window = remote.getCurrentWindow();
-    window.close();
-  }
-
+export default class DefaultLayout extends Vue {
   data() {
     return {
       menu: [
@@ -128,23 +98,22 @@ export default class App extends Vue {
             { label: "Text", icon: "pi pi-fw pi-pencil", to: "/text" },
           ],
         },
-     {
+        {
           label: "ChainCode",
           icon: "pi pi-fw pi-clone",
-          to:"/chaincode"
-        //  items: [
-            //{ label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-            //{
-              //label: "Calendar",
-              //icon: "pi pi-fw pi-calendar-plus",
-              //to: "/calendar",
-            //},
-            //{
-              //label: "Empty Page",
-              //icon: "pi pi-fw pi-circle-off",
-              //to: "/empty",
-       //     },
-          //]
+          items: [
+            { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
+            {
+              label: "Calendar",
+              icon: "pi pi-fw pi-calendar-plus",
+              to: "/calendar",
+            },
+            {
+              label: "Empty Page",
+              icon: "pi pi-fw pi-circle-off",
+              to: "/empty",
+            },
+          ],
         },
         {
           label: "Menu Hierarchy",
@@ -201,8 +170,9 @@ export default class App extends Vue {
       ],
     };
   }
-
 }
 </script>
 
-<style></style>
+<style>
+
+</style>

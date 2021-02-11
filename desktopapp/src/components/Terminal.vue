@@ -1,10 +1,7 @@
 <template>
   <div class="p-my-5">
-    <button @click="testget()">get google test</button>
-
-    <button @click="clearlog()">clear data</button>
     <transition name="slide-fade" mode="out-in">
-    <div class="console">{{ output }}</div>
+      <div class="console">{{ output }}</div>
     </transition>
   </div>
 </template>
@@ -13,30 +10,52 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
+// const TerminalProps = Vue.extend({
+//   props: {
+//     input: String,
+//   },
+// });
+
 @Component({
   components: {},
 })
 export default class Terminal extends Vue {
+  // mounted() {
+  //   this.displayOutput();
+  // }
+  // displayOutput() {
+  //   this.output = "minifab:output";
+  //   this.child.stdout.setEncoding("utf8");
+  //   this.child.stdout.on("data", (data: any) => {
+  //     this.output += data.toString();
+  //   });
+  //   this.child.stderr.on("data", (data: any) => {
+  //     this.output += data.toString();
+  //   });
+  //}
   output: any = "------------Terminal--------------";
-  // timer:number = 0;
-
+  timer: number = 0;
   created() {
-      this.testget()
-      setInterval(() => this.testget(), 5000);
+    // this.testget();
+    // setInterval(() => this.testget(), 500);
   }
-
   clearlog() {
-     this.output = ""
+    this.output = "";
   }
+  async testget() {
+    // const used = process.memoryUsage();
+    // for (let key in used) {
+    //   console.log(
+    //     `${key} ${Math.round((used[key] / 1024 / 1024) * 100) / 100} MB`
+    //   );
+    // }
 
-  testget() {
-    var cproc = require("child_process");
-
-    let proc = cproc.spawn("ping", ["www.google.com"]);
-
-    proc.stdout.on("data", (res: any) => {
-      this.output += res;
-    });
+    // this.output = await process.getProcessMemoryInfo()
+    // var cproc = require("child_process");
+    // let proc = cproc.spawn("ping", ["www.google.com"]);
+    // proc.stdout.on("data", (res: any) => {
+    //   this.output = res;
+    // });
   }
 }
 </script>
@@ -56,10 +75,10 @@ export default class Terminal extends Vue {
 }
 
 .slide-fade-enter-active {
-  transition: all .1s ease;
+  transition: all 0.1s ease;
 }
 .slide-fade-leave-active {
-  transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for <2.1.8 */ {
