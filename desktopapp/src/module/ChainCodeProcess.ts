@@ -1,15 +1,17 @@
 import OSProcess from "./OSProcess"
-import { OsType } from "../models/EnvProject";
+import { OsType, CCtype, CCstate } from "../models/EnvProject";
 const path = require('path');
 const process = require('process');
 const isDevelopment = process.env.NODE_ENV !== "production"
-
-const { Readable } = require('stream')
-
+import { DirBuilder } from "./DirBuilder"
+import Uploader from "./Uploader"
 
 
 class ChainCodeProcess {
-
+    // call dirBuilder module
+    dirBuilder = new DirBuilder()
+    // private variable for set CC command
+    private osType: OsType = OsType.WINDOW;
 
     testPath: any;
     constructor() {
@@ -18,77 +20,161 @@ class ChainCodeProcess {
             //console.log(this.testPath);
         }
     }
+    //get set function
+    getOsType() {
+        return this.osType
+    }
+    setOsType(_osType: OsType) {
+        this.osType = _osType;
+    }
     // test function 
-    testFunction() {
+    async testFunction() {
         if (isDevelopment) {
-            console.log("test ChainCode");
-            //console.log(path.dirname(__dirname))
-            //let testPath = path.resolve(process.cwd());
-            //testPath = path.join(testPath, "tests");
-            //console.log(testPath, "tests");
-            //let ls = OSProcess.run_new(this.testPath, ['netup'], OsType.WINDOW);
-            let ls = OSProcess.run_new(this.testPath, ['netup'], OsType.WINDOW);
-           
-            this.callback(ls);
-            // pro.stdout.on('data', function (data:any) {
-            // console.log(data.toString());
-            //});
+
+            await OSProcess.run_new(this.testPath, ['netup'], this.osType);
+            await OSProcess.run_new(this.testPath, ['create', '-c', 'testchannel'], this.osType);
+            await OSProcess.run_new(this.testPath, ['join'], this.osType);
+            await OSProcess.run_new(this.testPath, ['anchorupdate'], this.osType);
+            await OSProcess.run_new(this.testPath, ['explorerup'], this.osType);
+        }
+    }
+
+    async testClean() {
+        if (isDevelopment) {
+            //console.log("test clean");
+            await OSProcess.run_new(this.testPath, ['cleanup'], this.osType);
+        }
+    }
+    testCCgo() {
+        if (isDevelopment) {
+            // run test go Deploy with simple cc
 
         }
-        //   console.log("testCalled");
-
     }
-     callback(ls:any){
-        //readable.setEncoding('utf8');
-       ls.stdout.on('data', (data:any) => {
-        process.stdout.write(data.toString());
-                });
-     console.log(process.stdout)
-        
-    }
-    // callback(ls: any) {
-        
-    //      ls.stdout.on('data', (data:any) => {
-    //         data = data.toString();
-    //         console.log(`stdout: ${data}`);
-    //     });
-
-    //     ls.stderr.on('data', (data:any) => {
-    //         data = data.toString();
-    //         console.error(`stderr: ${data}`);
-    //     });
-
-    //     ls.on('close', (code:any) => {
-    //          data = data.toString();
-    //         console.log(`child process exited with code ${code}`);
-    //     });
-    
-    //   }
-    testClean() {
+    async testUpLoad() {
         if (isDevelopment) {
-            console.log("test clean");
-            let ls = OSProcess.run_new(this.testPath, ['cleanup'], OsType.WINDOW);
-            //console.log(ls.output);
-           this.callback(ls);
+            console.log("CC go");
+            let ccName = "testName";
+            let ccType = "go";
+            let ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
+            await this.dirBuilder.createDir_path(ccDir);
+            Uploader.upLoadDir(ccDir).then((des: any) => console.log(des))
+            //Uploader.upLoadFile(ccDir)
         }
     }
     //end test
     // basic setup
-    getEnvSetting() { }
-    setupFolder() { }
-
-    // user command CC
-    deployCC() {
+    getEnvSetting() {
+        // to do  wait for env project file 
 
     }
-    approve() { }
-    commit() { }
-    init() { }
+
+    async setupFolder(ccName: string, ccType: CCtype): CCstate {
+        let ccDir = ""
+        if (isDevelopment) {
+            ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
+        }
+        else {
+            //to do use project path for replace testPath
+            ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
+        }
+        this.dirBuilder.createDir_path(ccDir);
+        return await Uploader.upLoadDir(ccDir)
+            .then((des: any) => {
+                //console.log(des)
+                if (des != undefined) {
+                    console.log(des)
+                    return CCstate.setupDir
+                }
+                else {
+                    console.log("get error");
+                    return CCstate.unSetupCC
+                }
+            }).catch((err: any) => { console.log(err) })
+
+    }
+
+    //  init command CC
+    async deployCC(ccName: string, cctype: CCtype, ccState: CCstate): CCstate {
+        if (ccState == CCstate.setupDir) {
+            let arg = [];
+            //arg for call fabric command
+            arg.push("install")
+            // cc name
+            arg.push("-n")
+            arg.push(ccName)
+            //cc language
+            arg.push("-l")
+            arg.push(cctype)
+            //cc version
+            //to do get env version from cc setting
+            arg.push("-v")
+            arg.push("1.0")
+            if (isDevelopment) {
+                return await OSProcess.run_new(this.testPath, arg, this.osType).then(() => { return CCstate.installCC });
+            }
+        }
+        else {
+            console.log("pls setup dir")
+            return ccState
+        }
+    }
+
+    async approve(ccState: CCstate): CCstate {
+        if (ccState == CCstate.installCC)
+            if (isDevelopment) {
+                return await OSProcess.run_new(this.testPath, ['approve'], this.osType).then(() => { return CCstate.approveCC });
+            }
+            else {
+                console.log("pls install cc")
+                return ccState
+            }
+
+    }
+    async commit(ccState: CCstate): CCstate {
+        if (ccState == CCstate.approveCC) {
+            if (isDevelopment) {
+                return await OSProcess.run_new(this.testPath, ['commit'], this.osType).then(() => { return CCstate.commitCC });
+            }
+        } else {
+            console.log("pls approve cc")
+            return ccState
+        }
+
+    }
+
+    //end setup
+    // user  command
+    upGradeCC() {
+
+    }
+    init() {
+        // to do write init condition
+    }
     invoke() { }
     query() {
     }
-    discover() {
+    discover(ccName: string, cctype: CCtype, ccState: CCstate) {
+
+        // get channel endorser 
+        if (ccState == CCstate.readyCC) {
+            let arg = [];
+            //arg for call fabric command
+            arg.push("discover")
+            // cc name
+            arg.push("-n")
+            arg.push(ccName)
+            //cc language
+            arg.push("-l")
+            arg.push(cctype)
+            //cc version
+            //to do get env version from cc setting
+            if (isDevelopment) {
+                OSProcess.run_new(this.testPath, arg, this.osType);
+            }
+        }
     }
+
 
 }
 export default new ChainCodeProcess();

@@ -133,6 +133,7 @@ export default class App extends Vue {
      {
           label: "ChainCode",
           icon: "pi pi-fw pi-clone",
+          to:"/chaincode"
         //  items: [
             //{ label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
             //{
