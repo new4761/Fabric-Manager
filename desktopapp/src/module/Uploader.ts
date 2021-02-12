@@ -7,11 +7,11 @@ class Uploader {
     constructor() {}
     // use dialog box 
     // upload all content in directly to destination 
-    upLoadDir(destDir: string):any {
+    upLoadDir():any {
         return dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
             //console.log(result.canceled)
            // console.log(result.filePaths)
-            this.copyFilesDir(result.filePaths[0], destDir)
+           // this.copyFilesDir(result.filePaths[0], destDir)
             return result.filePaths[0]
         }).catch(err => {
             console.log(err)
@@ -21,11 +21,11 @@ class Uploader {
     }
     // use dialog box 
     // upload only one file in directly to destination 
-    upLoadFile(destDir: string):any {
+    upLoadFile():any {
         dialog.showOpenDialog({ properties: ['openFile'] }).then(result => {
             //console.log(result.canceled)
             //console.log(result.filePaths)
-            this.copyFile(result.filePaths[0], destDir)
+           // this.copyFile(result.filePaths[0], destDir)
             return result.filePaths[0]
         }).catch(err => {
             console.log(err)
@@ -33,6 +33,7 @@ class Uploader {
 
 
     }
+
     // call through to copy file
     copyFile(sourceDir: any, destDir: string) {
         let fileName = path.basename(sourceDir)

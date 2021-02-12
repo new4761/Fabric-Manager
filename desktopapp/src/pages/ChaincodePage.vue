@@ -11,6 +11,7 @@
       <br />
       <Button label="java" />
       <br />
+      <Button label="demo" @click="setUp()"></Button>
       <!-- <Button label="testupLoad" @click="testUpload()" /> -->
     </h1>
     <div class="p-grid p-fluid">
@@ -42,6 +43,7 @@ import Component from "vue-class-component";
 @Component({
   components: {},
 })
+// window.open("/chaincode","_self")
 export default class ChaincodePage extends Vue {
   ccName: string = "";
   selectedCCtype: { data: CCtype; text: string } = {
@@ -73,11 +75,7 @@ export default class ChaincodePage extends Vue {
   testcleanup() {
     ChainCodeProcess.testClean();
   }
-  update() {}
-  invoke() {}
-  query() {}
-  //test funtion
-  async testGo() {
+    async testGo() {
     let ccstate: CCstate;
     ccstate = await ChainCodeProcess.setupFolder(
       this.ccName,
@@ -98,6 +96,13 @@ export default class ChaincodePage extends Vue {
   testUpload() {
     ChainCodeProcess.testUpLoad();
   }
+  // end testfunction
+  setUp(){}
+  update() {}
+  invoke() {}
+  query() {}
+  //test funtion
+
 }
 </script>
 

@@ -9,7 +9,7 @@ const state = {
 // getters
 const getters = {
   getPath(id: number) {
-    return ProjectConfig.getPath(id);
+    return ProjectConfig.getPath();
   },
   getId() {
     return state.id;
