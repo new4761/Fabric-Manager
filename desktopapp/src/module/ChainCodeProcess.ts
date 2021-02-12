@@ -4,7 +4,7 @@ const path = require('path');
 const process = require('process');
 const isDevelopment = process.env.NODE_ENV !== "production"
 import { DirBuilder } from "./DirBuilder"
-import Uploader from "./Uploader"
+import FileManager from "./FileManager"
 
 
 class ChainCodeProcess {
@@ -58,8 +58,8 @@ class ChainCodeProcess {
             let ccType = "go";
             let ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
             await this.dirBuilder.createDir_path(ccDir);
-            Uploader.upLoadDir(ccDir).then((des: any) => console.log(des))
-            //Uploader.upLoadFile(ccDir)
+            FileManager.upLoadDir().then((des: any) => console.log(des))
+            //FileManager.upLoadFile(ccDir)
         }
     }
     //end test
@@ -79,7 +79,9 @@ class ChainCodeProcess {
             ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
         }
         this.dirBuilder.createDir_path(ccDir);
-        return await Uploader.upLoadDir(ccDir)
+        return await FileManager.upLoadDir(
+            
+        )
             .then((des: any) => {
                 //console.log(des)
                 if (des != undefined) {
