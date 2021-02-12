@@ -38,6 +38,11 @@ export default new Router({
                 layout: "clean-layout"
               }
         },
+        {
+            path: '/chaincode',
+            name: 'ChainCode',
+            component:()=> import('./pages/ChainCodePage.vue')
+        }
         // {
 		// 	path: '/orgchart',
 		// 	name: 'Orgchart',
