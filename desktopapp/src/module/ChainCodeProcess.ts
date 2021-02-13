@@ -5,8 +5,8 @@ const process = require('process');
 const isDevelopment = process.env.NODE_ENV !== "production"
 import { DirBuilder } from "./DirBuilder"
 import FileManager from "./FileManager"
-
-
+import {ChainCode} from "../models/ChainCode";
+import NetworkConfig from "../models/NetworkConfig";
 class ChainCodeProcess {
     // call dirBuilder module
     dirBuilder = new DirBuilder()
@@ -25,7 +25,7 @@ class ChainCodeProcess {
         return this.osType
     }
     setOsType(_osType: OsType) {
-        this.osType = _osType;
+        this.osType = _osType; 
     }
     // test function 
     async testFunction() {
@@ -45,32 +45,14 @@ class ChainCodeProcess {
             await OSProcess.run_new(this.testPath, ['cleanup'], this.osType);
         }
     }
-    testCCgo() {
-        if (isDevelopment) {
-            // run test go Deploy with simple cc
 
-        }
-    }
-    async testUpLoad() {
-        if (isDevelopment) {
-            console.log("CC go");
-            let ccName = "testName";
-            let ccType = "go";
-            let ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
-            await this.dirBuilder.createDir_path(ccDir);
-            FileManager.upLoadDir().then((des: any) => console.log(des))
-            //FileManager.upLoadFile(ccDir)
-        }
-    }
     //end test
     // basic setup
-    getEnvSetting() {
-        // to do  wait for env project file 
 
-    }
 
-    async setupFolder(ccName: string, ccType: CCtype): CCstate {
+     setupFolder(ccName: string, ccType: CCtype,srcPath:string): CCstate {
         let ccDir = ""
+        console.log(srcPath + ":from ccSetup")
         if (isDevelopment) {
             ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
         }
@@ -79,25 +61,12 @@ class ChainCodeProcess {
             ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
         }
         this.dirBuilder.createDir_path(ccDir);
-        return await FileManager.upLoadDir(
-            
-        )
-            .then((des: any) => {
-                //console.log(des)
-                if (des != undefined) {
-                    console.log(des)
-                    return CCstate.setupDir
-                }
-                else {
-                    console.log("get error");
-                    return CCstate.unSetupCC
-                }
-            }).catch((err: any) => { console.log(err) })
+        return CCstate.setupDir
 
     }
 
     //  init command CC
-    async deployCC(ccName: string, cctype: CCtype, ccState: CCstate): CCstate {
+     deployCC(ccName: string, cctype: CCtype, ccState: CCstate):CCstate {
         if (ccState == CCstate.setupDir) {
             let arg = [];
             //arg for call fabric command
@@ -113,19 +82,24 @@ class ChainCodeProcess {
             arg.push("-v")
             arg.push("1.0")
             if (isDevelopment) {
-                return await OSProcess.run_new(this.testPath, arg, this.osType).then(() => { return CCstate.installCC });
+                OSProcess.run_new(this.testPath, arg, this.osType);
+                return CCstate.installCC
+            }
+            else{
+                OSProcess.run_new(this.testPath, arg, this.osType);
+                return CCstate.installCC
             }
         }
         else {
-            console.log("pls setup dir")
+            //console.log("pls setup dir")
             return ccState
         }
     }
 
-    async approve(ccState: CCstate): CCstate {
+     approve(ccState: CCstate): CCstate  {
         if (ccState == CCstate.installCC)
             if (isDevelopment) {
-                return await OSProcess.run_new(this.testPath, ['approve'], this.osType).then(() => { return CCstate.approveCC });
+                return  OSProcess.run_new(this.testPath, ['approve'], this.osType).then(() => { return CCstate.approveCC });
             }
             else {
                 console.log("pls install cc")
@@ -133,10 +107,10 @@ class ChainCodeProcess {
             }
 
     }
-    async commit(ccState: CCstate): CCstate {
+     commit(ccState: CCstate): CCstate {
         if (ccState == CCstate.approveCC) {
             if (isDevelopment) {
-                return await OSProcess.run_new(this.testPath, ['commit'], this.osType).then(() => { return CCstate.commitCC });
+                return  OSProcess.run_new(this.testPath, ['commit'], this.osType).then(() => { return CCstate.commitCC });
             }
         } else {
             console.log("pls approve cc")
@@ -146,6 +120,29 @@ class ChainCodeProcess {
     }
 
     //end setup
+
+    /*
+    chaincode:[]
+
+    */
+    // update networkConfig
+    //define json obj path
+    pathObj ="chain_codes"
+    updateNetworkConfig(name:string,ccType:CCtype,ccState:CCstate){
+    
+
+    }
+    initNetworkConfig(name:string,ccType:CCtype,directory:string){
+        console.log("inti called")
+        let cc = new ChainCode(1,name,ccType,directory)
+        //console.log( NetworkConfig.getValue(this.pathObj))
+        NetworkConfig.pushValueToArray(this.pathObj,cc)
+       // NetworkConfig.updateNetworkConfig(this.pathObj,cc)
+    }
+    getNetworkConfig(id:string) {
+        // to do  wait for env project file 
+
+    }
     // user  command
     upGradeCC() {
 

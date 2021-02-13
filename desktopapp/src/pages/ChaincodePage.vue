@@ -11,98 +11,96 @@
       <br />
       <Button label="java" />
       <br />
-      <Button label="demo" @click="setUp()"></Button>
+      <Button label="demo" @click="display = !display"></Button>
+      <Dialog
+        modal
+        :dismissableMask="true"
+        :showHeader="false"
+        v-bind:visible="display"
+      >
+        <DigSetupCC
+          @deploy="deployCC"
+          @setCCName="setCCName"
+          @closeDig="setDisplay"
+          :_display="display"
+          :_ccName="ccName"
+          :_ccType="ccType"
+          @setCCtype="setCCtype"
+          :_path="path"
+          @setPath="setPath"
+        ></DigSetupCC>
+      </Dialog>
       <!-- <Button label="testupLoad" @click="testUpload()" /> -->
     </h1>
-    <div class="p-grid p-fluid">
-      <div class="p-col-12 p-md-4">
-        <div class="p-inputgroup">
-          <InputText
-            placeholder="CCName"
-            v-model="ccName"
-            @change="logCCName()"
-          />
-          <Dropdown
-            v-model="selectedCCtype"
-            :options="ccType"
-            optionLabel="text"
-            placeholder="Select CC type"
-          />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 // eslint-disable-next-line no-unused-vars
-import { CCstate, CCtype } from "../models/EnvProject";
 import ChainCodeProcess from "../module/ChainCodeProcess";
 import Component from "vue-class-component";
+import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
+import {  CCtype } from "../models/EnvProject";
 @Component({
-  components: {},
+  components: { DigSetupCC },
 })
 // window.open("/chaincode","_self")
 export default class ChaincodePage extends Vue {
-  ccName: string = "";
-  selectedCCtype: { data: CCtype; text: string } = {
-    data: CCtype.go,
-    text: "go",
-  };
-  ccType = [
-    { data: CCtype.go, text: "go" },
-    { data: CCtype.java, text: "java" },
-    { data: CCtype.node, text: "node" },
-  ];
-
-  //test funtion
-  logCCName() {
-    console.log(this.ccName);
-  }
-  // logCCtype(e:any){
-  //    console.log(e.value.data)
-  //  console.log(this.selectedCCtype)
-  // }
-  getselectCCtype() {
-    //  this.selectedCCtype = e.value.data;
-    //console.log(this.selectedCCtype);
-    return this.selectedCCtype.data;
-  }
+  ccName = "";
+  display = false;
+  ccType = CCtype.go;
+  path ="";
+  // test function 
   testsetup() {
     ChainCodeProcess.testFunction();
   }
   testcleanup() {
     ChainCodeProcess.testClean();
   }
-    async testGo() {
-    let ccstate: CCstate;
-    ccstate = await ChainCodeProcess.setupFolder(
-      this.ccName,
-      this.getselectCCtype()
-    );
-    console.log(ccstate);
-    ccstate = await ChainCodeProcess.deployCC(
-      this.ccName,
-      this.getselectCCtype(),
-      ccstate
-    );
-    console.log(ccstate);
-    ccstate = await ChainCodeProcess.approve(ccstate);
-    console.log(ccstate);
-    ccstate = await ChainCodeProcess.commit(ccstate);
-    console.log(ccstate);
+  async testGo() {
+    // let ccstate: CCstate;
+    // ccstate = await ChainCodeProcess.setupFolder(
+    //   this.ccName,
+    //   this.getselectCCtype()
+    // );
+    // console.log(ccstate);
+    // ccstate = await ChainCodeProcess.deployCC(
+    //   this.ccName,
+    //   this.getselectCCtype(),
+    //   ccstate
+    // );
+    // console.log(ccstate);
+    // ccstate = await ChainCodeProcess.approve(ccstate);
+    // console.log(ccstate);
+    // ccstate = await ChainCodeProcess.commit(ccstate);
+    // console.log(ccstate);
   }
-  testUpload() {
-    ChainCodeProcess.testUpLoad();
-  }
+
   // end testfunction
-  setUp(){}
+  //emit function
+  setCCtype(data: CCtype) {
+    this.ccType = data;
+  }
+  setCCName(data: string) {
+    this.ccName = data;
+  }
+  setDisplay(data: boolean) {
+    this.display = data;
+  }
+  setPath(data:string){
+    this.path = data
+  }
+
+  //end emit
+    deployCC(){
+    ChainCodeProcess.initNetworkConfig(this.ccName,this.ccType,this.path);
+  }
+  setUp() {}
   update() {}
   invoke() {}
   query() {}
   //test funtion
-
 }
 </script>
 
