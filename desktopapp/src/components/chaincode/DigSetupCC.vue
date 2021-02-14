@@ -50,7 +50,7 @@ const DigSetupCCProps = Vue.extend({
     _ccName: String,
     _display: Boolean,
     _ccType: String,
-    _path:String
+    _path: String,
   },
 });
 @Component({
@@ -71,29 +71,21 @@ export default class DigSetupCC extends DigSetupCCProps {
 
     { data: CCtype.node, text: "node" },
   ];
-
-  //test funtion
   setCCName() {
     this.$emit("setCCName", this.ccName);
   }
-  // logCCtype(e:any){
-  //    console.log(e.value.data)
-  //  console.log(this.selectedCCtype)
-  // }
   selectCCtype() {
-    //  this.selectedCCtype = e.value.data;
-    //console.log(this.selectedCCtype);
     this.$emit("setCCtype", this.selectedCCtype.data);
   }
-  deploy(){
-     this.$emit("deploy");
+  deploy() {
+    this.$emit("deploy");
   }
   close() {
     this.$emit("closeDig", false);
   }
   async getDir() {
     this.path = await FileManager.getDirPath();
-     this.$emit("setPath", this.path);
+    this.$emit("setPath", this.path);
   }
 }
 </script>

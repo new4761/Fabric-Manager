@@ -42,7 +42,7 @@ export class NetworkConfig {
   }
 
   updateNetworkConfig(key: string, value: any) {
-    this.constructor();
+   // this.constructor();
     this.file.set(key, value);
     this.file.save();
     logger.log("info","network-config sucessfully updated ");
@@ -52,25 +52,22 @@ export class NetworkConfig {
   //add data to array object
   pushValueToArray(key: string, value: any) {
     let target = this.getValue(key);
-    //console.log(target)
+   // console.log(target)
     if (target == undefined) {
-   //   console.log(key)
+   //console.log(key)
       value = [value]    
       this.updateNetworkConfig(key, value)
     }
     else { key = key + "." + (target.length); }
-    //console.log(key+".["+(target.length+1)+"]")
-   // key = key + "." + (target.length);
 
     this.file.set(key, value);
-    //this.file.set(key, value);
     this.file.save();
   }
   getValue(key: string) {
     // to do -> read file agin before get value ****
     if (isDevelopment) {
       let filePath = path.join(path.join(path.resolve(process.cwd()), 'tests', "net-config.json"));
-      console.log(filePath);
+     // console.log(filePath);
       this.file = editJsonFile(filePath);
     }
     let data = this.file.get(key);

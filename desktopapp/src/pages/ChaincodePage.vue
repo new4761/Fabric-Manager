@@ -1,37 +1,49 @@
 <template>
-  <div>
-    <h1>
-      <Button label="testNetwork" @click="testsetup()" />
-      <br />
-      <Button label="testcleanup" @click="testcleanup()" />
-      <br />
-      <Button label="go" @click="testGo()" />
-      <br />
-      <Button label="node" />
-      <br />
-      <Button label="java" />
-      <br />
-      <Button label="demo" @click="display = !display"></Button>
-      <Dialog
-        modal
-        :dismissableMask="true"
-        :showHeader="false"
-        v-bind:visible="display"
-      >
-        <DigSetupCC
-          @deploy="deployCC"
-          @setCCName="setCCName"
-          @closeDig="setDisplay"
-          :_display="display"
-          :_ccName="ccName"
-          :_ccType="ccType"
-          @setCCtype="setCCtype"
-          :_path="path"
-          @setPath="setPath"
-        ></DigSetupCC>
-      </Dialog>
-      <!-- <Button label="testupLoad" @click="testUpload()" /> -->
-    </h1>
+  <div class="p-grid p-mx-3">
+    <div class="p-col-12 p-mx-3">
+      <h1>
+        <Button label="testNetwork" @click="testsetup()" />
+        <br />
+        <Button label="testcleanup" @click="testcleanup()" />
+        <br />
+        <Button label="go" @click="testGo()" />
+        <br />
+        <Button label="node" />
+        <br />
+        <Button label="java" />
+        <br />
+        <Button label="demo" @click="display = !display"></Button>
+      </h1>
+    </div>
+    <DataTable :value="ccList">
+      <Column field="id" header="ID"></Column>
+      <Column field="name" header="Name"></Column>
+      <Column field="type" header="Language"></Column>
+      <Column field="state" header="state">
+        <template #body="slotProps">
+          <Tag :value="slotProps.data.state"></Tag>
+        </template>
+      </Column>
+    </DataTable>
+
+    <Dialog
+      modal
+      :dismissableMask="true"
+      :showHeader="false"
+      v-bind:visible="display"
+    >
+      <DigSetupCC
+        @deploy="deployCC"
+        @setCCName="setCCName"
+        @closeDig="setDisplay"
+        :_display="display"
+        :_ccName="ccName"
+        :_ccType="ccType"
+        @setCCtype="setCCtype"
+        :_path="path"
+        @setPath="setPath"
+      ></DigSetupCC>
+    </Dialog>
   </div>
 </template>
 
@@ -41,7 +53,10 @@ import Vue from "vue";
 import ChainCodeProcess from "../module/ChainCodeProcess";
 import Component from "vue-class-component";
 import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
-import {  CCtype } from "../models/EnvProject";
+const isDevelopment = process.env.NODE_ENV !== "production"
+import { CCtype, netWorkConfigPath } from "../models/EnvProject";
+import NetworkConfig from "@/models/NetworkConfig";
+
 @Component({
   components: { DigSetupCC },
 })
@@ -50,35 +65,16 @@ export default class ChaincodePage extends Vue {
   ccName = "";
   display = false;
   ccType = CCtype.go;
-  path ="";
-  // test function 
+  path = "";
+  ccList = [];
+  // test function
+
   testsetup() {
     ChainCodeProcess.testFunction();
   }
   testcleanup() {
     ChainCodeProcess.testClean();
   }
-  async testGo() {
-    // let ccstate: CCstate;
-    // ccstate = await ChainCodeProcess.setupFolder(
-    //   this.ccName,
-    //   this.getselectCCtype()
-    // );
-    // console.log(ccstate);
-    // ccstate = await ChainCodeProcess.deployCC(
-    //   this.ccName,
-    //   this.getselectCCtype(),
-    //   ccstate
-    // );
-    // console.log(ccstate);
-    // ccstate = await ChainCodeProcess.approve(ccstate);
-    // console.log(ccstate);
-    // ccstate = await ChainCodeProcess.commit(ccstate);
-    // console.log(ccstate);
-  }
-
-  // end testfunction
-  //emit function
   setCCtype(data: CCtype) {
     this.ccType = data;
   }
@@ -88,15 +84,29 @@ export default class ChaincodePage extends Vue {
   setDisplay(data: boolean) {
     this.display = data;
   }
-  setPath(data:string){
-    this.path = data
+  setPath(data: string) {
+    this.path = data;
   }
 
-  //end emit
-    deployCC(){
-    ChainCodeProcess.initNetworkConfig(this.ccName,this.ccType,this.path);
+  mounted() {
+    this.hookCClist();
   }
-  setUp() {}
+  hookCClist() {
+    this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+    // to do fix date to read
+  }
+  //end emit
+  async deployCC() {
+    let ccObj = await ChainCodeProcess.initNetworkConfig(this.ccName, this.ccType, this.path);
+    //this.hookCClist();
+    if (isDevelopment){
+    await ChainCodeProcess.deployCCtoFabric("test",ccObj)
+    //ChainCodeProcess.updateNetworkConfig()
+    //this.ccObj =ChainCodeProcess.setupFolder(ccObj,"test");
+    this.hookCClist();
+    }
+  }
+  initCC() {}
   update() {}
   invoke() {}
   query() {}

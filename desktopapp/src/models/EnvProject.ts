@@ -24,3 +24,7 @@ export enum CCstate {
     errorCC ="errorCC",
     readyCC  ="readyCC"   
 }
+export enum netWorkConfigPath{
+
+    ccPath =  "chain_codes"
+}

@@ -31,3 +31,5 @@ tests/vars/*
 !tests/*.json
 !tests/*.yaml
 !*.md
+
+project.log
