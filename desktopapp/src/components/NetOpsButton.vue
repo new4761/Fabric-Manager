@@ -87,7 +87,7 @@ import ProjectConfig from "../models/ProjectConfig";
 @Component({
   components: {},
 })
-export default class DemoNetupButton extends Vue {
+export default class NetOpsButton extends Vue {
   up: boolean = false;
   projectDir: string = "";
   output: string = "hey";
@@ -100,7 +100,7 @@ export default class DemoNetupButton extends Vue {
     this.init();
   }
   init() {
-    this.projectDir = ProjectConfig.getPath(0);
+    this.projectDir = ProjectConfig.getPath(this.$store.state.project.id);
     this.org = Object.keys(NetworkConfig.getOrgName());
   }
   netup() {
@@ -111,7 +111,6 @@ export default class DemoNetupButton extends Vue {
     if (this.port != "") {
       args.push("-e " + this.port);
     }
-    console.log(args);
     const child = OSProcess.run(this.projectDir, args);
     child.stdout.setEncoding("utf8");
     child.stdout.on("data", (data: any) => {

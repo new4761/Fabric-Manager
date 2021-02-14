@@ -42,7 +42,7 @@ import Component from "vue-class-component";
     object: Array,
   },
 })
-export default class OrgSubMenu extends Vue {
+export default class OrgDetail extends Vue {
   showSection: boolean = false;
 
   toggle() {

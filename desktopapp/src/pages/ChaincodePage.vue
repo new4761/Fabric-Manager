@@ -42,7 +42,7 @@ import Component from "vue-class-component";
 @Component({
   components: {},
 })
-export default class ChaincodePage extends Vue {
+export default class ChainCodePage extends Vue {
   ccName: string = "";
   selectedCCtype: { data: CCtype; text: string } = {
     data: CCtype.go,

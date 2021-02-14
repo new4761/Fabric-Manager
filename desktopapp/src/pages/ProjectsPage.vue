@@ -4,7 +4,6 @@
       Projects
     </h1>
     <ConfirmDialog />
-    <Toast />
 
     <DataView
       :value="data"
@@ -38,7 +37,7 @@
 
       <template #list="slotProps">
         <div class="p-col-12">
-          <div class="list-item p-m-3" @click="confirm(slotProps.data.id)">
+          <div class="list-item p-m-3" @click="confirmOpen(slotProps.data.id)">
             <div class="list-detail">
               <div class="name">{{ slotProps.data.name }}</div>
               <div class="directory">
@@ -59,24 +58,30 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <div @click="confirm(slotProps.data.id)">
+          <div>
             <Card class="p-m-3">
-              <template #header> </template>
-              <template #title>
-                {{ slotProps.data.name }}
+              <template #header>
+              </template>
+              <template #title >
+                <div @click="confirmOpen(slotProps.data.id)">
+                  {{ slotProps.data.name }}
+                </div>
               </template>
               <template #content>
-                <Chip class="p-m-1">
-                  {{ toDate(slotProps.data.date_create) }}
-                </Chip>
-                <Chip class="p-m-1">
-                  {{ toDate(slotProps.data.date_modify) }}
-                </Chip></template
+                <div @click="confirmOpen(slotProps.data.id)">
+                  <Chip class="p-m-1">
+                    {{ toDate(slotProps.data.date_create) }}
+                  </Chip>
+                  <Chip class="p-m-1">
+                    {{ toDate(slotProps.data.date_modify) }}
+                  </Chip>
+                </div></template
               >
               <template #footer>
                 <Button
-                  icon="pi pi-bookmark"
-                  class="p-button-rounded p-button-secondary"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"
+                   @click="confirmDelete(slotProps.data.id)"
                 />
               </template>
             </Card>
@@ -91,6 +96,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import data from "../../tests/projects.json";
+import ProjectConfig from "../models/ProjectConfig"
 
 @Component({
   components: {},
@@ -116,29 +122,28 @@ export default class ProjectPage extends Vue {
     this.data = data;
   }
 
-  confirm(id: number) {
+  confirmOpen(id: number) {
     this.$confirm.require({
       message: "go to project id: " + id + " ?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
         this.$store.commit("project/setId", id);
-        this.$router.push("/");
-        this.$toast.add({
-          severity: "info",
-          summary: "Confirmed",
-          detail: "You have accepted",
-          life: 3000,
-        });
+        this.$router.push("/home");
       },
-      reject: () => {
-        this.$toast.add({
-          severity: "info",
-          summary: "Rejected",
-          detail: "You have rejected",
-          life: 3000,
-        });
+      reject: () => {},
+    });
+  }
+
+    confirmDelete(id: number) {
+    this.$confirm.require({
+      message: "delete project " + this.data[id].name + " ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+      ProjectConfig.deleteProject(id);
       },
+      reject: () => {},
     });
   }
 

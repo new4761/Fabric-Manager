@@ -69,7 +69,7 @@ class ChainCodeProcess {
 
     }
 
-    async setupFolder(ccName: string, ccType: CCtype): CCstate {
+    async setupFolder(ccName: string, ccType: CCtype): Promise<CCstate> {
         let ccDir = ""
         if (isDevelopment) {
             ccDir = path.join(this.testPath, "vars", "chaincode", ccName, ccType)
@@ -95,7 +95,7 @@ class ChainCodeProcess {
     }
 
     //  init command CC
-    async deployCC(ccName: string, cctype: CCtype, ccState: CCstate): CCstate {
+    async deployCC(ccName: string, cctype: CCtype, ccState: CCstate): Promise<any> {
         if (ccState == CCstate.setupDir) {
             let arg = [];
             //arg for call fabric command
@@ -120,7 +120,7 @@ class ChainCodeProcess {
         }
     }
 
-    async approve(ccState: CCstate): CCstate {
+    async approve(ccState: CCstate): Promise<any> {
         if (ccState == CCstate.installCC)
             if (isDevelopment) {
                 return await OSProcess.run_new(this.testPath, ['approve'], this.osType).then(() => { return CCstate.approveCC });
@@ -131,7 +131,7 @@ class ChainCodeProcess {
             }
 
     }
-    async commit(ccState: CCstate): CCstate {
+    async commit(ccState: CCstate): Promise<any> {
         if (ccState == CCstate.approveCC) {
             if (isDevelopment) {
                 return await OSProcess.run_new(this.testPath, ['commit'], this.osType).then(() => { return CCstate.commitCC });

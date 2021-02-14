@@ -12,7 +12,7 @@ export class FileYamlBuilder {
       try {
          // check dev mode function
          // used this style for base to write function who work with files
-         if (isDevelopment) {
+         if (!isDevelopment) {
             console.log(path.dirname(__dirname));
          }
          let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname), outputPath) : 'tests', fileName);
@@ -26,7 +26,7 @@ export class FileYamlBuilder {
       try {
          // check dev mode function
          // used this style for base to write function who work with files
-         if (isDevelopment) {
+         if (!isDevelopment) {
             console.log(path.dirname(__dirname));
          }
          let filePath = path.join(!isDevelopment ? path.join(path.dirname(__dirname), outputPath) : 'tests', fileName);

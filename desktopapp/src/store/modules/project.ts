@@ -3,7 +3,7 @@ import ProjectConfig from "../../models/ProjectConfig";
 // initial state
 const state = {
   path: "",
-  id: null,
+  id: 0,
 };
 
 // getters

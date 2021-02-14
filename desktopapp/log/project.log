@@ -1,0 +1,174 @@
+2021-02-13 14:11:18.375 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:11:30.981 INFO  OSProcess running: netup,-o org1.org at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:11:36.181 INFO  OSProcess running: down at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:36:35.113 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:36:42.311 INFO  OSProcess running: netup,-o org0.org,-e 7888 at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:36:45.302 INFO  OSProcess running: down at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:55:42.025 INFO  OSProcess running: netup,-o org1.org at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:55:46.056 INFO  OSProcess running: down at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 14:55:48.071 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 15:07:41.842 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 15:07:45.656 INFO  OSProcess running: netup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 15:08:12.648 INFO  OSProcess running: netup,-o hahaha.2222asd,-e 7578 at:D:\blockchain\testlocation 
+2021-02-13 15:08:15.594 INFO  OSProcess running: down at:D:\blockchain\testlocation 
+2021-02-13 15:08:17.112 INFO  OSProcess running: cleanup at:D:\blockchain\testlocation 
+2021-02-13 15:32:32.915 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 15:32:35.537 INFO  OSProcess running: netup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 15:32:37.801 INFO  OSProcess running: down at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 16:57:27.461 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 16:57:30.765 INFO  OSProcess running: cleanup at:D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests 
+2021-02-13 17:07:46.167 INFO  get value 
+2021-02-13 17:07:56.318 INFO  get value 
+2021-02-13 17:08:01.640 INFO  get value 
+2021-02-13 17:08:05.524 INFO  get value 
+2021-02-13 17:08:07.476 INFO  get value 
+2021-02-13 17:08:27.293 INFO  get value 
+2021-02-13 17:08:36.623 INFO  get value 
+2021-02-13 17:11:31.035 INFO  get value 
+2021-02-13 17:13:14.846 INFO  get value 
+2021-02-13 18:13:12.696 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-13 18:13:18.725 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-13 18:14:27.620 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-13 18:14:59.776 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-13 18:16:05.349 INFO  get value 
+2021-02-13 18:16:06.798 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-13 18:16:28.214 INFO  get value 
+2021-02-13 18:16:30.920 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:14:28.142 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:18:32.362 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:27:11.647 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:27:12.814 INFO  get value 
+2021-02-14 06:27:14.381 INFO  get value 
+2021-02-14 06:27:16.857 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:27:18.113 INFO  get value 
+2021-02-14 06:27:19.798 INFO  get value 
+2021-02-14 06:27:26.268 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:44:20.784 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:44:23.129 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:44:34.611 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:45:04.798 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:46:00.365 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:46:11.091 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:46:39.164 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:48:27.899 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:48:36.918 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:51:24.861 INFO  project-config: add new element 
+2021-02-14 06:51:24.874 INFO  network-config sucessfully created at D:\blockchain\minifab\test1 
+2021-02-14 06:51:40.584 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:51:49.643 INFO  get value 
+2021-02-14 06:53:29.590 WARN  switching path: D:\blockchain\minifab\test1\net-config.json 
+2021-02-14 06:53:29.901 WARN  switching path: D:\blockchain\minifab\test1\net-config.json 
+2021-02-14 06:53:29.901 INFO  get value 
+2021-02-14 06:53:29.902 WARN  switching path: D:\blockchain\minifab\test1\net-config.json 
+2021-02-14 06:54:02.657 WARN  switching path: D:\blockchain\minifab\test1\net-config.json 
+2021-02-14 06:54:39.347 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:55:55.854 WARN  switching path: D:\blockchain\minifab\test1\net-config.json 
+2021-02-14 06:55:56.803 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:56:07.194 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:56:09.940 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 06:56:09.940 INFO  get value 
+2021-02-14 06:56:09.940 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 06:56:12.084 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 06:56:16.923 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 06:56:18.002 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 06:56:54.807 INFO  project-config: add new element 
+2021-02-14 06:56:54.807 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 06:56:54.818 INFO  network-config sucessfully created at D:\blockchain\minifab\1 
+2021-02-14 06:59:47.461 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:00:48.665 INFO  project-config: add new element 
+2021-02-14 07:00:48.666 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:00:48.676 INFO  network-config sucessfully created at D:\blockchain\minifab\1 
+2021-02-14 07:01:08.603 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:01:08.603 INFO  get value 
+2021-02-14 07:01:08.603 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:01:28.203 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:01:36.418 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:01:36.418 INFO  get value 
+2021-02-14 07:01:36.418 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:01:39.277 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:01:49.999 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:01:49.999 INFO  get value 
+2021-02-14 07:01:49.999 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 07:02:51.641 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:03:10.198 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:03:18.054 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:03:20.296 WARN  switching path: D:\blockchain\minifab\1\net-config.json 
+2021-02-14 07:03:20.296 INFO  get value 
+2021-02-14 07:03:20.296 WARN  switching path: D:\blockchain\minifab\1\net-config.json 
+2021-02-14 07:05:32.998 WARN  switching path: D:\blockchain\minifab\1\net-config.json 
+2021-02-14 07:05:33.340 WARN  switching path: D:\blockchain\minifab\1\net-config.json 
+2021-02-14 07:05:33.340 INFO  get value 
+2021-02-14 07:05:33.340 WARN  switching path: D:\blockchain\minifab\1\net-config.json 
+2021-02-14 07:05:41.279 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:08:28.907 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:08:29.702 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:08:51.258 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:08:52.059 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:12:29.854 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:12:30.638 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:15:11.126 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:17:48.077 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:21:00.594 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:21:03.527 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:21:11.800 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:21:27.899 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:25:13.852 WARN  project-config: delete project id: 15 
+2021-02-14 07:26:09.997 WARN  project-config: delete project id: 14 
+2021-02-14 07:26:53.708 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:27:52.618 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:28:31.860 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:28:34.967 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:28:54.720 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:28:55.560 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:29:11.693 WARN  project-config: delete project id: 15 
+2021-02-14 07:29:59.652 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:30:03.885 WARN  project-config: delete project id: 15 
+2021-02-14 07:31:50.371 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:31:58.218 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:32:37.890 WARN  project-config: delete project id: 14 
+2021-02-14 07:33:47.214 WARN  project-config: delete project id: 13 
+2021-02-14 07:34:32.089 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:35:30.553 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:35:34.371 WARN  project-config: delete project id: 15 
+2021-02-14 07:35:49.345 WARN  project-config: delete project id: 14 
+2021-02-14 07:36:13.272 WARN  project-config: delete project id: 13 
+2021-02-14 07:36:45.080 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:36:49.342 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:37:00.569 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:37:16.533 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:37:16.533 INFO  get value 
+2021-02-14 07:37:16.533 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:37:31.001 ERROR Docker: Error: connect ENOENT //./pipe/docker_engine 
+2021-02-14 07:42:52.847 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:53:21.654 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 07:56:09.020 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:00:35.163 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:06:33.280 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:18:09.417 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:19:04.213 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:19:43.586 INFO  project-config: add new element 
+2021-02-14 08:19:43.605 INFO  network-config sucessfully created at D:\blockchain\minifab\1 
+2021-02-14 08:20:20.405 WARN  project-config: delete project id: 13 
+2021-02-14 08:21:37.821 WARN  switching path: D:\blockchain\testlocation\net-config.json 
+2021-02-14 08:21:49.508 INFO  project-config: add new element 
+2021-02-14 08:21:49.524 INFO  network-config sucessfully created at D:\blockchain\minifab\2 
+2021-02-14 08:22:25.190 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:22:33.340 WARN  project-config: delete project id: 13 
+2021-02-14 08:23:52.991 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:23:58.550 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:24:05.564 INFO  project-config: add new element 
+2021-02-14 08:24:05.575 INFO  network-config sucessfully created at D:\blockchain\minifab\2 
+2021-02-14 08:24:16.860 WARN  project-config: delete project id: 13 
+2021-02-14 08:24:46.720 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:25:40.121 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:25:45.478 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:25:48.319 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:25:48.319 INFO  get value 
+2021-02-14 08:25:48.319 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:27:58.563 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:28:20.688 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:28:57.153 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:28:58.962 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:28:58.963 INFO  get value 
+2021-02-14 08:28:58.963 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 
+2021-02-14 08:29:46.166 WARN  switching path: D:\blockchain\dev_Hyperledger_Blockchain\desktopapp\tests\net-config.json 

@@ -1,11 +1,8 @@
 <template>
   <div>
-    <!-- <div>
-      <Button label="Create Project" @click="display = true" />
-    </div> -->
     <span @click="display = true">
       <Card
-        style="width: 8rem; height: 8rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
+        style="width: 9rem; height: 9rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
       >
         <template v-slot:content>
           <div class="p-grid p-jc-center">
@@ -24,7 +21,11 @@
         :style="{ width: '80vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-col-12"></div>
+        <div class="p-col-12">
+          <div class="p-inputgroup">
+            <InputText placeholder="projectName" v-model="projectName" />
+          </div>
+        </div>
         <div class="p-col-12">
           <div class="p-inputgroup">
             <Button label="SetProjectDirectory" @click="getFilepath()" />
@@ -53,7 +54,7 @@
           />
 
           <Button
-            class="p-button-danger p-ml-auto"
+            class="p-button-danger p-ml-auto p-my-2"
             label="close"
             @click="display = false"
           />
@@ -71,6 +72,7 @@ import OrgInputText from "./OrgInputText.vue";
 import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
 import NetworkConfig from "../models/NetworkConfig";
+import ProjectConfig from "../models/ProjectConfig";
 
 // import OrgData from "@/models/OrgData";
 @Component({
@@ -79,26 +81,27 @@ import NetworkConfig from "../models/NetworkConfig";
     OrgEditButton,
   },
 })
-export default class DemoSpecButton extends Vue {
+export default class CreateNetButton extends Vue {
   display: boolean = false;
   object = SpecConfig;
   projectDir: string = "";
+  projectName: string = "";
 
   newOrgTolist(name: string, isOrderer: boolean) {
     this.object.newOrg(name, isOrderer);
   }
   removeOrgFromList(target: any) {
-    //  console.log(target);
     this.object.removeOrg(target);
   }
   createNetwork() {
     this.object.createFile();
     this.object.setUpFileStructure(this.projectDir);
     let project = {
-      name: "test",
+      name: this.projectName,
       date_create: +new Date(),
       directory: this.projectDir,
     };
+    ProjectConfig.addProject(project);
     NetworkConfig.createConfig(project);
   }
 
