@@ -46,13 +46,11 @@ export default class ChannelPage extends Vue {
   create() {
     let args: string[] = ["create"];
     args.push("-c " + this.channelName);
-    console.log(args);
     OSProcess.run(this.projectDir, args);
   }
 
   join() {
     let args: string[] = ["join"];
-    console.log(args);
     OSProcess.run(this.projectDir, args);
   }
 }

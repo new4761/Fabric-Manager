@@ -4,7 +4,16 @@
       Projects
     </h1>
     <ConfirmDialog />
-    <Toast />
+    <Dialog :visible="display" :closable="false" :modal="true" class="info">
+      {{ dataSelected }}
+      <div class="p-grid p-mt-5">
+        <Button
+          class="p-button-danger p-ml-auto p-my-2"
+          label="close"
+          @click="display = false"
+        />
+      </div>
+    </Dialog>
 
     <DataView
       :value="data"
@@ -31,14 +40,17 @@
             />
           </div>
           <div class="p-col-6" style="text-align: right">
-            <DataViewLayoutOptions v-model="layout" />
+            <div class="p-d-flex  p-ai-center p-jc-end">
+              <CreateNetButton class="p-mx-1" />
+              <DataViewLayoutOptions v-model="layout" />
+            </div>
           </div>
         </div>
       </template>
 
       <template #list="slotProps">
         <div class="p-col-12">
-          <div class="list-item p-m-3" @click="confirm(slotProps.data.id)">
+          <div class="list-item p-m-3" @click="confirmOpen(slotProps.data.id)">
             <div class="list-detail">
               <div class="name">{{ slotProps.data.name }}</div>
               <div class="directory">
@@ -59,25 +71,38 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <div @click="confirm(slotProps.data.id)">
+          <div>
             <Card class="p-m-3">
               <template #header> </template>
               <template #title>
-                {{ slotProps.data.name }}
+                <div @click="confirmOpen(slotProps.data.id)">
+                  {{ slotProps.data.name }}
+                </div>
               </template>
               <template #content>
-                <Chip class="p-m-1">
-                  {{ toDate(slotProps.data.date_create) }}
-                </Chip>
-                <Chip class="p-m-1">
-                  {{ toDate(slotProps.data.date_modify) }}
-                </Chip></template
+                <div @click="confirmOpen(slotProps.data.id)">
+                  <Chip class="p-m-1">
+                    {{ toDate(slotProps.data.date_create) }}
+                  </Chip>
+                  <Chip class="p-m-1">
+                    {{ toDate(slotProps.data.date_modify) }}
+                  </Chip>
+                </div></template
               >
               <template #footer>
-                <Button
-                  icon="pi pi-bookmark"
-                  class="p-button-rounded p-button-secondary"
-                />
+                <div class="p-d-flex  p-ai-center p-jc-end">
+                  <Button
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger p-mx-1"
+                    @click="confirmDelete(slotProps.data.id)"
+                  />
+
+                  <Button
+                    icon="fas fa-info"
+                    class="p-button-rounded p-button-info"
+                    @click="openInfo(slotProps.data.id)"
+                  />
+                </div>
               </template>
             </Card>
           </div>
@@ -91,12 +116,16 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import data from "../../tests/projects.json";
+import ProjectConfig from "../models/ProjectConfig";
+import CreateNetButton from "../components/CreateNetButton.vue";
 
 @Component({
-  components: {},
+  components: { CreateNetButton },
 })
 export default class ProjectPage extends Vue {
+  display: boolean = false;
   data: any = null;
+  dataSelected:any = null;
   layout: string = "grid";
   sortKey: any = null;
   sortOrder: any = null;
@@ -116,29 +145,37 @@ export default class ProjectPage extends Vue {
     this.data = data;
   }
 
-  confirm(id: number) {
+  openInfo(id:number) {
+    this.dataSelected = data[id];
+    this.display = true;
+  }
+
+  closeinfo() {
+    this.display = false;
+  }
+
+  confirmOpen(id: number) {
     this.$confirm.require({
       message: "go to project id: " + id + " ?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
         this.$store.commit("project/setId", id);
-        this.$router.push("/");
-        this.$toast.add({
-          severity: "info",
-          summary: "Confirmed",
-          detail: "You have accepted",
-          life: 3000,
-        });
+        this.$router.push("/home");
       },
-      reject: () => {
-        this.$toast.add({
-          severity: "info",
-          summary: "Rejected",
-          detail: "You have rejected",
-          life: 3000,
-        });
+      reject: () => {},
+    });
+  }
+
+  confirmDelete(id: number) {
+    this.$confirm.require({
+      message: "delete project " + this.data[id].name + " ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        ProjectConfig.deleteProject(id);
       },
+      reject: () => {},
     });
   }
 
@@ -176,4 +213,7 @@ export default class ProjectPage extends Vue {
 }
 </script>
 
-<style></style>
+<style>
+
+
+</style>

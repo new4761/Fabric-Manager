@@ -1,49 +1,51 @@
 import fs from "fs";
+import store from "../store/modules/project";
 const yaml = require("js-yaml");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
 import ProjectConfig from "./ProjectConfig";
+import logger from "../module/Logger";
 export class NetworkConfig {
   file: any;
 
   constructor() {
     try {
-      // check dev mode function
-      // used this style for base to write function who work with files
-      if (!isDevelopment) {
-        // console.log(path.dirname(__dirname));
-      }
       let filePath = path.join(
-        !isDevelopment
-          ? path.join(path.dirname(__dirname), ProjectConfig.getPath)
-          : "tests",
+        ProjectConfig.getPath(store.state.id),
         "net-config.json"
+        
       );
       this.file = editJsonFile(filePath);
-      // console.log("net-config path: " + filePath);
+      logger.log("warn","switching path: " + filePath)
+      // logger.log("info","net-config path: " + ProjectConfig.getPath(store.state.id));
     } catch (e) {
-      console.log(e);
+      logger.log("error","error net-config path");
     }
   }
 
-  createConfig(project: object) {
+  createConfig(project: any) {
+    // this.constructor();
     let data = yaml.load(
-      fs.readFileSync(path.join(ProjectConfig.getPath, "spec.yaml"), "utf8")
+      fs.readFileSync(path.join(project.directory, "spec.yaml"), "utf8")
     );
-    console.log("yaml data: " + data);
     data = {
       ...project,
       date_modify: +new Date(),
       ...data,
     };
-    this.file.set("project_config", data);
-    this.file.save();
+
+    let file = editJsonFile(path.join(project.directory, "net-config.json"));
+    file.set("project_config", data);
+    file.save();
+    logger.log("info","network-config sucessfully created at " + project.directory);
   }
 
   updateNetworkConfig(key: string, value: any) {
+    this.constructor();
     this.file.set(key, value);
     this.file.save();
+    logger.log("info","network-config sucessfully updated ");
   }
 
 
@@ -72,10 +74,12 @@ export class NetworkConfig {
       this.file = editJsonFile(filePath);
     }
     let data = this.file.get(key);
+    logger.log("info","get value");
     return data;
   }
 
   getOrgName() {
+    this.constructor();
     let org = this.file.data.project_config.fabric.orderers.concat(
       this.file.data.project_config.fabric.cas,
       this.file.data.project_config.fabric.peers
@@ -128,7 +132,7 @@ export class NetworkConfig {
         orderer: isOrderer,
       };
     });
-
+    // logger.log("info","network-config get org name");
     return newOrg;
   }
 }

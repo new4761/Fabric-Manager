@@ -74,11 +74,14 @@ import ProgressSpinner from "primevue/progressspinner";
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
+import Tag from 'primevue/tag';
+
 
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 
 import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
+// import "primevue/resources/themes/fluent-light/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
@@ -109,6 +112,7 @@ Vue.component("clean-layout", CleanLayout);
 Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
 Vue.component("ConfirmDialog", ConfirmDialog);
+Vue.component("Tag", Tag);
 
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);

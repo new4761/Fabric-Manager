@@ -2,30 +2,12 @@
   <div class="p-m-5">
     <Terminal />
 
-    <Button
-      label="calllog"
-      @click="calllog()"
-      class="p-button-raised p-button-rounded p-m-2"
-    />
-
-    <Button
-      label="set global var id = 0"
-      @click="setGlobal(0)"
-      class="p-button-raised p-button-rounded p-m-2"
-    />
-
-    <Button
-      label="set global var id = 1"
-      @click="setGlobal(555)"
-      class="p-button-raised p-button-rounded p-m-2"
-    />
-
     <Card>
       <template #title>
         Demo Spec
       </template>
       <template #content>
-        <DemoSpecButton></DemoSpecButton>
+        <CreateNetButton></CreateNetButton>
       </template>
     </Card>
 
@@ -34,7 +16,7 @@
         Demo Netup
       </template>
       <template #content>
-        <DemoNetupButton></DemoNetupButton>
+        <NetOpsButton></NetOpsButton>
       </template>
     </Card>
 
@@ -65,36 +47,22 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import DemoSpecButton from "../components/DemoSpecButton.vue";
-import DemoNetupButton from "../components/DemoNetupButton.vue";
+import CreateNetButton from "../components/CreateNetButton.vue";
+import NetOpsButton from "../components/NetOpsButton.vue";
 import Terminal from "../components/Terminal.vue";
 import ChannelPage from "./ChannelPage.vue";
 import DockerProcess from "../module/DockerProcess";
-import Logger from "../module/Logger";
 @Component({
   components: {
-    DemoSpecButton,
-    DemoNetupButton,
+    CreateNetButton,
+    NetOpsButton,
     ChannelPage,
     Terminal,
   },
 })
 export default class Demo extends Vue {
-  calllog() {
-    // Vue.prototype.$logger.info("test: ", new Date().toJSON());
-    Logger.log("info", "test ");
-    Logger.log("warn", "test ");
-    Logger.log("error", "test ");
-  }
-
   list() {
-    DockerProcess.ListContainer();
-  }
-
-  setGlobal(id: number) {
-    console.log("before set: " + this.$store.state.project.id);
-    this.$store.commit("project/setId", id);
-    console.log("after set: " + this.$store.state.project.id);
+    DockerProcess.listContainer();
   }
 }
 </script>

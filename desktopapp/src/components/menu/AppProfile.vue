@@ -7,9 +7,9 @@
 		</button>
         <transition name="layout-submenu-wrapper">
             <ul v-show="expanded">
-                <li><button class="p-link"><i class="pi pi-fw pi-user"></i><span>Switch project</span></button></li>
-                <li><button class="p-link"><i class="pi pi-fw pi-inbox"></i><span>Setting</span></button></li>
-                <li><button class="p-link"><i class="pi pi-fw pi-power-off"></i><span>Close</span></button></li>
+                <li><button class="p-link" @click="$router.push('/')"><i class="pi pi-fw pi-user"></i><span>Switch project</span></button></li>
+                <li><button class="p-link" @click="onClick"><i class="pi pi-fw pi-inbox"></i><span>Setting</span></button></li>
+                <li><button class="p-link" @click="onClick"><i class="pi pi-fw pi-power-off"></i><span>Close</span></button></li>
             </ul>
         </transition>
 		
