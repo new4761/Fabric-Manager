@@ -7,13 +7,17 @@ export class ChainCode {
     state:CCstate;
     directory:string;
     version:number;
-    //lastUpdate:number;
+    lastUpdate:number;
  constructor(id:number,name:string,type:CCtype,directory:string){
     this.id =id;
     this.name=name;
     this.type=type;
     this.directory =directory;
     this.state = CCstate.unSetupCC;
-    this.version = 1
+    this.version = 1;
+    this.lastUpdate = +new Date();
+ }
+ setDate(){
+   this.lastUpdate = +new Date()
  }
 }

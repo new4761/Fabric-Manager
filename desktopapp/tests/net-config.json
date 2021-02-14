@@ -41,5 +41,48 @@
         }
       ]
     }
-  }
+  },
+  "chain_codes": [
+    {
+      "id": 1,
+      "name": "asdasdasd",
+      "type": "go",
+      "directory": "D:\\hyperledger_project\\devlop\\minifabric\\vars\\chaincode\\samplecc\\go",
+      "state": "unSetupCC",
+      "version": 1
+    },
+    {
+      "id": 1,
+      "name": "asdasdasd",
+      "type": "go",
+      "directory": "D:\\hyperledger_project\\devlop\\minifabric\\vars\\chaincode\\samplecc\\go",
+      "state": "unSetupCC",
+      "version": 1
+    },
+    {
+      "id": 1,
+      "name": "",
+      "type": "go",
+      "directory": "",
+      "state": "unSetupCC",
+      "version": 1
+    },
+    {
+      "id": 1,
+      "name": "",
+      "type": "go",
+      "directory": "",
+      "state": "unSetupCC",
+      "version": 1
+    },
+    {
+      "id": 1,
+      "name": "",
+      "type": "go",
+      "directory": "",
+      "state": "unSetupCC",
+      "version": 1,
+      "lastUpdate": 1613280699204
+    }
+  ]
 }

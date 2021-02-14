@@ -45,13 +45,15 @@ export class NetworkConfig {
     this.file.set(key, value);
     this.file.save();
   }
+
+
   //add data to array object
   pushValueToArray(key: string, value: any) {
     let target = this.getValue(key);
-    console.log(target)
+    //console.log(target)
     if (target == undefined) {
    //   console.log(key)
-      value = [value]
+      value = [value]    
       this.updateNetworkConfig(key, value)
     }
     else { key = key + "." + (target.length); }
