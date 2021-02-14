@@ -1,7 +1,8 @@
 <template>
   <div>
     <span @click="display = true">
-      <Card
+      <Button label="Create Project" icon="fas fa-plus-square fa-lg" iconPos="left"/>
+      <!-- <Card
         style="width: 9rem; height: 9rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
       >
         <template v-slot:content>
@@ -9,7 +10,7 @@
             <Button icon="pi pi-plus" class="p-button-rounded p-button-lg " />
           </div>
         </template>
-      </Card>
+      </Card> -->
     </span>
 
     <div>
@@ -103,6 +104,7 @@ export default class CreateNetButton extends Vue {
     };
     ProjectConfig.addProject(project);
     NetworkConfig.createConfig(project);
+    this.display = false
   }
 
   getFilepath() {

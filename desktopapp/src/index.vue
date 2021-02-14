@@ -14,12 +14,10 @@
       <div class="container p-col-12 ">
         {{ container }}
       </div>
+      
     </div>
 
-    <DataTable
-      :value="container"
-      class="custom-table"
-    >
+    <DataTable :value="container" class="custom-table">
       <Column field="Names" header="Name"></Column>
       <Column field="Image" header="Image"></Column>
       <Column field="State" header="State"></Column>
@@ -59,9 +57,10 @@ export default class Index extends Vue {
   container: Array<Object> = [];
 
   created() {
-    this.readLog();
     this.getContainer();
-    setInterval(() => this.readLog(), 5000);
+    this.readLog();
+    this.highlight();
+    // setInterval(() => this.readLog(), 5000);
   }
 
   getContainer() {
@@ -74,8 +73,6 @@ export default class Index extends Vue {
     this.log = fs.readFileSync("./log/project.log", "utf8");
     this.highlight();
     this.getContainer();
-  
-
   }
 
   highlight() {
