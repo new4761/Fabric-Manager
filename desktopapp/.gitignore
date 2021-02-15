@@ -24,12 +24,8 @@ package-lock.json
 
 #Electron-builder output
 /dist_electron
-
 #Test output
 tests/*
-tests/vars/*
-!tests/*.json
+!tests/*.bat
 !tests/*.yaml
 !*.md
-
-project.log

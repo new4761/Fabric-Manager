@@ -1,27 +1,26 @@
 fabric:
   cas:
-  - "ca1.org0.example.com"
-  - "ca1.org1.example.com"
-  peers: 
-  - "peer1.org0.example.com"
- # - "peer2.org0.example.com"
-  - "peer1.org1.example.com"
- # - "peer2.org1.example.com"
+    - ca1.test3.test
+    - ca1.test4.net
+    - ca1.test5.com
+    - ca1.yoyal.co.th
+  peers:
+    - peer1.test3.test
+    - peer2.test3.test
+    - peer3.test3.test
+    - peer1.test4.net
+    - peer2.test4.net
+    - peer3.test4.net
+    - peer1.test5.com
+    - peer2.test5.com
+    - peer3.test5.com
+    - peer1.yoyal.co.th
+    - peer2.yoyal.co.th
+    - peer3.yoyal.co.th
   orderers:
-  - "orderer1.example.com"
-  - "orderer2.example.com"
-  - "orderer3.example.com"
+    - orderer1.test.test
+    - orderer2.test2.test
   settings:
-    ca:
-      FABRIC_LOGGING_SPEC: DEBUG
-    peer:
-      FABRIC_LOGGING_SPEC: DEBUG
-    orderer:
-      FABRIC_LOGGING_SPEC: DEBUG
-  ### use go proxy when default go proxy is restricted in some of the regions.
-  ### the default goproxy
-  # goproxy: "https://proxy.golang.org,direct"
-  ### the goproxy in China area
-  # goproxy: "https://goproxy.cn,direct"
-  ### set the endpoint address to override the automatically detected IP address
-  # endpoint_address: 1.2.3.4
+    - ca: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - peer: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - orderer: 'FABRIC_LOGGING_SPEC: DEBUG'
