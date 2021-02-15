@@ -48,35 +48,31 @@ class ChainCodeProcess {
 
     //end test
     // basic setup
-
-
-    setupFolder(ccObj: ChainCode):ChainCode {
-     // console.log("setupcalled")
+    setupFolder(projectPath: string, ccObj: ChainCode): ChainCode {
         let ccDir = ""
-       // console.log(srcPath + ":from ccSetup")
+        // console.log(srcPath + ":from ccSetup")
         try {
             if (isDevelopment) {
                 ccDir = path.join(this.testPath, "vars", "chaincode", ccObj.name, ccObj.type)
             }
             else {
                 //to do use project path for replace testPath
-                ccDir = path.join(this.testPath, "vars", "chaincode", ccObj.name, ccObj.type)
+                ccDir = path.join(projectPath, "vars", "chaincode", ccObj.name, ccObj.type)
             }
             //this.dirBuilder.createDir_path(ccDir);
-            //FileManager.copyFilesDir(ccObj.directory,ccDir)
-         
+            FileManager.copyFilesDir(ccObj.directory, ccDir)
+            ccObj.state = CCstate.setupDir;
+            this.updateNetworkConfig(ccObj);
         }
         catch {
             //to doccObj
         }
-        ccObj.state = CCstate.setupDir;
-        this.updateNetworkConfig(ccObj)
         return ccObj
 
     }
 
     //  init command CC
-    installCC(projectPath: string, ccObj: ChainCode): CCstate {
+    installCC(projectPath: string, ccObj: ChainCode): ChainCode {
         if (ccObj.state == CCstate.setupDir) {
             let arg = [];
             //arg for call fabric command
@@ -92,62 +88,86 @@ class ChainCodeProcess {
             arg.push("-v")
             arg.push("1.0")
             if (isDevelopment) {
-                OSProcess.run_new(this.testPath, arg, this.osType);
-                return CCstate.installCC
+                return OSProcess.run_new(this.testPath, arg, this.osType).then(() => {
+                    ccObj.state = CCstate.installCC;
+                    return ccObj
+                });
             }
             else {
-                OSProcess.run_new(projectPath, arg, this.osType);
-                return CCstate.installCC
+                return OSProcess.run_new(projectPath, arg, this.osType).then(() => {
+                    ccObj.state = CCstate.installCC;
+                    return ccObj
+                });
             }
         }
         else {
             //console.log("pls setup dir")
-            return ccObj.state
+            return ccObj
         }
     }
 
-    approve(projectPath: string, ccObj: ChainCode): CCstate {
+    approve(projectPath: string, ccObj: ChainCode): ChainCode {
         if (ccObj.state == CCstate.installCC)
             if (isDevelopment) {
-                return OSProcess.run_new(this.testPath, ['approve'], this.osType).then(() => { return CCstate.approveCC });
+                return OSProcess.run_new(this.testPath, ['approve'], this.osType)
+                    .then(() => {
+                        ccObj.state = CCstate.approveCC;
+                        this.updateNetworkConfig(ccObj);
+                        return ccObj
+                    });
             }
             else {
                 //fix to real path
-                return OSProcess.run_new(projectPath, ['approve'], this.osType).then(() => { return CCstate.approveCC });
+
+                return OSProcess.run_new(projectPath, ['approve'], this.osType)
+                    .then(() => {
+                        ccObj.state = CCstate.approveCC;
+                        this.updateNetworkConfig(ccObj);
+                        return ccObj
+                    });
             }
         else {
-            return ccObj.state
+            return ccObj
         }
 
     }
-    commit(projectPath: string, ccObj: ChainCode): CCstate {
+    commit(projectPath: string, ccObj: ChainCode): ChainCode {
         if (ccObj.state == CCstate.approveCC) {
             if (isDevelopment) {
-                return OSProcess.run_new(this.testPath, ['commit'], this.osType).then(() => { return CCstate.commitCC });
+                return OSProcess.run_new(this.testPath, ['commit'], this.osType)
+                    .then(() => {
+                        ccObj.state = CCstate.commitCC;
+                        this.updateNetworkConfig(ccObj);
+                        return ccObj
+                    });
             }
             else {
                 //fix to real path
-                return OSProcess.run_new(projectPath, ['commit'], this.osType).then(() => { return CCstate.approveCC });
+                return OSProcess.run_new(projectPath, ['commit'], this.osType)
+                    .then(() => {
+                        ccObj.state = CCstate.commitCC;
+                        this.updateNetworkConfig(ccObj);
+                        return ccObj
+                    });
             }
         } else {
-            console.log("pls approve cc")
-            return ccObj.state
+            //console.log("pls approve cc")
+            return ccObj
         }
     }
     //end setup
-   // updateNetworkConfig() {
-   updateNetworkConfig(ccObj:ChainCode) {
-    console.log("from update")
-    console.log(ccObj)
-       let target = NetworkConfig.getValue(netWorkConfigPath.ccPath).findIndex(res => res.id == ccObj.id );
-       //let target = NetworkConfig.getValue(netWorkConfigPath.ccPath).findIndex(res => res.id == 2 );
-       console.log(target)
-       let path = netWorkConfigPath.ccPath +"."+target;
-    
-         console.log(path)
-       console.log(NetworkConfig.getValue(path))
-    //  NetworkConfig.updateNetworkConfig(path,CCstate.setupDir);
-       NetworkConfig.updateNetworkConfig(path, ccObj);
+    // updateNetworkConfig() {
+    updateNetworkConfig(ccObj: ChainCode) {
+        //console.log("from update")
+        //console.log(ccObj)
+        let target = NetworkConfig.getValue(netWorkConfigPath.ccPath).findIndex((res: ChainCode) => res.id == ccObj.id);
+        //let target = NetworkConfig.getValue(netWorkConfigPath.ccPath).findIndex(res => res.id == 2 );
+        // console.log(target)
+        let path = netWorkConfigPath.ccPath + "." + target;
+        //   console.log(path)
+        // console.log(NetworkConfig.getValue(path))
+        //  NetworkConfig.updateNetworkConfig(path,CCstate.setupDir);
+        NetworkConfig.updateNetworkConfig(path, ccObj);
 
     }
 
@@ -173,14 +193,17 @@ class ChainCodeProcess {
         // to do  wait for env project file 
 
     }
-    deployCCtoFabric(projectPath: string, ccObj: ChainCode) {
-        this.setupFolder(ccObj)
+    async deployCCtoFabric(projectPath: string, ccObj: ChainCode) {
+        ccObj = await this.setupFolder(projectPath, ccObj);
+        ccObj = await this.installCC(projectPath, ccObj)
+        ccObj = await this.approve(projectPath, ccObj)
+        ccObj = await this.commit(projectPath, ccObj)
     }
     // user  command
     updateCC() {
 
     }
-    init() {
+    initCC() {
         // to do write init condition
     }
     invoke() { }

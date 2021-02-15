@@ -1,4 +1,7 @@
 const { spawn } = require("child_process");
+
+const spawnSync = require('child-process-promise').spawn;
+ 
 import { OsType } from "../models/EnvProject";
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -22,28 +25,20 @@ class OSProcess {
 
   run_new(path: string, args: string[], type: OsType): any {
     let ls: any;
-
     switch (type) {
       case OsType.WINDOW:
-        // console.log("spawn window bat")
         try {
-          ls = spawn("minifabwin.bat", args, { cwd: path });
-          this.callback(ls.childProcess);
-          //this.callback(ls);
-          // await ls
-          return ls
-            .then(() => {
-              console.log("end run");
-            })
-            .finally(() => {
+          ls = spawnSync("minifabwin.bat", args, {shell: true, cwd: path });
+          logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
+          this.callback(ls.childProcess); 
+          return ls.then(() => {
               return ls;
-            });
+            })
         } catch {
-          console.log("child running");
           return null;
         }
       case OsType.WSL:
-        ls = spawn("minifab", args, { cwd: path });
+        ls = spawn("minifab", args, { shell: true,cwd: path });
         console.log("end run");
         return ls;
     }

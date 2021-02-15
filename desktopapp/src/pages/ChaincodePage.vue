@@ -57,6 +57,7 @@ const isDevelopment = process.env.NODE_ENV !== "production"
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 
+
 @Component({
   components: { DigSetupCC },
 })
@@ -75,6 +76,8 @@ export default class ChaincodePage extends Vue {
   testcleanup() {
     ChainCodeProcess.testClean();
   }
+  //end test
+  //emit function
   setCCtype(data: CCtype) {
     this.ccType = data;
   }
@@ -87,7 +90,7 @@ export default class ChaincodePage extends Vue {
   setPath(data: string) {
     this.path = data;
   }
-
+ //end emit 
   mounted() {
     this.hookCClist();
   }
@@ -97,10 +100,13 @@ export default class ChaincodePage extends Vue {
   }
   //end emit
   async deployCC() {
+
     let ccObj = await ChainCodeProcess.initNetworkConfig(this.ccName, this.ccType, this.path);
     //this.hookCClist();
+    let projectPath =""
     if (isDevelopment){
-    await ChainCodeProcess.deployCCtoFabric("test",ccObj)
+    projectPath="test"
+    await ChainCodeProcess.deployCCtoFabric(projectPath,ccObj)
     //ChainCodeProcess.updateNetworkConfig()
     //this.ccObj =ChainCodeProcess.setupFolder(ccObj,"test");
     this.hookCClist();
