@@ -20,8 +20,13 @@
       <Column field="name" header="Name"></Column>
       <Column field="type" header="Language"></Column>
       <Column field="state" header="state">
-        <template #body="slotProps">
-          <Tag :value="slotProps.data.state"></Tag>
+        <template #body="obj">
+          <Tag :value="obj.data.state"></Tag>
+        </template>
+      </Column>
+         <Column >
+        <template #body="obj">
+         {{obj.data}}
         </template>
       </Column>
     </DataTable>
@@ -55,7 +60,7 @@ import Component from "vue-class-component";
 import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
 const isDevelopment = process.env.NODE_ENV !== "production"
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
-import NetworkConfig from "@/models/NetworkConfig";
+import NetworkConfig from "../models/NetworkConfig";
 
 
 @Component({
@@ -64,7 +69,7 @@ import NetworkConfig from "@/models/NetworkConfig";
 // window.open("/chaincode","_self")
 export default class ChaincodePage extends Vue {
   ccName = "";
-  display = false;
+  display = true;
   ccType = CCtype.go;
   path = "";
   ccList = [];
@@ -99,16 +104,15 @@ export default class ChaincodePage extends Vue {
     // to do fix date to read
   }
   //end emit
-  async deployCC() {
-
-    let ccObj = await ChainCodeProcess.initNetworkConfig(this.ccName, this.ccType, this.path);
+  async deployCC(useInti:boolean,args:any) {
+    //TODO: fix channel
+    let channel ="testchannel"
+    let ccObj = await ChainCodeProcess.initNetworkConfig(this.ccName, this.ccType, this.path,channel);
     //this.hookCClist();
     let projectPath =""
     if (isDevelopment){
     projectPath="test"
-    await ChainCodeProcess.deployCCtoFabric(projectPath,ccObj)
-    //ChainCodeProcess.updateNetworkConfig()
-    //this.ccObj =ChainCodeProcess.setupFolder(ccObj,"test");
+    await ChainCodeProcess.deployCCtoFabric(projectPath,ccObj,useInti,args)
     this.hookCClist();
     }
   }

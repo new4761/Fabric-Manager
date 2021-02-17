@@ -1,4 +1,4 @@
-::minifabwin netup 
+ ::minifabwin netup 
 ::minifabwin create -c testchannel
 ::minifabwin join
 ::minifabwin anchorupdate
