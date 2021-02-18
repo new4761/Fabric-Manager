@@ -5,9 +5,9 @@ import { ChainCode } from "./ChainCode";
 class ArgsCCWrapper {
 
     argsCCWrapper(args: any) {
-        let newArgs = []
+        let newArgs:any = []
         let parameterArg = ""
-        args.forEach((res: any, index) => {
+        args.forEach((res: any, index:number) => {
             if (index != args.length - 1)
                 parameterArg += "\"" + res + "\","
             else

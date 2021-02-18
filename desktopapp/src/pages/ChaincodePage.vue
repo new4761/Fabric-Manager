@@ -6,12 +6,14 @@
         <br />
         <Button label="testcleanup" @click="testcleanup()" />
         <br />
-        <Button label="go" @click="testGo()" />
-        <br />
-        <Button label="node" />
+        <!-- <Button label="go" @click="testGo()" />
+        <br /> -->
+       <Button label="SDK" @click="testSDK()" />
+           <br>
+        <!-- <Button label="node" />
         <br />
         <Button label="java" />
-        <br />
+        <br /> -->
         <Button label="demo" @click="display = !display"></Button>
       </h1>
     </div>
@@ -61,6 +63,7 @@ import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
 const isDevelopment = process.env.NODE_ENV !== "production"
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
 import NetworkConfig from "../models/NetworkConfig";
+import FabrickSDK from "../module/fabric/FabrickSDK";
 
 
 @Component({
@@ -69,11 +72,14 @@ import NetworkConfig from "../models/NetworkConfig";
 // window.open("/chaincode","_self")
 export default class ChaincodePage extends Vue {
   ccName = "";
-  display = true;
+  display = false;
   ccType = CCtype.go;
   path = "";
   ccList = [];
   // test function
+  testSDK(){
+FabrickSDK.connect();
+  }
 
   testsetup() {
     ChainCodeProcess.testFunction();

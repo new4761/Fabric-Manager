@@ -75,7 +75,7 @@ class ChainCodeProcess {
 
     //  init command CC
     installCC(projectPath: string, ccObj: ChainCode): ChainCode {
-        let args = [];
+        let args:any = [];
         args.push("install")
         args = ArgsWrapper.basicCCWrapper(args, ccObj)
         if (ccObj.state == CCstate.setupDir) {
@@ -99,7 +99,7 @@ class ChainCodeProcess {
     }
 
     approve(projectPath: string, ccObj: ChainCode): ChainCode {
-        let args = [];
+        let args:any = [];
         args.push("approve")
         args = ArgsWrapper.basicCCWrapper(args, ccObj)
         if (ccObj.state == CCstate.installCC)
@@ -127,7 +127,7 @@ class ChainCodeProcess {
 
     }
     commit(projectPath: string, ccObj: ChainCode): ChainCode {
-        let args = [];
+        let args:any = [];
         args.push("commit")
         args = ArgsWrapper.basicCCWrapper(args, ccObj)
         if (ccObj.state == CCstate.approveCC) {
@@ -206,7 +206,7 @@ class ChainCodeProcess {
     }
     initCC(projectPath: string, ccObj: ChainCode, ccArgs: any): ChainCode {
         // to do write init condition
-        let args = [];
+        let args:any = [];
         args = ["initialize"].concat(ArgsWrapper.basicCCWrapper(args, ccObj).concat(ArgsWrapper.argsCCWrapper(ccArgs)))
        
         //console.log(args)
