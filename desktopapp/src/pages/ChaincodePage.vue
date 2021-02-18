@@ -63,7 +63,7 @@ import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
 const isDevelopment = process.env.NODE_ENV !== "production"
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
 import NetworkConfig from "../models/NetworkConfig";
-import FabrickSDK from "../module/fabric/FabrickSDK";
+//import FabrickSDK from "../module/fabric/FabrickSDK";
 
 
 @Component({
@@ -78,7 +78,7 @@ export default class ChaincodePage extends Vue {
   ccList = [];
   // test function
   testSDK(){
-FabrickSDK.connect();
+//FabrickSDK.connect();
   }
 
   testsetup() {
