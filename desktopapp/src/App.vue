@@ -14,9 +14,12 @@
     </div>
     <transition name="fade" mode="out-in">
       <component :is="layout">
-        <transition name="fade" mode="out-in">
-          <router-view />
-        </transition>
+      
+           <div v-if="$root.loading">
+             loading bitch
+           </div>
+          <router-view v-else/>
+       
       </component>
     </transition>
   </div>

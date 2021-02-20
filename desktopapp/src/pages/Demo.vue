@@ -1,8 +1,14 @@
 <template>
   <div class="p-m-5">
-    <Terminal />
+    <Button
+      label="inspec"
+      @click="list()"
+      class="p-button-raised p-button-rounded p-m-1"
+    />
+    <!-- <Terminal /> -->
+    <!-- {{this.$store.commit("docker/getContainerCount")}} -->
 
-    <Card>
+    <!-- <Card>
       <template #title>
         Demo Spec
       </template>
@@ -40,7 +46,7 @@
           class="p-button-raised p-button-rounded p-m-1"
         />
       </template>
-    </Card>
+    </Card> -->
   </div>
 </template>
 
@@ -51,7 +57,8 @@ import CreateNetButton from "../components/CreateNetButton.vue";
 import NetOpsButton from "../components/NetOpsButton.vue";
 import Terminal from "../components/Terminal.vue";
 import ChannelPage from "./ChannelPage.vue";
-import DockerProcess from "../module/DockerProcess";
+// import NetworkConfig from "../models/NetworkConfig";
+// import OSProcess from "../module/OSProcess";
 @Component({
   components: {
     CreateNetButton,
@@ -62,7 +69,10 @@ import DockerProcess from "../module/DockerProcess";
 })
 export default class Demo extends Vue {
   list() {
-    DockerProcess.listContainer();
+    // this.$store.commit("docker/setContainer");
+    this.$store.commit("docker/setContainer");
+
+    console.log(this.$store.getters["docker/getContainerCount"]);
   }
 }
 </script>

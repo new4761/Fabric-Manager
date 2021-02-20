@@ -17,7 +17,8 @@ export class NetworkConfig {
         
       );
       this.file = editJsonFile(filePath);
-      logger.log("warn","switching path: " + filePath)
+      // logger.log("warn","switching path: " + filePath)
+      store.mutations.setPath(store.state.id);
       // logger.log("info","net-config path: " + ProjectConfig.getPath(store.state.id));
     } catch (e) {
       logger.log("error","error net-config path");
@@ -48,10 +49,24 @@ export class NetworkConfig {
     logger.log("info","network-config sucessfully updated ");
   }
 
+  pushValueToArray(key: string, value: any) {
+    let target = this.getValue(key);
+   // console.log(target)
+    if (target == undefined) {
+   //console.log(key)
+      value = [value]    
+      this.updateNetworkConfig(key, value)
+    }
+    else { key = key + "." + (target.length); }
+
+    this.file.set(key, value);
+    this.file.save();
+  }
+
   getValue(key: string) {
     this.constructor();
     let data = this.file.get(key);
-    logger.log("info","get value");
+    // logger.log("info","get value " + data);
     return data;
   }
 

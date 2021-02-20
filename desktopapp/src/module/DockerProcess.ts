@@ -11,8 +11,8 @@ class DockerProcess {
           resolve(containers);
         }
         else{
-          logger.log("error","Docker: " + err)
-          resolve(err);
+          // logger.log("error","Docker: " + err)
+          reject(err);
         }
       });
     });

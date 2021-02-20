@@ -24,6 +24,10 @@ const mutations = {
   setId(state:any, id: number) {
     state.id = id;
   },
+
+  setPath(id: number) {
+    state.path =  ProjectConfig.getPath(id);
+  },
 };
 
 export default {

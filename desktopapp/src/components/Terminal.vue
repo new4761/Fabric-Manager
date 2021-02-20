@@ -20,42 +20,22 @@ import Component from "vue-class-component";
   components: {},
 })
 export default class Terminal extends Vue {
-  // mounted() {
-  //   this.displayOutput();
-  // }
-  // displayOutput() {
-  //   this.output = "minifab:output";
-  //   this.child.stdout.setEncoding("utf8");
-  //   this.child.stdout.on("data", (data: any) => {
-  //     this.output += data.toString();
-  //   });
-  //   this.child.stderr.on("data", (data: any) => {
-  //     this.output += data.toString();
-  //   });
-  //}
   output: any = "------------Terminal--------------";
-  timer: number = 0;
-  created() {
-    // this.testget();
-    // setInterval(() => this.testget(), 500);
-  }
-  clearlog() {
-    this.output = "";
-  }
-  async testget() {
-    // const used = process.memoryUsage();
-    // for (let key in used) {
-    //   console.log(
-    //     `${key} ${Math.round((used[key] / 1024 / 1024) * 100) / 100} MB`
-    //   );
-    // }
+  process: any = this.$store.state.process;
+  created() {}
 
-    // this.output = await process.getProcessMemoryInfo()
-    // var cproc = require("child_process");
-    // let proc = cproc.spawn("ping", ["www.google.com"]);
-    // proc.stdout.on("data", (res: any) => {
-    //   this.output = res;
-    // });
+  mounted() {
+    this.displayOutput();
+  }
+  displayOutput() {
+    this.output = "minifab:output";
+    this.process.stdout.setEncoding("utf8");
+    this.process.stdout.on("data", (data: any) => {
+      this.output += data.toString();
+    });
+    this.process.stderr.on("data", (data: any) => {
+      this.output += data.toString();
+    });
   }
 }
 </script>

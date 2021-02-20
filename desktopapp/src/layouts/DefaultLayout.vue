@@ -5,7 +5,7 @@
         <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
           <Card class="p-mx-2 p-my-1">
             <template #title>
-              network stuff
+             <net-ops-button/>
             </template>
           </Card>
 

@@ -3,38 +3,68 @@
     <Button
       icon="pi pi-power-off"
       class="p-button-rounded p-button-success p-button-lg"
-      @click="display = true"
-      v-show="!up"
+      @click="displayaction = true"
     />
+    <div>
+      <Dialog
+        header="action"
+        v-bind:visible="displayaction"
+        :closable="false"
+        modal
+        :style="{ width: '50vw' }"
+        :contentStyle="{ overflow: 'visible' }"
+      >
+        <div class="p-col-12">
+          <Button
+            icon="pi pi-power-off"
+            class="p-button-rounded p-button-success p-button-lg"
+            @click="display = true"
+          />
 
-    <Button
-      icon="pi pi-power-off"
-      class="p-button-rounded p-button-danger p-button-lg"
-      @click="netdown()"
-      v-show="up"
-    />
+          <Button
+            icon="pi pi-power-off"
+            class="p-button-rounded p-button-danger p-button-lg"
+            @click="netdown()"
+          />
 
-    <Button
-      label="clean"
-      @click="cleanup()"
-      class="p-button-raised p-button-rounded p-m-1"
-    />
+          <Button
+            label="restart"
+            @click="cleanup()"
+            class="p-button-raised p-button-rounded p-m-1"
+          />
+
+          <Button
+            label="clean"
+            @click="cleanup()"
+            class="p-button-raised p-button-rounded p-m-1"
+          />
+        </div>
+
+        <Button
+          class="p-button-danger p-ml-auto p-m-2"
+          label="close"
+          @click="displayaction = false"
+        />
+      </Dialog>
+    </div>
 
     <div>
       <Dialog
         header="log"
-        v-bind:visible="display2"
+        v-bind:visible="displaylog"
         :closable="false"
         modal
         :style="{ width: '80vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="console p-col-12">{{ output }}</div>
+        <!-- <div class="console p-col-12">{{ output }}</div> -->
+
+        <Terminal />
 
         <Button
           class="p-button-danger p-ml-auto p-m-2"
           label="close"
-          @click="display2 = false"
+          @click="displaylog = false"
         />
       </Dialog>
     </div>
@@ -84,15 +114,16 @@ import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
 import NetworkConfig from "../models/NetworkConfig";
 import ProjectConfig from "../models/ProjectConfig";
+import Terminal from "./Terminal.vue";
 @Component({
-  components: {},
+  components: { Terminal },
 })
 export default class NetOpsButton extends Vue {
   up: boolean = false;
   projectDir: string = "";
-  output: string = "hey";
   display: boolean = false;
-  display2: boolean = false;
+  displaylog: boolean = false;
+  displayaction: boolean = false;
   orgSelected: string = "";
   org: any[] = [];
   port: string = "";
@@ -112,29 +143,20 @@ export default class NetOpsButton extends Vue {
       args.push("-e " + this.port);
     }
     const child = OSProcess.run(this.projectDir, args);
-    child.stdout.setEncoding("utf8");
-    child.stdout.on("data", (data: any) => {
-      this.output = data.toString();
-    });
-    this.display2 = true;
+    this.$store.commit("setProcess",child)
+    this.displaylog = true;
     this.up = true;
   }
   netdown() {
     const child = OSProcess.run(this.projectDir, ["down"]);
-    child.stdout.setEncoding("utf8");
-    child.stdout.on("data", (data: any) => {
-      this.output = data.toString();
-    });
-    this.display2 = true;
+    this.$store.commit("setProcess",child)
+    this.displaylog = true;
     this.up = false;
   }
   cleanup() {
     const child = OSProcess.run(this.projectDir, ["cleanup"]);
-    child.stdout.setEncoding("utf8");
-    child.stdout.on("data", (data: any) => {
-      this.output += data.toString();
-    });
-    this.display2 = true;
+    this.$store.commit("setProcess",child)
+    this.displaylog = true;
   }
   data() {
     return {};

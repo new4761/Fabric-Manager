@@ -1,28 +1,71 @@
 <template>
-  <div style="background-color: powderblue;">
-    <div class="p-grid p-jc-center p-my-1">
-      <div class="el p-col-4 ">not</div>
-      <div class="el p-col-4 ">thing</div>
-      <div class="el p-col-4 ">here yet</div>
-    </div>
-
-    <div class="p-grid p-jc-center  p-my-1">
-      <div class="log p-col-12 " id="log" v-html="highlight()"></div>
-    </div>
-
-    <div class="p-grid p-jc-center  p-my-1">
-      <div class="container p-col-12 ">
-        {{ container }}
+  <div>
+    <!-- <div class="p-grid p-jc-center p-my-1">
+      <div class=" p-col-4 ">
+        
       </div>
-      
-    </div>
+      <div class=" p-col-4 ">thing</div>
+      <div class=" p-col-4 ">here yet</div>
+    </div> -->
 
-    <DataTable :value="container" class="custom-table">
-      <Column field="Names" header="Name"></Column>
-      <Column field="Image" header="Image"></Column>
-      <Column field="State" header="State"></Column>
-      <Column field="Status" header="Status"></Column>
-    </DataTable>
+    <div class="p-grid p-jc-center p-my-1">
+      <div class="p-col-5">
+        <div class="tag-wrapper">
+          <div class="netstat-card netstat-card-content1">
+            <h1 class="netstat-card-title">
+              {{ activeContainer }} out of
+              {{ this.$store.getters["docker/getContainerCount"] }}
+            </h1>
+            <div class="netstat-card-desc">active containers</div>
+            <div class="netstat-card-divider"></div>
+            <div class="netstat-card-progress-wrapper">
+              <div class="tagline netstat-card-tag">net stat</div>
+              <div class="netstat-card-progress">
+                {{
+                  (activeContainer /
+                    this.$store.getters["docker/getContainerCount"]) *
+                    100
+                }}
+                %
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+        </div>
+      </div>
+
+      <div class="p-col-4">
+        <div class="tag-wrapper">
+          <div class="netstat-card netstat-card-content4">
+            <div class="netstat-card-desc">
+              {{ this.$store.state.platform }}
+            </div>
+            <div class="netstat-card-desc">
+              {{ this.$store.state.project.path }}
+            </div>
+            <div class="netstat-card-desc">$238.89</div>
+            <div class="netstat-card-desc">$238.89</div>
+          </div>
+          <div class="divider"></div>
+        </div>
+      </div>
+
+      <div class="p-col-3">
+        <div class="tag-wrapper">
+          <div class="netstat-card netstat-card-content3">
+            <button type="button" class="button-action">
+          <img src="./assets/hyperledger.svg">
+            </button>
+          </div>
+          <div class="divider"></div>
+        </div>
+      </div>
+    </div>
+ <img src="./assets/hyperledger.svg">
+    <ContainerTable v-bind:container="container" />
+
+
+    <LogView />
 
     <div class="p-grid p-jc-center  p-my-1">
       <div class="el p-col-12 " style=" height: 100vh;">
@@ -42,63 +85,45 @@
 </template>
 
 <script lang="ts">
-import fs from "fs";
 import Vue from "vue";
 import Component from "vue-class-component";
-import CreateNetButton from "./components/CreateNetButton.vue";
+import ContainerTable from "./components/ContainerTable.vue";
+import LogView from "./components/LogView.vue";
 import DockerProcess from "./module/DockerProcess";
 @Component({
   components: {
-    CreateNetButton,
+    ContainerTable,
+    LogView,
   },
 })
 export default class Index extends Vue {
-  log: string = "";
   container: Array<Object> = [];
+  activeContainer: number = 0;
 
   created() {
+    console.log(this.$store.state.project.path);
+    this.$store.commit("docker/setContainer");
+    this.$store.commit("docker/setOrgContainer");
     this.getContainer();
-    this.readLog();
-    this.highlight();
-    // setInterval(() => this.readLog(), 5000);
+  }
+  mounted() {}
+
+  updated() {
+    this.$store.commit("docker/setActiveContainer");
+    this.activeContainer = this.$store.getters[
+      "docker/getActiveContainerCount"
+    ];
   }
 
   getContainer() {
-    DockerProcess.listContainer().then((result: any) => {
-      this.container = result;
-    });
-  }
-
-  readLog() {
-    this.log = fs.readFileSync("./log/project.log", "utf8");
-    this.highlight();
-    this.getContainer();
-  }
-
-  highlight() {
-    var temp = this.log;
-    temp = temp.replace(new RegExp("INFO", "gi"), (match) => {
-      return '<span class="info">' + match + "</span>";
-    });
-
-    temp = temp.replace(new RegExp("WARN", "gi"), (match) => {
-      return '<span class="warn">' + match + "</span>";
-    });
-
-    temp = temp.replace(new RegExp("ERROR", "gi"), (match) => {
-      return '<span class="error">' + match + "</span>";
-    });
-
-    temp = temp.replace(
-      new RegExp(
-        "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]",
-        "gi"
-      ),
-      (match) => {
-        return '<span class="timestamp">' + match + "</span>";
-      }
-    );
-    return temp;
+    DockerProcess.listContainer()
+      .then((result: any) => {
+        this.container = result;
+      })
+      .catch(() => {
+        // console.log(err);
+        this.container = [];
+      });
   }
 }
 </script>

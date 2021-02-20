@@ -74,8 +74,7 @@ import ProgressSpinner from "primevue/progressspinner";
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
-import Tag from 'primevue/tag';
-
+import Tag from "primevue/tag";
 
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
@@ -102,6 +101,7 @@ Vue.directive("ripple", Ripple);
 // App.config.globalProperties.$primevue = reactive({ ripple: true });
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
 // Vue.prototype.$appState =  Vue.observable({ ripple: true });
+
 Vue.use(PrimeVue, { ripple: true });
 
 Vue.config.productionTip = false;
@@ -179,10 +179,23 @@ Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
 
-new Vue({
+const app = new Vue({
+  data() {
+    return { loading: false };
+  },
   router,
   store,
   render: (h) => h(App),
 }).$mount("#app");
 
+router.beforeEach((to, from, next) => {
+  app.loading = true;
+  next();
+});
+router.afterEach(() => {
+  app.loading = false;
+  // setTimeout(() => (app.loading = false), 1500); // timeout for demo purposes
+});
+
+store.commit("setPlatform",  process.platform);
 // router.replace('/project')
