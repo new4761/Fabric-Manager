@@ -60,7 +60,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { CCtype } from "../../models/EnvProject";
 import FileManager from "../../module/FileManager";
-import InputArg from "../../components/chaincode/digSetupCC/InputArg.vue"
+import InputArg from "../../components/chaincode/InputArg.vue"
 const DigSetupCCProps = Vue.extend({
   props: {
     _ccName: String,
@@ -105,6 +105,7 @@ export default class DigSetupCC extends DigSetupCCProps {
     this.path = await FileManager.getDirPath();
     this.$emit("setPath", this.path);
   }
+  
   setArg(value:any,index:number){
     //handle vue array change 
     this.$set(this.args, index, value)

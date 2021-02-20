@@ -71,6 +71,7 @@ export class NetworkConfig {
       this.file = editJsonFile(filePath);
     }
     let data = this.file.get(key);
+    if(!isDevelopment)
     logger.log("info","get value");
     return data;
   }

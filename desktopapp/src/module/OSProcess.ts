@@ -7,6 +7,8 @@ const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const events = require("events");
 import logger from "../module/Logger";
+import StdoutCapture from "./OSProcess/StdoutCapture";
+
 
 class OSProcess {
   emitter: any;
@@ -28,13 +30,17 @@ class OSProcess {
     switch (type) {
       case OsType.WINDOW:
         try {
-          ls = spawnSync("minifabwin.bat", args, {shell: true, cwd: path });
+          ls = spawnSync("minifabwin.bat", args, {shell: true, cwd: path,capture: [ 'stdout', 'stderr' ] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
           this.callback(ls.childProcess); 
-          return ls.then(() => {
-              return ls;
+          return ls.then((res:any) => {
+          
+            console.log(StdoutCapture.checkStatus(res.stdout.toString()));
+              return res.stdout;
             })
         } catch {
+          //TODO: write return con
+          console.log("child running");
           return null;
         }
       case OsType.WSL:

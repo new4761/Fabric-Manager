@@ -8,8 +8,9 @@
         <br />
         <!-- <Button label="go" @click="testGo()" />
         <br /> -->
-       <Button label="SDK" @click="testSDK()" />
-           <br>
+        <Button label="SDK" @click="testSDK()" />
+        <br />
+               <Button label="console" @click="callConsole()" />
         <!-- <Button label="node" />
         <br />
         <Button label="java" />
@@ -21,14 +22,19 @@
       <Column field="id" header="ID"></Column>
       <Column field="name" header="Name"></Column>
       <Column field="type" header="Language"></Column>
-      <Column field="state" header="state">
+      <Column header="Lastupdate">
+        <template #body="obj">
+          {{ convertTime(obj.data.lastUpdate) }}
+        </template></Column
+      >
+      <Column header="state">
         <template #body="obj">
           <Tag :value="obj.data.state"></Tag>
         </template>
       </Column>
-         <Column >
+      <Column>
         <template #body="obj">
-         {{obj.data}}
+          {{ obj.data }}
         </template>
       </Column>
     </DataTable>
@@ -60,11 +66,12 @@ import Vue from "vue";
 import ChainCodeProcess from "../module/ChainCodeProcess";
 import Component from "vue-class-component";
 import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
-const isDevelopment = process.env.NODE_ENV !== "production"
+const isDevelopment = process.env.NODE_ENV !== "production";
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
 import NetworkConfig from "../models/NetworkConfig";
+// eslint-disable-next-line no-unused-vars
+import { ChainCode } from "@/models/ChainCode";
 //import FabrickSDK from "../module/fabric/FabrickSDK";
-
 
 @Component({
   components: { DigSetupCC },
@@ -77,8 +84,8 @@ export default class ChaincodePage extends Vue {
   path = "";
   ccList = [];
   // test function
-  testSDK(){
-//FabrickSDK.connect();
+  testSDK() {
+    //FabrickSDK.connect();
   }
 
   testsetup() {
@@ -101,7 +108,7 @@ export default class ChaincodePage extends Vue {
   setPath(data: string) {
     this.path = data;
   }
- //end emit 
+  //end emit
   mounted() {
     this.hookCClist();
   }
@@ -110,22 +117,61 @@ export default class ChaincodePage extends Vue {
     // to do fix date to read
   }
   //end emit
-  async deployCC(useInti:boolean,args:any) {
+  //render function
+  convertTime(unix: number) {
+    let dateNow: number = Date.now();
+  //  console.log(new Date(unix).getDate());
+    let dayNow = new Date(dateNow).getTime();
+    let dayUpdate = new Date(unix).getTime();
+    return this.msToTime(dayNow - dayUpdate);
+  }
+  msToTime(s: number) {
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = ((s - mins) / 60) % 24;
+    var day = Math.round((s - mins) / 60 / 24);
+    if (day >= 1) {
+      return day + " " + "Days ago";
+    } else if (hrs >= 1) {
+      return hrs + " " + "Hours ago";
+    } else {
+      return mins + " " + "Minutes ago";
+    }
+  }
+  callConsole(){
+    //console.log(obj)
+    this.$router.push({ name: 'ConsoleCC'});
+  }
+  //end render
+  //CC function
+  async deployCC(useInti: boolean, args: any) {
     //TODO: fix channel
-    let channel ="testchannel"
-    let ccObj = await ChainCodeProcess.initNetworkConfig(this.ccName, this.ccType, this.path,channel);
-    //this.hookCClist();
-    let projectPath =""
-    if (isDevelopment){
-    projectPath="test"
-    await ChainCodeProcess.deployCCtoFabric(projectPath,ccObj,useInti,args)
+    let channel = "testchannel";
+    let ccObj = await ChainCodeProcess.initNetworkConfig(
+      this.ccName,
+      this.ccType,
+      this.path,
+      channel
+    );
     this.hookCClist();
+    //TODO: Get real project path
+    let projectPath = "";
+    if (isDevelopment) {
+      projectPath = "test";
+      await ChainCodeProcess.deployCCtoFabric(
+        projectPath,
+        ccObj,
+        useInti,
+        args
+      );
+      this.hookCClist();
     }
   }
   initCC() {}
   update() {}
-  invoke() {}
-  query() {}
   //test funtion
 }
 </script>

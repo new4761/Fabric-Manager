@@ -32,7 +32,8 @@ class ChainCodeProcess {
     async testFunction() {
         if (isDevelopment) {
             let org = "test3.test";
-            await OSProcess.run_new(this.testPath, ['netup', '-o', org], this.osType);
+            // await OSProcess.run_new(this.testPath, ['netup', '-e', 'true'], this.osType);
+            await OSProcess.run_new(this.testPath, ['netup', '-o', org,'-e','true'], this.osType);
             await OSProcess.run_new(this.testPath, ['create', '-c', 'testchannel'], this.osType);
             await OSProcess.run_new(this.testPath, ['join'], this.osType);
             await OSProcess.run_new(this.testPath, ['anchorupdate'], this.osType);
@@ -75,7 +76,7 @@ class ChainCodeProcess {
 
     //  init command CC
     installCC(projectPath: string, ccObj: ChainCode): ChainCode {
-        let args:any = [];
+        let args: any = [];
         args.push("install")
         args = ArgsWrapper.basicCCWrapper(args, ccObj)
         if (ccObj.state == CCstate.setupDir) {
@@ -99,7 +100,7 @@ class ChainCodeProcess {
     }
 
     approve(projectPath: string, ccObj: ChainCode): ChainCode {
-        let args:any = [];
+        let args: any = [];
         args.push("approve")
         args = ArgsWrapper.basicCCWrapper(args, ccObj)
         if (ccObj.state == CCstate.installCC)
@@ -127,7 +128,7 @@ class ChainCodeProcess {
 
     }
     commit(projectPath: string, ccObj: ChainCode): ChainCode {
-        let args:any = [];
+        let args: any = [];
         args.push("commit")
         args = ArgsWrapper.basicCCWrapper(args, ccObj)
         if (ccObj.state == CCstate.approveCC) {
@@ -205,10 +206,9 @@ class ChainCodeProcess {
 
     }
     initCC(projectPath: string, ccObj: ChainCode, ccArgs: any): ChainCode {
-        // to do write init condition
-        let args:any = [];
+        let args: any = [];
         args = ["initialize"].concat(ArgsWrapper.basicCCWrapper(args, ccObj).concat(ArgsWrapper.argsCCWrapper(ccArgs)))
-       
+
         //console.log(args)
         if (ccObj.state == CCstate.commitCC) {
             if (isDevelopment) {
@@ -233,25 +233,52 @@ class ChainCodeProcess {
             return ccObj
         }
     }
-    invoke() { }
-    query() {
+    invoke(projectPath: string, ccObj: ChainCode, ccArgs: any) {
+        let args: any = [];
+        args.push("invoke")
+        args = ArgsWrapper.basicCCWrapper(args, ccObj).concat(ArgsWrapper.argsCCWrapper(ccArgs));
+        if (ccObj.state == CCstate.initCC) {
+            if (isDevelopment) {
+                return OSProcess.run_new(this.testPath, args, this.osType)
+                    .then((res:any) => {
+                        //TODO write update Console 
+                        return res
+                        // ccObj.state = CCstate.commitCC;
+                        // this.updateNetworkConfig(ccObj);
+                        // return ccObj
+                    });
+            }
+            else {
+                //fix to real path
+                return OSProcess.run_new(projectPath, args, this.osType)
+                    .then((res:any) => {
+                        return res
+                    });
+            }
+        } else {
+            //console.log("pls approve cc")
+            return ccObj
+        }
+
+     }
+    query(projectPath: string, ccObj: ChainCode, ccArgs: any) {
     }
     discover(projectPath: string, ccObj: ChainCode) {
 
-        // get channel endorser 
-        if (ccObj.state == CCstate.readyCC) {
-            let args = [];
-            args.push("discover")
-            args = ArgsWrapper.basicCCWrapper(args, ccObj)
-            //TODO:get env version from cc setting
-            if (isDevelopment) {
-                OSProcess.run_new(this.testPath, args, this.osType);
-            }
-            else {
+        // // get channel endorser 
+        // if (ccObj.state == CCstate.readyCC) {
+        //     let args = [];
+        //     args.push("discover")
+        //     args = ArgsWrapper.basicCCWrapper(args, ccObj)
+        //     //TODO:get env version from cc setting
+        //     if (isDevelopment) {
+        //         OSProcess.run_new(this.testPath, args, this.osType);
+        //     }
+        //     else {
 
-                OSProcess.run_new(this.testPath, args, this.osType);
-            }
-        }
+        //         OSProcess.run_new(this.testPath, args, this.osType);
+        //     }
+        // }
     }
 
 }

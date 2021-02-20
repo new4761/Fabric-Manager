@@ -21,8 +21,8 @@ export enum CCstate {
     initCC ="initCC",
  //   upGradeCC ="upGradeCC",
    // unreadyCC ="unreadyCC",
-    errorCC ="errorCC",
-    readyCC  ="readyCC"   
+    // errorCC ="errorCC",
+    // readyCC  ="readyCC"   
 }
 export enum netWorkConfigPath{
 
