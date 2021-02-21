@@ -1,6 +1,8 @@
 <template>
   <div class="p-m-5">
-    {{ channels }}
+    <h1>
+      channel
+    </h1>
 
     <div class="p-col-12 p-md-6">
       <div class="p-inputgroup">
@@ -15,13 +17,20 @@
         <template #body="slotProps">
           <div class="p-d-flex p-jc-center p-ai-center">
             <Button class="p-mx-1" label="join" @click="join(slotProps.name)" />
-            <Button class="p-mx-1"  label="query" @click="join(slotProps.name)" />
-            <Button class="p-mx-1"  label="query update" @click="join(slotProps.name)" />
+            <Button
+              class="p-mx-1"
+              label="query"
+              @click="join(slotProps.name)"
+            />
+            <Button
+              class="p-mx-1"
+              label="update"
+              @click="join(slotProps.name)"
+            />
           </div>
         </template>
       </Column>
     </DataTable>
-
 
     <div>
       <Dialog

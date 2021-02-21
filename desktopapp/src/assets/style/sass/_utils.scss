@@ -16,7 +16,6 @@
     padding: 0 !important;
     background: transparent;
     overflow: visible;
-    
 
     > code {
       border-left: 0 none;
@@ -45,170 +44,127 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-
-.divider{
-  height:1px;
-  margin-top:20px;
-  margin-bottom:15px;
-  background-color:#eee;
-}
-.style-label{
-  color:#bebebe;
-  font-size:12px;
-  line-height:20px;
-  font-weight:500;
-  text-transform:uppercase;
-}
-// .tag-wrapper{
-//   margin-top:35px;
-//   margin-bottom:35px;
-//   padding-right:5px;
-//   padding-left:5px;
-// }
-.row{
-  margin-bottom:50px;
-}
-.netstat-card-title{
-  margin-top:0px;
-  margin-bottom:0px;
-  color:#fff;
-  font-weight:300;
-}
-.tagline{
-  font-size:12px;
-  font-weight:500;
-  letter-spacing:2px;
-  text-transform:uppercase;
-}
-.tagline.netstat-card-tag{
-  color:#fff;
-}
-.basic-column{
-  padding-right:5px;
-  padding-left:5px;
-}
-.netstat-card{
-  padding:22px 30px;
-  border-radius:8px;
-  background-image:-webkit-linear-gradient(270deg, #1991eb, #1991eb);
-  background-image:linear-gradient(180deg, #1991eb, #1991eb);
-}
-.netstat-card.netstat-card-content3{
-  background-image:-webkit-linear-gradient(270deg, #ed629a, #c850c0);
-  background-image:linear-gradient(180deg, #ed629a, #c850c0);
-}
-.netstat-card.netstat-card-content4{
-  background-image:-webkit-linear-gradient(270deg, #ff8308, #fd4f00);
-  background-image:linear-gradient(180deg, #ff8308, #fd4f00);
-}
-.netstat-card.netstat-card-content2{
-  display:block;
-  background-image:-webkit-linear-gradient(270deg, #17cec4, #17cec4 0%, #08aeea);
-  background-image:linear-gradient(180deg, #17cec4, #17cec4 0%, #08aeea);
-  color:#333;
-}
-.netstat-card.netstat-card-content1{
-  background-image:-webkit-linear-gradient(270deg, #7042bf, #3023ae);
-  background-image:linear-gradient(180deg, #7042bf, #3023ae);
-}
-.netstat-card-progress-wrapper{
-  display:-webkit-box;
-  display:-webkit-flex;
-  display:-ms-flexbox;
-  display:flex;
-  -webkit-box-pack:justify;
-  -webkit-justify-content:space-between;
-  -ms-flex-pack:justify;
-  justify-content:space-between;
-}
-.netstat-card-divider{
-  height:1px;
-  margin-top:10px;
-  margin-bottom:14px;
-  background-color:hsla(0, 0%, 100%, .15);
-}
-.netstat-card-desc{
-  color:hsla(0, 0%, 100%, .8);
-  font-size:16px;
-  line-height:24px;
-}
-.netstat-card-progress{
-  color:#fff;
-  text-align:right;
-}
-@media (max-width: 991px){
-   .netstat-card-title{
-      font-size:30px;
-  }
-   .netstat-card{
-      padding-top:12px;
-      padding-bottom:16px;
-  }
-}
-
-
-.button-action {
-  font-size: 1.25em;
-  font-weight: bold;
-  line-height: 1;
-  text-transform: uppercase;
-  position: relative;
-  border: .1875em solid;
-  padding: 1em;
-  color: rebeccapurple;
-  background: transparent;
-  border-radius: .125em;
-  transition: background .3s;
-  
-  &:hover,
-  &:focus {
-      color: white;
-      background: rebeccapurple;
-      border-color: rebeccapurple;
-  }
-  
-  &:active {
-      top: .08em;
-  }
-}
-
-.svg-icon {
-  /* Place the icon on the text baseline. */
-  position: relative;
-  top: .125em;
-
-  /* Prevent the icon from shrinking inside a flex container. */
-  flex-shrink: 0;
-
-  /* Scale the icon to match the font-size of the parent element. */
-  height: 1em;
-  width: 1em;
-
-  /* Let the icon take whatever color the parent has. */
-  fill: currentColor;
-
-  /*
-   * If the icon is used on a link, which has a color transition,
-   * we can also use a transition on the fill value.
-  */
- transition: fill .3s;
-}
-
-/* Helper Class to hide text visually but keep it accessible for screen reader or other assistive software. */
-.visually-hidden {
-  // Move the text out of the flow of the container.
-  position: absolute;
-  
-  // Reduce its height and width to just one pixel.
+.divider {
   height: 1px;
-  width: 1px;
-  
-  // Hide any overflowing elements or text.
-  overflow: hidden;
-  
-  // Clip the box to zero pixels.
-  clip: rect(0, 0, 0, 0);
-  
-  // Text won't wrap to a second line.
-  white-space: nowrap;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  background-color: #eee;
+}
+
+.netstat-card-title {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: #fff;
+  font-weight: 300;
+}
+.tagline {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.tagline.netstat-card-tag {
+  color: #fff;
+}
+.basic-column {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.netstat-card {
+  padding: 22px 30px;
+  border-radius: 8px;
+  background-image: -webkit-linear-gradient(270deg, #1991eb, #1991eb);
+  background-image: linear-gradient(180deg, #1991eb, #1991eb);
+}
+
+.netstat-card-progress-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+.netstat-card-divider {
+  height: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+  background-color: hsla(0, 0%, 100%, 0.15);
+}
+.netstat-card-desc {
+  color: hsla(0, 0%, 100%, 0.8);
+  font-size: 16px;
+  line-height: 24px;
+}
+.netstat-card-progress {
+  color: #fff;
+  text-align: right;
+}
+@media (max-width: 991px) {
+  .netstat-card-title {
+    font-size: 30px;
+  }
+  .netstat-card {
+    padding-top: 12px;
+    padding-bottom: 16px;
+  }
+}
+$linkcolour: #0099ff;
+
+/* button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  line-height: normal;
+  font-size: 16px;
+  color: #fff;
+  background: #0099ff;
+  width: 160px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.btn:hover {
+  line-height: normal;
+}
+.btn-icon {
+  will-change: width, transform;
+  width: 0;
+  height: 50px;
+  padding: 2px;
+  border-radius: 50%;
+  fill: #fff;
+  background: rgb(255, 255, 255);
+  margin-left: 0;
+  transform: scale(0);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.btn-icon--vis {
+  width: 50px;
+  transform: scale(1);
+  margin-left: 8.333333333333334px;
+}
+.btn:hover .btn-icon {
+  width: 50px;
+  transform: scale(1);
+  margin-left: 8.333333333333334px;
+}
+
+.light-blue{
+  background: rgb(87, 209, 250);
+}
+.light-blue:hover{
+  background: darken(rgb(87, 209, 250), 10%);
+}
+
+.teal{
+  background: teal;
+}
+.teal:hover{
+  background: darken(teal, 10%);
 }

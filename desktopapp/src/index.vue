@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div class="p-col-4">
+      <div class="p-col-3">
         <div class="tag-wrapper">
           <div class="netstat-card netstat-card-content4">
             <div class="netstat-card-desc">
@@ -43,27 +43,27 @@
             <div class="netstat-card-desc">
               {{ this.$store.state.project.path }}
             </div>
-            <div class="netstat-card-desc">$238.89</div>
-            <div class="netstat-card-desc">$238.89</div>
+            <div class="netstat-card-desc">net stage</div>
+            <div class="netstat-card-desc">port</div>
           </div>
           <div class="divider"></div>
         </div>
       </div>
 
-      <div class="p-col-3">
-        <div class="tag-wrapper">
-          <div class="netstat-card netstat-card-content3">
-            <button type="button" class="button-action">
-          <img src="./assets/hyperledger.svg">
-            </button>
-          </div>
-          <div class="divider"></div>
-        </div>
+      <div class="p-col-4">
+        <a  class="btn teal p-ripple" v-ripple
+          >Explorer
+          <img src="./assets/explorer.svg" class="btn-icon btn-icon--vis" />
+        </a>
+
+        <a  class="btn light-blue p-ripple" v-ripple
+          >Portainer
+          <img src="./assets/portainer.svg" class="btn-icon btn-icon--vis"
+        /></a>
       </div>
     </div>
- <img src="./assets/hyperledger.svg">
-    <ContainerTable v-bind:container="container" />
 
+    <ContainerTable v-bind:container="container" />
 
     <LogView />
 
@@ -157,12 +157,6 @@ p-datatable-responsive
 p-datatable-emptymessage
 p-rowgroup-header
 p-rowgroup-footer */
-
-.el {
-  background-color: white;
-  height: 100px;
-  border-style: solid;
-}
 
 .container {
   border-style: solid;
