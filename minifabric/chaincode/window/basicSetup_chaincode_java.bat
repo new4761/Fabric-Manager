@@ -3,7 +3,7 @@
 ::minifabwin join
 ::minifabwin anchorupdate
 ::minifabwinfab profilegen
-call minifabwin install -n simple -l java -v 1.8
+call minifabwin install -n simple -r false -l java -v 1.8
 call minifabwin approve 
 call minifabwin commit
 call minifabwin initialize  -p \"init\",\"5\",\"2\",\"3\",\"5\"

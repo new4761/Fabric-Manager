@@ -3,7 +3,7 @@
 ::minifabwin join
 ::minifabwin anchorupdate
 ::minifabwinfab profilegen
-call minifabwin install -n simple -l node -v 1.5
+call minifabwin install -n simple -r false -l node -v 1.5
 call minifabwin approve 
 call minifabwin commit
 call minifabwin initialize  -p \"invoke\",\"5\",\"2\",\"3\",\"5\"
