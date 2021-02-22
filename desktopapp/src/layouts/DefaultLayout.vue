@@ -3,14 +3,10 @@
     <div class="p-d-flex">
       <transition name="layout-sidebar">
         <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
-          <Card class="p-mx-2 p-my-1">
-            <template #title>
-              network stuff
-            </template>
-          </Card>
-
           <AppProfile />
-
+          <div class="p-d-flex p-jc-center p-mb-3">
+            <net-ops-button />
+          </div>
           <AppMenu :model="menu" class="scroll-menu" />
         </div>
       </transition>

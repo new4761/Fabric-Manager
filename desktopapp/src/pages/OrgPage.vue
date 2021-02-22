@@ -34,7 +34,7 @@
     </div>
 
     <small>
-      {{ fabric }}
+      {{ org }}
     </small>
   </div>
 </template>
@@ -58,6 +58,8 @@ export default class OrgPage extends Vue {
   init() {
     this.fabric = NetworkConfig.getValue("project_config.fabric");
     this.org = NetworkConfig.getOrgName();
+
+    
   }
 }
 </script>

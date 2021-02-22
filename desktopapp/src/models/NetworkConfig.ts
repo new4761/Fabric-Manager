@@ -17,7 +17,8 @@ export class NetworkConfig {
         
       );
       this.file = editJsonFile(filePath);
-      logger.log("warn","switching path: " + filePath)
+      // logger.log("warn","switching path: " + filePath)
+      store.mutations.setPath(store.state.id);
       // logger.log("info","net-config path: " + ProjectConfig.getPath(store.state.id));
     } catch (e) {
       logger.log("error","error net-config path");

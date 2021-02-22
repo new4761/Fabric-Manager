@@ -16,7 +16,6 @@
     padding: 0 !important;
     background: transparent;
     overflow: visible;
-    
 
     > code {
       border-left: 0 none;
@@ -45,3 +44,127 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
+.divider {
+  height: 1px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  background-color: #eee;
+}
+
+.netstat-card-title {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: #fff;
+  font-weight: 300;
+}
+.tagline {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.tagline.netstat-card-tag {
+  color: #fff;
+}
+.basic-column {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.netstat-card {
+  padding: 22px 30px;
+  border-radius: 8px;
+  background-image: -webkit-linear-gradient(270deg, #1991eb, #1991eb);
+  background-image: linear-gradient(180deg, #1991eb, #1991eb);
+}
+
+.netstat-card-progress-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+.netstat-card-divider {
+  height: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+  background-color: hsla(0, 0%, 100%, 0.15);
+}
+.netstat-card-desc {
+  color: hsla(0, 0%, 100%, 0.8);
+  font-size: 16px;
+  line-height: 24px;
+}
+.netstat-card-progress {
+  color: #fff;
+  text-align: right;
+}
+@media (max-width: 991px) {
+  .netstat-card-title {
+    font-size: 30px;
+  }
+  .netstat-card {
+    padding-top: 12px;
+    padding-bottom: 16px;
+  }
+}
+$linkcolour: #0099ff;
+
+/* button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  line-height: normal;
+  font-size: 16px;
+  color: #fff;
+  background: #0099ff;
+  width: 160px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.btn:hover {
+  line-height: normal;
+}
+.btn-icon {
+  will-change: width, transform;
+  width: 0;
+  height: 50px;
+  padding: 2px;
+  border-radius: 50%;
+  fill: #fff;
+  background: rgb(255, 255, 255);
+  margin-left: 0;
+  transform: scale(0);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.btn-icon--vis {
+  width: 50px;
+  transform: scale(1);
+  margin-left: 8.333333333333334px;
+}
+.btn:hover .btn-icon {
+  width: 50px;
+  transform: scale(1);
+  margin-left: 8.333333333333334px;
+}
+
+.light-blue{
+  background: rgb(87, 209, 250);
+}
+.light-blue:hover{
+  background: darken(rgb(87, 209, 250), 10%);
+}
+
+.teal{
+  background: teal;
+}
+.teal:hover{
+  background: darken(teal, 10%);
+}

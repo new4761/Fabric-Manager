@@ -2,7 +2,8 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
 import logger from "../module/Logger";
-const del = require("del");
+import {DirBuilder} from "../module/DirBuilder";
+
 
 export class ProjectConfig {
   file: any;
@@ -32,18 +33,13 @@ export class ProjectConfig {
     logger.log("info", "project-config: add new element");
   }
 
-  async deleteProject(id: number) {
+  deleteProject(id: number) {
+    let dirBuilder = new DirBuilder()
     let dir = this.file.data[id].directory;
-    //delete directory recursively
 
-    try {
-      await del(dir);
-      logger.log("INFO", `${dir} is deleted!`);
-    } catch (err) {
-      logger.log("ERROR", `Error while deleting ${dir}`);
-    }
+    dirBuilder.deleteDir(dir);
 
-    logger.log("warn", "project-config: delete project id: " + id);
+    logger.log("warn", "project-config: delete project id: " + id + "at: " + dir);
 
     if (id > -1) {
       this.file.data.splice(id, 1);

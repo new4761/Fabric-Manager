@@ -70,15 +70,16 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 import ScrollPanel from "primevue/scrollpanel";
 import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
+import Knob from 'primevue/knob';
 
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
-import Tag from 'primevue/tag';
-
+import Tag from "primevue/tag";
 
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
+
 
 import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 // import "primevue/resources/themes/fluent-light/theme.css";
@@ -102,13 +103,14 @@ Vue.directive("ripple", Ripple);
 // App.config.globalProperties.$primevue = reactive({ ripple: true });
 // Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
 // Vue.prototype.$appState =  Vue.observable({ ripple: true });
+
 Vue.use(PrimeVue, { ripple: true });
 
 Vue.config.productionTip = false;
 
 Vue.component("default-layout", DefaultLayout);
 Vue.component("clean-layout", CleanLayout);
-
+Vue.component("Knob", Knob);
 Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
 Vue.component("ConfirmDialog", ConfirmDialog);
@@ -179,10 +181,23 @@ Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
 
-new Vue({
+const app = new Vue({
+  data() {
+    return { loading: false };
+  },
   router,
   store,
   render: (h) => h(App),
 }).$mount("#app");
 
+router.beforeEach((to, from, next) => {
+  app.loading = true;
+  next();
+});
+router.afterEach(() => {
+  app.loading = false;
+  // setTimeout(() => (app.loading = false), 1500); // timeout for demo purposes
+});
+
+store.commit("setPlatform",  process.platform);
 // router.replace('/project')

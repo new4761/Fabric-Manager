@@ -21,6 +21,7 @@ class OSProcess {
     const child = spawn("minifab.cmd", args, {
       shell: true,
       cwd: path,
+      // stdio: "inherit",
     });
     logger.log("info", "OSProcess running: " + args + " at:" + path);
     return child;
