@@ -51,18 +51,35 @@
       <template #list="slotProps">
         <div class="p-col-12">
           <div class="list-item p-m-3" @click="confirmOpen(slotProps.data.id)">
-            <div class="list-detail">
+            <div class="list-detail p-d-flex p-jc-between">
               <div class="name">{{ slotProps.data.name }}</div>
+              <div class="date">
+                 create date:
+                <Chip class="p-m-1">
+                 {{ toDate(slotProps.data.date_create) }}
+                </Chip>
+                last updated:
+                <Chip class="p-m-1">
+                 {{ toDate(slotProps.data.date_modify) }}
+                </Chip>
+              </div>
+            </div>
+            <div class="p-d-flex  p-ai-center p-jc-between">
               <div class="directory">
                 {{ slotProps.data.directory }}
               </div>
-              <div class="date">
-                <Chip class="p-m-1">
-                  {{ toDate(slotProps.data.date_create) }}
-                </Chip>
-                <Chip class="p-m-1">
-                  {{ toDate(slotProps.data.date_modify) }}
-                </Chip>
+              <div>
+                <Button
+                  icon="pi pi-trash"
+                  class="p-button-sm p-button-danger p-mx-1"
+                  @click.stop="confirmDelete(slotProps.data.id)"
+                />
+
+                <Button
+                  icon="fas fa-info"
+                  class="p-button-sm p-button-info"
+                  @click.stop="openInfo(slotProps.data.id)"
+                />
               </div>
             </div>
           </div>
@@ -71,36 +88,36 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <div>
-            <Card class="p-m-3">
-              <template #header> </template>
+          <div class="card-project " @click="confirmOpen(slotProps.data.id)" >
+            <Card class="p-m-3" >
               <template #title>
-                <div @click="confirmOpen(slotProps.data.id)">
+                <div>
                   {{ slotProps.data.name }}
                 </div>
               </template>
               <template #content>
-                <div @click="confirmOpen(slotProps.data.id)">
+                <div>
                   <Chip class="p-m-1">
                     {{ toDate(slotProps.data.date_create) }}
                   </Chip>
                   <Chip class="p-m-1">
                     {{ toDate(slotProps.data.date_modify) }}
                   </Chip>
-                </div></template
-              >
+                </div>
+              </template>
+
               <template #footer>
                 <div class="p-d-flex  p-ai-center p-jc-end">
                   <Button
                     icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger p-mx-1"
-                    @click="confirmDelete(slotProps.data.id)"
+                    class="p-button-sm p-button-danger p-mx-1"
+                    @click.stop="confirmDelete(slotProps.data.id)"
                   />
 
                   <Button
                     icon="fas fa-info"
-                    class="p-button-rounded p-button-info"
-                    @click="openInfo(slotProps.data.id)"
+                    class="p-button-sm p-button-info"
+                    @click.stop="openInfo(slotProps.data.id)"
                   />
                 </div>
               </template>
@@ -125,7 +142,7 @@ import CreateNetButton from "../components/CreateNetButton.vue";
 export default class ProjectPage extends Vue {
   display: boolean = false;
   data: any = null;
-  dataSelected:any = null;
+  dataSelected: any = null;
   layout: string = "grid";
   sortKey: any = null;
   sortOrder: any = null;
@@ -145,7 +162,7 @@ export default class ProjectPage extends Vue {
     this.data = data;
   }
 
-  openInfo(id:number) {
+  openInfo(id: number) {
     this.dataSelected = data[id];
     this.display = true;
   }
@@ -214,6 +231,7 @@ export default class ProjectPage extends Vue {
 </script>
 
 <style>
-
-
+.card-project {
+  cursor: pointer;
+}
 </style>
