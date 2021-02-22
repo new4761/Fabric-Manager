@@ -28,3 +28,10 @@ export enum netWorkConfigPath{
 
     ccPath =  "chain_codes"
 }
+
+export class ccOutputPayload {
+  rawData: string = "";
+  response: string = "";
+  fabricPayload: string = "";
+
+}

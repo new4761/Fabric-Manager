@@ -8,6 +8,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const events = require("events");
 import logger from "../module/Logger";
 import StdoutCapture from "./OSProcess/StdoutCapture";
+import { removeColorCode } from "./StringBuilder";
 
 
 class OSProcess {
@@ -35,8 +36,8 @@ class OSProcess {
           this.callback(ls.childProcess); 
           return ls.then((res:any) => {
           
-            console.log(StdoutCapture.checkStatus(res.stdout.toString()));
-              return res.stdout;
+           // console.log(StdoutCapture.checkStatus(res.stdout.toString()));
+              return StdoutCapture.checkStatus(res.stdout.toString())
             })
         } catch {
           //TODO: write return con
@@ -53,7 +54,7 @@ class OSProcess {
   callback(ls: any) {
     ls.stdout.on("data", (data: any) => {
       data = data.toString();
-      console.log(`${data}`);
+      console.log(`${removeColorCode(data)}`);
     });
 
     ls.stderr.on("data", (data: any) => {

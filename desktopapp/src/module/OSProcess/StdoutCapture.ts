@@ -1,4 +1,5 @@
 import { stdoutPayLoad } from "@/lib/payload-data"
+import { removeColorCode } from "../StringBuilder";
 
 class StdoutCapture {
 
@@ -45,7 +46,7 @@ class StdoutCapture {
         let captureMinifabricResultRegex = /Running operation.*#.*\*(.*)#/s
         let message = stdout.match(captureMinifabricResultRegex);
         if (message != null) {
-            return message[1]
+            return removeColorCode(message[1].toString())
         }
         else {
 

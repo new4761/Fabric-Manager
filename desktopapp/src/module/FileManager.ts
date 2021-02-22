@@ -3,23 +3,24 @@ const { dialog } = require('electron').remote
 const path = require('path');
 const fse = require('fs-extra')
 const fs = require('fs')
+//const isDevelopment = process.env.NODE_ENV !== "production"
 class FileManager {
     // write all function who handle normal files (etc not yaml,json )
 
 
 
-    constructor() {}
+    constructor() { }
     // use dialog box 
     // get all content in directory to destination
     //catch it with   undefined con
-    getDirPath():any {
+    getDirPath(): any {
         return dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
             //console.log(result.canceled)
-           // console.log(result.filePaths)
-           // this.copyFilesDir(result.filePaths[0], destDir)
+            // console.log(result.filePaths)
+            // this.copyFilesDir(result.filePaths[0], destDir)
             return result.filePaths[0]
         }).catch(err => {
-          //  console.log(err)
+            //  console.log(err)
             return err
         })
 
@@ -28,11 +29,11 @@ class FileManager {
     // use dialog box 
     // get only one file in directory to destination 
     //catch it with undefined con
-    getFilePath():any {
+    getFilePath(): any {
         dialog.showOpenDialog({ properties: ['openFile'] }).then(result => {
             //console.log(result.canceled)
             //console.log(result.filePaths)
-           // this.copyFile(result.filePaths[0], destDir)
+            // this.copyFile(result.filePaths[0], destDir)
             return result.filePaths[0]
         }).catch(err => {
             //console.log(err)
@@ -42,11 +43,21 @@ class FileManager {
 
     }
     //to do  remove file function
-    removeFile(){}
+    removeFile() { }
     //to do remove all files in directory
-    cleanUpDir(){}
+    cleanUpDir() { }
 
+    readFile(sourceDir: string) {
 
+       return fs.readFileSync(sourceDir, 'utf8', (err: any, data: any) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+            //console.log(data)
+            return data
+        })
+    }
 
     // call through to copy file
     copyFile(sourceDir: any, destDir: string) {

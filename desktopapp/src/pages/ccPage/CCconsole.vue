@@ -29,23 +29,35 @@
     <br>
         <div class="p-grid p-jc-center  p-my-1">
       <div class="container p-col-12 ">
-        {{ container }}
+        {{ selectedCC }}
       </div>
-    
+       <div class="p-col-12">
+    <TabView>
+	<TabPanel header="rawoutput">
+	{{output.rawData}}
+	</TabPanel>
+	<TabPanel header="response">
+	{{output.response}}
+	</TabPanel>
+	<TabPanel header="payload">
+		{{output.fabricPayload}}
+	</TabPanel>
+</TabView>
+</div>
     </div>
+
   </div>
 </template>
 
 <script lang="ts">
 // eslint-disable-next-line no-unused-vars
 import { ChainCode } from "@/models/ChainCode";
-import { netWorkConfigPath } from "@/models/EnvProject";
+import { netWorkConfigPath,ccOutputPayload } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 import ChainCodeProcess from "@/module/ChainCodeProcess";
 import Vue from "vue";
 import Component from "vue-class-component";
 import InputArg from "../../components/chaincode/InputArg.vue";
-import DockerProcess from "@/module/DockerProcess";
 const CCconsoleProps = Vue.extend({
   props: {
     ccID: String,
@@ -55,22 +67,24 @@ const CCconsoleProps = Vue.extend({
   components: { InputArg },
 })
 export default class CCconsole extends CCconsoleProps {
-  container: Array<Object> = [];
+  container:any = "";
   ccComnand: {label:string,value:string } = { label: "INVOKE", value: "invoke" };
   ccList = [];
   selectedCC = {};
   args: any = [];
+  output:ccOutputPayload = new ccOutputPayload();
+  rawOutput:any=""
   ccCommandOption = [
+  //  { label: "INIT", value: "init" },
     { label: "INVOKE", value: "invoke" },
     { label: "QUERY", value: "query" },
   ];
   created() {
     this.hookCClist();
-    this.dockerFunc();
     this.selectedCC = this.ccList[0];
   }
   mounted(){
-
+ console.log( new Date(Date.now()).toISOString())
   }
   hookCClist() {
     this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
@@ -100,18 +114,25 @@ export default class CCconsole extends CCconsoleProps {
   async invoke() {
     //TODO: Get real project path
     let projectPath = "";
-    await ChainCodeProcess.invoke(projectPath, this.selectedCC, this.args);
+    let startTime = new Date(Date.now()).toISOString()
+    this.output = await ChainCodeProcess.invoke(projectPath, this.selectedCC, this.args,startTime);
+    //this.dockerFunc();
   }
   query() {}
-  //dokcer Function 
-  async dockerFunc(){
-    let obj = await DockerProcess.listContainer().then((res: any) => {
-    //  console.log(DockerProcess.testCall(res[0]))
-      return  DockerProcess.testCall(res[2].Id)
-    // DockerProcess.getLog(res[0])
-    });
-    DockerProcess.callback(obj)
+
+
+  getRawOutput(){
+
+
   }
+  getResponseOutput()
+  {}
+  getPayLoad(){
+
+
+  }
+
+
 }
 </script>
 

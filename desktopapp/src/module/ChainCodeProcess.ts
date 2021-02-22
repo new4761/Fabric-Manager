@@ -1,5 +1,5 @@
 import OSProcess from "./OSProcess"
-import { OsType, CCtype, CCstate, netWorkConfigPath } from "../models/EnvProject";
+import { OsType, CCtype, CCstate, netWorkConfigPath, ccOutputPayload } from "../models/EnvProject";
 const path = require('path');
 const process = require('process');
 const isDevelopment = process.env.NODE_ENV !== "production"
@@ -8,6 +8,9 @@ import FileManager from "./FileManager"
 import { ChainCode } from "../models/ChainCode";
 import NetworkConfig from "../models/NetworkConfig";
 import ArgsWrapper from "../models/ArgsWrapper";
+import DockerProcess from "@/module/DockerProcess";
+import { stdoutPayLoad } from "@/lib/payload-data";
+
 class ChainCodeProcess {
     // call dirBuilder module
     dirBuilder = new DirBuilder()
@@ -33,7 +36,7 @@ class ChainCodeProcess {
         if (isDevelopment) {
             let org = "test3.test";
             // await OSProcess.run_new(this.testPath, ['netup', '-e', 'true'], this.osType);
-            await OSProcess.run_new(this.testPath, ['netup', '-o', org,'-e','true'], this.osType);
+            await OSProcess.run_new(this.testPath, ['netup', '-o', org, '-e', 'true'], this.osType);
             await OSProcess.run_new(this.testPath, ['create', '-c', 'testchannel'], this.osType);
             await OSProcess.run_new(this.testPath, ['join'], this.osType);
             await OSProcess.run_new(this.testPath, ['anchorupdate'], this.osType);
@@ -233,16 +236,27 @@ class ChainCodeProcess {
             return ccObj
         }
     }
-    invoke(projectPath: string, ccObj: ChainCode, ccArgs: any) {
+    //invoke group
+    invoke(projectPath: string, ccObj: ChainCode, ccArgs: any, startTime: string) {
         let args: any = [];
+        let output = new ccOutputPayload();
         args.push("invoke")
         args = ArgsWrapper.basicCCWrapper(args, ccObj).concat(ArgsWrapper.argsCCWrapper(ccArgs));
         if (ccObj.state == CCstate.initCC) {
             if (isDevelopment) {
                 return OSProcess.run_new(this.testPath, args, this.osType)
-                    .then((res:any) => {
+                    .then(async (res: stdoutPayLoad) => {
                         //TODO write update Console 
-                        return res
+                        let container = await this.findFirstEndorser(this.testPath)
+                        output.rawData = await this.getCallBackData(container, startTime)
+                        if (res.status) { output.fabricPayload = res.message }
+                        else {
+                            output.fabricPayload = res.message
+                        }
+                        output.response = this.getResponse(output.rawData, startTime)
+                        return output
+                        //  return output
+                        // return res
                         // ccObj.state = CCstate.commitCC;
                         // this.updateNetworkConfig(ccObj);
                         // return ccObj
@@ -251,16 +265,90 @@ class ChainCodeProcess {
             else {
                 //fix to real path
                 return OSProcess.run_new(projectPath, args, this.osType)
-                    .then((res:any) => {
-                        return res
+                    .then((res: any) => {
+                        //TODO: testReal Case
+                        let container = this.findFirstEndorser(projectPath)
+                        this.getCallBackData(container, startTime)
                     });
             }
         } else {
             //console.log("pls approve cc")
-            return ccObj
+            return output
         }
 
-     }
+    }
+
+    async findFirstEndorser(projectPath: string) {
+        let sourceDir;
+        if (isDevelopment) {
+            sourceDir = path.join(path.resolve(process.cwd()), "tests", "vars", "run", "ccinvoke.sh");
+        }
+        else {
+            sourceDir = path.join(path.resolve(projectPath), "tests", "vars", "run", "ccinvoke.sh");
+        }
+
+        let data = FileManager.readFile(sourceDir)
+        //console.log(data)
+        let name
+        if (typeof data === 'string')
+            name = this.getEndorserNameByRegex(data)
+        return await DockerProcess.findFirstContainerByRegex("dev-" + name, "")
+
+
+    }
+    getEndorserNameByRegex(data: string) {
+        let regex = /tlsRootCertFiles.\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/([a-z1-9.A-Z]*)\//
+        let name = data.match(regex);
+        if (name != null) {
+            return name[1].toString()
+        }
+        else {
+
+            return false
+        }
+    }
+    async getCallBackData(container: any, startTime: string) {
+        startTime = startTime.replace(/T|Z/g, ".");
+        startTime = startTime.slice(0, -7) + ".*UTC.*->.*\n";
+        let regexStartTime = new RegExp(startTime, "gs")
+        //console.log(regexStartTime)
+        let res = await DockerProcess.callback(container);
+        let message = res.match(regexStartTime);
+        if (message != null) {
+            console.log(message[0])
+            //   startTime = startTime.slice(0, -20) + ".*UTC.*->.*";
+            let regexAddNewline = /\n/gms
+            message = message[0].replace(regexAddNewline, '\r\n');
+            console.log(message)
+            return message
+        }
+        else {
+
+            return "Unknown Error from  CCCallBack"
+        }
+
+
+    }
+    getResponse(data: string, startTime: string) {
+        startTime = startTime.slice(0, -20) + ".*UTC.*->.*";
+        let regexStartTime = new RegExp(startTime, "g")
+        //console.log("regx:"+regexStartTime)
+        //console.log(data)
+
+        data = data.replace(regexStartTime, "");
+
+
+        return data
+    }
+    // console.log(data)
+    // if (message != null) {
+    //     console.log(message.toString())
+    // }
+    // else {
+
+    //     return "Unknown Error from  Minifabric"
+    // }
+
     query(projectPath: string, ccObj: ChainCode, ccArgs: any) {
     }
     discover(projectPath: string, ccObj: ChainCode) {
