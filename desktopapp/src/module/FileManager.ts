@@ -44,6 +44,13 @@ class FileManager {
     }
     //to do  remove file function
     removeFile() { }
+
+    removeDir(destDir: string) { 
+        fse.removeSync(destDir)
+            .then(() => console.log('removeDir success!'))
+            .catch((err: any) => console.error(err))
+
+    }
     //to do remove all files in directory
     cleanUpDir() { }
 
@@ -86,7 +93,7 @@ class FileManager {
     // call through to copy files
     copyFilesDir(sourceDir: any, destDir: string) {
         fse.copy(sourceDir, destDir)
-            .then(() => console.log('success!'))
+            .then(() => console.log('copyFilesDir success!'))
             .catch((err: any) => console.error(err))
     }
 }

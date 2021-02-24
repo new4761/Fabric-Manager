@@ -59,7 +59,7 @@ class OSProcess {
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  run_CC_output(projectPath: string, args: string[], type: OsType, methodName: string): any {
+  run_CC_output(projectPath: string, args: string[], type: OsType, methodName: string,version:any): any {
     let ls: any;
     //set to minifab output
     args.push("-f")
@@ -80,7 +80,7 @@ class OSProcess {
           }
           let watcher = FileManager.WaitToReadFile(sourceDir)
           let payloadData: any[] = []
-          this.callbackCC(ls.childProcess, sourceDir, watcher, payloadData);
+          this.callbackCC(ls.childProcess, sourceDir, watcher, payloadData,version);
           let message: any[] = []
           return ls.then((res: any) => {
             // console.log(payloadData)
@@ -124,7 +124,7 @@ class OSProcess {
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  callbackCC(ls: any, projectPath: string, watcher: any, payloadData: any[]) {
+  callbackCC(ls: any, projectPath: string, watcher: any, payloadData: any[],version:any) {
     //  let sourceDir: string;
     let streamPipe: any
     watcher.on('change', async function name(e: any) {
@@ -132,30 +132,13 @@ class OSProcess {
     });
 
     watcher.on('close', async function name() {
-      let container = await ChainCodeProcess.findFirstEndorser(projectPath)
+      let container = await ChainCodeProcess.findFirstEndorser(projectPath,version)
       streamPipe = await DockerProcess.callbackAttach(container, payloadData)
       //  console.log("watcher die bitch")
     });
     ls.stdout.on("data", async (data: any) => {      //  const regex = new RegExp(/changed: \[minifab]*/);
-      // const regex = new RegExp(/.*Run[\s\S]*cc[\s\S]*/);
-      //console.log(regex.test(data))
-      // if (regex.test(data)) {
-      // data = data.toString();
-      //  let container = DockerProcess.getContainerByID("3700405ba56dd2a9f16f0e235f92abb5cdc4d1666af7d755ab115781564a4ca4")
-      //let container =await DockerProcess.findFirstContainerByName("7f85d04cff_cli")
-      // let container = await ChainCodeProcess.findFirstEndorser(sourceDir)
-      // console.log(container)
-      // // console.log(DockerProcess.getContainerByID("3700405ba56dd2a9f16f0e235f92abb5cdc4d1666af7d755ab115781564a4ca4"))
-      // streamPipe = await DockerProcess.callbackAttach(container)
-      //let container = DockerProcess.getContainerByID("3700405ba56dd2a9f16f0e235f92abb5cdc4d1666af7d755ab115781564a4ca4")
-      //   streamPipe = DockerProcess.callbackAttach(container)
-      //    console.log(streamPipe       
-      // console.log(`${removeColorCode(data)}`);
-      // }
-      // else {
       data = data.toString();
       console.log(`${removeColorCode(data)}`);
-      // }
     });
     ls.stderr.on("data", (data: any) => {
       data = data.toString();

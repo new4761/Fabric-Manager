@@ -16,7 +16,7 @@
       <component :is="layout">
       
            <div v-if="$root.loading">
-             loading bitch
+             loading
            </div>
           <router-view v-else/>
        

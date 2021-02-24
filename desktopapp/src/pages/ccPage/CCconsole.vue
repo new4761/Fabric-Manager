@@ -26,6 +26,7 @@
     <br />
     <Button label="goDeploy" @click="openManagerCC()" />
     <br />
+    <Button label="upgrade" @click="upGradeCC()" />
     <br />
     <div class="p-grid p-jc-center p-my-1">
       <div class="container p-col-12">
@@ -60,6 +61,7 @@ import { ChainCode } from "@/models/ChainCode";
 import { netWorkConfigPath, ccOutputPayload } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 import ChainCodeProcess from "@/module/ChainCodeProcess";
+const isDevelopment = process.env.NODE_ENV !== "production";
 import Vue from "vue";
 import Component from "vue-class-component";
 import InputArg from "../../components/chaincode/InputArg.vue";
@@ -111,6 +113,19 @@ export default class CCconsole extends CCconsoleProps {
       this.args.splice(index, index);
     }
   }
+  async upGradeCC(){
+    //TODO: Get real project path
+    let projectPath = "";
+    if (isDevelopment) {
+      projectPath = "test";
+      await ChainCodeProcess.updateCCtoFabric(
+        projectPath,
+        this.selectedCC,
+        this.args
+      );
+      this.hookCClist();
+  }
+  }
   callCommand() {
     this.resetOutput()
     // if (this.ccComnand.value == "invoke") {
@@ -134,7 +149,7 @@ export default class CCconsole extends CCconsoleProps {
       command
     );
   }
-  query() {}
+  // query() {}
   resetOutput() {
     this.output.rawData = [];
     this.output.response = [];

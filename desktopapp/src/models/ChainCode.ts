@@ -9,6 +9,7 @@ export class ChainCode {
     channel:string;
     version:number;
     lastUpdate:number;
+    useInit:boolean;
  constructor(id:number,name:string,type:CCtype,directory:string,channel:string){
     this.id =id;
     this.name=name;
@@ -18,6 +19,7 @@ export class ChainCode {
     this.channel =channel;
     this.version = 1.0;
     this.lastUpdate = +new Date();
+    this.useInit=false;
  }
  setDate(){
    this.lastUpdate = +new Date()
