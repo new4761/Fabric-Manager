@@ -37,8 +37,9 @@ class DockerProcess {
       })
 
     });
-    return container
+    return this.getContainerByID(container.Id)
   }
+  //TODO:Override  for CC
   async findFirstContainerByRegex(name: string, flags: string) {
     //console.log(name)
     // name = "/"+name;
@@ -46,28 +47,26 @@ class DockerProcess {
     let container: any = 'Error no container name:' + name
     await this.listContainer().then((res: any) => {
 
-      res.forEach(function (containerInfo: any) {
+      res.forEach(function (containerInfo: any, index: number) {
         if (regex.test(containerInfo.Names)) {
-          // console.log(containerInfo)
+
           container = containerInfo
         }
       })
 
     });
-    return container
+    return this.getContainerByID(container.Id)
   }
   getContainerByID(containerID: string) {
-
+    //3700405ba56dd2a9f16f0e235f92abb5cdc4d1666af7d755ab115781564a4ca4
     let container = docker.getContainer(containerID)
-    //console.log(container)
     return container
-    //console.log(container)
 
   }
 
-  callback(container: any) {
+  callbackLogs(container: any) {
     var logStream = new stream.PassThrough();
-    container =this.getContainerByID(container.Id)
+    container = this.getContainerByID(container.Id)
     container.logs({
       follow: true,
       stdout: true,
@@ -81,12 +80,11 @@ class DockerProcess {
 
       // return target
     })
-    let message = this.destroyStream(logStream).then((res)=> 
-    {
+    let message = this.destroyStream(logStream).then((res) => {
       //console.log(res.search(/\n/))
       return res
     })
-    return  message
+    return message
   }
 
 
@@ -97,22 +95,72 @@ class DockerProcess {
     let stdoutData = ''
 
     target.on('data', function (chunk: any) {
+      console.log(chunk.toString('utf8'))
       stdoutData += (removeColorCode(chunk.toString('utf8')))
     });
 
     target.on('end', function () {
       // console.log("end")
-      return stdoutData
+      //return stdoutData
       //logStream.end('!stop!');
     });
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         target.end()
-       // console.log(stdoutData)
+        // console.log(stdoutData)
         resolve(stdoutData);
       }, 2000);
     });
 
+  }
+  
+  async callbackAttach(container: any,pipePayload:any[]) {
+   // let pipePayload:any =[];
+   // console.log(container)
+   let  streamPipe;
+    var logStream = new stream.PassThrough();
+    // let target:any;
+    logStream.on('data', function(chunk:any){
+     pipePayload.push(removeColorCode(chunk.toString('utf8')))
+      // console.log(removeColorCode(chunk.toString('utf8')));
+    });
+    streamPipe = await container.attach({ stream: true, stdout: true, stderr: true, tty: false }).then((res: any) => { return res })
+       container.modem.demuxStream(streamPipe, logStream, logStream);
+       //streamPipe[1]=pipePayload;
+    // streamPipe.on('data', function (chunk) {
+    //   console.log("from streamPipe " + removeColorCode(chunk.toString('utf8')));
+    // });
+    streamPipe.on('end', function () {
+      logStream.end()
+    });
+    //console.log(streamPipe);
+    return streamPipe
+  }
+
+  // setTimeout(() => {
+  //   stream.end()
+  //   // console.log(stdoutData)
+
+  // }, 2000);
+  // logStream.on("data", (data: any) => {
+
+  //   data = data.toString();
+  //   console.log(`${removeColorCode(data)}`);
+
+  // });
+
+
+
+
+
+
+  killStreamPipe(target: any) {
+    // target.on('end', function () {
+    //   //console.log("from stream Pipe die bitch");
+    //    // console.log();
+    // });
+   // console.log("killStreamPipe")
+    target.destroy();
   }
 
   getLog(container: any) {

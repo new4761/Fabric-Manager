@@ -57,7 +57,21 @@ class FileManager {
             //console.log(data)
             return data
         })
+    }   
+     WaitToReadFile(sourceDir: string){
+    //   return fs.watch(sourceDir, (err: any, data: any) => {
+    //         if (err) {
+    //          console.error("from WaitToReadFile: "+err)
+    //          //console.log(this.readFile(sourceDir))
+    //         let file =this.readFile(sourceDir);
+    //          //console.log(file)
+    //          //watcher.close();
+    //         }
+    //         //console.log(data)
+    //     })
+      return fs.watch(sourceDir)
     }
+
 
     // call through to copy file
     copyFile(sourceDir: any, destDir: string) {

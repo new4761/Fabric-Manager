@@ -33,11 +33,17 @@
       </div>
        <div class="p-col-12">
     <TabView>
-	<TabPanel header="rawoutput">
-	{{output.rawData}}
-	</TabPanel>
 	<TabPanel header="response">
-	{{output.response}}
+        <div v-for="(item,index) in output.response" :key="index">
+      {{item}}
+    </div>
+	<!-- {{output.response}} -->
+	</TabPanel>
+<TabPanel header="rawoutput">
+    <div v-for="(item,index) in output.rawData" :key="index">
+      {{item}}
+    </div>
+	<!-- {{output.rawData}} -->
 	</TabPanel>
 	<TabPanel header="payload">
 		{{output.fabricPayload}}
@@ -73,7 +79,7 @@ export default class CCconsole extends CCconsoleProps {
   selectedCC = {};
   args: any = [];
   output:ccOutputPayload = new ccOutputPayload();
-  rawOutput:any=""
+ // rawOutput:any=""
   ccCommandOption = [
   //  { label: "INIT", value: "init" },
     { label: "INVOKE", value: "invoke" },
@@ -84,7 +90,7 @@ export default class CCconsole extends CCconsoleProps {
     this.selectedCC = this.ccList[0];
   }
   mounted(){
- console.log( new Date(Date.now()).toISOString())
+ //console.log( new Date(Date.now()).toISOString())
   }
   hookCClist() {
     this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
@@ -114,8 +120,7 @@ export default class CCconsole extends CCconsoleProps {
   async invoke() {
     //TODO: Get real project path
     let projectPath = "";
-    let startTime = new Date(Date.now()).toISOString()
-    this.output = await ChainCodeProcess.invoke(projectPath, this.selectedCC, this.args,startTime);
+    this.output = await ChainCodeProcess.invoke(projectPath, this.selectedCC, this.args);
     //this.dockerFunc();
   }
   query() {}

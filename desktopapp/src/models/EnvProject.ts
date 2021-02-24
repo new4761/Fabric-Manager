@@ -30,8 +30,8 @@ export enum netWorkConfigPath{
 }
 
 export class ccOutputPayload {
-  rawData: string = "";
-  response: string = "";
+  rawData: Array<string> = [];
+  response: Array<string>  = [];
   fabricPayload: string = "";
 
 }

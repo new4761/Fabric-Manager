@@ -11,11 +11,14 @@ export class NetworkConfig {
 
   constructor() {
     try {
-      let filePath = path.join(
-        ProjectConfig.getPath(store.state.id),
-        "net-config.json"
+      // let filePath = path.join(
+      //   ProjectConfig.getPath(store.state.id),
+      //   "net-config.json"
         
-      );
+      // );
+      
+    let filePath = path.join(path.join(path.resolve(process.cwd()), 'tests', "net-config.json"));
+
       this.file = editJsonFile(filePath);
       // logger.log("warn","switching path: " + filePath)
       store.mutations.setPath(store.state.id);
@@ -36,7 +39,8 @@ export class NetworkConfig {
       ...data,
     };
 
-    let file = editJsonFile(path.join(project.directory, "net-config.json"));
+    let filePath = path.join(path.join(path.resolve(process.cwd()), 'tests', "net-config.json"));
+    let file = editJsonFile(filePath);
     file.set("project_config", data);
     file.save();
     logger.log("info","network-config sucessfully created at " + project.directory);
