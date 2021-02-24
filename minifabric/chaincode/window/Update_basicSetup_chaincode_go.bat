@@ -3,11 +3,11 @@
  ::minifabwin join
  ::minifabwin anchorupdate
  ::minifabwinfab profilegen
-call minifabwin install -n simple -r false -l go -v 2.0
+call minifabwin install -n simple -v 4.0
 call minifabwin approve 
 call minifabwin commit
 call minifabwin initialize  -p \"wtf\",\"a\",\"5\",\"b\",\"2\"
-::call minifabwin discover
-::call minifabwin query -p \"query\",\"a\"
+call minifabwin discover
+call minifabwin query -p \"query\",\"a\"
 ::minifabwin explorerup
 pause
