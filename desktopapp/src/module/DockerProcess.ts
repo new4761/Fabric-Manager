@@ -41,7 +41,7 @@ class DockerProcess {
   }
   //TODO:Override  for CC
   async findFirstContainerByRegex(name: string, flags: string) {
-    //console.log(name)
+    console.log(name)
     // name = "/"+name;
     let regex = new RegExp(name, flags)
     let container: any = 'Error no container name:' + name
@@ -60,6 +60,7 @@ class DockerProcess {
   getContainerByID(containerID: string) {
     //3700405ba56dd2a9f16f0e235f92abb5cdc4d1666af7d755ab115781564a4ca4
     let container = docker.getContainer(containerID)
+
     return container
 
   }
@@ -116,7 +117,7 @@ class DockerProcess {
   
   async callbackAttach(container: any,pipePayload:any[]) {
    // let pipePayload:any =[];
-   // console.log(container)
+  // console.log(container)
    let  streamPipe;
     var logStream = new stream.PassThrough();
     // let target:any;

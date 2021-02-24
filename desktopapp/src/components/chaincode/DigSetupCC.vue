@@ -16,7 +16,7 @@
           <InputText
             placeholder="CCName"
             v-model="ccName"
-            @change="setCCName()"
+            @input="setCCName()"
           />
           <Dropdown
             v-model="selectedCCtype"

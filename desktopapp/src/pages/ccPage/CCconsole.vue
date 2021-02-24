@@ -25,40 +25,39 @@
     <br />
     <br />
     <Button label="goDeploy" @click="openManagerCC()" />
-    <br>
-    <br>
-        <div class="p-grid p-jc-center  p-my-1">
-      <div class="container p-col-12 ">
+    <br />
+    <br />
+    <div class="p-grid p-jc-center p-my-1">
+      <div class="container p-col-12">
         {{ selectedCC }}
       </div>
-       <div class="p-col-12">
-    <TabView>
-	<TabPanel header="response">
-        <div v-for="(item,index) in output.response" :key="index">
-      {{item}}
+      <div class="p-col-12">
+        <TabView>
+          <TabPanel header="response">
+            <div v-for="(item, index) in output.response" :key="index">
+              {{ item }}
+            </div>
+            <!-- {{output.response}} -->
+          </TabPanel>
+          <TabPanel header="rawoutput">
+            <div v-for="(item, index) in output.rawData" :key="index">
+              {{ item }}
+            </div>
+            <!-- {{output.rawData}} -->
+          </TabPanel>
+          <TabPanel header="payload">
+            {{ output.fabricPayload }}
+          </TabPanel>
+        </TabView>
+      </div>
     </div>
-	<!-- {{output.response}} -->
-	</TabPanel>
-<TabPanel header="rawoutput">
-    <div v-for="(item,index) in output.rawData" :key="index">
-      {{item}}
-    </div>
-	<!-- {{output.rawData}} -->
-	</TabPanel>
-	<TabPanel header="payload">
-		{{output.fabricPayload}}
-	</TabPanel>
-</TabView>
-</div>
-    </div>
-
   </div>
 </template>
 
 <script lang="ts">
 // eslint-disable-next-line no-unused-vars
 import { ChainCode } from "@/models/ChainCode";
-import { netWorkConfigPath,ccOutputPayload } from "@/models/EnvProject";
+import { netWorkConfigPath, ccOutputPayload } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 import ChainCodeProcess from "@/module/ChainCodeProcess";
 import Vue from "vue";
@@ -73,15 +72,18 @@ const CCconsoleProps = Vue.extend({
   components: { InputArg },
 })
 export default class CCconsole extends CCconsoleProps {
-  container:any = "";
-  ccComnand: {label:string,value:string } = { label: "INVOKE", value: "invoke" };
+  container: any = "";
+  ccComnand: { label: string; value: string } = {
+    label: "INVOKE",
+    value: "invoke",
+  };
   ccList = [];
-  selectedCC = {};
+  selectedCC = []
   args: any = [];
-  output:ccOutputPayload = new ccOutputPayload();
- // rawOutput:any=""
+  output: ccOutputPayload = new ccOutputPayload();
+  // rawOutput:any=""
   ccCommandOption = [
-  //  { label: "INIT", value: "init" },
+    //  { label: "INIT", value: "init" },
     { label: "INVOKE", value: "invoke" },
     { label: "QUERY", value: "query" },
   ];
@@ -89,8 +91,8 @@ export default class CCconsole extends CCconsoleProps {
     this.hookCClist();
     this.selectedCC = this.ccList[0];
   }
-  mounted(){
- //console.log( new Date(Date.now()).toISOString())
+  mounted() {
+    //console.log( new Date(Date.now()).toISOString())
   }
   hookCClist() {
     this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
@@ -110,34 +112,34 @@ export default class CCconsole extends CCconsoleProps {
     }
   }
   callCommand() {
-    if (this.ccComnand.value == "invoke") {
-      this.invoke();
-    }
+    this.resetOutput()
+    // if (this.ccComnand.value == "invoke") {
+    //   this.invoke();
+    // }
+    // else if (this.ccComnand.value == "query") {
+    //   this.query();
+    // }
+    this.callPeerCC(this.ccComnand.value)
   }
   openManagerCC() {
     this.$router.push({ name: "CCManager" });
   }
-  async invoke() {
+  async callPeerCC(command:string) {
     //TODO: Get real project path
     let projectPath = "";
-    this.output = await ChainCodeProcess.invoke(projectPath, this.selectedCC, this.args);
-    //this.dockerFunc();
+    this.output = await ChainCodeProcess.callCC_command(
+      projectPath,
+      this.selectedCC,
+      this.args,
+      command
+    );
   }
   query() {}
-
-
-  getRawOutput(){
-
-
+  resetOutput() {
+    this.output.rawData = [];
+    this.output.response = [];
+    this.output.fabricPayload = "";
   }
-  getResponseOutput()
-  {}
-  getPayLoad(){
-
-
-  }
-
-
 }
 </script>
 

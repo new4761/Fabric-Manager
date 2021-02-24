@@ -59,11 +59,12 @@ class OSProcess {
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  run_CC_output(projectPath: string, args: string[], type: OsType): any {
+  run_CC_output(projectPath: string, args: string[], type: OsType, methodName: string): any {
     let ls: any;
     //set to minifab output
     args.push("-f")
     args.push("minifab")
+    let scriptFile = "cc" + methodName + ".sh"
     switch (type) {
       case OsType.WINDOW:
         try {
@@ -71,19 +72,20 @@ class OSProcess {
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + projectPath);
           let sourceDir = path
           if (isDevelopment) {
-            sourceDir = path.join(path.resolve(process.cwd()), "tests", "vars", "run", "ccinvoke.sh");
+            sourceDir = path.join(path.resolve(process.cwd()), "tests", "vars", "run", scriptFile)
           }
           else {
-            sourceDir = path.join(path.resolve(projectPath), "tests", "vars", "run", "ccinvoke.sh");
+            //TODO :real path
+            sourceDir = path.join(path.resolve(projectPath), "tests", "vars", "run", scriptFile)
           }
           let watcher = FileManager.WaitToReadFile(sourceDir)
-          let payloadData:any[]=[]
-          this.callbackCC(ls.childProcess, sourceDir, watcher,payloadData);
-          let message:any[] =[]
+          let payloadData: any[] = []
+          this.callbackCC(ls.childProcess, sourceDir, watcher, payloadData);
+          let message: any[] = []
           return ls.then((res: any) => {
-           // console.log(payloadData)
-           message.push(StdoutCapture.checkStatus(res.stdout.toString()))
-           message.push(payloadData)
+            // console.log(payloadData)
+            message.push(StdoutCapture.checkStatus(res.stdout.toString()))
+            message.push(payloadData)
             return message
           })
         } catch {
@@ -122,8 +124,8 @@ class OSProcess {
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  callbackCC(ls: any, projectPath: string, watcher: any,payloadData:any[]) {
-  //  let sourceDir: string;
+  callbackCC(ls: any, projectPath: string, watcher: any, payloadData: any[]) {
+    //  let sourceDir: string;
     let streamPipe: any
     watcher.on('change', async function name(e: any) {
       watcher.close()
@@ -131,8 +133,8 @@ class OSProcess {
 
     watcher.on('close', async function name() {
       let container = await ChainCodeProcess.findFirstEndorser(projectPath)
-      streamPipe = await DockerProcess.callbackAttach(container,payloadData)
-    //  console.log("watcher die bitch")
+      streamPipe = await DockerProcess.callbackAttach(container, payloadData)
+      //  console.log("watcher die bitch")
     });
     ls.stdout.on("data", async (data: any) => {      //  const regex = new RegExp(/changed: \[minifab]*/);
       // const regex = new RegExp(/.*Run[\s\S]*cc[\s\S]*/);
@@ -167,7 +169,7 @@ class OSProcess {
 
       code = code.toString();
       DockerProcess.killStreamPipe(streamPipe)
-      
+
       //console.log(streamPipe[1]);
       console.log(`child process exited with code ${code}`);
       return streamPipe[1]
