@@ -1,6 +1,12 @@
 .layout-main {
   transition: margin-left $transitionDuration;
+  
+}
+
+.layout-wrapper{
+  max-width: 1000px;
   padding: 2rem 2rem 2rem 2rem;
+ 
 }
 
 .scroll-main {

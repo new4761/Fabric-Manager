@@ -12,17 +12,17 @@
             <div class="p-col-4 p-ml-auto">
               <Button
                 icon="fas fa-code"
-                class="p-button-sm p-button-rounded p-button-secondary p-mx-1"
-                @click="func()"
+                class="p-button-sm p-button-secondary p-mx-1"
+                @click="func(item)"
               />
               <Button
                 icon="fas fa-info"
-                class="p-button-sm p-button-rounded p-button-secondary p-mx-1"
+                class="p-button-sm p-button-secondary p-mx-1"
                 @click="func()"
               />
               <Button
                 icon="fas fa-wrench"
-                class="p-button-sm p-button-rounded p-button-secondary p-mx-1"
+                class="p-button-sm p-button-secondary p-mx-1"
                 @click="func()"
               />
             </div>
@@ -36,6 +36,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+const { exec } = require('child_process');
 
 @Component({
   props: {
@@ -47,6 +48,10 @@ export default class OrgDetail extends Vue {
 
   toggle() {
     this.showSection = !this.showSection;
+  }
+
+  func(container:string){
+    exec(' start cmd.exe @cmd /k "docker exec -it ' + container +' /bin/sh"');
   }
 }
 </script>

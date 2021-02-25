@@ -1,5 +1,7 @@
 <template>
   <div>
+    <ContextMenu :global="true" :model="items" />
+
     <div class="title-bar">
       <div class="title">
         Current Path : {{ $route.name }} Project ID:
@@ -14,12 +16,10 @@
     </div>
     <transition name="fade" mode="out-in">
       <component :is="layout">
-      
-           <div v-if="$root.loading">
-             loading bitch
-           </div>
-          <router-view v-else/>
-       
+        <div v-if="$root.loading">
+          loading bitch
+        </div>
+        <router-view v-else />
       </component>
     </transition>
   </div>
@@ -62,7 +62,16 @@ export default class App extends Vue {
     window.close();
   }
 
- 
+  data() {
+    return {
+      items: [
+        {
+          label: "right click",
+          icon: "pi pi-fw pi-file",
+        },
+      ],
+    };
+  }
 }
 </script>
 

@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="p-p-5">
     <h1>
       Projects
     </h1>
     <ConfirmDialog />
-    <Dialog :visible="display" :closable="false" :modal="true" class="info">
+    <Dialog :visible="display" :closable="false" :modal="true" class="project-info">
       {{ dataSelected }}
       <div class="p-grid p-mt-5">
         <Button
@@ -18,8 +18,6 @@
     <DataView
       :value="data"
       :layout="layout"
-      :paginator="true"
-      :rows="9"
       :sortOrder="sortOrder"
       :sortField="sortField"
     >
@@ -50,8 +48,8 @@
 
       <template #list="slotProps">
         <div class="p-col-12">
-          <div class="list-item p-m-3" @click="confirmOpen(slotProps.data.id)">
-            <div class="list-detail p-d-flex p-jc-between">
+          <div class="list-item p-m-3 project-content"  @click="confirmOpen(slotProps.data.id)">
+            <div class="list-detail p-d-flex p-jc-between ">
               <div class="name">{{ slotProps.data.name }}</div>
               <div class="date">
                  create date:
@@ -88,8 +86,8 @@
 
       <template #grid="slotProps">
         <div class="p-col-2 p-md-4">
-          <div class="card-project " @click="confirmOpen(slotProps.data.id)" >
-            <Card class="p-m-3" >
+          <div @click="confirmOpen(slotProps.data.id)" >
+            <Card class="p-m-3 project-content " >
               <template #title>
                 <div>
                   {{ slotProps.data.name }}
@@ -185,12 +183,14 @@ export default class ProjectPage extends Vue {
   }
 
   confirmDelete(id: number) {
+   let target = this.data.find((element: any) => element.id == id);
     this.$confirm.require({
-      message: "delete project " + this.data[id].name + " ?",
+      
+      message: "delete project " + target.name + " ?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        ProjectConfig.deleteProject(id);
+        ProjectConfig.deleteProject(target.id);
       },
       reject: () => {},
     });
@@ -231,7 +231,10 @@ export default class ProjectPage extends Vue {
 </script>
 
 <style>
-.card-project {
+.project-content {
   cursor: pointer;
+}
+.project-info{
+  width: 70vh;
 }
 </style>

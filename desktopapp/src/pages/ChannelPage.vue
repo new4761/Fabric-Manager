@@ -1,36 +1,43 @@
 <template>
-  <div class="p-m-5">
-    <h1>
-      channel
-    </h1>
-
-    <div class="p-col-12 p-md-6">
-      <div class="p-inputgroup">
-        <Button label="create" @click="create()" />
-        <InputText placeholder="name" v-model="channelName" />
+  <div>
+    <div class="p-d-flex p-jc-between">
+      <div class="p-col">
+        <h1>
+          Channel
+        </h1>
       </div>
     </div>
 
-    <DataTable :value="channels" class="p-datatable-striped">
-      <Column field="name" header="name"></Column>
-      <Column header="operation">
-        <template #body="slotProps">
-          <div class="p-d-flex p-jc-center p-ai-center">
-            <Button class="p-mx-1" label="join" @click="join(slotProps.name)" />
-            <Button
-              class="p-mx-1"
-              label="query"
-              @click="join(slotProps.name)"
-            />
-            <Button
-              class="p-mx-1"
-              label="update"
-              @click="join(slotProps.name)"
-            />
+    <div class="channel-wrapper p-grid p-jc-center p-my-4">
+      <div class="channel-header">
+        Channel list
+        <div class="p-col-4">
+          <div class="p-inputgroup">
+            <InputText placeholder="new channel" v-model="channelName" />
+            <Button label="create" @click="create()" />
           </div>
-        </template>
-      </Column>
-    </DataTable>
+        </div>
+      </div>
+      <DataTable :value="channels" class="p-datatable-striped">
+        <Column field="name" header="name"></Column>
+        <Column header="operation">
+          <template #body="slotProps">
+            <div class="p-d-flex p-jc-center p-ai-center">
+              <Button
+                class="p-mx-1"
+                label="join"
+                @click="join(slotProps.data.name)"
+              />
+              <Button
+                class="p-mx-1"
+                label="edit"
+                @click="editChannel(slotProps.data.name)"
+              />
+            </div>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
 
     <div>
       <Dialog
@@ -67,6 +74,7 @@ export default class ChannelPage extends Vue {
   display: boolean = false;
   displaylog: boolean = false;
   channelName: string = "";
+  channelSelected: string = "";
   channels: Array<string> = [];
 
   mounted() {
@@ -76,6 +84,7 @@ export default class ChannelPage extends Vue {
   init() {
     this.projectDir = this.$store.state.project.path;
     this.channels = NetworkConfig.getValue("channel");
+    this.channelSelected = this.channels[0];
   }
 
   create() {
@@ -85,6 +94,15 @@ export default class ChannelPage extends Vue {
     this.$store.commit("setProcess", child);
     NetworkConfig.pushValueToArray("channel", { name: this.channelName });
     this.displaylog = true;
+  }
+
+  editChannel(name: string) {
+    this.$router.push({
+      name: "ChannelEdit",
+      params: {
+        channelName: name,
+      },
+    });
   }
 
   join(name: string) {
@@ -106,4 +124,22 @@ export default class ChannelPage extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style>
+.channel-wrapper {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.channel-header {
+  border-radius: 5px 5px 0px 0px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(49, 155, 255);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+</style>

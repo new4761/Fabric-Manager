@@ -3,16 +3,25 @@
     <div class="p-d-flex">
       <transition name="layout-sidebar">
         <div class="layout-sidebar-dark  p-d-flex p-flex-column menu">
-          <AppProfile />
-          <div class="p-d-flex p-jc-center p-mb-3">
+          <div class="p-d-flex p-jc-center p-mt-3">
+            <div class="p-col-12"></div>
+          </div>
+
+          <div class="p-d-flex p-jc-center p-mt-3">
             <net-ops-button />
           </div>
+
+          <AppProfile />
           <AppMenu :model="menu" class="scroll-menu" />
         </div>
       </transition>
 
       <div class="scroll-main layout-main p-col p-as-stretch">
-        <slot />
+        <div class=" p-d-flex p-jc-center">
+          <div class="layout-wrapper">
+            <slot />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,7 +42,7 @@ export default class DefaultLayout extends Vue {
     return {
       menu: [
         { label: "Home", icon: "pi pi-fw pi-home", to: "/home" },
-        { label: "Demo", icon: "pi pi-fw pi-pencil", to: "/demo" },
+
         {
           label: "Organization",
           icon: "pi pi-fw pi-sitemap",

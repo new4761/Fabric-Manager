@@ -80,6 +80,7 @@ export class NetworkConfig {
     let newOrg: {
       [key: string]: {
         name: string;
+        fullname: string;
         child: Set<string>;
         ca: boolean;
         peer: number;
@@ -96,7 +97,8 @@ export class NetworkConfig {
 
       if (!(name in newOrg)) {
         newOrg[name] = {
-          name: name,
+          name:"",
+          fullname: name,
           child: new Set(),
           ca: false,
           peer: 0,
@@ -117,7 +119,8 @@ export class NetworkConfig {
       }
 
       newOrg[name] = {
-        name: name,
+        name:name.split(".")[0],
+        fullname: name,
         child: newOrg[name].child.add(element),
         ca: isCa,
         peer: isPeer ? (newOrg[name].peer += 1) : 0,

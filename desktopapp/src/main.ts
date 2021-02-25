@@ -77,6 +77,7 @@ import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
 import Tag from "primevue/tag";
 
+
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 
@@ -115,6 +116,7 @@ Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
 Vue.component("ConfirmDialog", ConfirmDialog);
 Vue.component("Tag", Tag);
+
 
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);
@@ -180,6 +182,7 @@ Vue.component("TreeTable", TreeTable);
 Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
+
 
 const app = new Vue({
   data() {

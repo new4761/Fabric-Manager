@@ -23,6 +23,12 @@ export default new Router({
       name: "Channel",
       component: () => import("./pages/ChannelPage.vue"),
     },
+    {
+      path: "/channel/edit",
+      name: "ChannelEdit",
+      component: () => import("./pages/ChannelEditPage.vue"),
+      props: true
+    },
 
     {
       path: "/org",

@@ -1,5 +1,8 @@
 <template>
-  <div class="p-grid p-jc-center  p-my-1">
+  <div class="log-wrapper p-grid p-jc-center p-my-1">
+      <div class="log-header">
+        main log
+      </div>
     <div class="log p-col-12 " id="log" v-html="highlight()"></div>
   </div>
 </template>
@@ -55,4 +58,56 @@ export default class LogView extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style>
+
+
+.log-wrapper {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.log-header {
+  border-radius: 5px 5px 0px 0px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+}
+.log {
+  background-color: rgb(56, 56, 56);
+  border-radius: 0px 0px 5px 5px;
+  color: aliceblue;
+  font-size: 12px;
+  white-space: break-spaces;
+  word-break: break-all;
+  padding: 1em;
+  overflow: auto;
+  height: 250px;
+}
+
+.info {
+  font-weight: bold;
+  color: rgb(103, 184, 255);
+}
+
+.warn {
+  font-weight: bold;
+  color: rgb(255, 190, 93);
+}
+
+.error {
+  font-weight: bold;
+  color: rgb(255, 97, 97);
+}
+
+.timestamp {
+  font-size: 10px;
+  font-weight: lighter;
+  color: rgb(134, 134, 134);
+}
+</style>
