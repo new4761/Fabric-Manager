@@ -161,7 +161,6 @@ export default class Index extends Vue {
         this.container = result;
       })
       .catch(() => {
-        // console.log(err);
         this.container = [];
       });
   }
@@ -170,7 +169,6 @@ export default class Index extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 :root {
   --blue-color: #5296f9;

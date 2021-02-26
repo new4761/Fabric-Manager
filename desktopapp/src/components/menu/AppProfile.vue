@@ -20,7 +20,7 @@
 	export default {
 		data() {
 			return {
-				expanded: false
+				expanded: false,
 			}
 		},
 		methods: {
@@ -28,7 +28,7 @@
 				this.expanded = !this.expanded;
 				event.preventDefault();
 			}
-		}
+		},
 	}
 </script>
 

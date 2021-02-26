@@ -6,7 +6,7 @@ const state = {
   networkId: "",
   container: [],
   orgContainer: [],
-  activeContainer: Array(),
+  activeContainer:[],
 };
 
 // getters
@@ -64,6 +64,7 @@ const mutations = {
       );
 
       if (el !== undefined) {
+        // @ts-ignore
         state.activeContainer.push(element);
       }
     });

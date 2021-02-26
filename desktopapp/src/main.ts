@@ -70,17 +70,16 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 import ScrollPanel from "primevue/scrollpanel";
 import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
-import Knob from 'primevue/knob';
+import Knob from "primevue/knob";
 
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
 import Tag from "primevue/tag";
-
+import BadgeDirective from "primevue/badgedirective";
 
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
-
 
 import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 // import "primevue/resources/themes/fluent-light/theme.css";
@@ -99,6 +98,7 @@ Vue.use(ToastService);
 Vue.use(ConfirmationService);
 Vue.directive("tooltip", Tooltip);
 Vue.directive("ripple", Ripple);
+Vue.directive("badge", BadgeDirective);
 
 // App.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
 // App.config.globalProperties.$primevue = reactive({ ripple: true });
@@ -116,7 +116,6 @@ Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
 Vue.component("ConfirmDialog", ConfirmDialog);
 Vue.component("Tag", Tag);
-
 
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);
@@ -183,7 +182,6 @@ Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
 
-
 const app = new Vue({
   data() {
     return { loading: false };
@@ -194,6 +192,9 @@ const app = new Vue({
 }).$mount("#app");
 
 router.beforeEach((to, from, next) => {
+  // store.commit("docker/setContainer");
+  // store.commit("docker/setOrgContainer");
+  // store.commit("docker/setActiveContainer");
   app.loading = true;
   next();
 });
@@ -202,5 +203,5 @@ router.afterEach(() => {
   // setTimeout(() => (app.loading = false), 1500); // timeout for demo purposes
 });
 
-store.commit("setPlatform",  process.platform);
+store.commit("setPlatform", process.platform);
 // router.replace('/project')

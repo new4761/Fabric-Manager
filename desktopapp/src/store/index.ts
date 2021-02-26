@@ -2,13 +2,17 @@ import Vue from "vue";
 import Vuex from "vuex";
 import project from "./modules/project";
 import docker from "./modules/docker";
+import createPersistedState from "vuex-persistedstate";
+const dataState = createPersistedState({
+  paths: ["data"],
+});
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     platform: "",
-    process:null
+    process: null,
   },
   mutations: {
     setPlatform(state: any, platform: string) {
@@ -20,13 +24,12 @@ export default new Vuex.Store({
     },
   },
 
-  getters: {
-
-  },
+  getters: {},
 
   actions: {},
   modules: {
     project,
     docker,
   },
+  plugins: [dataState],
 });

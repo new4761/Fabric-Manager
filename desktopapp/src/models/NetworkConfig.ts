@@ -14,22 +14,24 @@ export class NetworkConfig {
       let filePath = path.join(
         ProjectConfig.getPath(store.state.id),
         "net-config.json"
-        
       );
       this.file = editJsonFile(filePath);
       // logger.log("warn","switching path: " + filePath)
       store.mutations.setPath(store.state.id);
       // logger.log("info","net-config path: " + ProjectConfig.getPath(store.state.id));
     } catch (e) {
-      logger.log("error","error net-config path");
+      logger.log("error", "error net-config path");
     }
   }
 
-  createConfig(project: any) {
+  createConfig(project: any, quick?: boolean) {
     // this.constructor();
     let data = yaml.load(
       fs.readFileSync(path.join(project.directory, "spec.yaml"), "utf8")
     );
+
+    let defaultOrg = data.fabric.peers[0].replace(/^[^.]*./gm, "");
+
     data = {
       ...project,
       date_modify: +new Date(),
@@ -38,26 +40,34 @@ export class NetworkConfig {
 
     let file = editJsonFile(path.join(project.directory, "net-config.json"));
     file.set("project_config", data);
+    if (quick) {
+      file.set("channel", [{ name: "mychannel" }]);
+    }
     file.save();
-    logger.log("info","network-config sucessfully created at " + project.directory);
+    logger.log(
+      "info",
+      "network-config sucessfully created at " + project.directory
+    );
+    return defaultOrg;
   }
 
   updateNetworkConfig(key: string, value: any) {
     this.constructor();
     this.file.set(key, value);
     this.file.save();
-    logger.log("info","network-config sucessfully updated ");
+    logger.log("info", "network-config sucessfully updated ");
   }
 
   pushValueToArray(key: string, value: any) {
     let target = this.getValue(key);
-   // console.log(target)
+    // console.log(target)
     if (target == undefined) {
-   //console.log(key)
-      value = [value]    
-      this.updateNetworkConfig(key, value)
+      //console.log(key)
+      value = [value];
+      this.updateNetworkConfig(key, value);
+    } else {
+      key = key + "." + target.length;
     }
-    else { key = key + "." + (target.length); }
 
     this.file.set(key, value);
     this.file.save();
@@ -97,7 +107,7 @@ export class NetworkConfig {
 
       if (!(name in newOrg)) {
         newOrg[name] = {
-          name:"",
+          name: "",
           fullname: name,
           child: new Set(),
           ca: false,
@@ -119,7 +129,7 @@ export class NetworkConfig {
       }
 
       newOrg[name] = {
-        name:name.split(".")[0],
+        name: name.split(".")[0],
         fullname: name,
         child: newOrg[name].child.add(element),
         ca: isCa,

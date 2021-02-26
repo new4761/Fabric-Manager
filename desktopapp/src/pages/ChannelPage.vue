@@ -18,25 +18,30 @@
           </div>
         </div>
       </div>
-      <DataTable :value="channels" class="p-datatable-striped">
-        <Column field="name" header="name"></Column>
-        <Column header="operation">
-          <template #body="slotProps">
-            <div class="p-d-flex p-jc-center p-ai-center">
-              <Button
-                class="p-mx-1"
-                label="join"
-                @click="join(slotProps.data.name)"
-              />
-              <Button
-                class="p-mx-1"
-                label="edit"
-                @click="editChannel(slotProps.data.name)"
-              />
-            </div>
-          </template>
-        </Column>
-      </DataTable>
+      <div v-if="channels">
+        <DataTable :value="channels" class="p-datatable-striped">
+          <Column field="name" header="name"></Column>
+          <Column header="operation">
+            <template #body="slotProps">
+              <div class="p-d-flex p-jc-center p-ai-center">
+                <Button
+                  class="p-mx-1"
+                  label="join"
+                  @click="join(slotProps.data.name)"
+                />
+                <Button
+                  class="p-mx-1"
+                  label="edit"
+                  @click="editChannel(slotProps.data.name)"
+                />
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+      </div>
+      <div v-else class="channel-empty p-text-center">
+        <i class="fas fa-exclamation-circle"></i>  no channel
+      </div>
     </div>
 
     <div>
@@ -65,6 +70,7 @@ import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
 import Terminal from "../components/Terminal.vue";
 import NetworkConfig from "../models/NetworkConfig";
+import logger from "../module/Logger";
 
 @Component({
   components: { Terminal },
@@ -83,8 +89,12 @@ export default class ChannelPage extends Vue {
 
   init() {
     this.projectDir = this.$store.state.project.path;
-    this.channels = NetworkConfig.getValue("channel");
-    this.channelSelected = this.channels[0];
+    try {
+      this.channels = NetworkConfig.getValue("channel");
+      this.channelSelected = this.channels[0];
+    } catch (err) {
+      logger.log("warn", "no channel");
+    }
   }
 
   create() {
@@ -125,6 +135,14 @@ export default class ChannelPage extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.channel-empty {
+  width: 100%;
+  height: 350px;
+  background-color: rgb(206, 206, 206);
+  line-height: 350px;
+  font-size: 30px;
+  color: rgb(105, 105, 105);
+}
 .channel-wrapper {
   padding-left: 1em;
   padding-right: 1em;

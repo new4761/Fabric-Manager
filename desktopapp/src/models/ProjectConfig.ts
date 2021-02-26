@@ -2,8 +2,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
 import logger from "../module/Logger";
-import {DirBuilder} from "../module/DirBuilder";
-
+import { DirBuilder } from "../module/DirBuilder";
 
 export class ProjectConfig {
   file: any;
@@ -31,21 +30,28 @@ export class ProjectConfig {
     this.file.data[project.id] = project;
     this.file.save();
     logger.log("info", "project-config: add new element");
+    return project.id;
   }
 
   deleteProject(id: number) {
-    let dirBuilder = new DirBuilder()
-    let target = this.file.data.find((element: any) => element.id == id)
+    let dirBuilder = new DirBuilder();
+    let target = this.file.data.find((element: any) => element.id == id);
     let dir = target.directory;
 
-    console.log(dir)
+    console.log(dir);
 
     // dirBuilder.deleteDir(dir);
 
-    logger.log("warn", "project-config: delete project id: " + target.id + "at: " + dir);
+    logger.log(
+      "warn",
+      "project-config: delete project id: " + target.id + "at: " + dir
+    );
 
     if (target.id > -1) {
-      this.file.data.splice(this.file.data.findIndex((element: any) => element.id == id), 1);
+      this.file.data.splice(
+        this.file.data.findIndex((element: any) => element.id == id),
+        1
+      );
     }
     this.file.save();
   }
