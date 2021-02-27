@@ -1,6 +1,6 @@
 import { CCstate, CCtype } from "./EnvProject";
 
-export class ChainCode {
+export default class ChainCode {
     id:number;
     name:string;
     type:CCtype;
@@ -10,6 +10,7 @@ export class ChainCode {
     version:number;
     lastUpdate:number;
     useInit:boolean;
+    initArgs:any
  constructor(id:number,name:string,type:CCtype,directory:string,channel:string){
     this.id =id;
     this.name=name;
@@ -20,11 +21,7 @@ export class ChainCode {
     this.version = 1.0;
     this.lastUpdate = +new Date();
     this.useInit=false;
+    this.initArgs=[]
  }
- setDate(){
-   this.lastUpdate = +new Date()
- }
- updateVersion(){
-    this.version+=1.0
- }
+
 }

@@ -1,4 +1,4 @@
-import { ChainCode } from "./ChainCode";
+import ChainCode  from "./ChainCode";
 
 
 
@@ -19,7 +19,7 @@ class ArgsCCWrapper {
         ///to do marbel json object data
         return newArgs
     }
-    basicCCWrapper(args:any,ccObj: ChainCode) {
+    basicCCWrapper(args:any,ccObj: ChainCode,org:string) {
         let newArgs = []
         // cc name
         newArgs.push("-n")
@@ -33,6 +33,9 @@ class ArgsCCWrapper {
         //cc channel
         newArgs.push("-c")
         newArgs.push(ccObj.channel)
+        //cc channel
+        newArgs.push("-o")
+        newArgs.push(org)
         //set to minifab output
         return args.concat(newArgs)
     }

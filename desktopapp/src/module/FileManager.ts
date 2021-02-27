@@ -45,7 +45,7 @@ class FileManager {
     //to do  remove file function
     removeFile() { }
 
-    removeDir(destDir: string) { 
+    removeDir(destDir: string) {
         fse.removeSync(destDir)
             .then(() => console.log('removeDir success!'))
             .catch((err: any) => console.error(err))
@@ -56,7 +56,7 @@ class FileManager {
 
     readFile(sourceDir: string) {
 
-       return fs.readFileSync(sourceDir, 'utf8', (err: any, data: any) => {
+        return fs.readFileSync(sourceDir, 'utf8', (err: any, data: any) => {
             if (err) {
                 console.error(err)
                 return
@@ -64,21 +64,25 @@ class FileManager {
             //console.log(data)
             return data
         })
-    }   
-     WaitToReadFile(sourceDir: string){
-    //   return fs.watch(sourceDir, (err: any, data: any) => {
-    //         if (err) {
-    //          console.error("from WaitToReadFile: "+err)
-    //          //console.log(this.readFile(sourceDir))
-    //         let file =this.readFile(sourceDir);
-    //          //console.log(file)
-    //          //watcher.close();
-    //         }
-    //         //console.log(data)
-    //     })
-      return fs.watch(sourceDir)
     }
+    WaitToReadFile(sourceDir: string) {
+        if (fs.existsSync(sourceDir)) {
+            return fs.watch(sourceDir)
+        }
+        else {
+            console.log("fuck u")
+        }
 
+    }
+    createFile(sourceDir: string) {
+        //console.log(sourceDir)
+        if (!fs.existsSync(sourceDir)) {
+            fs.writeFileSync(sourceDir, function (err: any) {
+                if (err) throw err;
+                console.log('Saved!');
+            });
+        }
+    }
 
     // call through to copy file
     copyFile(sourceDir: any, destDir: string) {

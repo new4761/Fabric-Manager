@@ -25,8 +25,9 @@ export enum CCstate {
     // readyCC  ="readyCC"   
 }
 export enum netWorkConfigPath{
-
-    ccPath =  "chain_codes"
+    channelPath="channel",
+    ccPath =  "chain_codes",
+    peerPath="project_config.fabric.peers",
 }
 
 export class ccOutputPayload {

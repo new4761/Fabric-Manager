@@ -3,7 +3,7 @@ var docker = new Docker({ socketPath: "//./pipe/docker_engine" });
 import logger from "../module/Logger";
 import { removeColorCode } from "./StringBuilder";
 var stream = require('stream');
-
+import store from "../store/modules/project";
 class DockerProcess {
   constructor() { }
   listContainer() {
@@ -41,13 +41,13 @@ class DockerProcess {
   }
   //TODO:Override  for CC
   async findFirstContainerByRegex(name: string, flags: string) {
-    console.log(name)
+  //  console.log(name)
     // name = "/"+name;
     let regex = new RegExp(name, flags)
     let container: any = 'Error no container name:' + name
     await this.listContainer().then((res: any) => {
 
-      res.forEach(function (containerInfo: any, index: number) {
+      res.forEach(function (containerInfo: any) {
         if (regex.test(containerInfo.Names)) {
 
           container = containerInfo
@@ -58,13 +58,12 @@ class DockerProcess {
     return this.getContainerByID(container.Id)
   }
   getContainerByID(containerID: string) {
-    //3700405ba56dd2a9f16f0e235f92abb5cdc4d1666af7d755ab115781564a4ca4
+
     let container = docker.getContainer(containerID)
 
     return container
 
   }
-
   callbackLogs(container: any) {
     var logStream = new stream.PassThrough();
     container = this.getContainerByID(container.Id)
@@ -78,8 +77,6 @@ class DockerProcess {
       }
       container.modem.demuxStream(stream, logStream, logStream);
 
-
-      // return target
     })
     let message = this.destroyStream(logStream).then((res) => {
       //console.log(res.search(/\n/))
@@ -137,23 +134,6 @@ class DockerProcess {
     //console.log(streamPipe);
     return streamPipe
   }
-
-  // setTimeout(() => {
-  //   stream.end()
-  //   // console.log(stdoutData)
-
-  // }, 2000);
-  // logStream.on("data", (data: any) => {
-
-  //   data = data.toString();
-  //   console.log(`${removeColorCode(data)}`);
-
-  // });
-
-
-
-
-
 
   killStreamPipe(target: any) {
     // target.on('end', function () {

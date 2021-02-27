@@ -30,7 +30,11 @@ export default class InputArg extends Vue {
       this.value=""
   }
   setArg(){
+    if(this.value!="")
       this.$emit("setArg", this.value);
+    else{
+      this.deleteArg()
+    }
   }
 }
 </script>

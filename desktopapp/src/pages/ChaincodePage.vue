@@ -1,21 +1,12 @@
 <template>
   <div class="p-grid p-mx-3">
     <div class="p-col-12 p-mx-3">
+      
       <h1>
         <Button label="testNetwork" @click="testsetup()" />
         <br />
         <Button label="testcleanup" @click="testcleanup()" />
         <br />
-        <!-- <Button label="go" @click="testGo()" />
-        <br /> -->
-        <Button label="SDK" @click="testSDK()" />
-        <br />
-               <Button label="console" @click="callConsole()" />
-        <!-- <Button label="node" />
-        <br />
-        <Button label="java" />
-        <br /> -->
-        <Button label="demo" @click="display = !display"></Button>
       </h1>
     </div>
     <DataTable :value="ccList">
@@ -38,25 +29,6 @@
         </template>
       </Column>
     </DataTable>
-
-    <Dialog
-      modal
-      :dismissableMask="true"
-      :showHeader="false"
-      v-bind:visible="display"
-    >
-      <DigSetupCC
-        @deploy="deployCC"
-        @setCCName="setCCName"
-        @closeDig="setDisplay"
-        :_display="display"
-        :_ccName="ccName"
-        :_ccType="ccType"
-        @setCCtype="setCCtype"
-        :_path="path"
-        @setPath="setPath"
-      ></DigSetupCC>
-    </Dialog>
   </div>
 </template>
 
@@ -66,20 +38,22 @@ import Vue from "vue";
 import ChainCodeProcess from "../module/ChainCodeProcess";
 import Component from "vue-class-component";
 import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
-const isDevelopment = process.env.NODE_ENV !== "production";
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
 import NetworkConfig from "../models/NetworkConfig";
 // eslint-disable-next-line no-unused-vars
-import { ChainCode } from "@/models/ChainCode";
+import ChainCode from "@/models/ChainCode";
 //import FabrickSDK from "../module/fabric/FabrickSDK";
-
+const ChaincodePageProps = Vue.extend({
+  props: {
+    _display: Boolean,
+  },
+});
 @Component({
   components: { DigSetupCC },
 })
 // window.open("/chaincode","_self")
-export default class ChaincodePage extends Vue {
+export default class ChaincodePage extends ChaincodePageProps {
   ccName = "";
-  display = false;
   ccType = CCtype.go;
   path = "";
   ccList = [];
@@ -95,18 +69,8 @@ export default class ChaincodePage extends Vue {
     ChainCodeProcess.testClean();
   }
   //end test
-  //emit function
-  setCCtype(data: CCtype) {
-    this.ccType = data;
-  }
-  setCCName(data: string) {
-    this.ccName = data;
-  }
-  setDisplay(data: boolean) {
-    this.display = data;
-  }
-  setPath(data: string) {
-    this.path = data;
+  close() {
+    this.$emit("closeDig", false);
   }
   //end emit
   mounted() {
@@ -141,38 +105,8 @@ export default class ChaincodePage extends Vue {
       return mins + " " + "Minutes ago";
     }
   }
-  callConsole(){
-    //console.log(obj)
-    this.$router.push({ name: 'ConsoleCC'});
-  }
   //end render
-  //CC function
-  async deployCC(useInti: boolean, args: any) {
-    //TODO: fix channel
-    let channel = "testchannel";
-    let ccObj = await ChainCodeProcess.initNetworkConfig(
-      this.ccName,
-      this.ccType,
-      this.path,
-      channel
-    );
-    this.hookCClist();
-    //TODO: Get real project path
-    let projectPath = "";
-    if (isDevelopment) {
-      projectPath = "test";
-      await ChainCodeProcess.deployCCtoFabric(
-        projectPath,
-        ccObj,
-        useInti,
-        args
-      );
-      this.hookCClist();
-    }
-  }
-  initCC() {}
-  update() {}
-  //test funtion
+
 }
 </script>
 

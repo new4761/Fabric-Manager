@@ -1,7 +1,7 @@
 const { spawn } = require("child_process");
 
 const spawnSync = require('child-process-promise').spawn;
-
+import store from "../store/modules/project";
 import { strict } from "assert";
 import { OsType } from "../models/EnvProject";
 const path = require("path");
@@ -13,6 +13,7 @@ import DockerProcess from "./DockerProcess";
 import FileManager from "./FileManager";
 import StdoutCapture from "./OSProcess/StdoutCapture";
 import { removeColorCode } from "./StringBuilder";
+import ProjectConfig from "@/models/ProjectConfig";
 
 
 class OSProcess {
@@ -30,15 +31,16 @@ class OSProcess {
     logger.log("info", "OSProcess running: " + args + " at:" + path);
     return child;
   }
-  run_new(path: string, args: string[], type: OsType): any {
+  run_new(args: string[], type: OsType): any {
     let ls: any;
     //set to minifab output
+    let projectPath = ProjectConfig.getPathResolve(store.state.id);
     args.push("-f")
     args.push("minifab")
     switch (type) {
       case OsType.WINDOW:
         try {
-          ls = spawnSync("minifabwin.bat", args, { shell: true, cwd: path, capture: ['stdout', 'stderr'] });
+          ls = spawnSync("minifabwin.bat", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
           this.callback(ls.childProcess);
           return ls.then((res: any) => {
@@ -59,28 +61,26 @@ class OSProcess {
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  run_CC_output(projectPath: string, args: string[], type: OsType, methodName: string,version:any): any {
+  run_CC_output( args: string[], type: OsType, methodName: string,version:any): any {
     let ls: any;
     //set to minifab output
+    let projectPath = ProjectConfig.getPathResolve(store.state.id);
     args.push("-f")
     args.push("minifab")
     let scriptFile = "cc" + methodName + ".sh"
+    let sourceDir = path.join(projectPath, "vars", "run", scriptFile)
+    FileManager.createFile(sourceDir)
     switch (type) {
       case OsType.WINDOW:
         try {
           ls = spawnSync("minifabwin.bat", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + projectPath);
-          let sourceDir = path
-          if (isDevelopment) {
-            sourceDir = path.join(path.resolve(process.cwd()), "tests", "vars", "run", scriptFile)
-          }
-          else {
-            //TODO :real path
-            sourceDir = path.join(path.resolve(projectPath), "tests", "vars", "run", scriptFile)
-          }
-          let watcher = FileManager.WaitToReadFile(sourceDir)
+          //console.log(sourceDir)
+          // FileManager.createFile(sourceDir)
+          // let watcher = FileManager.WaitToReadFile(sourceDir)
+          //console.log(watcher)
           let payloadData: any[] = []
-          this.callbackCC(ls.childProcess, sourceDir, watcher, payloadData,version);
+          this.callbackCC(ls.childProcess,sourceDir, payloadData,version);
           let message: any[] = []
           return ls.then((res: any) => {
             // console.log(payloadData)
@@ -124,7 +124,8 @@ class OSProcess {
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  callbackCC(ls: any, projectPath: string, watcher: any, payloadData: any[],version:any) {
+  callbackCC(ls: any,sourceDir:string,payloadData: any[],version:any) {
+    let watcher = FileManager.WaitToReadFile(sourceDir)
     //  let sourceDir: string;
     let streamPipe: any
     watcher.on('change', async function name(e: any) {
@@ -132,7 +133,7 @@ class OSProcess {
     });
 
     watcher.on('close', async function name() {
-      let container = await ChainCodeProcess.findFirstEndorser(projectPath,version)
+      let container = await ChainCodeProcess.findFirstEndorser(sourceDir,version)
       streamPipe = await DockerProcess.callbackAttach(container, payloadData)
       //  console.log("watcher die bitch")
     });

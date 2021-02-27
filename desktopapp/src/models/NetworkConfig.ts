@@ -70,15 +70,19 @@ export class NetworkConfig {
   }
   getValue(key: string) {
     // to do -> read file agin before get value ****
-    if (isDevelopment) {
-      let filePath = path.join(path.join(path.resolve(process.cwd()), 'tests', "net-config.json"));
+    let filePath = path.join(ProjectConfig.getPath(store.state.id), "net-config.json");
      // console.log(filePath);
-      this.file = editJsonFile(filePath);
-    }
+    this.file = editJsonFile(filePath);
     let data = this.file.get(key);
-    if(!isDevelopment)
+    
     logger.log("info","get value");
     return data;
+  }
+  getUniqueOrgName(data:any){
+    data =this.getValue(data)
+    const regex = new RegExp('[a-zA-Z]*[0-9]*.(.*)');
+    const result = data.map((res:any) => res.match(regex)[1]).filter((value:any, index:number, self:any) =>self.indexOf(value) === index);
+    return result
   }
 
   getOrgName() {

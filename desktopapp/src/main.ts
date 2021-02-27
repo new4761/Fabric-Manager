@@ -71,6 +71,8 @@ import ScrollPanel from "primevue/scrollpanel";
 import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
 import Knob from 'primevue/knob';
+import Splitter from 'primevue/splitter';
+import SplitterPanel from 'primevue/splitterpanel';
 
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
@@ -180,6 +182,8 @@ Vue.component("TreeTable", TreeTable);
 Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
+Vue.component("SplitterPanel", SplitterPanel);
+Vue.component("Splitter", Splitter);
 
 const app = new Vue({
   data() {
