@@ -1,86 +1,76 @@
 <template>
   <div>
-    <!-- <div class="p-grid p-jc-center p-my-1">
-      <div class=" p-col-4 ">
-        
-      </div>
-      <div class=" p-col-4 ">thing</div>
-      <div class=" p-col-4 ">here yet</div>
-    </div> -->
-
-    <div class="p-grid p-jc-center p-my-1">
-      <div class="p-col-5">
-        <div class="tag-wrapper">
-          <div class="netstat-card netstat-card-content1">
-            <h1 class="netstat-card-title">
-              {{ activeContainer }} out of
-              {{ this.$store.getters["docker/getContainerCount"] }}
-            </h1>
-            <div class="netstat-card-desc">active containers</div>
-            <div class="netstat-card-divider"></div>
-            <div class="netstat-card-progress-wrapper">
-              <div class="tagline netstat-card-tag">net stat</div>
-              <div class="netstat-card-progress">
-                {{
-                  (activeContainer /
-                    this.$store.getters["docker/getContainerCount"]) *
-                    100
-                }}
-                %
+    <div class="p-d-flex p-my-1">
+      <div class="p-col-8 status">
+        <div class="p-d-flex">
+          <div class="p-col-5 status-container" :class="statusClass">
+            <div class="p-d-flex  p-jc-center">
+              <Knob
+                v-model="activeContainer"
+                :size="110"
+                :min="0"
+                :max="this.$store.getters['docker/getContainerCount']"
+                :readonly="true"
+                :valueColor="'#fff'"
+                :strokeWidth="15"
+                :textColor="'#fff'"
+                :valueTemplate="
+                  activeContainer +
+                    '/' +
+                    this.$store.getters['docker/getContainerCount']
+                "
+              />
+            </div>
+            <div class="p-d-flex  p-jc-center">Active containers</div>
+          </div>
+          <div class="p-col-auto status-detail">
+            <div class="p-col  p-as-center">
+              <div class="p-d-flex status-text">
+                net stat
+                <a>
+                  {{
+                    (activeContainer /
+                      this.$store.getters["docker/getContainerCount"]) *
+                      100
+                  }}
+                  %
+                </a>
+              </div>
+              <div class="p-d-flex status-text">
+                fabric version <a>{{ env.version }}</a>
+              </div>
+              <div class="p-d-flex status-text">
+                expose port <a>{{ env.port }}</a>
+              </div>
+              <div
+                class="p-d-flex status-text p-text-nowrap p-text-truncate"
+                style="width: 12rem"
+              >
+                current org <a>{{ env.org }}</a>
               </div>
             </div>
           </div>
-          <div class="divider"></div>
         </div>
-      </div>
 
-      <div class="p-col-3">
-        <div class="tag-wrapper">
-          <div class="netstat-card netstat-card-content4">
-            <div class="netstat-card-desc">
-              {{ this.$store.state.platform }}
-            </div>
-            <div class="netstat-card-desc">
-              {{ this.$store.state.project.path }}
-            </div>
-            <div class="netstat-card-desc">net stage</div>
-            <div class="netstat-card-desc">port</div>
-          </div>
-          <div class="divider"></div>
-        </div>
       </div>
-
       <div class="p-col-4">
-        <a  class="btn teal p-ripple" v-ripple
+        <a class="btn teal p-ripple" v-ripple
           >Explorer
           <img src="./assets/explorer.svg" class="btn-icon btn-icon--vis" />
         </a>
 
-        <a  class="btn light-blue p-ripple" v-ripple
+        <a class="btn light-blue p-ripple" v-ripple
           >Portainer
           <img src="./assets/portainer.svg" class="btn-icon btn-icon--vis"
         /></a>
       </div>
     </div>
-
-    <ContainerTable v-bind:container="container" />
+    <div v-if="statusClass == 'offline'" class="container">
+      network is currently offline
+    </div>
+    <ContainerTable v-bind:container="container" v-else />
 
     <LogView />
-
-    <div class="p-grid p-jc-center  p-my-1">
-      <div class="el p-col-12 " style=" height: 100vh;">
-        <div class="p-py-5">
-          <Button label=" demo " @click="$router.push('demo')" class="p-m-1" />
-          <Button
-            label=" channel "
-            @click="$router.push('channel')"
-            class="p-m-1"
-          />
-          <Button label=" project " @click="$router.push('/')" class="p-m-1" />
-          <Button label=" org " @click="$router.push('org')" class="p-m-1" />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -90,6 +80,10 @@ import Component from "vue-class-component";
 import ContainerTable from "./components/ContainerTable.vue";
 import LogView from "./components/LogView.vue";
 import DockerProcess from "./module/DockerProcess";
+const fs = require("fs");
+// const dotenv = require("dotenv");
+const path = require("path");
+
 @Component({
   components: {
     ContainerTable,
@@ -97,22 +91,68 @@ import DockerProcess from "./module/DockerProcess";
   },
 })
 export default class Index extends Vue {
+  envConfig: any;
   container: Array<Object> = [];
   activeContainer: number = 0;
+  statusClass: string = "";
+  split: any;
+  env = {
+    version: "",
+    port: "",
+    org: "",
+  };
+
+  // env index
+  // 0: "#!/bin/bash↵"
+  // 1: " XX_CHANNEL_NAME='undefined'↵"
+  // 2: " XX_CC_LANGUAGE='go'↵"
+  // 3: " XX_IMAGETAG='2.3.0'↵"
+  // 4: " XX_BLOCK_NUMBER='newest'↵"
+  // 5: " XX_CC_VERSION='1.0'↵"
+  // 6: " XX_CC_NAME='simple'↵"
+  // 7: " XX_DB_TYPE='golevel'↵"
+  // 8: " XX_CC_PARAMETERS='ImluaXQiLCJhIiwiMjAwIiwiYiIsIjMwMCIK'↵"
+  // 9: " XX_EXPOSE_ENDPOINTS='8000'↵"
+  // 10: " XX_CURRENT_ORG='org1.example.com'↵"
+  // 11: " XX_TRANSIENT_DATA='Cg=='↵"
+  // 12: " XX_CC_PRIVATE='false'↵"
+  // 13: " XX_CC_POLICY='Cg=='↵"
+  // 14: " XX_CC_INIT_REQUIRED='true'↵"
+  // 15: " XX_RUN_OUTPUT='minifab'↵"
 
   created() {
-    console.log(this.$store.state.project.path);
     this.$store.commit("docker/setContainer");
     this.$store.commit("docker/setOrgContainer");
-    this.getContainer();
+    this.container = this.$store.state.docker.activeContainer;
+    this.envConfig = fs.readFileSync(
+      path.join(this.$store.state.project.path + "/vars/envsettings"),
+      "utf8"
+    );
+    this.split = this.envConfig.split("declare");
+    this.getEnv();
   }
-  mounted() {}
-
-  updated() {
+  mounted() {
     this.$store.commit("docker/setActiveContainer");
     this.activeContainer = this.$store.getters[
       "docker/getActiveContainerCount"
     ];
+    if (this.activeContainer == 0) {
+      this.statusClass = "offline";
+    } else if (
+      this.activeContainer < this.$store.getters["docker/getContainerCount"]
+    ) {
+      this.statusClass = "partial";
+    } else if (
+      this.activeContainer == this.$store.getters["docker/getContainerCount"]
+    ) {
+      this.statusClass = "online";
+    }
+  }
+
+  getEnv() {
+    this.env.version = this.split[3].match(/'((?:\\.|[^'\\])*)'/)[1];
+    this.env.port = this.split[9].match(/'((?:\\.|[^'\\])*)'/)[1];
+    this.env.org = this.split[10].match(/'((?:\\.|[^'\\])*)'/)[1];
   }
 
   getContainer() {
@@ -121,86 +161,133 @@ export default class Index extends Vue {
         this.container = result;
       })
       .catch(() => {
-        // console.log(err);
         this.container = [];
       });
   }
+
+  
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.custom-table.p-datatable {
-  border-style: solid;
-  background-color: rgb(219, 219, 219);
-  border-radius: 5px;
-  color: rgb(114, 114, 114);
-  font-size: 12px;
-  overflow: auto;
-  height: 200px;
+:root {
+  --blue-color: #5296f9;
 }
 
-.custom-table .p-column-title {
-  color: rgb(74, 147, 255);
-  font-size: 15px;
+.divider-grad-mask {
+  width: 100%;
+  height: 1rem;
+  background: linear-gradient(
+      90deg,
+      var(--blue-color) 0 50%,
+      transparent 0 100%
+    )
+    0 0 / 2rem 1rem;
+  mask: linear-gradient(-90deg, black, transparent);
 }
 
-/* p-datatable-header
-p-datatable-footer
-p-column-title
-p-sortable-column
-p-column-filter
-p-datatable-scrollable-header
-p-datatable-scrollable-body
-p-datatable-scrollable-footer
-p-datatable-responsive
-p-datatable-emptymessage
-p-rowgroup-header
-p-rowgroup-footer */
+.status-text {
+  margin: 5px;
+  font-weight: bold;
+  font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans,
+    Tahoma, sans-serif;
+}
+.status-text a {
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.online {
+  background-color: rgb(49, 155, 255);
+}
+.offline {
+  background-color: rgb(255, 94, 94);
+}
+.partial {
+  background-color: rgb(255, 207, 75);
+}
+
+.status-container {
+  color: #fff;
+  border-radius: 10px 0px 0px 10px;
+  font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans,
+    Tahoma, sans-serif;
+}
+
+.status-detail {
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  padding: 1em;
+  border-radius: 0px 10px 10px 0px;
+}
+
+/* button base */
+.btn {
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  padding: 8px 30px;
+  border-radius: 10px;
+  line-height: normal;
+  font-size: 18px;
+  color: #fff;
+  background: #0099ff;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.btn:hover {
+  line-height: normal;
+}
+.btn-icon {
+  will-change: width, transform;
+  width: 0;
+  height: 50px;
+  padding: 2px;
+  border-radius: 50%;
+  fill: #fff;
+  background: rgb(255, 255, 255);
+  margin-left: 0;
+  transform: scale(0);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.btn-icon--vis {
+  width: 50px;
+  transform: scale(1);
+  margin-left: 8.333333333333334px;
+}
+.btn:hover .btn-icon {
+  width: 50px;
+  transform: scale(1);
+  margin-left: 8.333333333333334px;
+}
+
+.light-blue {
+  background: rgb(87, 209, 250);
+}
+.light-blue:hover {
+  background: darken(rgb(87, 209, 250), 10%);
+}
+
+.teal {
+  background: teal;
+}
+.teal:hover {
+  background: darken(teal, 10%);
+}
 
 .container {
   border-style: solid;
   background-color: rgb(219, 219, 219);
   border-radius: 5px;
   color: rgb(114, 114, 114);
-  font-size: 12px;
-  white-space: break-spaces;
-  word-break: break-all;
+  font-size: 30px;
   padding: 1em;
-  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 200px;
-}
-
-.log {
-  background-color: rgb(56, 56, 56);
-  border-radius: 5px;
-  color: aliceblue;
-  font-size: 12px;
-  white-space: break-spaces;
-  word-break: break-all;
-  padding: 1em;
-  overflow: auto;
-  height: 200px;
-}
-
-.info {
-  font-weight: bold;
-  color: rgb(103, 184, 255);
-}
-
-.warn {
-  font-weight: bold;
-  color: rgb(255, 190, 93);
-}
-
-.error {
-  font-weight: bold;
-  color: rgb(255, 97, 97);
-}
-
-.timestamp {
-  font-size: 10px;
-  font-weight: lighter;
-  color: rgb(134, 134, 134);
 }
 </style>

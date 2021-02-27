@@ -10,32 +10,51 @@
         v-for="(item, index) in org"
         :key="index"
       >
-        <div class="p-grid">
-          <div class="p-col-8">
-            <h4>{{ item.name }}</h4>
+        <div class="p-d-flex">
+          <div class="org-title p-col-8">
+            {{ item.name }}
           </div>
           <div class="p-col p-m-1">
-            <div class="p-grid p-jc-end">
-              <span class="p-mx-1" v-if="item.orderer"> <Tag class="p-mr-2" severity="warning" value="orderer"></Tag> </span>
-              <span class="p-mx-1" v-if="item.ca"> <Tag severity="danger" value="ca"></Tag> </span>
-              <span class="p-mx-1" v-if="item.peer > 0"> <Tag class="p-mr-2" severity="info" value="peer"></Tag> </span>
+            <div class="p-d-flex p-jc-end">
+              <span class="p-mx-1" v-if="item.orderer">
+                <Tag class="p-mr-2" severity="warning" value="orderer"></Tag>
+              </span>
+              <span class="p-mx-1" v-if="item.ca">
+                <Tag severity="danger" value="ca"></Tag>
+              </span>
+              <span class="p-mx-1" v-if="item.peer > 0">
+                <Tag
+                  class="p-mr-2"
+                  severity="info"
+                  value="peer"
+                  v-badge="item.peer"
+                 
+                ></Tag>
+              </span>
             </div>
           </div>
         </div>
 
-        <div class="p-grid">
-          <div class="p-col">  <small> {{ item }} </small></div>
-        
+        <div class="p-d-flex">
+          <div class="org-subtitle p-col-8">
+            {{ item.fullname }}
+          </div>
         </div>
-        <div class="org-sub">
-          <OrgDetail v-bind:object="Array.from(item.child)" />
+
+        <div class="p-d-flex">
+          <div class="p-col">
+            <small> //TODO MSP, NODE OU, CERT</small>
+          </div>
+        </div>
+        <div class="p-d-flex">
+          <div class="p-col">
+            <div>
+              <OrgDetail v-bind:object="Array.from(item.child)" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <small>
-      {{ org }}
-    </small>
   </div>
 </template>
 
@@ -58,8 +77,6 @@ export default class OrgPage extends Vue {
   init() {
     this.fabric = NetworkConfig.getValue("project_config.fabric");
     this.org = NetworkConfig.getOrgName();
-
-    
   }
 }
 </script>
@@ -74,58 +91,11 @@ export default class OrgPage extends Vue {
   border-radius: 5px;
 }
 
-.org-sub {
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
-  overflow: hidden;
-  transition: all 0.5s;
-  cursor: pointer;
-  border-radius: 5px;
+.org-title {
+  font-weight: bolder;
+  font-size: 25px;
 }
-
-.org-sub:hover {
-  color: #0388e5;
-}
-
-.org-item {
-  background-color: rgb(78, 78, 78);
-  color: rgb(255, 255, 255);
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  transition: all 0.5s;
-}
-
-.org-item:hover {
-  color: #0388e5;
-}
-
-.smooth-enter,
-.smooth-leave-to {
-  background-color: rgb(78, 78, 78);
-  overflow: hidden;
-  max-height: 0;
-}
-
-.smooth-enter-to,
-.smooth-leave {
-  background-color: rgb(78, 78, 78);
-  overflow: hidden;
-  max-height: 1000px;
-}
-
-.smooth-leave-active {
-  background-color: rgb(78, 78, 78);
-  overflow: hidden;
-  transition: max-height 0.3s;
-}
-
-.smooth-enter-active {
-  background-color: rgb(78, 78, 78);
-  overflow: hidden;
-  transition: max-height 1s;
+.org-subtitle {
+  font-size: 15px;
 }
 </style>

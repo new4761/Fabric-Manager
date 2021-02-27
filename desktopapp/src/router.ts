@@ -7,11 +7,20 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: 'Project',
-      component: () => import('./pages/ProjectsPage.vue'),
+      name: "Project",
+      component: () => import("./pages/ProjectsPage.vue"),
       meta: {
-          layout: "clean-layout"
-        },
+        layout: "clean-layout",
+      },
+    },
+    {
+      path: "/console",
+      name: "SplashConsole",
+      component: () => import("./pages/SplashConsolePage.vue"),
+      meta: {
+        layout: "clean-layout",
+      },
+      props: true,
     },
     {
       path: "/demo",
@@ -22,6 +31,12 @@ export default new Router({
       path: "/channel",
       name: "Channel",
       component: () => import("./pages/ChannelPage.vue"),
+    },
+    {
+      path: "/channel/edit",
+      name: "ChannelEdit",
+      component: () => import("./pages/ChannelEditPage.vue"),
+      props: true,
     },
 
     {

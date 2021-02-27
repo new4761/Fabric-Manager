@@ -1,16 +1,29 @@
 <template>
   <div>
-    <span @click="display = true">
-      <Button label="Create Project" icon="fas fa-plus-square fa-lg" iconPos="left"/>
-      <!-- <Card
-        style="width: 9rem; height: 9rem; padding-top: 1em; background-color: rgb(0, 162, 273);"
+    <div>
+      <Dialog
+        header="fast"
+        v-bind:visible="displaylog"
+        :closable="false"
+        modal
+        :style="{ width: '80vw' }"
+        :contentStyle="{ overflow: 'visible' }"
       >
-        <template v-slot:content>
-          <div class="p-grid p-jc-center">
-            <Button icon="pi pi-plus" class="p-button-rounded p-button-lg " />
-          </div>
-        </template>
-      </Card> -->
+        <Terminal />
+        <Button
+          class="p-button-danger p-m-2"
+          label="close"
+          @click="displaylog = false"
+        />
+      </Dialog>
+    </div>
+
+    <span @click="display = true">
+      <Button
+        label="Create Project"
+        icon="fas fa-plus-square fa-lg"
+        iconPos="left"
+      />
     </span>
 
     <div>
@@ -46,6 +59,22 @@
         <div class="p-grid p-fluid p-field">
           <OrgInputText @new-org="newOrgTolist"></OrgInputText>
         </div>
+        <div class="p-grid p-mt-5 p-jc-between p-px-5">
+          <div class="p-field-checkbox p-mx-5">
+            <Checkbox id="quick" v-model="quick" :binary="true" />
+            <label for="quick">quick startup</label>
+          </div>
+
+          <div class="p-field-checkbox p-mx-5">
+            <Checkbox
+              id="binary"
+              v-model="channel"
+              :binary="true"
+              :disabled="!quick"
+            />
+            <label for="binary">create default channel</label>
+          </div>
+        </div>
 
         <div class="p-grid p-mt-5">
           <Button
@@ -74,19 +103,25 @@ import OrgEditButton from "./OrgEditButton.vue";
 import SpecConfig from "../models/SpecConfig";
 import NetworkConfig from "../models/NetworkConfig";
 import ProjectConfig from "../models/ProjectConfig";
+import Terminal from "./Terminal.vue";
 
 // import OrgData from "@/models/OrgData";
 @Component({
   components: {
     OrgInputText,
     OrgEditButton,
+    Terminal,
   },
 })
 export default class CreateNetButton extends Vue {
+  quick: boolean = true;
+  channel: boolean = true;
   display: boolean = false;
+  displaylog: boolean = false;
   object = SpecConfig;
   projectDir: string = "";
   projectName: string = "";
+  defaultOrg: string = "";
 
   newOrgTolist(name: string, isOrderer: boolean) {
     this.object.newOrg(name, isOrderer);
@@ -102,9 +137,26 @@ export default class CreateNetButton extends Vue {
       date_create: +new Date(),
       directory: this.projectDir,
     };
-    ProjectConfig.addProject(project);
-    NetworkConfig.createConfig(project);
-    this.display = false
+    let id = ProjectConfig.addProject(project);
+
+    if (this.quick) {
+      let defaultOrg = NetworkConfig.createConfig(project, this.channel);
+      this.$router.push({
+        name: "SplashConsole",
+        params: {
+          command:
+             (this.channel ? "netup,create,join" : "netup") +
+            " -o " +
+            defaultOrg +
+            (this.channel ? " -c mychannel" : ""),
+          directory: this.projectDir,
+          id: id,
+        },
+      });
+    } else {
+      NetworkConfig.createConfig(project);
+    }
+    this.display = false;
   }
 
   getFilepath() {

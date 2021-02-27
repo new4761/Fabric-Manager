@@ -1,38 +1,5 @@
 <template>
   <div>
-    <!-- <div class="p-d-flex">
-      <Button
-        icon="fas fa-power-off"
-        class="p-button-success p-button-lg p-m-1"
-        label="start"
-        @click="display = true"
-      />
-    </div>
-    <div class="p-d-flex">
-      <Button
-        icon="fas fa-power-off"
-        class=" p-button-secondary p-button-lg p-m-1"
-        label="shutdown"
-        @click="netdown()"
-      />
-    </div>
-    <div class="p-d-flex">
-      <Button
-        icon="fas fa-redo"
-        class=" p-button-warning p-button-lg p-m-1"
-        label="restart"
-        @click="cleanup()"
-      />
-    </div>
-    <div class="p-d-flex">
-      <Button
-        icon="fas fa-trash"
-        class=" p-button-danger p-button-lg p-m-1"
-        label="cleanup"
-        @click="cleanup()"
-      />
-    </div> -->
-
     <div class="p-d-flex">
       <Button
         icon="fas fa-power-off"
@@ -44,13 +11,6 @@
         icon="fas fa-power-off"
         class=" p-button-danger p-button-lg p-m-1"
         @click="netdown()"
-      />
-    </div>
-    <div class="p-d-flex">
-      <Button
-        icon="fas fa-redo"
-        class=" p-button-warning p-button-lg p-m-1"
-        @click="restart()"
       />
 
       <Button
@@ -88,11 +48,24 @@
         :contentStyle="{ overflow: 'visible' }"
       >
         <div class="p-d-flex">
-          <div class="p-col-3 p-mx-2 ">
-            <InputText id="port" type="number" v-model="port" placeholder="port"/>
+          <div class="p-col-12 p-ml-5 p-my-1">
+            <span class="p-float-label">
+              <Dropdown
+                id="organization"
+                v-model="orgSelected"
+                :options="org"
+              />
+              <label for="organization">Default organization</label>
+            </span>
           </div>
-          <div class="p-col-4 p-mx-3">
-            <Dropdown v-model="orgSelected" :options="org" placeholder="organization"/>
+        </div>
+
+        <div class="p-col-12 p-d-flex">
+          <div class="p-ml-5 p-my-1">
+            <span class="p-float-label">
+              <InputText id="port" v-model="port" />
+              <label for="port">port (optional)</label>
+            </span>
           </div>
         </div>
         <div class="p-d-flex p-jc-end p-mt-1">
@@ -128,10 +101,12 @@ export default class NetOpsButton extends Vue {
   projectDir: string = "";
   display: boolean = false;
   displaylog: boolean = false;
+  expose: boolean = false;
   orgSelected: string = "";
   org: any[] = [];
   port: string = "";
   command: string = "";
+
   mounted() {
     this.init();
   }
@@ -141,7 +116,7 @@ export default class NetOpsButton extends Vue {
   }
   netup() {
     this.command = "";
-    let args: string[] = ["netup"];
+    let args: string[] = ["restart"];
     if (this.orgSelected != "") {
       args.push("-o " + this.orgSelected);
     }
@@ -186,6 +161,9 @@ export default class NetOpsButton extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .p-inputtext {
-  width: 100px;
+  width: 150px;
+}
+.p-dropdown {
+  width: 200px;
 }
 </style>

@@ -4,7 +4,6 @@ const path = require("path");
 import logger from "../module/Logger";
 import { DirBuilder } from "../module/DirBuilder";
 
-
 export class ProjectConfig {
   file: any;
 
@@ -31,18 +30,28 @@ export class ProjectConfig {
     this.file.data[project.id] = project;
     this.file.save();
     logger.log("info", "project-config: add new element");
+    return project.id;
   }
 
   deleteProject(id: number) {
-    let dirBuilder = new DirBuilder()
-    let dir = this.file.data[id].directory;
+    let dirBuilder = new DirBuilder();
+    let target = this.file.data.find((element: any) => element.id == id);
+    let dir = target.directory;
 
-    dirBuilder.deleteDir(dir);
+    console.log(dir);
 
-    logger.log("warn", "project-config: delete project id: " + id + "at: " + dir);
+    // dirBuilder.deleteDir(dir);
 
-    if (id > -1) {
-      this.file.data.splice(id, 1);
+    logger.log(
+      "warn",
+      "project-config: delete project id: " + target.id + "at: " + dir
+    );
+
+    if (target.id > -1) {
+      this.file.data.splice(
+        this.file.data.findIndex((element: any) => element.id == id),
+        1
+      );
     }
     this.file.save();
   }

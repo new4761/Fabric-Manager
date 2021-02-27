@@ -6,7 +6,7 @@ const state = {
   networkId: "",
   container: [],
   orgContainer: [],
-  activeContainer: Array(),
+  activeContainer:[],
 };
 
 // getters
@@ -19,6 +19,9 @@ const getters = {
 
   getContainerCount() {
     return state.orgContainer.length;
+  },
+  getActiveContainer() {
+    return state.activeContainer;
   },
 
   getActiveContainerCount() {
@@ -53,6 +56,7 @@ const mutations = {
   },
 
   setActiveContainer() {
+    mutations.setContainer()
     state.activeContainer = [];
     state.container.forEach((element: any, index: number) => {
       var el = state.orgContainer.find((a: string) =>
@@ -60,6 +64,7 @@ const mutations = {
       );
 
       if (el !== undefined) {
+        // @ts-ignore
         state.activeContainer.push(element);
       }
     });
