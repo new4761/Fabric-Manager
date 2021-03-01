@@ -46,9 +46,15 @@ export default new Router({
     },
 
     {
-      path: "/chaincode",
-      name: "Chaincode",
+      path: "/chaincode/manager",
+      name: "CCManager",
       component: () => import("./pages/ChaincodePage.vue"),
+    },
+    {
+      path: "/chaincode/console",
+      name: "ConsoleCC",
+      component: () => import("./pages/ccPage/CCconsole.vue"),
+      props: true
     },
 
     {
@@ -59,32 +65,6 @@ export default new Router({
         layout: "default-layout",
       },
     },
-    // {
-    // 	path: '/orgchart',
-    // 	name: 'Orgchart',
-    // 	component: () => import('./pages/org-chart/index.vue')
-    // },
-    // {
-    //     path: '/orgform',
-    // 	component: () => import('./pages/org-form/index.vue'),
-    //     children: [
-    //     {
-    //         path: '',
-    //         component: () => import('./pages/org-form/components/step-1.vue')
-    //     },
-    //     {
-    //         path: '/orgform/step2',
-    //         component: () => import('./pages/org-form/components/step-2.vue')
-    //     },
-    //     {
-    //         path: '/orgform/step3',
-    //         component: () => import('./pages/org-form/components/step-3.vue')
-    //     },
-    //     {
-    //         path: '/orgform/step4',
-    //         component: () => import('./pages/org-form/components/step-4.vue')
-    //     }]
-    // },
   ],
   scrollBehavior() {
     return { x: 0, y: 0 };

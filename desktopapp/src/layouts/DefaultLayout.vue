@@ -56,7 +56,7 @@ export default class DefaultLayout extends Vue {
         {
           label: "ChainCode",
           icon: "pi pi-fw pi-clone",
-          to: "/chaincode",
+         to:"/chaincode/console"
         },
         {
           label: "Menu Hierarchy",

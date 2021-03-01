@@ -1,103 +1,112 @@
 <template>
-  <div>
-    <h1>
-      <Button label="testNetwork" @click="testsetup()" />
-      <br />
-      <Button label="testcleanup" @click="testcleanup()" />
-      <br />
-      <Button label="go" @click="testGo()" />
-      <br />
-      <Button label="node" />
-      <br />
-      <Button label="java" />
-      <br />
-      <!-- <Button label="testupLoad" @click="testUpload()" /> -->
-    </h1>
-    <div class="p-grid p-fluid">
-      <div class="p-col-12 p-md-4">
-        <div class="p-inputgroup">
-          <InputText
-            placeholder="CCName"
-            v-model="ccName"
-            @change="logCCName()"
-          />
-          <Dropdown
-            v-model="selectedCCtype"
-            :options="ccType"
-            optionLabel="text"
-            placeholder="Select CC type"
-          />
-        </div>
-      </div>
+  <div class="p-grid p-mx-3">
+    <div class="p-col-12 p-mx-3">
+      
+      <h1>
+        <Button label="testNetwork" @click="testsetup()" />
+        <br />
+        <Button label="testcleanup" @click="testcleanup()" />
+        <br />
+      </h1>
     </div>
+    <DataTable :value="ccList">
+      <Column field="id" header="ID"></Column>
+      <Column field="name" header="Name"></Column>
+      <Column field="type" header="Language"></Column>
+      <Column header="Lastupdate">
+        <template #body="obj">
+          {{ convertTime(obj.data.lastUpdate) }}
+        </template></Column
+      >
+      <Column header="state">
+        <template #body="obj">
+          <Tag :value="obj.data.state"></Tag>
+        </template>
+      </Column>
+      <Column>
+        <template #body="obj">
+          {{ obj.data }}
+        </template>
+      </Column>
+    </DataTable>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 // eslint-disable-next-line no-unused-vars
-import { CCstate, CCtype } from "../models/EnvProject";
 import ChainCodeProcess from "../module/ChainCodeProcess";
 import Component from "vue-class-component";
+import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
+import { CCtype, netWorkConfigPath } from "../models/EnvProject";
+import NetworkConfig from "../models/NetworkConfig";
+// eslint-disable-next-line no-unused-vars
+import ChainCode from "@/models/ChainCode";
+//import FabrickSDK from "../module/fabric/FabrickSDK";
+const ChaincodePageProps = Vue.extend({
+  props: {
+    _display: Boolean,
+  },
+});
 @Component({
-  components: {},
+  components: { DigSetupCC },
 })
-export default class ChainCodePage extends Vue {
-  ccName: string = "";
-  selectedCCtype: { data: CCtype; text: string } = {
-    data: CCtype.go,
-    text: "go",
-  };
-  ccType = [
-    { data: CCtype.go, text: "go" },
-    { data: CCtype.java, text: "java" },
-    { data: CCtype.node, text: "node" },
-  ];
+// window.open("/chaincode","_self")
+export default class ChaincodePage extends ChaincodePageProps {
+  ccName = "";
+  ccType = CCtype.go;
+  path = "";
+  ccList = [];
+  // test function
+  testSDK() {
+    //FabrickSDK.connect();
+  }
 
-  //test funtion
-  logCCName() {
-    console.log(this.ccName);
-  }
-  // logCCtype(e:any){
-  //    console.log(e.value.data)
-  //  console.log(this.selectedCCtype)
-  // }
-  getselectCCtype() {
-    //  this.selectedCCtype = e.value.data;
-    //console.log(this.selectedCCtype);
-    return this.selectedCCtype.data;
-  }
   testsetup() {
     ChainCodeProcess.testFunction();
   }
   testcleanup() {
     ChainCodeProcess.testClean();
   }
-  update() {}
-  invoke() {}
-  query() {}
-  //test funtion
-  async testGo() {
-    let ccstate: CCstate;
-    ccstate = await ChainCodeProcess.setupFolder(
-      this.ccName,
-      this.getselectCCtype()
-    );
-    console.log(ccstate);
-    ccstate = await ChainCodeProcess.deployCC(
-      this.ccName,
-      this.getselectCCtype(),
-      ccstate
-    );
-    console.log(ccstate);
-    ccstate = await ChainCodeProcess.approve(ccstate);
-    console.log(ccstate);
-    ccstate = await ChainCodeProcess.commit(ccstate);
-    console.log(ccstate);
+  //end test
+  close() {
+    this.$emit("closeDig", false);
   }
-  testUpload() {
-    ChainCodeProcess.testUpLoad();
+  //end emit
+  mounted() {
+    this.hookCClist();
   }
+  hookCClist() {
+    this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+    // to do fix date to read
+  }
+  //end emit
+  //render function
+  convertTime(unix: number) {
+    let dateNow: number = Date.now();
+  //  console.log(new Date(unix).getDate());
+    let dayNow = new Date(dateNow).getTime();
+    let dayUpdate = new Date(unix).getTime();
+    return this.msToTime(dayNow - dayUpdate);
+  }
+  msToTime(s: number) {
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = ((s - mins) / 60) % 24;
+    var day = Math.round((s - mins) / 60 / 24);
+    if (day >= 1) {
+      return day + " " + "Days ago";
+    } else if (hrs >= 1) {
+      return hrs + " " + "Hours ago";
+    } else {
+      return mins + " " + "Minutes ago";
+    }
+  }
+  //end render
+
 }
 </script>
 

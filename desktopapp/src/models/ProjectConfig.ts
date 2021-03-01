@@ -60,6 +60,10 @@ export class ProjectConfig {
     return this.file.data[id].directory;
   }
 
+ getPathResolve(id: number) {
+    return  path.resolve(this.file.data[id].directory)
+  }
+
   updateDate(id: number) {
     this.file.data[id].set("date_modify", +new Date());
     logger.log("info", "project-config: update date_modify");
@@ -71,6 +75,6 @@ export class ProjectConfig {
     logger.log("info", "project-config: update key-value");
   }
 
-  getValue(key: string) {}
+  getValue(key: string) { }
 }
 export default new ProjectConfig();

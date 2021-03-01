@@ -21,6 +21,18 @@ export enum CCstate {
     initCC ="initCC",
  //   upGradeCC ="upGradeCC",
    // unreadyCC ="unreadyCC",
-    errorCC ="errorCC",
-    readyCC  ="readyCC"   
+    // errorCC ="errorCC",
+    // readyCC  ="readyCC"   
+}
+export enum netWorkConfigPath{
+    channelPath="channel",
+    ccPath =  "chain_codes",
+    peerPath="project_config.fabric.peers",
+}
+
+export class ccOutputPayload {
+  rawData: Array<string> = [];
+  response: Array<string>  = [];
+  fabricPayload: string = "";
+
 }

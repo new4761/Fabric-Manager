@@ -17,7 +17,7 @@
     <transition name="fade" mode="out-in">
       <component :is="layout">
         <div v-if="$root.loading">
-          loading bitch
+          <!-- loading bitch -->
         </div>
         <router-view v-else />
       </component>
