@@ -1,0 +1,17 @@
+{
+  "name": "connent_to_network",
+  "version": "1.0.0",
+  "description": "",
+  "main": "connent.js",
+  "dependencies": {
+    "fabric-client": "^1.4.17",
+    "fabric-network": "^2.2.5",
+    "grpc": "^1.24.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

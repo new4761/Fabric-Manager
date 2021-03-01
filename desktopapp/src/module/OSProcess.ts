@@ -40,7 +40,7 @@ class OSProcess {
     switch (type) {
       case OsType.WINDOW:
         try {
-          ls = spawnSync("minifabwin.bat", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
+          ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
           this.callback(ls.childProcess);
           return ls.then((res: any) => {
@@ -73,7 +73,7 @@ class OSProcess {
     switch (type) {
       case OsType.WINDOW:
         try {
-          ls = spawnSync("minifabwin.bat", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
+          ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + projectPath);
           //console.log(sourceDir)
           // FileManager.createFile(sourceDir)

@@ -38,8 +38,8 @@ export class NetworkConfig {
       ...data,
     };
 
-    let filePath = path.join(path.join(path.resolve(process.cwd()), 'tests', "net-config.json"));
-    let file = editJsonFile(filePath);
+  
+    let file = editJsonFile(path.join(project.directory, "net-config.json"));
     file.set("project_config", data);
     if (quick) {
       file.set("channel", [{ name: "mychannel" }]);

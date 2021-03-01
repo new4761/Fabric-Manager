@@ -62,7 +62,7 @@
             v-model="selectedCC"
             :options="ccList"
             optionLabel="name"
-            @click="hookCClist()"
+            @before-show="hookCClist"
             @change="setSelectedCC"
           />
         </div>
@@ -88,7 +88,12 @@
         </Accordion>
       </div>
     </div>
-
+        <div v-for="(item, index) in args.length + 1" :key="index">
+          <InputArg
+            @setArg="setArg($event, index)"
+            @deleteArg="deleteArg(index)"
+          ></InputArg>
+        </div>
     <div class="p-col-12">
       <ScrollPanel style="width: 100%">
         <TabView>
@@ -108,7 +113,6 @@
         </TabView>
       </ScrollPanel>
     </div>
-
     <Dialog
       modal
       :dismissableMask="true"
@@ -193,17 +197,19 @@ export default class CCconsole extends CCconsoleProps {
   ];
   created() {
     this.hookCClist();
-    this.selectedCC = this.ccList[0];
     this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
-    this.selectedChannel = this.channelList[0];
+   // this.selectedChannel = this.channelList[0];
     this.orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
     this.selectedOrg = this.orgList[0];
+    this.selectedCC = this.ccList[0];
+    //console.log(NetworkConfig.getValue(netWorkConfigPath.channelPath)+":dasdasdasdasd")
   }
   mounted() {
     //console.log( new Date(Date.now()).toISOString())
   }
   //TODO hook on selected channel
   hookCClist() {
+   // console.log("hook")
     this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
     // to do fix date to read
   }

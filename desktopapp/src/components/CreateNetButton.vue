@@ -147,7 +147,7 @@ export default class CreateNetButton extends Vue {
           command:
              (this.channel ? "netup,create,join" : "netup") +
             " -o " +
-            defaultOrg +
+            defaultOrg +" -e "+" true "+ 
             (this.channel ? " -c mychannel" : ""),
           directory: this.projectDir,
           id: id,
