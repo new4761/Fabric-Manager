@@ -3,26 +3,29 @@
     <ContextMenu :global="true" :model="items" />
 
     <div class="title-bar">
-      <div class="title">
-        Current Path : {{ $route.name }} Project ID:
-        {{ this.$store.state.project.id }}
-      </div>
-
-      <div class="title-btn">
-        <div class="minimize" @click="minimizeWindow()"></div>
-        <div class="maximize" @click="maximizeWindow()"></div>
-        <div class="close" @click="closeWindow()"></div>
-      </div>
-    </div>
-    <transition name="fade" mode="out-in">
-      <component :is="layout">
-        <div v-if="$root.loading">
-          <!-- loading bitch -->
+      <div class="title-content">
+        <div class="title">
+          Current Path : {{ $route.name }} Project ID:
+          {{ this.$store.state.project.id }}
         </div>
-        <router-view v-else />
-      </component>
-    </transition>
-  </div>
+
+        <div class="title-btn">
+          <div class="minimize" @click="minimizeWindow()"></div>
+          <div class="maximize" @click="maximizeWindow()"></div>
+          <div class="close" @click="closeWindow()"></div>
+        </div>
+      </div>
+      </div>
+      <transition name="fade" mode="out-in">
+        <component :is="layout">
+          <div v-if="$root.loading">
+            loading bitch
+          </div>
+          <router-view v-else />
+        </component>
+      </transition>
+    </div>
+ 
 </template>
 
 <script lang="ts">
