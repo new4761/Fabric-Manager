@@ -1,13 +1,42 @@
-// .p-button {
-// }
-// .p-button-danger {
+.p-button {
+  color: white !important;
+//   background-color: $buttonPrimaryBgColor !important;
+}
 
-//   background-color: rgb(255, 149, 149) !important;
-// }
-// .p-button-label {
-// }
-// .p-button-info {
-//   background-color: rgb(255, 149, 149) !important;
-// }
-// .p-button-lg {
-// }
+.p-button-primary {
+  color: white !important;
+  background-color: $buttonPrimaryBgColor !important;
+}
+
+.p-button-success {
+    background-color: $buttonSuccessBgColor !important;
+  }
+
+.p-button-danger {
+  background-color: $buttonDangerBgColor !important;
+}
+
+.p-button-warning {
+  background-color: $buttonWarningBgColor !important;
+}
+
+.p-button-secondary {
+  background-color: $buttonSecondaryBgColor !important;
+}
+
+.p-button-primary {
+  background-color: $buttonPrimaryBgColor !important;
+}
+
+.p-button-info {
+  background-color: $buttonInfoBgColor !important;
+}
+
+.p-button-lg {
+}
+
+
+.p-card {
+    background-color:$bodyBgColor !important;
+}
+

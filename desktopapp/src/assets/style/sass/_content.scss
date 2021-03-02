@@ -1,12 +1,15 @@
 .layout-main {
   transition: margin-left $transitionDuration;
-  
 }
 
-.layout-wrapper{
+.layout-wrapper {
   max-width: 1000px;
-  padding: 2rem 2rem 2rem 2rem;
- 
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .scroll-main {
@@ -14,7 +17,6 @@
   width: 100%;
   height: 94vh;
   background-color: $bodyBgColor;
-
 }
 
 .scroll-main::-webkit-scrollbar {
@@ -68,9 +70,8 @@
   height: 6vh;
   padding: 0px;
   margin: 0px;
-  background-color:$bodyBgColor;
+  background-color: $bodyBgColor;
   border-bottom: 1px solid rgb(161, 161, 161);
-
 }
 
 .title {
