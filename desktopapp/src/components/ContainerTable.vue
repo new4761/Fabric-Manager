@@ -1,27 +1,26 @@
 <template>
   <div>
-    <Dialog :visible="display" :closable="false" class="container-info">
+    <!-- <Dialog :visible="display" :closable="false" class="container-info">
       {{ containerData }}
-      <div class="p-grid p-mt-5">
+      <div class="p-grid">
         <Button
           class="p-button-danger p-ml-auto p-my-2"
           label="close"
           @click="display = false"
         />
       </div>
-    </Dialog>
+    </Dialog> -->
 
     <!-- <div class="p-grid p-jc-center  p-my-1">
       <div class="container p-col-12 ">
         {{ container }}
       </div>
     </div> -->
-
-    <div class="table-wrapper p-grid p-jc-center p-my-4">
-      <div class="table-header">
-        Network containers
-        <Button icon="pi pi-refresh" />
-      </div>
+    <div class="table-header p-grid ">
+      Network containers
+      <!-- <Button icon="pi pi-refresh" /> -->
+    </div>
+    <div class="table-wrapper p-grid p-jc-center">
       <DataTable :value="container" class="custom-table" :autoLayout="true">
         <Column field="Names" header="Name">
           <template #body="slotProps">
@@ -60,64 +59,91 @@ import Component from "vue-class-component";
 
 @Component({
   components: {},
-  props: {
-    container: Array,
-  },
 })
 export default class ContainerTable extends Vue {
-  containerData: object = {};
-  display: boolean = false;
-  openInfo(containerData: Object) {
-    this.containerData = containerData;
-    this.display = true;
+  envConfig: any;
+  container: Array<Object> = [];
+  activeContainer: number = 0;
+  statusClass: string = "";
+
+  updated() {
+    // this.$store.commit("docker/setActiveContainer");
+    this.container = this.$store.state.docker.activeContainer;
+    this.activeContainer = this.$store.getters[
+      "docker/getActiveContainerCount"
+    ];
+    if (this.activeContainer == 0) {
+      this.statusClass = "offline";
+    } else {
+      this.statusClass = "online";
+    }
   }
 
-  closeinfo() {
-    this.display = false;
+  mounted() {
+    this.container = this.$store.state.docker.activeContainer;
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
 /* .custom-table .p-datatable-header {
   background-color: rgb(255, 255, 255);
   font-size: 20px;
 } */
+@import "@/assets/style/_variables.scss";
 .table-wrapper {
-  padding-left: 1em;
-  padding-right: 1em;
+  padding: 10px 40px 40px 40px;
+  background-color: $SubBgColor;
 }
 
 .table-header {
-  border-radius: 5px 5px 0px 0px;
-  width: 100%;
-  padding: 10px;
-  display: flex;
+  padding: 40px;
   align-items: center;
-  justify-content: space-between;
-  background-color: rgb(49, 155, 255);
+  background-color: $SubBgColor;
   color: white;
   font-size: 20px;
   font-weight: bold;
+  border-bottom: 9px solid rgb(161, 161, 161);
 }
 
 .custom-table.p-datatable {
-  background-color: rgb(219, 219, 219);
-  border-radius: 5px;
+  background-color: $SubBgColor;
   font-size: 12px;
   overflow: auto;
-  height: 350px;
+  height: calc(94vh - 420px);
   width: 100%;
 }
 
 .custom-table .p-column-title {
-  color: rgb(74, 147, 255);
+  font-size: 17px;
+}
+
+.custom-table tr,
+th {
+  background-color: $SubBgColor !important;
+  transition: all 0.3s!important;
+}
+.custom-table tr {
   font-size: 15px;
 }
-.container-info {
-  width: 50vh;
+.custom-table tr:hover {
+  color: $primaryBgColor;
+  background-color: $SubBgColorHover !important;
 }
+
+.custom-table a{
+  color: $primaryBgColor;
+}
+
+// .container-info {
+//   width: 50vh;
+// }
+
+// .custom-table .p-datatable-header{
+//   background-color: $SubBgColor !important;
+// }
+
 /* p-datatable-header
 p-datatable-footer
 p-column-title

@@ -82,7 +82,7 @@ export class NetworkConfig {
     this.file = editJsonFile(filePath);
     let data = this.file.get(key);
     
-    logger.log("info","get value");
+    logger.log("info","get " + key);
     return data;
   }
   getUniqueOrgName(data:any){

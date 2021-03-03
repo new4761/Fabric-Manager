@@ -1,9 +1,13 @@
 /* General */
 $fontSize:16px;
+$bodyBgColorDarker:rgb(20,34,43);
 $bodyBgColor:rgb(39,52,59);
-$SubBgColor:rgb(33, 40, 44);
+// $SubBgColor:rgb(33, 40, 44);
+$SubBgColor:rgb(32, 44, 51);
+$SubBgColorHover:rgb(92, 92, 92);
 $textColor:#ffffff;
-$textSecondaryColor:#707070;
+$textprimaryColor:rgb(134, 224, 200);
+$textSecondaryColor:#c7c7c7;
 $borderRadius:3px;
 $dividerColor:#e3e3e3;
 $transitionDuration:.5s;
@@ -27,10 +31,9 @@ $menuitemDarkActiveBgColor:rgb(0, 0, 0);
 $menuitemDarkBorderColor:rgba(52, 56, 65, 0.6);
 
 
-/*button*/
-$buttonPrimaryBgColor:rgb(84,209,176);
-$buttonSecondaryBgColor:rgb(92, 92, 92);
-$buttonInfoBgColor:rgb(76, 204, 221);
-$buttonSuccessBgColor:rgb(0, 189, 72);
-$buttonDangerBgColor:rgb(255, 118, 118);
-$buttonWarningBgColor:rgb(255, 209, 111);
+$primaryBgColor:rgb(84,209,176);
+$secondaryBgColor:rgb(92, 92, 92);
+$infoBgColor:rgb(76, 204, 221);
+$successBgColor:rgb(0, 189, 72);
+$dangerBgColor:rgb(255, 118, 118);
+$warningBgColor:rgb(255, 209, 111);

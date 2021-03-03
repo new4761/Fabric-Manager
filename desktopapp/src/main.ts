@@ -185,9 +185,8 @@ const app = new Vue({
 }).$mount("#app");
 
 router.beforeEach((to, from, next) => {
-  // store.commit("docker/setContainer");
-  // store.commit("docker/setOrgContainer");
-  // store.commit("docker/setActiveContainer");
+  store.commit("docker/setOrgContainer");
+  store.commit("docker/setActiveContainer");
   app.loading = true;
   next();
 });

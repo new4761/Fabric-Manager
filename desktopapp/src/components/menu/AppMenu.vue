@@ -135,10 +135,9 @@ export default {
   }
 }
 
-
 .layout-sidebar-dark {
   @include linear-gradient($menuDarkBgColorFirst, $menuDarkBgColorLast);
-
+  width: 220px;
   .layout-menu {
     > li {
       > a {

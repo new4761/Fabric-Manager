@@ -1,10 +1,15 @@
 <template>
-  <div class="p-p-5">
+  <div class="project-wrapper">
     <h1>
       Projects
     </h1>
     <ConfirmDialog />
-    <Dialog :visible="display" :closable="false" :modal="true" class="project-info">
+    <Dialog
+      :visible="display"
+      :closable="false"
+      :modal="true"
+      class="project-info"
+    >
       {{ dataSelected }}
       <div class="p-grid p-mt-5">
         <Button
@@ -20,6 +25,7 @@
       :layout="layout"
       :sortOrder="sortOrder"
       :sortField="sortField"
+      class="project-table"
     >
       <template #header>
         <div class="p-grid p-nogutter">
@@ -28,7 +34,7 @@
               v-model="sortKey"
               :options="sortOptions"
               optionLabel="label"
-              placeholder="Sort By Price"
+              placeholder="Sort"
               @change="onSortChange($event)"
             />
             <Button
@@ -46,19 +52,71 @@
         </div>
       </template>
 
+      <template #grid="slotProps">
+        <div class="p-col-2 p-md-4">
+          <div @click="confirmOpen(slotProps.data.id)">
+            <Card class="p-m-3 project-card">
+              <template #title>
+                <div class="project-card-title">
+                  {{ slotProps.data.name }}
+                </div>
+              </template>
+              <template #content>
+                <div class="project-card-content">
+                  <div class="project-card-text">
+                    date created
+                    <Chip class="p-m-1">
+                      {{ toDate(slotProps.data.date_create) }}
+                    </Chip>
+                  </div>
+
+                  <div class="project-card-text">
+                    last updated
+                    <Chip class="p-m-1">
+                      {{ toDate(slotProps.data.date_modify) }}
+                    </Chip>
+                  </div>
+                </div>
+              </template>
+
+              <template #footer>
+                <div class="project-card-footer">
+                  <div class="p-d-flex  p-ai-center p-jc-end">
+                    <Button
+                      icon="pi pi-trash"
+                      class="p-button-sm p-button-danger p-mx-3"
+                      @click.stop="confirmDelete(slotProps.data.id)"
+                    />
+
+                    <Button
+                      icon="fas fa-info"
+                      class="p-button-sm p-button-info"
+                      @click.stop="openInfo(slotProps.data.id)"
+                    />
+                  </div>
+                </div>
+              </template>
+            </Card>
+          </div>
+        </div>
+      </template>
+
       <template #list="slotProps">
         <div class="p-col-12">
-          <div class="list-item p-m-3 project-content"  @click="confirmOpen(slotProps.data.id)">
+          <div
+            class="list-item p-m-3 project-content"
+            @click="confirmOpen(slotProps.data.id)"
+          >
             <div class="list-detail p-d-flex p-jc-between ">
               <div class="name">{{ slotProps.data.name }}</div>
               <div class="date">
-                 create date:
+                create date:
                 <Chip class="p-m-1">
-                 {{ toDate(slotProps.data.date_create) }}
+                  {{ toDate(slotProps.data.date_create) }}
                 </Chip>
                 last updated:
                 <Chip class="p-m-1">
-                 {{ toDate(slotProps.data.date_modify) }}
+                  {{ toDate(slotProps.data.date_modify) }}
                 </Chip>
               </div>
             </div>
@@ -69,7 +127,7 @@
               <div>
                 <Button
                   icon="pi pi-trash"
-                  class="p-button-sm p-button-danger p-mx-1"
+                  class="p-button-sm p-button-danger p-mx-2"
                   @click.stop="confirmDelete(slotProps.data.id)"
                 />
 
@@ -80,46 +138,6 @@
                 />
               </div>
             </div>
-          </div>
-        </div>
-      </template>
-
-      <template #grid="slotProps">
-        <div class="p-col-2 p-md-4">
-          <div @click="confirmOpen(slotProps.data.id)" >
-            <Card class="p-m-3 project-content " >
-              <template #title>
-                <div>
-                  {{ slotProps.data.name }}
-                </div>
-              </template>
-              <template #content>
-                <div>
-                  <Chip class="p-m-1">
-                    {{ toDate(slotProps.data.date_create) }}
-                  </Chip>
-                  <Chip class="p-m-1">
-                    {{ toDate(slotProps.data.date_modify) }}
-                  </Chip>
-                </div>
-              </template>
-
-              <template #footer>
-                <div class="p-d-flex  p-ai-center p-jc-end">
-                  <Button
-                    icon="pi pi-trash"
-                    class="p-button-sm p-button-danger p-mx-1"
-                    @click.stop="confirmDelete(slotProps.data.id)"
-                  />
-
-                  <Button
-                    icon="fas fa-info"
-                    class="p-button-sm p-button-info"
-                    @click.stop="openInfo(slotProps.data.id)"
-                  />
-                </div>
-              </template>
-            </Card>
           </div>
         </div>
       </template>
@@ -183,9 +201,8 @@ export default class ProjectPage extends Vue {
   }
 
   confirmDelete(id: number) {
-   let target = this.data.find((element: any) => element.id == id);
+    let target = this.data.find((element: any) => element.id == id);
     this.$confirm.require({
-      
       message: "delete project " + target.name + " ?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
@@ -230,11 +247,46 @@ export default class ProjectPage extends Vue {
 }
 </script>
 
-<style>
-.project-content {
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
+.project-wrapper {
+  background-color: $bodyBgColorDarker;
+  padding: 80px;
+}
+
+.project-table .p-dataview-content {
+  height: calc(94vh - 295px);
+  overflow: auto;
+}
+.project-card {
+  padding: 20px;
   cursor: pointer;
 }
-.project-info{
+
+.project-card.p-card {
+  background-color: $bodyBgColor;
+    transition: all 0.2s;
+}
+
+.project-card.p-card:hover {
+  color: $primaryBgColor;
+  background-color: $SubBgColorHover;
+}
+
+.project-card-title {
+  font-size: 25px;
+}
+.project-card-content {
+}
+.project-card-text {
+  font-size: 15px;
+}
+.project-card-text .p-chip {
+  font-size: 15px;
+}
+.project-card-footer {
+}
+.project-info {
   width: 70vh;
 }
 </style>
