@@ -67,7 +67,6 @@ import OrgDetail from "../components/orgpage/OrgDetail.vue";
   components: { OrgDetail },
 })
 export default class OrgPage extends Vue {
-  fabric: object = {};
   org: object = {};
 
   mounted() {
@@ -75,7 +74,6 @@ export default class OrgPage extends Vue {
   }
 
   init() {
-    this.fabric = NetworkConfig.getValue("project_config.fabric");
     this.org = NetworkConfig.getOrgName();
   }
 }
