@@ -2,6 +2,7 @@ const { spawn } = require("child_process");
 
 const spawnSync = require('child-process-promise').spawn;
 import store from "../store/modules/project";
+import storeProcess from "../store";
 import { strict } from "assert";
 import { OsType } from "../models/EnvProject";
 const path = require("path");
@@ -42,6 +43,7 @@ class OSProcess {
         try {
           ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
+          storeProcess.commit("setProcess", ls.childProcess);
           this.callback(ls.childProcess);
           return ls.then((res: any) => {
 
@@ -75,6 +77,7 @@ class OSProcess {
         try {
           ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + projectPath);
+          storeProcess.commit("setProcess", ls.childProcess);
           //console.log(sourceDir)
           // FileManager.createFile(sourceDir)
           // let watcher = FileManager.WaitToReadFile(sourceDir)
@@ -137,10 +140,12 @@ class OSProcess {
       streamPipe = await DockerProcess.callbackAttach(container, payloadData)
       //  console.log("watcher die bitch")
     });
-    ls.stdout.on("data", async (data: any) => {      //  const regex = new RegExp(/changed: \[minifab]*/);
-      data = data.toString();
-      console.log(`${removeColorCode(data)}`);
-    });
+
+    // ls.stdout.on("data", async (data: any) => {      //  const regex = new RegExp(/changed: \[minifab]*/);
+    //   data = data.toString();
+    //   console.log(`${removeColorCode(data)}`);
+    // });
+    
     ls.stderr.on("data", (data: any) => {
       data = data.toString();
       console.error(`stderr: ${data}`);

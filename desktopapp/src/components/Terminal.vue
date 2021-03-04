@@ -18,32 +18,39 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { mapState } from "vuex";
 
-// const TerminalProps = Vue.extend({
-//   props: {
-//     input: String,
-//   },
-// });
+const TerminalProps = Vue.extend({
+  computed: mapState(["process"]),
+});
 
 @Component({
   components: {},
 })
-export default class Terminal extends Vue {
-  output: any = "------------Terminal--------------";
-  process: any = this.$store.state.process;
-  created() {}
+export default class Terminal extends TerminalProps {
+  output: any = "";
+  process: any;
+  created() {
+    this.$store.subscribe((mutation) => {
+      if (mutation.type === "setProcess") {
+        this.displayOutput();
+      }
+    });
+  }
+
 
   mounted() {
     this.displayOutput();
   }
+
   displayOutput() {
-    this.output = "minifab:output \n";
-    this.process.stdout.setEncoding("utf-8");
-    this.process.stdout.on("data", (data: any) => {
+    this.$store.state.process.stdout.setEncoding("utf-8");
+    this.$store.state.process.stdout.on("data", (data: any) => {
       this.output += data.toString().replace(/\u21b5/g, "", "");
     });
-    this.process.stderr.on("data", (data: any) => {
-      this.output += data.toString().replace(/[^\x20-\x7E]+/g, "");
+    this.$store.state.process.stderr.on("data", (data: any) => {
+      this.output += data.toString()
+      // .replace(/[^\x20-\x7E]+/g, "");
     });
   }
 }

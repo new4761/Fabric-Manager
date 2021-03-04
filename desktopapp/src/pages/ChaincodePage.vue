@@ -1,19 +1,21 @@
 <template>
   <div class="cc-list-wrapper">
-    <DataTable :value="ccList" class="cc-list">
-      <Column field="id" header="ID"></Column>
+    <!-- {{ ccList }} -->
+    <DataTable :value="ccList" class="cc-list" :autoLayout="true">
       <Column field="name" header="Name"></Column>
       <Column field="type" header="Language"></Column>
-      <Column header="Lastupdate">
-        <template #body="obj">
-          {{ convertTime(obj.data.lastUpdate) }}
-        </template></Column
-      >
+      <Column field="channel" header="Channel"></Column>
+
       <Column header="state">
         <template #body="obj">
           <Tag class="p-tag-primary" :value="obj.data.state"></Tag>
         </template>
       </Column>
+      <Column header="Last updated">
+        <template #body="obj">
+          {{ convertTime(obj.data.lastUpdate) }}
+        </template></Column
+      >
       <!-- <Column>
         <template #body="obj">
           {{ obj.data }}
@@ -75,7 +77,7 @@ export default class ChaincodePage extends ChaincodePageProps {
   //render function
   convertTime(unix: number) {
     let dateNow: number = Date.now();
-  //  console.log(new Date(unix).getDate());
+    //  console.log(new Date(unix).getDate());
     let dayNow = new Date(dateNow).getTime();
     let dayUpdate = new Date(unix).getTime();
     return this.msToTime(dayNow - dayUpdate);
@@ -97,24 +99,21 @@ export default class ChaincodePage extends ChaincodePageProps {
     }
   }
   //end render
-
 }
 </script>
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
 
-
 .cc-list-wrapper {
   padding: 10px 20px 20px 20px;
   background-color: $SubBgColor;
+  width:100%
 }
 
 .cc-list.p-datatable {
   background-color: $SubBgColor;
   font-size: 12px;
-  overflow: auto;
-  height: 150px;
   width: 100%;
 }
 
@@ -131,14 +130,12 @@ th {
   font-size: 15px;
 }
 .cc-list tr:hover {
-  color: $primaryColor
-;
+  color: $primaryColor;
   background-color: $SubBgColorHover !important;
 }
 
 .cc-list a {
-  color: $primaryColor
-;
+  color: $primaryColor;
 }
 
 .container-info {
