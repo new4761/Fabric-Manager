@@ -2,10 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import project from "./modules/project";
 import docker from "./modules/docker";
-import createPersistedState from "vuex-persistedstate";
-const dataState = createPersistedState({
-  paths: ["data"],
-});
+// import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -31,5 +28,5 @@ export default new Vuex.Store({
     project,
     docker,
   },
-  plugins: [dataState],
+  // plugins: [createPersistedState()],
 });

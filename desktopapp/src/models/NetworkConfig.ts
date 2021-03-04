@@ -82,7 +82,7 @@ export class NetworkConfig {
     this.file = editJsonFile(filePath);
     let data = this.file.get(key);
     
-    logger.log("info","get value");
+    logger.log("info","get " + key);
     return data;
   }
   getUniqueOrgName(data:any){
@@ -104,6 +104,7 @@ export class NetworkConfig {
         name: string;
         fullname: string;
         child: Set<string>;
+        container: Array<object>;
         ca: boolean;
         peer: number;
         orderer: boolean;
@@ -122,6 +123,7 @@ export class NetworkConfig {
           name: "",
           fullname: name,
           child: new Set(),
+          container:[],
           ca: false,
           peer: 0,
           orderer: false,
@@ -144,6 +146,7 @@ export class NetworkConfig {
         name: name.split(".")[0],
         fullname: name,
         child: newOrg[name].child.add(element),
+        container:[],
         ca: isCa,
         peer: isPeer ? (newOrg[name].peer += 1) : 0,
         orderer: isOrderer,

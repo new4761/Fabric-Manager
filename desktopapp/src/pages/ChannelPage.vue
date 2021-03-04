@@ -1,15 +1,14 @@
 <template>
   <div>
-    <div class="p-d-flex p-jc-between">
-      <div class="p-col">
-        <h1>
-          Channel
-        </h1>
+    <div class="p-grid p-jc-between">
+      <div class="channel-header">
+        Channel
+        <hr class="dotted" />
       </div>
     </div>
 
-    <div class="channel-wrapper p-grid p-jc-center p-my-4">
-      <div class="channel-header">
+    <div class="channel-list-wrapper p-grid p-jc-center p-my-4">
+      <div class="channel-list-header">
         Channel list
         <div class="p-col-4">
           <div class="p-inputgroup">
@@ -19,7 +18,7 @@
         </div>
       </div>
       <div v-if="channels">
-        <DataTable :value="channels" class="p-datatable-striped">
+        <DataTable :value="channels" class="channel-list">
           <Column field="name" header="name"></Column>
           <Column header="operation">
             <template #body="slotProps">
@@ -39,8 +38,8 @@
           </Column>
         </DataTable>
       </div>
-      <div v-else class="channel-empty p-text-center">
-        <i class="fas fa-exclamation-circle"></i>  no channel
+      <div v-else class="channel-list-empty p-text-center">
+        <i class="fas fa-exclamation-circle"></i> no channel
       </div>
     </div>
 
@@ -134,8 +133,30 @@ export default class ChannelPage extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-.channel-empty {
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
+
+.channel-header {
+  padding: 30px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  height: 110px;
+}
+
+.channel-list-header {
+  align-items: center;
+  background-color: $SubBgColor;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  width:100%;
+}
+
+.channel-list-empty {
   width: 100%;
   height: 350px;
   background-color: rgb(206, 206, 206);
@@ -143,21 +164,41 @@ export default class ChannelPage extends Vue {
   font-size: 30px;
   color: rgb(105, 105, 105);
 }
-.channel-wrapper {
-  padding-left: 1em;
-  padding-right: 1em;
+.channel-list-wrapper {
+  padding: 10px 40px 40px 40px;
+  background-color: $SubBgColor;
 }
 
-.channel-header {
-  border-radius: 5px 5px 0px 0px;
+.channel-list.p-datatable {
+  background-color: $SubBgColor;
+  font-size: 12px;
+  overflow: auto;
+  height: calc(94vh - 420px);
   width: 100%;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: rgb(49, 155, 255);
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
+}
+
+.channel-list .p-column-title {
+  font-size: 17px;
+}
+
+.channel-list tr,
+th {
+  background-color: $SubBgColor !important;
+  transition: all 0.3s !important;
+}
+.channel-list tr {
+  font-size: 15px;
+}
+.channel-list tr:hover {
+  color: $primaryColor;
+  background-color: $SubBgColorHover !important;
+}
+
+.channel-list a {
+  color: $primaryColor;
+}
+
+.channel-list .p-datatable-header {
+  background-color: $SubBgColor !important;
 }
 </style>

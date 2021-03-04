@@ -57,4 +57,6 @@ export default class SplashConsolePage extends TerminalProps {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/style/_variables.scss";
+</style>

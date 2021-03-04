@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p>{{ _display }}</p>
+    <!-- <p>{{ _display }}</p>
     <p>{{ useInit }}</p>
     <p>{{ ccName }}</p>
     <p>{{ selectedCCtype.data }}</p>
     <p>{{ path }}</p>
     <p>{{ args }}</p>
     <p>{{ selectedChannel.name }}</p>
-    <p>{{ selectedOrg }}</p>
+    <p>{{ selectedOrg }}</p> -->
     <div class="p-grid p-fluid">
       <div class="p-col-12">
         <small>Selected Channel </small>
@@ -153,4 +153,8 @@ export default class DigSetupCC extends DigSetupCCProps {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
+
+
+</style>

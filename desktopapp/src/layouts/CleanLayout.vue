@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="p-d-flex">
-      <div class="scroll-main layout-main p-col p-as-stretch">
+      <div class="scroll-main layout-main p-as-stretch p-nogutter">
         <slot />
       </div>
     </div>
@@ -18,4 +18,5 @@ import Component from "vue-class-component";
 export default class CleanLayout extends Vue {}
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";</style>

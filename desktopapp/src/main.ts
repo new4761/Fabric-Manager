@@ -70,9 +70,7 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 import ScrollPanel from "primevue/scrollpanel";
 import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
-import Knob from 'primevue/knob';
-import Splitter from 'primevue/splitter';
-import SplitterPanel from 'primevue/splitterpanel';
+import Knob from "primevue/knob";
 
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
@@ -83,8 +81,8 @@ import BadgeDirective from "primevue/badgedirective";
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 
-import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
-// import "primevue/resources/themes/fluent-light/theme.css";
+// import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
+import "primevue/resources/themes/mdc-dark-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
@@ -92,9 +90,6 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "./assets/style/style.scss";
 import store from "./store";
-// import logger from './module/Logger'
-
-// Vue.prototype.$logger = logger;
 
 Vue.use(ToastService);
 Vue.use(ConfirmationService);
@@ -102,10 +97,6 @@ Vue.directive("tooltip", Tooltip);
 Vue.directive("ripple", Ripple);
 Vue.directive("badge", BadgeDirective);
 
-// App.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
-// App.config.globalProperties.$primevue = reactive({ ripple: true });
-// Vue.prototype.$appState = Vue.observable({inputStyle: 'outlined'});
-// Vue.prototype.$appState =  Vue.observable({ ripple: true });
 
 Vue.use(PrimeVue, { ripple: true });
 
@@ -183,8 +174,6 @@ Vue.component("TreeTable", TreeTable);
 Vue.component("TriStateCheckbox", TriStateCheckbox);
 Vue.component("ScrollPanel", ScrollPanel);
 Vue.component("ProgressSpinner", ProgressSpinner);
-Vue.component("SplitterPanel", SplitterPanel);
-Vue.component("Splitter", Splitter);
 
 const app = new Vue({
   data() {
@@ -196,9 +185,8 @@ const app = new Vue({
 }).$mount("#app");
 
 router.beforeEach((to, from, next) => {
-  // store.commit("docker/setContainer");
-  // store.commit("docker/setOrgContainer");
-  // store.commit("docker/setActiveContainer");
+  store.commit("docker/setOrgContainer");
+  store.commit("docker/setActiveContainer");
   app.loading = true;
   next();
 });

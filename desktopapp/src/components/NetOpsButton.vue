@@ -159,7 +159,9 @@ export default class NetOpsButton extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/style/_variables.scss";
+
 .p-inputtext {
   width: 150px;
 }

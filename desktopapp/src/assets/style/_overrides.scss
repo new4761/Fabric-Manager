@@ -1,1 +1,70 @@
 //Suggested location to add your overrides so that migration would be easy by just updating the SASS folder in the future
+
+.p-ripple .p-ink {
+  background: rgba(134, 224, 200, 0.671) !important;
+}
+
+.p-button {
+  color: white !important;
+}
+
+.p-button-primary {
+  color: white !important;
+  background-color: $primaryColor !important;
+}
+
+.p-button-success {
+  background-color: $successBgColor !important;
+}
+
+.p-button-danger {
+  background-color: $dangerBgColor !important;
+}
+
+.p-button-warning {
+  background-color: $warningBgColor !important;
+}
+
+.p-button-secondary {
+  background-color: $secondaryBgColor !important;
+}
+
+.p-button-primary {
+  background-color: $primaryColor !important;
+}
+
+.p-button-info {
+  background-color: $infoBgColor !important;
+}
+
+.p-inputtext:focus {
+  box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
+}
+
+.p-inputwrapper-focus,
+.p-inputwrapper:focus {
+  box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
+  border-color: $primaryFocusColor !important;
+}
+.p-dropdown-item.p-highlight {
+  background-color: rgba(134, 224, 200, 0.178) !important ;
+  color: $primaryColor !important;
+}
+
+.p-dropdown-item.p-ripple .p-ink {
+  background-color: rgba(134, 224, 200, 0.671) !important;
+}
+
+.p-highlight a {
+  color: $primaryColor !important;
+}
+.p-highlight a:focus {
+  background-color: rgba(134, 224, 200, 0.185) !important ;
+}
+.p-tabview-ink-bar{
+    color: $primaryColor !important;
+    background-color: $primaryColor !important;
+}
+.p-tag-primary{
+  background-color: $primaryColor !important;
+}

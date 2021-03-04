@@ -1,51 +1,43 @@
 <template>
-  <div>
-    <div class="p-col-12">
-      <Accordion>
-        <AccordionTab>
-          <template #header>
-            <span
-              >Network selection = Current Channel :
-              <b>{{ selectedChannel.name }}</b> Current Organization :
-              <b>{{ selectedOrg }}</b>
-            </span>
-          </template>
-          <div class="p-grid p-fluid">
-            <div class="p-col-2">
-              <small>Selected Channel </small>
-              <br />
-              <Dropdown
-                v-model="selectedChannel"
-                :options="channelList"
-                optionLabel="name"
-              />
-            </div>
-            <div class="p-col-10">
-              <small>Selected Peer Organization</small>
-
-              <br />
-              <Dropdown v-model="selectedOrg" :options="orgList" />
-            </div>
+  <div class="cc-page-wrapper">
+    <div @click="toggle()">
+      <div class="cc-list-header">
+        <div class="p-grid p-ai-center vertical-container">
+          ChainCode
+          <div
+            :class="{
+              'toggle-open': showSection,
+              'toggle p-mx-2': true,
+            }"
+          >
+            <i class="fas fa-angle-double-down"></i>
           </div>
-        </AccordionTab>
-      </Accordion>
-      <hr class="dotted" />
+
+          <Button
+            class="p-ml-auto p-button-sm p-button-primary"
+            icon="pi pi-plus"
+            label="Deploy new CC"
+            @click="setUpCCdisplay = true"
+          ></Button>
+        </div>
+      </div>
+    </div>
+
+    <transition name="smooth">
+      <div v-show="showSection">
+        <div class="p-grid p-fluid">
+          <ChaincodePage></ChaincodePage>
+        </div>
+      </div>
+    </transition>
+
+    <hr class="dotted" />
+    <div class="cc-console-wrapper">
       <div class="p-d-flex">
         <h5 class="p-text-bold">ChainCode selection</h5>
-        <Button
-          class="p-ml-auto p-button-sm"
-          icon="pi pi-plus"
-          label="Deploy new CC"
-          @click="setUpCCdisplay = true"
-        ></Button>
-        <Button
-          class="p-button-sm p-ml-2"
-          icon="pi pi-bars"
-          label="CCList"
-          @click="listCCdisplay = !listCCdisplay"
-        ></Button>
       </div>
-      <div class="p-grid p-fluid">
+
+      <div class="p-grid p-fluid ">
         <div class="p-col-2">
           <small>CC Command</small>
           <hr class="dotted" />
@@ -55,6 +47,7 @@
             optionLabel="label"
           />
         </div>
+
         <div class="p-col-8">
           <small>CC Name</small>
           <hr class="dotted" />
@@ -70,11 +63,16 @@
         <div class="p-col-2">
           <br />
           <hr class="dotted" />
-          <Button label="SEND" @click="callCommand()" />
+          <Button
+            label="SEND"
+            @click="callCommand()"
+            class="p-button-primary"
+          />
         </div>
       </div>
+
       <div>
-        <Accordion>
+        <!-- <Accordion>
           <AccordionTab>
             <template #header>
               <span
@@ -85,33 +83,41 @@
             </template>
             {{ selectedCC }}
           </AccordionTab>
-        </Accordion>
+        </Accordion> -->
       </div>
-    </div>
-        <div v-for="(item, index) in args.length + 1" :key="index">
-          <InputArg
-            @setArg="setArg($event, index)"
-            @deleteArg="deleteArg(index)"
-          ></InputArg>
+      <div class="p-grid">
+        <div class="cc-args-wrapper">
+          <div
+            v-for="(item, index) in args.length + 1"
+            :key="index"
+            class="cc-args-item"
+          >
+            <InputArg
+              @setArg="setArg($event, index)"
+              @deleteArg="deleteArg(index)"
+            ></InputArg>
+          </div>
         </div>
-    <div class="p-col-12">
-      <ScrollPanel style="width: 100%">
-        <TabView>
-          <TabPanel header="payload">
-            <p>{{ output.fabricPayload }}</p>
-          </TabPanel>
-          <TabPanel header="response">
-            <p v-for="(item, index) in output.response" :key="index">
-              {{ item }}
-            </p>
-          </TabPanel>
-          <TabPanel header="rawoutput">
-            <p v-for="(item, index) in output.rawData" :key="index">
-              {{ item }}
-            </p>
-          </TabPanel>
-        </TabView>
-      </ScrollPanel>
+      </div>
+      <div class="p-col-12">
+        <ScrollPanel style="width: 100%">
+          <TabView>
+            <TabPanel header="payload">
+              <p>{{ output.fabricPayload }}</p>
+            </TabPanel>
+            <TabPanel header="response">
+              <p v-for="(item, index) in output.response" :key="index">
+                {{ item }}
+              </p>
+            </TabPanel>
+            <TabPanel header="rawoutput">
+              <p v-for="(item, index) in output.rawData" :key="index">
+                {{ item }}
+              </p>
+            </TabPanel>
+          </TabView>
+        </ScrollPanel>
+      </div>
     </div>
     <Dialog
       modal
@@ -131,24 +137,6 @@
         @closeDig="setUpCCDisplay"
         :_display="setUpCCdisplay"
       ></DigSetupCC>
-    </Dialog>
-    <Dialog
-      modal
-      :closable="false"
-      v-bind:visible="listCCdisplay"
-      :style="{ width: '80vw' }"
-      ><template #header>
-        <span>ChainCode List</span>
-        <Button
-          @click="setUpCCListisplay(false)"
-          icon="pi pi-times"
-          class="p-button-text p-ml-auto p-button-rounded"
-        />
-      </template>
-      <ChaincodePage
-        @closeDig="setUpCCDisplay"
-        :_display="listCCdisplay"
-      ></ChaincodePage>
     </Dialog>
   </div>
 </template>
@@ -195,10 +183,11 @@ export default class CCconsole extends CCconsoleProps {
     { label: "INVOKE", value: "invoke" },
     { label: "QUERY", value: "query" },
   ];
+  showSection: boolean = false;
   created() {
     this.hookCClist();
     this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
-   // this.selectedChannel = this.channelList[0];
+    // this.selectedChannel = this.channelList[0];
     this.orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
     this.selectedOrg = this.orgList[0];
     this.selectedCC = this.ccList[0];
@@ -209,16 +198,19 @@ export default class CCconsole extends CCconsoleProps {
   }
   //TODO hook on selected channel
   hookCClist() {
-   // console.log("hook")
+    // console.log("hook")
     this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
     // to do fix date to read
   }
   test() {
     console.log(NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath));
   }
-  setSelectedCC(e) {
+  setSelectedCC(e: any) {
     this.selectedCC = e.value;
     //console.log( this.selectedCC)
+  }
+  toggle() {
+    this.showSection = !this.showSection;
   }
 
   async upGradeCC() {
@@ -271,4 +263,61 @@ export default class CCconsole extends CCconsoleProps {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/style/_variables.scss";
+
+.cc-list-header {
+  padding: 20px;
+  align-items: center;
+  background-color: $SubBgColor;
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.cc-console-wrapper {
+  padding: 20px;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.cc-args-wrapper {
+  padding: 20px;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.smooth-enter,
+.smooth-leave-to {
+  overflow: hidden;
+  max-height: 0;
+}
+
+.smooth-enter-to,
+.smooth-leave {
+  overflow: hidden;
+  max-height: 1000px;
+}
+
+.smooth-leave-active {
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+
+.smooth-enter-active {
+  overflow: hidden;
+  transition: max-height 1s;
+}
+
+.toggle {
+  transition: transform 0.2s ease;
+}
+.toggle-open {
+  transform: rotate(180deg);
+  color: $primaryColor;
+}
+</style>

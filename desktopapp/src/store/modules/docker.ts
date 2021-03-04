@@ -37,8 +37,10 @@ const mutations = {
   //set
 
   setContainer() {
+    console.log("setContainer")
     DockerProcess.listContainer()
       .then((result: any) => {
+      
         state.container = result;
       })
       .catch((err: any) => {
@@ -47,6 +49,7 @@ const mutations = {
   },
 
   setOrgContainer() {
+    console.log("OrgContainer")
     state.orgContainer = NetworkConfig.getValue(
       "project_config.fabric.orderers"
     ).concat(
@@ -56,6 +59,7 @@ const mutations = {
   },
 
   setActiveContainer() {
+    console.log("setActiveContainer")
     mutations.setContainer()
     state.activeContainer = [];
     state.container.forEach((element: any, index: number) => {
