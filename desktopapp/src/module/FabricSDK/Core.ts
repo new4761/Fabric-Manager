@@ -1,0 +1,1 @@
+const { Gateway} = require("electron").remote.require("fabric-network");
