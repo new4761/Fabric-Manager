@@ -1,19 +1,35 @@
 <template>
   <div class="cc-page-wrapper">
-    <div class="cc-list-header p-grid p-jc-between">
-      <h3 class="p-text-bold">ChainCode</h3>
+    <div @click="toggle()">
+      <div class="cc-list-header">
+        <div class="p-grid p-ai-center vertical-container">
+          ChainCode
+          <div
+            :class="{
+              'toggle-open': showSection,
+              'toggle p-mx-2': true,
+            }"
+          >
+            <i class="fas fa-angle-double-down"></i>
+          </div>
 
-      <Button
-        class="p-ml-auto p-button-sm p-button-primary"
-        icon="pi pi-plus"
-        label="Deploy new CC"
-        @click="setUpCCdisplay = true"
-      ></Button>
+          <Button
+            class="p-ml-auto p-button-sm p-button-primary"
+            icon="pi pi-plus"
+            label="Deploy new CC"
+            @click="setUpCCdisplay = true"
+          ></Button>
+        </div>
+      </div>
     </div>
 
-    <div class="p-grid p-fluid">
-      <ChaincodePage></ChaincodePage>
-    </div>
+    <transition name="smooth">
+      <div v-show="showSection">
+        <div class="p-grid p-fluid">
+          <ChaincodePage></ChaincodePage>
+        </div>
+      </div>
+    </transition>
 
     <hr class="dotted" />
     <div class="cc-console-wrapper">
@@ -21,7 +37,7 @@
         <h5 class="p-text-bold">ChainCode selection</h5>
       </div>
 
-      <div class="p-grid p-fluid">
+      <div class="p-grid p-fluid ">
         <div class="p-col-2">
           <small>CC Command</small>
           <hr class="dotted" />
@@ -47,7 +63,11 @@
         <div class="p-col-2">
           <br />
           <hr class="dotted" />
-          <Button label="SEND" @click="callCommand()" class="p-button-primary"/>
+          <Button
+            label="SEND"
+            @click="callCommand()"
+            class="p-button-primary"
+          />
         </div>
       </div>
 
@@ -66,11 +86,17 @@
         </Accordion> -->
       </div>
       <div class="p-grid">
-        <div v-for="(item, index) in args.length + 1" :key="index">
-          <InputArg
-            @setArg="setArg($event, index)"
-            @deleteArg="deleteArg(index)"
-          ></InputArg>
+        <div class="cc-args-wrapper">
+          <div
+            v-for="(item, index) in args.length + 1"
+            :key="index"
+            class="cc-args-item"
+          >
+            <InputArg
+              @setArg="setArg($event, index)"
+              @deleteArg="deleteArg(index)"
+            ></InputArg>
+          </div>
         </div>
       </div>
       <div class="p-col-12">
@@ -157,6 +183,7 @@ export default class CCconsole extends CCconsoleProps {
     { label: "INVOKE", value: "invoke" },
     { label: "QUERY", value: "query" },
   ];
+  showSection: boolean = false;
   created() {
     this.hookCClist();
     this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
@@ -181,6 +208,9 @@ export default class CCconsole extends CCconsoleProps {
   setSelectedCC(e: any) {
     this.selectedCC = e.value;
     //console.log( this.selectedCC)
+  }
+  toggle() {
+    this.showSection = !this.showSection;
   }
 
   async upGradeCC() {
@@ -241,9 +271,8 @@ export default class CCconsole extends CCconsoleProps {
   align-items: center;
   background-color: $SubBgColor;
   color: white;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
-  border-bottom: 9px solid rgb(161, 161, 161);
 }
 
 .cc-console-wrapper {
@@ -252,5 +281,43 @@ export default class CCconsole extends CCconsoleProps {
   color: white;
   font-size: 20px;
   font-weight: bold;
+}
+
+.cc-args-wrapper {
+  padding: 20px;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.smooth-enter,
+.smooth-leave-to {
+  overflow: hidden;
+  max-height: 0;
+}
+
+.smooth-enter-to,
+.smooth-leave {
+  overflow: hidden;
+  max-height: 1000px;
+}
+
+.smooth-leave-active {
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+
+.smooth-enter-active {
+  overflow: hidden;
+  transition: max-height 1s;
+}
+
+.toggle {
+  transition: transform 0.2s ease;
+}
+.toggle-open {
+  transform: rotate(180deg);
+  color: $primaryColor;
 }
 </style>
