@@ -31,7 +31,7 @@
     <hr class="dotted" />
     <div class="cc-console-wrapper">
       <div class="p-d-flex">
-        <h5 class="p-text-bold">Invoke, Query Chaincode</h5>
+        <h5 class="p-text-bold">ChainCode Operation</h5>
       </div>
 
       <div class="p-grid p-fluid ">
@@ -63,7 +63,7 @@
           <Button
             label="SEND"
             @click="callCommand()"
-            class="p-button-primary"
+            class="p-button-outlined p-button-primary"
           />
         </div>
       </div>
@@ -290,7 +290,7 @@ export default class CCconsole extends CCconsoleProps {
 @import "@/assets/style/_variables.scss";
 
 .cc-list-header {
-  padding: 20px;
+  padding: 30px;
   align-items: center;
   background-color: $SubBgColor;
   color: white;

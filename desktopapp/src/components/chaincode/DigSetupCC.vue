@@ -61,9 +61,9 @@
     <br />
     <br />
 
-    <Button label="deploy" @click="deployCC()" />
+    <Button label="deploy" @click="deployCC()"  class="p-button-outlined p-button-primary" />
 
-    <Button label="close" @click="close()" />
+    <Button label="close" @click="close()"  class="p-button-outlined p-button-danger" />
   </div>
 </template>
 

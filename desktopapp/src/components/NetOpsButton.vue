@@ -3,19 +3,19 @@
     <div class="p-d-flex">
       <Button
         icon="fas fa-power-off"
-        class="p-button-success p-button-lg p-m-1"
+        class="p-button-success p-button-lg p-m-1 p-p-1 p-button-outlined"
         @click="display = true"
       />
 
       <Button
         icon="fas fa-power-off"
-        class=" p-button-danger p-button-lg p-m-1"
+        class=" p-button-danger p-button-lg p-m-1 p-button-outlined"
         @click="netdown()"
       />
 
       <Button
         icon="fas fa-trash"
-        class=" p-button-secondary p-button-lg p-m-1"
+        class=" p-button-secondary p-button-lg p-m-1 p-button-outlined"
         @click="cleanup()"
       />
     </div>
@@ -70,13 +70,13 @@
         </div>
         <div class="p-d-flex p-jc-end p-mt-1">
           <Button
-            class="p-button-success p-m-2"
+            class="p-button-primary p-m-2"
             label="create"
             @click="netup()"
           />
 
           <Button
-            class="p-button-danger p-ml-auto p-m-2"
+            class="p-button-danger p-ml-auto p-m-2 p-button-outlined"
             label="close"
             @click="display = false"
           />

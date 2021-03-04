@@ -38,7 +38,7 @@
             </table>
           </div> -->
           <div>
-            Organization list
+            Network
           </div>
           <div>
             ###########
