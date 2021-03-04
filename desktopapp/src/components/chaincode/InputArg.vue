@@ -39,4 +39,5 @@ export default class InputArg extends Vue {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";</style>

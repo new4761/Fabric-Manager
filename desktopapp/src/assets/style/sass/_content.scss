@@ -37,7 +37,8 @@
 }
 
 .scroll-main::-webkit-scrollbar-thumb:hover {
-  background-color: $primaryBgColor;
+  background-color: $primaryColor
+;
   transition: color 0.5s;
 }
 .scroll-main::-webkit-scrollbar-track {

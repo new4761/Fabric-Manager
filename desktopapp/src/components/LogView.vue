@@ -58,7 +58,8 @@ export default class LogView extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
 
 
 .log-wrapper {

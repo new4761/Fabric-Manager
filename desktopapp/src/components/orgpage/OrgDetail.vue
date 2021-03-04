@@ -57,7 +57,9 @@ export default class OrgDetail extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/style/_variables.scss";
+
 .org-sub {
   background-color: rgb(110, 110, 110);
   padding: 10px;

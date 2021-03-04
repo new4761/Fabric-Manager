@@ -134,7 +134,8 @@ export default class ChannelPage extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
 .channel-empty {
   width: 100%;
   height: 350px;

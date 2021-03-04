@@ -118,7 +118,8 @@ export default class ChannelEditPage extends ChannelProps {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
 .config-view-header {
   border-radius: 5px 5px 0px 0px;
   width: 100%;

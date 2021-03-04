@@ -1,15 +1,6 @@
 <template>
-  <div class="p-grid p-mx-3">
-    <div class="p-col-12 p-mx-3">
-      
-      <h1>
-        <Button label="testNetwork" @click="testsetup()" />
-        <br />
-        <Button label="testcleanup" @click="testcleanup()" />
-        <br />
-      </h1>
-    </div>
-    <DataTable :value="ccList">
+  <div class="cc-list-wrapper">
+    <DataTable :value="ccList" class="cc-list">
       <Column field="id" header="ID"></Column>
       <Column field="name" header="Name"></Column>
       <Column field="type" header="Language"></Column>
@@ -20,14 +11,14 @@
       >
       <Column header="state">
         <template #body="obj">
-          <Tag :value="obj.data.state"></Tag>
+          <Tag class="p-tag-primary" :value="obj.data.state"></Tag>
         </template>
       </Column>
-      <Column>
+      <!-- <Column>
         <template #body="obj">
           {{ obj.data }}
         </template>
-      </Column>
+      </Column> -->
     </DataTable>
   </div>
 </template>
@@ -44,9 +35,9 @@ import NetworkConfig from "../models/NetworkConfig";
 import ChainCode from "@/models/ChainCode";
 //import FabrickSDK from "../module/fabric/FabrickSDK";
 const ChaincodePageProps = Vue.extend({
-  props: {
-    _display: Boolean,
-  },
+  // props: {
+  //   _display: Boolean,
+  // },
 });
 @Component({
   components: { DigSetupCC },
@@ -110,4 +101,51 @@ export default class ChaincodePage extends ChaincodePageProps {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
+
+
+.cc-list-wrapper {
+  padding: 10px 20px 20px 20px;
+  background-color: $SubBgColor;
+}
+
+.cc-list.p-datatable {
+  background-color: $SubBgColor;
+  font-size: 12px;
+  overflow: auto;
+  height: 150px;
+  width: 100%;
+}
+
+.cc-list .p-column-title {
+  font-size: 17px;
+}
+
+.cc-list tr,
+th {
+  background-color: $SubBgColor !important;
+  transition: all 0.3s !important;
+}
+.cc-list tr {
+  font-size: 15px;
+}
+.cc-list tr:hover {
+  color: $primaryColor
+;
+  background-color: $SubBgColorHover !important;
+}
+
+.cc-list a {
+  color: $primaryColor
+;
+}
+
+.container-info {
+  width: 50vh;
+}
+
+.cc-list .p-datatable-header {
+  background-color: $SubBgColor !important;
+}
+</style>

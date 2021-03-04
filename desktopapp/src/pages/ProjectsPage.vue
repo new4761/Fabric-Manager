@@ -269,7 +269,8 @@ export default class ProjectPage extends Vue {
 }
 
 .project-card.p-card:hover {
-  color: $primaryBgColor;
+  color: $primaryColor
+;
   background-color: $SubBgColorHover;
 }
 

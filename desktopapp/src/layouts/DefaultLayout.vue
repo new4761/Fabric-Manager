@@ -247,7 +247,8 @@ export default class DefaultLayout extends Vue {
 }
 
 .online {
-  background-color: $primaryBgColor;
+  background-color: $primaryColor
+;
 }
 .offline {
   background-color: $dangerBgColor;

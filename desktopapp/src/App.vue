@@ -77,4 +77,5 @@ export default class App extends Vue {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";</style>

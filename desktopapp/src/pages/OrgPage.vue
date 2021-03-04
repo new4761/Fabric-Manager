@@ -79,7 +79,8 @@ export default class OrgPage extends Vue {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
 .org-list {
   background-color: rgb(255, 255, 255);
   color: rgb(58, 58, 58);

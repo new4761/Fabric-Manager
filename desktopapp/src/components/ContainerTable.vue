@@ -4,7 +4,7 @@
       Network containers
     </div>
     <div class="table-wrapper p-grid p-jc-center">
-      <DataTable :value="container" class="custom-table" :autoLayout="true">
+      <!-- <DataTable :value="container" class="custom-table" :autoLayout="true">
         <Column field="Names" header="Name">
           <template #body="slotProps">
             <div class="p-text-nowrap p-text-truncate">
@@ -31,18 +31,14 @@
             />
           </template>
         </Column>
-      </DataTable>
+      </DataTable> -->
 
-      <!-- <DataTable
+      <DataTable
         :value="Object.values(org)"
         class="custom-table"
         :autoLayout="true"
-        dataKey="id"
-        :expandedRows="expandedRows"
-        @row-expand="onRowExpand"
-        @row-collapse="onRowCollapse"
       >
-        <Column :expander="true" />
+
         <Column field="Names" header="Name">
           <template #body="slotProps">
             <div class="p-text-nowrap p-text-truncate">
@@ -79,15 +75,8 @@
             </div>
           </template>
         </Column>
-
         <Column header="Status"> </Column>
-
-        <template #expansion="slotProps">
-          <div class="orders-subtable">
-            <h5>Orders for {{ slotProps.data.name }}</h5>
-          </div>
-        </template>
-      </DataTable> -->
+      </DataTable>
     </div>
   </div>
 </template>
@@ -149,22 +138,7 @@ export default class ContainerTable extends Vue {
     });
   }
 
-  onRowExpand(event: any) {
-    this.$toast.add({
-      severity: "info",
-      summary: "Product Expanded",
-      detail: event.data.name,
-      life: 3000,
-    });
-  }
-  onRowCollapse(event: any) {
-    this.$toast.add({
-      severity: "success",
-      summary: "Product Collapsed",
-      detail: event.data.name,
-      life: 3000,
-    });
-  }
+
 }
 </script>
 
@@ -211,12 +185,14 @@ th {
   font-size: 15px;
 }
 .custom-table tr:hover {
-  color: $primaryBgColor;
+  color: $primaryColor
+;
   background-color: $SubBgColorHover !important;
 }
 
 .custom-table a {
-  color: $primaryBgColor;
+  color: $primaryColor
+;
 }
 
 .container-info {

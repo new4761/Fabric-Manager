@@ -18,4 +18,5 @@ import Component from "vue-class-component";
 export default class CleanLayout extends Vue {}
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/assets/style/_variables.scss";</style>
