@@ -44,7 +44,7 @@ class OSProcess {
           ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
           storeProcess.commit("setProcess", ls.childProcess);
-          this.callback(ls.childProcess);
+          // this.callback(ls.childProcess);
           return ls.then((res: any) => {
 
             // console.log(StdoutCapture.checkStatus(res.stdout.toString()));

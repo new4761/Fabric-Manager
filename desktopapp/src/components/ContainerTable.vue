@@ -91,60 +91,15 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import NetworkConfig from "../models/NetworkConfig";
+
 @Component({
   components: {},
+  props: {
+    container: Array,
+    org: Object,
+  },
 })
-export default class ContainerTable extends Vue {
-  envConfig: any;
-  container: Array<Object> = [];
-  activeContainer: number = 0;
-  statusClass: string = "";
-  expandedRows: any = [];
-  org: {
-    [key: string]: {
-      name: string;
-      fullname: string;
-      child: Set<string>;
-      container: object[];
-      ca: boolean;
-      peer: number;
-      orderer: boolean;
-    };
-  } = {};
-
-  created() {
-    this.container = this.$store.state.docker.activeContainer;
-    this.org = NetworkConfig.getOrgName();
-    this.filter();
-  }
-  updated() {
-    // this.$store.commit("docker/setActiveContainer");
-    this.container = this.$store.state.docker.activeContainer;
-    this.activeContainer = this.$store.getters[
-      "docker/getActiveContainerCount"
-    ];
-    if (this.activeContainer == 0) {
-      this.statusClass = "offline";
-    } else {
-      this.statusClass = "online";
-    }
-  }
-
-  mounted() {
-    this.container = this.$store.state.docker.activeContainer;
-    this.org = NetworkConfig.getOrgName();
-    this.filter();
-  }
-
-  filter() {
-    this.container.forEach((element: any) => {
-      element.Names[0] = element.Names[0].replace(/\//g, "");
-      let name = element.Names[0].replace(/^[^.]*./gm, "");
-      this.org[name].container.push(element);
-    });
-  }
-}
+export default class ContainerTable extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -219,4 +174,3 @@ p-datatable-emptymessage
 p-rowgroup-header
 p-rowgroup-footer */
 </style>
-

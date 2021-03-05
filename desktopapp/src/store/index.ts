@@ -17,7 +17,6 @@ export default new Vuex.Store({
     },
     setProcess(state: any, process: any) {
       state.process = process;
-      console.log("setttttttttttttt"+state.process);
     },
   },
 

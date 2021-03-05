@@ -13,9 +13,9 @@
           <div class="p-d-row p-jc-center ">
             <AppProfile />
           </div>
-       
-            <AppMenu :model="menu" class="scroll-menu" />
-          
+
+          <AppMenu :model="menu" class="scroll-menu" />
+
           <!-- <div class="p-col-8 status">
             <div class="p-d-flex">
               <div class="p-col-5 status-container" :class="statusClass">
@@ -70,17 +70,19 @@
 
           <div class="p-d-row p-mt-auto">
             <div class="p-d-flex status-text">
-             active container <a>{{
-                activeContainer +
-                  "/" +
-                  this.$store.getters["docker/getContainerCount"]
-              }}
+              active container
+              <a
+                >{{
+                  activeContainer +
+                    "/" +
+                    this.$store.getters["docker/getContainerCount"]
+                }}
               </a>
             </div>
             <div class="p-d-flex status-text">
               fabric version <a>{{ env.version }}</a>
             </div>
-            
+
             <div class="p-d-flex status-text">
               expose port <a>{{ env.port }}</a>
             </div>
@@ -118,6 +120,8 @@ const fs = require("fs");
 // const dotenv = require("dotenv");
 const path = require("path");
 
+/* eslint-disable no-unused-vars */
+
 @Component({
   components: { NetOpsButton, AppProfile, AppMenu },
 })
@@ -132,6 +136,8 @@ export default class DefaultLayout extends Vue {
     port: "",
     org: "",
   };
+  // @ts-ignore
+  unwatch: Function;
 
   // env index
   // 0: "#!/bin/bash↵"
@@ -152,26 +158,38 @@ export default class DefaultLayout extends Vue {
   // 15: " XX_RUN_OUTPUT='minifab'↵"
 
   created() {
+    console.log("created");
     this.$store.commit("docker/setOrgContainer");
     this.$store.commit("docker/setActiveContainer");
     this.container = this.$store.state.docker.activeContainer;
 
+    this.unwatch = this.$store.watch(
+      (state) => {
+        return this.$store.state.docker.activeContainer; // could also put a Getter here
+      },
+      (newValue, oldValue) => {
+        //something changed do something
+        this.container = newValue;
+
+        this.activeContainer = this.$store.getters[
+          "docker/getActiveContainerCount"
+        ];
+        this.checkStatus();
+      },
+      //Optional Deep if you need it
+      {
+        deep: true,
+      }
+    );
+  }
+
+  mounted() {
     this.envConfig = fs.readFileSync(
       path.join(this.$store.state.project.path + "/vars/envsettings"),
       "utf8"
     );
     this.split = this.envConfig.split("declare");
     this.getEnv();
-  }
-
-  mounted() {
-    this.checkStatus();
-  }
-  updated() {
-    this.$store.commit("docker/setActiveContainer");
-    this.activeContainer = this.$store.getters[
-      "docker/getActiveContainerCount"
-    ];
     this.checkStatus();
   }
 
@@ -193,6 +211,10 @@ export default class DefaultLayout extends Vue {
     this.env.version = this.split[3].match(/'((?:\\.|[^'\\])*)'/)[1];
     this.env.port = this.split[9].match(/'((?:\\.|[^'\\])*)'/)[1];
     this.env.org = this.split[10].match(/'((?:\\.|[^'\\])*)'/)[1];
+  }
+
+  beforeDestroy() {
+    this.unwatch();
   }
 
   data() {
@@ -234,7 +256,6 @@ export default class DefaultLayout extends Vue {
   margin: 5px;
   font-size: 15px;
   color: $textSecondaryColor;
-
 }
 .status-text a {
   margin-left: 5px;
@@ -247,8 +268,7 @@ export default class DefaultLayout extends Vue {
 }
 
 .online {
-  background-color: $primaryColor
-;
+  background-color: $primaryColor;
 }
 .offline {
   background-color: $dangerBgColor;

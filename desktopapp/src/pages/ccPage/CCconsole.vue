@@ -138,21 +138,10 @@
     </Dialog>
 
     <div>
-      <Dialog
-        header="command"
-        v-bind:visible="displaylog"
-        :closable="false"
-        modal
-        :style="{ width: '80vw' }"
-        :contentStyle="{ overflow: 'visible' }"
-      >
-        <Terminal />
-        <Button
-          class="p-button-danger p-m-2"
-          label="close"
-          @click="displaylog = false"
-        />
-      </Dialog>
+    <ConsoleDialogue
+      :_displaylog="displaylog"
+      @update:_displaylog="(val) => (displaylog = val)"
+    />
     </div>
   </div>
 </template>
@@ -160,7 +149,7 @@
 <script lang="ts">
 // eslint-disable-next-line no-unused-vars
 import ChainCode from "@/models/ChainCode";
-import Terminal from "../../components/Terminal.vue";
+import ConsoleDialogue from "../../components/ConsoleDialogue.vue";
 import DigSetupCC from "../../components/chaincode/DigSetupCC.vue";
 import { netWorkConfigPath, ccOutputPayload } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
@@ -175,7 +164,7 @@ const CCconsoleProps = Vue.extend({
   },
 });
 @Component({
-  components: { InputArg, DigSetupCC, ChaincodePage, Terminal },
+  components: { InputArg, DigSetupCC, ChaincodePage, ConsoleDialogue },
 })
 export default class CCconsole extends CCconsoleProps {
   container: any = "";

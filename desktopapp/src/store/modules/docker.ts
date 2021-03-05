@@ -6,7 +6,7 @@ const state = {
   networkId: "",
   container: [],
   orgContainer: [],
-  activeContainer:[],
+  activeContainer: [],
 };
 
 // getters
@@ -36,12 +36,12 @@ const actions = {};
 const mutations = {
   //set
 
-  setContainer() {
-    console.log("setContainer")
-    DockerProcess.listContainer()
+  async setContainer() {
+    await DockerProcess.listContainer()
       .then((result: any) => {
-      
+        console.log("set from docker process " + result.length);
         state.container = result;
+        return;
       })
       .catch((err: any) => {
         // console.log(err);
@@ -49,7 +49,6 @@ const mutations = {
   },
 
   setOrgContainer() {
-    console.log("OrgContainer")
     state.orgContainer = NetworkConfig.getValue(
       "project_config.fabric.orderers"
     ).concat(
@@ -58,10 +57,11 @@ const mutations = {
     );
   },
 
-  setActiveContainer() {
-    console.log("setActiveContainer")
-    mutations.setContainer()
-    state.activeContainer = [];
+  async setActiveContainer() {
+    await mutations.setContainer();
+    // state.activeContainer = [];
+    // @ts-ignore
+    let temp = [];
     state.container.forEach((element: any, index: number) => {
       var el = state.orgContainer.find((a: string) =>
         a.includes(element.Names[0].replace(/\//g, ""))
@@ -69,9 +69,12 @@ const mutations = {
 
       if (el !== undefined) {
         // @ts-ignore
-        state.activeContainer.push(element);
+        temp.push(element);
       }
     });
+    // @ts-ignore
+    state.activeContainer = temp;
+    console.log("store set to " + state.activeContainer);
   },
 
   setNetworkId() {},

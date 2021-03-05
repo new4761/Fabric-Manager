@@ -18,6 +18,8 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { removeColorCode } from "../module/StringBuilder";
+import StdoutCapture from "../module/OSProcess/StdoutCapture";
 import { mapState } from "vuex";
 
 const TerminalProps = Vue.extend({
@@ -30,14 +32,17 @@ const TerminalProps = Vue.extend({
 export default class Terminal extends TerminalProps {
   output: any = "";
   process: any;
+  stop: boolean = false;
+  // @ts-ignore
+  unsubscribe: Function;
+
   created() {
-    this.$store.subscribe((mutation) => {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === "setProcess") {
         this.displayOutput();
       }
     });
   }
-
 
   mounted() {
     this.displayOutput();
@@ -46,13 +51,24 @@ export default class Terminal extends TerminalProps {
   displayOutput() {
     this.$store.state.process.stdout.setEncoding("utf-8");
     this.$store.state.process.stdout.on("data", (data: any) => {
-      this.output += data.toString().replace(/\u21b5/g, "", "");
+      let res = StdoutCapture.checkStatus(data.toString());
+      this.output += removeColorCode(data.toString());
+      if (res.status) {
+        this.output += "\n from res" + res.message;
+        this.$emit('toast')
+      }
     });
     this.$store.state.process.stderr.on("data", (data: any) => {
-      this.output += data.toString()
-      // .replace(/[^\x20-\x7E]+/g, "");
+      this.output += removeColorCode(data.toString());
     });
+   
+  
   }
+
+  beforeDestroy() {
+    this.unsubscribe();
+  }
+
 }
 </script>
 

@@ -21,21 +21,10 @@
     </div>
 
     <div>
-      <Dialog
-        :header="command"
-        v-bind:visible="displaylog"
-        :closable="false"
-        modal
-        :style="{ width: '80vw' }"
-        :contentStyle="{ overflow: 'visible' }"
-      >
-        <Terminal />
-        <Button
-          class="p-button-danger p-m-2"
-          label="close"
-          @click="displaylog = false"
-        />
-      </Dialog>
+      <ConsoleDialogue
+        :_displaylog="displaylog"
+        @update:_displaylog="(val) => (displaylog = val)"
+      />
     </div>
 
     <div>
@@ -92,9 +81,12 @@ import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
 import NetworkConfig from "../models/NetworkConfig";
 import ProjectConfig from "../models/ProjectConfig";
-import Terminal from "./Terminal.vue";
+import ConsoleDialogue from "./ConsoleDialogue.vue";
+
+import { OsType } from "../models/EnvProject";
+
 @Component({
-  components: { Terminal },
+  components: { ConsoleDialogue },
 })
 export default class NetOpsButton extends Vue {
   up: boolean = false;
@@ -107,6 +99,8 @@ export default class NetOpsButton extends Vue {
   port: string = "";
   command: string = "";
 
+  private osType: OsType = OsType.WINDOW;
+
   mounted() {
     this.init();
   }
@@ -114,7 +108,9 @@ export default class NetOpsButton extends Vue {
     this.projectDir = ProjectConfig.getPath(this.$store.state.project.id);
     this.org = Object.keys(NetworkConfig.getOrgName());
   }
-  netup() {
+  async netup() {
+    this.displaylog = true;
+    this.up = true;
     this.command = "";
     let args: string[] = ["restart"];
     if (this.orgSelected != "") {
@@ -123,35 +119,26 @@ export default class NetOpsButton extends Vue {
     if (this.port != "") {
       args.push("-e " + this.port);
     }
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
+    await OSProcess.run_new(args, this.osType);
+    this.$store.commit("docker/setActiveContainer");
     this.command = args.join();
-    this.displaylog = true;
-    this.up = true;
   }
-  netdown() {
-    this.command = "";
-    const child = OSProcess.run(this.projectDir, ["down"]);
-    this.$store.commit("setProcess", child);
-    this.command = "down";
+  async netdown() {
     this.displaylog = true;
     this.up = false;
+    this.command = "";
+    await OSProcess.run_new(["down"], this.osType);
+    this.$store.commit("docker/setActiveContainer");
+    this.command = "down";
   }
   cleanup() {
+    this.displaylog = true;
     this.command = "";
     const child = OSProcess.run(this.projectDir, ["cleanup"]);
     this.$store.commit("setProcess", child);
     this.command = "cleanup";
-    this.displaylog = true;
   }
 
-  restart() {
-    this.command = "";
-    const child = OSProcess.run(this.projectDir, ["restart"]);
-    this.$store.commit("setProcess", child);
-    this.command = "restart";
-    this.displaylog = true;
-  }
   data() {
     return {};
   }
