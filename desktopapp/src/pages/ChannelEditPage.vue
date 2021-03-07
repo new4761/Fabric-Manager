@@ -28,7 +28,44 @@
                 />
               </div>
             </div>
-            <div class="config-view-panel ">{{ channelConfig }}</div>
+
+            <Accordion :multiple="true" v-if="!notshow">
+              <AccordionTab header="Application">
+                <div
+                  v-for="(item, index) in Object.keys(
+                    channelApplication.groups
+                  )"
+                  :key="index"
+                  class="p-my-2"
+                >
+                  <div class="config-view-panel">
+                    {{ channelApplication.groups[item].policies }}
+                    <br />
+                    {{ channelApplication.groups[item].Values }}
+                  </div>
+                </div>
+              </AccordionTab>
+              <AccordionTab header="Orderer">
+                <div
+                  v-for="(item, index) in Object.keys(channelOrderer.groups)"
+                  :key="index"
+                  class="p-my-2"
+                >
+                  <div class="config-view-panel">
+                    {{ channelOrderer.groups[item] }}
+                    <br />
+                    {{ channelOrderer.groups[item].values }}
+                  </div>
+                </div>
+              </AccordionTab>
+              <AccordionTab header="policies">
+                <!-- <div class="config-view-panel">{{ channelPolicies }}</div> -->
+                <Textarea v-model="channelPoliciesString" rows="5" cols="30" />
+              </AccordionTab>
+              <AccordionTab header="value">
+                <div class="config-view-panel">{{ channelValues }}</div>
+              </AccordionTab>
+            </Accordion>
           </div>
         </div>
         <div class="p-d-grid p-jc-center">
@@ -42,21 +79,10 @@
     </div>
 
     <div>
-      <Dialog
-        header="log"
-        v-bind:visible="displaylog"
-        :closable="false"
-        modal
-        :style="{ width: '80vw' }"
-        :contentStyle="{ overflow: 'visible' }"
-      >
-        <Terminal />
-        <Button
-          class="p-button-danger p-ml-auto p-m-2"
-          label="close"
-          @click="displaylog = false"
-        />
-      </Dialog>
+      <ConsoleDialogue
+        :_displaylog="displaylog"
+        @update:_displaylog="(val) => (displaylog = val)"
+      />
     </div>
   </div>
 </template>
@@ -65,11 +91,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
-import Terminal from "../components/Terminal.vue";
+import ConsoleDialogue from "../components/ConsoleDialogue.vue";
 // import NetworkConfig from "../models/NetworkConfig";
 const fs = require("fs");
 const path = require("path");
-
+import { OsType } from "../models/EnvProject";
 const ChannelProps = Vue.extend({
   props: {
     channelName: String,
@@ -77,42 +103,59 @@ const ChannelProps = Vue.extend({
 });
 
 @Component({
-  components: { Terminal },
+  components: { ConsoleDialogue },
 })
 export default class ChannelEditPage extends ChannelProps {
   projectDir: string = "";
   display: boolean = false;
   displaylog: boolean = false;
   channelConfig: any = {};
-
-  mounted() {
+  channelPolicies: any = {};
+  channelValues: any = {};
+  channelApplication: any = {};
+  channelOrderer: any = {};
+  channelPoliciesString: string = "";
+  notshow: boolean = false;
+  private osType: OsType = OsType.WINDOW;
+  created() {
     this.init();
   }
 
   init() {
     this.projectDir = this.$store.state.project.path;
-    let str = fs.readFileSync(
-      path.join(
-        this.$store.state.project.path +
-          "/vars/" +
-          this.channelName +
-          "_config.json"
-      ),
-      "utf8"
-    );
-    this.channelConfig = JSON.parse(str);
+    try {
+      let str = fs.readFileSync(
+        path.join(
+          this.$store.state.project.path +
+            "/vars/" +
+            this.channelName +
+            "_config.json"
+        ),
+        "utf8"
+      );
+
+      this.channelConfig = JSON.parse(str);
+      this.channelPolicies = this.channelConfig.channel_group.policies;
+      this.channelValues = this.channelConfig.channel_group.values;
+      this.channelApplication = this.channelConfig.channel_group.groups.Application;
+      this.channelOrderer = this.channelConfig.channel_group.groups.Orderer;
+      this.channelPoliciesString = JSON.stringify(this.channelPolicies);
+    } catch (e) {
+      console.log(e);
+      this.notshow = true;
+    }
   }
 
   back() {
     this.$router.push("/channel");
   }
 
-  query() {
-    let args: string[] = ["channelquery"];
-    args.push("-c " + this.channelName);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
+  async query() {
     this.displaylog = true;
+    let args: string[] = ["channelquery"];
+    args.push("-c");
+    args.push(this.channelName);
+    await OSProcess.run_new(args, this.osType);
   }
 }
 </script>
@@ -120,6 +163,14 @@ export default class ChannelEditPage extends ChannelProps {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
+
+.p-accordion-content {
+  background-color: rgb(73, 73, 73) !important;
+  margin: 0 !important;
+}
+.p-accordion-tab.p-accordion-tab-active {
+  margin: 0 !important;
+}
 .config-view-header {
   border-radius: 5px 5px 0px 0px;
   width: 100%;
@@ -139,14 +190,15 @@ export default class ChannelEditPage extends ChannelProps {
   width: 100%;
 }
 .config-view-panel {
-  max-width: 800px;
+  max-width: 1000px;
   height: 400px;
   background-color: darkblue;
   color: aliceblue;
   font-size: 12px;
   white-space: break-spaces;
+  word-wrap: break-word;
   padding: 1em;
-  overflow: auto;
+  overflow: scroll;
 }
 .channel-edit-config-edit {
   width: 100%;

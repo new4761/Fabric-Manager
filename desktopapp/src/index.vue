@@ -2,61 +2,70 @@
   <div>
     <div class="container-header">
       <div class="p-col ">
-        <div class="p-d-flex p-jc-between">
-          <!-- <div class="p-datatable p-component p-datatable-auto-layout">
-            <table role="grid">
-              <tbody class="p-datatable-tbody">
-                <tr>
-                  <td>
-                    1
-                  </td>
-                  <td>
-                    2
-                  </td>
-                  <td>
-                    4
-                  </td>
-                  <td>
-                    5
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    1
-                  </td>
-                  <td>
-                    2
-                  </td>
-                  <td>
-                    4
-                  </td>
-                  <td>
-                    5
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
-          <div>
-            Organization list
+        <div class="p-d-flex p-jc-end p-ai-center">
+          <div class="p-col-6">
+            <div class="container-title p-text-left">
+              Network
+            </div>
           </div>
-          <div>
-            ###########
+          <div class="p-col-3 container-text">
+            <div class="p-grid">
+              <div class="p-col p-text-right">
+                <a class="p-mx-1">
+                  {{ Object.values(org).length }}
+                </a>
+                organization
+              </div>
+            </div>
+          </div>
+          <div class="p-col-3 container-text">
+            <div class="p-grid">
+              <div class="p-col p-text-center">
+                <small>
+                  <a>
+                    {{ this.$store.getters["docker/getActiveContainerCount"] }}
+                  </a>
+                  /
+                  {{ this.$store.getters["docker/getContainerCount"] }}
+                  container
+                </small>
+              </div>
+            </div>
+            <div class="p-grid p-jc-center">
+              <div class="p-col-8">
+                <ProgressBar
+                  :value="
+                    (this.$store.getters['docker/getActiveContainerCount'] /
+                      12) *
+                      100
+                  "
+                >
+                  Percent Complete:
+                  {{ this.$store.getters["docker/getActiveContainerCount"] }}%
+                </ProgressBar>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="container-content">
       <div v-if="false" class="container">
         network is currently offline
       </div>
-      <ContainerTable v-else />
+      <ContainerTable
+        v-else
+        v-bind:container="container"
+        v-bind:org="org"
+        :key="componentKey"
+      />
     </div>
 
     <div class="container-footer">
-      explorer stuff
+      <ExplorerButton />
     </div>
-
+    <Button @click="set()" label="test" />
     <!-- <LogView /> -->
 
     <!-- <div class="p-d-flex p-my-1">
@@ -78,32 +87,237 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import ContainerTable from "./components/ContainerTable.vue";
-import LogView from "./components/LogView.vue";
+import ContainerTable from "./components/container/ContainerTable.vue";
+import LogView from "./components/container/LogView.vue";
+import ExplorerButton from "./components/container/ExplorerButton.vue";
+import NetworkConfig from "./models/NetworkConfig";
 
+/* eslint-disable no-unused-vars */
 @Component({
   components: {
     ContainerTable,
     LogView,
+    ExplorerButton,
   },
 })
-export default class Index extends Vue {}
+export default class Index extends Vue {
+  envConfig: any;
+  container: Array<Object> = [];
+  activeContainer: number = 0;
+  statusClass: string = "";
+  expandedRows: any = [];
+  // @ts-ignore
+  unwatch: Function;
+  componentKey: number = 0;
+
+  org: {
+    [key: string]: {
+      name: string;
+      fullname: string;
+      child: Set<string>;
+      container: object[];
+      ca: boolean;
+      peer: number;
+      orderer: boolean;
+    };
+  } = {};
+
+  created() {
+    this.container = this.$store.state.docker.activeContainer;
+    this.org = NetworkConfig.getOrgName();
+    this.filter();
+
+    this.unwatch = this.$store.watch(
+      (state) => {
+        return this.$store.state.docker.activeContainer; // could also put a Getter here
+      },
+      (newValue, oldValue) => {
+        //something changed do something
+        // console.log("component update old " + oldValue);
+        // console.log("component update new" + newValue);
+        this.container = newValue;
+
+        this.activeContainer = this.$store.getters[
+          "docker/getActiveContainerCount"
+        ];
+        // console.log(this.container);
+        if (this.activeContainer == 0) {
+          this.statusClass = "offline";
+        } else {
+          this.statusClass = "online";
+        }
+        this.filter();
+        this.componentKey += 1;
+      },
+      //Optional Deep if you need it
+      {
+        deep: true,
+      }
+    );
+
+    // this.unsubscribe = this.$store.subscribe((mutation, state) => {
+    //   if (mutation.type === "docker/setActiveContainer") {
+    //     console.log(`Updating to ${state.docker.activeContainer}`);
+    //     this.getContainer();
+    //   }
+    // });
+
+    // this.unwatch = this.$store.watch(
+    //   (state, getters) => getters.getActiveContainer,
+    //   (newValue, oldValue) => {
+    //     console.log(`Updating from ${oldValue} to ${newValue}`);
+    //   }
+    // );
+  }
+
+  set() {
+    console.log(this.$store.state.result);
+  }
+
+  beforeDestroy() {
+    // this.unsubscribe();
+    this.unwatch();
+  }
+
+  // getContainer() {
+  //   this.container = this.$store.state.docker.activeContainer;
+  //   this.activeContainer = this.$store.getters[
+  //     "docker/getActiveContainerCount"
+  //   ];
+  //   console.log(this.container);
+  //   if (this.activeContainer == 0) {
+  //     this.statusClass = "offline";
+  //   } else {
+  //     this.statusClass = "online";
+  //   }
+  // }
+
+  mounted() {
+    this.$store.commit("docker/setOrgContainer");
+    this.$store.commit("docker/setActiveContainer");
+    this.container = this.$store.state.docker.activeContainer;
+    this.org = NetworkConfig.getOrgName();
+    this.filter();
+  }
+
+  filter() {
+    this.container.forEach((element: any) => {
+      element.Names[0] = element.Names[0].replace(/\//g, "");
+      let name = element.Names[0].replace(/^[^.]*./gm, "");
+      this.org[name].container.push(element);
+    });
+  }
+}
+
+// export default {
+//   components: {
+//     ContainerTable,
+
+//     ExplorerButton,
+//   },
+//   computed: mapState(["docker/activeContainer"]),
+
+//   data() {
+//     return {
+//       envConfig: "",
+//       container: [],
+//       activeContainer: 0,
+//       statusClass: "",
+//       expandedRows: [],
+//       org: {},
+//     };
+//   },
+
+//   created() {
+//     this.container = this.$store.state.docker.activeContainer;
+//     this.org = NetworkConfig.getOrgName();
+//     this.filter();
+
+//     // @ts-ignore
+//     this.unsubscribe = this.$store.subscribe((mutation) => {
+//       if (mutation.type === "docker/setActiveContainer") {
+//         console.log("getContainer");
+//         this.getContainer();
+//       }
+//     });
+//   },
+
+//   mounted() {
+//     this.container = this.$store.state.docker.activeContainer;
+//     this.org = NetworkConfig.getOrgName();
+//     this.filter();
+//   },
+
+//  // @ts-ignore
+//   beforeDestroy() {
+//     // @ts-ignore
+//     this.unsubscribe();
+//   },
+
+//   methods: {
+//     getContainer() {
+//       this.container = this.$store.state.docker.activeContainer;
+//       this.activeContainer = this.$store.getters[
+//         "docker/getActiveContainerCount"
+//       ];
+//       console.log(this.activeContainer);
+//       if (this.activeContainer == 0) {
+//         this.statusClass = "offline";
+//       } else {
+//         this.statusClass = "online";
+//       }
+//     },
+//     filter() {
+//       this.container.forEach((element: any) => {
+//         element.Names[0] = element.Names[0].replace(/\//g, "");
+//         let name = element.Names[0].replace(/^[^.]*./gm, "");
+//         // @ts-ignore
+//         this.org[name].container.push(element);
+//       });
+//     },
+//   },
+// };
+
+// const Props = Vue.extend({
+//   created() {
+//      const unsubscribe = this.$store.subscribe((mutation) => {
+//       if (mutation.type === "docker/setActiveContainer") {
+//         console.log("getContainer")
+//         getContainer();
+//       }
+//     });
+//   }
+// });
 </script>
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
-
+.p-progressbar {
+  background-color: rgba(255, 255, 255, 0.219);
+  height: 10px;
+}
+.p-progressbar-value {
+  background-color: $primaryColor !important ;
+  color: white;
+}
 .container-header {
-  padding: 30px;
+  padding: 10px 0px 0px 30px;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   color: white;
-  font-size: 20px;
-  font-weight: bold;
   height: 110px;
+  font-size: 15px;
+}
+.container-title {
+  font-size: 25px;
+  font-weight: bold;
 }
 
+.container-text {
+  font-size: 18px;
+  font-weight: bold;
+}
 .container-content {
 }
 
@@ -124,62 +338,5 @@ export default class Index extends Vue {}
   justify-content: center;
   align-items: center;
   height: 200px;
-}
-
-/* button base */
-.btn {
-  text-align: center;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  padding: 8px 30px;
-  border-radius: 10px;
-  line-height: normal;
-  font-size: 18px;
-  color: #fff;
-  background: #0099ff;
-  width: 100%;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.btn:hover {
-  line-height: normal;
-}
-.btn-icon {
-  will-change: width, transform;
-  width: 0;
-  height: 50px;
-  padding: 2px;
-  border-radius: 50%;
-  fill: #fff;
-  background: rgb(255, 255, 255);
-  margin-left: 0;
-  transform: scale(0);
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.btn-icon--vis {
-  width: 50px;
-  transform: scale(1);
-  margin-left: 8.333333333333334px;
-}
-.btn:hover .btn-icon {
-  width: 50px;
-  transform: scale(1);
-  margin-left: 8.333333333333334px;
-}
-
-.light-blue {
-  background: rgb(87, 209, 250);
-}
-.light-blue:hover {
-  background: darken(rgb(87, 209, 250), 10%);
-}
-
-.teal {
-  background: teal;
-}
-.teal:hover {
-  background: darken(teal, 10%);
 }
 </style>

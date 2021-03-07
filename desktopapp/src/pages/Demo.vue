@@ -53,7 +53,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import CreateNetButton from "../components/CreateNetButton.vue";
+import CreateNetButton from "../components/project/CreateNetButton.vue";
 import NetOpsButton from "../components/NetOpsButton.vue";
 import Terminal from "../components/Terminal.vue";
 import ChannelPage from "./ChannelPage.vue";

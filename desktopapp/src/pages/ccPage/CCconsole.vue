@@ -17,31 +17,28 @@
       </div>
     </div>
     <div @click="toggle()">
-      <div class="cc-list-header">
-        <div class="p-grid p-ai-center vertical-container">
-          ChainCode
-          <div
-            :class="{
-              'toggle-open': showSection,
-              'toggle p-mx-2': true,
-            }"
-          >
-            <i class="fas fa-angle-double-down"></i>
-          </div>
-
-          <Button
-            class="p-ml-auto p-button-sm p-button-primary"
-            icon="pi pi-plus"
-            label="Deploy new CC"
-            @click="setUpCCdisplay = true"
-          ></Button>
+      <div class="cc-list-header p-grid p-ai-center vertical-container">
+        ChainCode
+        <div
+          :class="{
+            'toggle-open': showSection,
+            'toggle p-mx-2': true,
+          }"
+        >
+          <i class="fas fa-angle-double-down"></i>
         </div>
+
+        <Button
+          class="p-ml-auto p-button-sm p-button-primary"
+          icon="pi pi-plus"
+          label="Deploy new CC"
+          @click.stop="setUpCCdisplay = true"
+        ></Button>
       </div>
     </div>
-
     <transition name="smooth">
       <div v-show="showSection">
-        <div class="p-grid p-fluid">
+        <div class="p-grid">
           <ChaincodePage></ChaincodePage>
         </div>
       </div>
@@ -50,12 +47,12 @@
     <hr class="dotted" />
     <div class="cc-console-wrapper">
       <div class="p-d-flex">
-        <h5 class="p-text-bold">ChainCode selection</h5>
+        <h5 class="p-text-bold">ChainCode Operation</h5>
       </div>
 
       <div class="p-grid p-fluid ">
         <div class="p-col-2">
-          <small>CC Command</small>
+          <small>Command</small>
           <hr class="dotted" />
           <Dropdown
             v-model="ccComnand"
@@ -65,7 +62,7 @@
         </div>
 
         <div class="p-col-8">
-          <small>CC Name</small>
+          <small>Name</small>
           <hr class="dotted" />
           <Dropdown
             v-model="selectedCC"
@@ -82,7 +79,7 @@
           <Button
             label="SEND"
             @click="callCommand()"
-            class="p-button-primary"
+            class="p-button-outlined p-button-primary"
           />
         </div>
       </div>
@@ -142,7 +139,7 @@
       v-bind:visible="setUpCCdisplay"
     >
       <template #header>
-        <span>Deploy New ChaiCode</span>
+        <span>Deploy New ChainCode</span>
         <Button
           @click="setUpCCdisplay = false"
           icon="pi pi-times"
@@ -150,16 +147,25 @@
         />
       </template>
       <DigSetupCC
+        @openLog="displayLog"
         @closeDig="setUpCCDisplay"
         :_display="setUpCCdisplay"
       ></DigSetupCC>
     </Dialog>
+
+    <div>
+    <ConsoleDialogue
+      :_displaylog="displaylog"
+      @update:_displaylog="(val) => (displaylog = val)"
+    />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 // eslint-disable-next-line no-unused-vars
 import ChainCode from "@/models/ChainCode";
+import ConsoleDialogue from "../../components/ConsoleDialogue.vue";
 import DigSetupCC from "../../components/chaincode/DigSetupCC.vue";
 import { netWorkConfigPath, ccOutputPayload } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
@@ -174,7 +180,7 @@ const CCconsoleProps = Vue.extend({
   },
 });
 @Component({
-  components: { InputArg, DigSetupCC, ChaincodePage },
+  components: { InputArg, DigSetupCC, ChaincodePage, ConsoleDialogue },
 })
 export default class CCconsole extends CCconsoleProps {
   container: any = "";
@@ -191,6 +197,7 @@ export default class CCconsole extends CCconsoleProps {
   //digBox var
   listCCdisplay = false;
   setUpCCdisplay = false;
+  displaylog = false;
   selectedCC = {};
   output: ccOutputPayload = new ccOutputPayload();
   // rawOutput:any=""
@@ -259,6 +266,11 @@ export default class CCconsole extends CCconsoleProps {
     //handle vue array change
     this.$set(this.args, index, value);
   }
+
+  displayLog(data: boolean) {
+    this.displaylog = data;
+  }
+
   setUpCCDisplay(data: boolean) {
     this.setUpCCdisplay = data;
   }
@@ -281,11 +293,11 @@ export default class CCconsole extends CCconsoleProps {
 @import "@/assets/style/_variables.scss";
 
 .cc-list-header {
-  padding: 20px;
+  padding: 30px;
   align-items: center;
   background-color: $SubBgColor;
   color: white;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
 }
 

@@ -4,37 +4,46 @@
   background: rgba(134, 224, 200, 0.671) !important;
 }
 
-.p-button {
-  color: white !important;
-}
-
-.p-button-primary {
+.p-button-primary:not(.p-button-outlined) {
   color: white !important;
   background-color: $primaryColor !important;
 }
 
-.p-button-success {
+.p-button-success:not(.p-button-outlined) {
+  color: white !important;
   background-color: $successBgColor !important;
 }
 
-.p-button-danger {
+.p-button-danger:not(.p-button-outlined) {
+  color: white !important;
   background-color: $dangerBgColor !important;
 }
 
-.p-button-warning {
+.p-button-warning:not(.p-button-outlined) {
+  color: white !important;
   background-color: $warningBgColor !important;
 }
 
-.p-button-secondary {
+.p-button-secondary:not(.p-button-outlined) {
+  color: white !important;
   background-color: $secondaryBgColor !important;
 }
 
-.p-button-primary {
-  background-color: $primaryColor !important;
+.p-button-info:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $infoBgColor !important;
 }
 
-.p-button-info {
-  background-color: $infoBgColor !important;
+.p-button-outlined.p-button-danger {
+  color: $dangerBgColor !important;
+}
+
+.p-button-outlined.p-button-secondary {
+  color: $secondaryBgColor !important;
+}
+
+.p-button-outlined.p-button-primary {
+  color: $primaryColor !important;
 }
 
 .p-inputtext:focus {
@@ -61,10 +70,21 @@
 .p-highlight a:focus {
   background-color: rgba(134, 224, 200, 0.185) !important ;
 }
-.p-tabview-ink-bar{
-    color: $primaryColor !important;
-    background-color: $primaryColor !important;
+.p-tabview-ink-bar {
+  color: $primaryColor !important;
+  background-color: $primaryColor !important;
 }
-.p-tag-primary{
+.p-tag-primary {
+  background-color: $primaryColor !important;
+}
+.p-tabview {
+  width: 100% !important;
+}
+
+.p-confirm-dialog-reject {
+  color: rgb(180, 180, 180) !important;
+}
+
+.p-confirm-dialog-accept {
   background-color: $primaryColor !important;
 }

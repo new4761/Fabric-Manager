@@ -1,12 +1,13 @@
 import DockerProcess from "../../module/DockerProcess";
 import NetworkConfig from "../../models/NetworkConfig";
+import ConsoleProcess from "@/module/ChainCode/ConsoleProcess";
 
 // initial state
 const state = {
   networkId: "",
   container: [],
   orgContainer: [],
-  activeContainer:[],
+  activeContainer: [],
 };
 
 // getters
@@ -36,12 +37,11 @@ const actions = {};
 const mutations = {
   //set
 
-  setContainer() {
-    console.log("setContainer")
-    DockerProcess.listContainer()
+  async setContainer() {
+    await DockerProcess.listContainer()
       .then((result: any) => {
-      
         state.container = result;
+        return;
       })
       .catch((err: any) => {
         // console.log(err);
@@ -49,7 +49,6 @@ const mutations = {
   },
 
   setOrgContainer() {
-    console.log("OrgContainer")
     state.orgContainer = NetworkConfig.getValue(
       "project_config.fabric.orderers"
     ).concat(
@@ -58,20 +57,27 @@ const mutations = {
     );
   },
 
-  setActiveContainer() {
-    console.log("setActiveContainer")
-    mutations.setContainer()
-    state.activeContainer = [];
-    state.container.forEach((element: any, index: number) => {
-      var el = state.orgContainer.find((a: string) =>
-        a.includes(element.Names[0].replace(/\//g, ""))
-      );
+  async setActiveContainer() {
+    await mutations.setContainer();
+    // state.activeContainer = [];
+    // @ts-ignore
+    let temp = [];
+    try {
+      state.container.forEach((element: any, index: number) => {
+        var el = state.orgContainer.find((a: string) =>
+          a.includes(element.Names[0].replace(/\//g, ""))
+        );
 
-      if (el !== undefined) {
-        // @ts-ignore
-        state.activeContainer.push(element);
-      }
-    });
+        if (el !== undefined) {
+          // @ts-ignore
+          temp.push(element);
+        }
+      });
+      // @ts-ignore
+      state.activeContainer = temp;
+    } catch (e) {
+      // console.log(e);
+    }
   },
 
   setNetworkId() {},

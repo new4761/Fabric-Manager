@@ -185,8 +185,8 @@ const app = new Vue({
 }).$mount("#app");
 
 router.beforeEach((to, from, next) => {
-  store.commit("docker/setOrgContainer");
-  store.commit("docker/setActiveContainer");
+  // store.commit("docker/setOrgContainer");
+  // store.commit("docker/setActiveContainer");
   app.loading = true;
   next();
 });
@@ -194,6 +194,5 @@ router.afterEach(() => {
   app.loading = false;
   // setTimeout(() => (app.loading = false), 1500); // timeout for demo purposes
 });
-
 store.commit("setPlatform", process.platform);
 // router.replace('/project')

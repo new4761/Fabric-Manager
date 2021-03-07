@@ -1,13 +1,5 @@
 <template>
   <div>
-    <!-- <p>{{ _display }}</p>
-    <p>{{ useInit }}</p>
-    <p>{{ ccName }}</p>
-    <p>{{ selectedCCtype.data }}</p>
-    <p>{{ path }}</p>
-    <p>{{ args }}</p>
-    <p>{{ selectedChannel.name }}</p>
-    <p>{{ selectedOrg }}</p> -->
     <div class="p-grid p-fluid">
       <div class="p-col-12">
         <small>Selected Channel </small>
@@ -24,9 +16,20 @@
         <Dropdown v-model="selectedOrg" :options="orgList" />
       </div>
     </div>
-    <br>
+    <br />
     <div class="p-grid p-fluid">
       <div class="p-col-12">
+        <small>Chaincode directory</small>
+        <br />
+        <div class="p-inputgroup">
+          
+          <InputText disabled v-model="path" />
+          <Button label="dir" @click="getDir()" />
+        </div>
+        <br />
+
+        <small>Chaincode and language</small>
+        <br />
         <div class="p-inputgroup">
           <InputText placeholder="CCName" v-model="ccName" />
           <Dropdown
@@ -45,7 +48,7 @@
             <InputSwitch ckass="p-inputswitch-checked" v-model="useInit" />
           </span>
         </div>
-         <br>
+        <br />
         <div v-for="(item, index) in args.length + 1" :key="index">
           <InputArg
             v-if="useInit"
@@ -53,19 +56,14 @@
             @deleteArg="deleteArg(index)"
           ></InputArg>
         </div>
-        <br />
-        <br />
-        <Button label="dir" @click="getDir()" />
-        <br />
-        <br />
-        <br />
-        <Button label="deploy" @click="deployCC()" />
-        <br />
-        <br />
-        <br />
-        <Button label="close" @click="close()" />
       </div>
     </div>
+    <br />
+    <br />
+
+    <Button label="deploy" @click="deployCC()"  class="p-button-outlined p-button-primary" />
+
+    <Button label="close" @click="close()"  class="p-button-outlined p-button-danger" />
   </div>
 </template>
 
@@ -74,6 +72,7 @@ import Vue from "vue";
 
 import Component from "vue-class-component";
 import { CCtype, netWorkConfigPath } from "../../models/EnvProject";
+
 import FileManager from "../../module/FileManager";
 import InputArg from "../../components/chaincode/InputArg.vue";
 import ChainCodeProcess from "@/module/ChainCodeProcess";
@@ -131,6 +130,7 @@ export default class DigSetupCC extends DigSetupCCProps {
     }
   }
   async deployCC() {
+    this.$emit("openLog", true);
     //TODO: fix channel
     let ccObj = await ChainCodeProcess.initNetworkConfig(
       this.ccName,
@@ -154,6 +154,4 @@ export default class DigSetupCC extends DigSetupCCProps {
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
-
-
 </style>
