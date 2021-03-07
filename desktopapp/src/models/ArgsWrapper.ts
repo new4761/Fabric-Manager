@@ -39,21 +39,6 @@ class ArgsCCWrapper {
         //set to minifab output
         return args.concat(newArgs)
     }
-    // argsCCWrapperDefault(args:any,ccObj: ChainCode) {
-    //     let newArgs = []
-    //     let parameterArg = ""
-    //     args.forEach((res: any, index:number) => {
-    //         if (index != args.length - 1)
-    //             parameterArg += "\"" + res + "\","
-    //         else
-    //             parameterArg += "\"" + res + "\""
-    //     });
-    //     //set output to default to catch script file
-    //     newArgs.push("-f")
-    //     newArgs.push("default")
-
-    //     return args.concat(newArgs)
-    // }
 
 
 }

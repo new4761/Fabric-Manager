@@ -25,15 +25,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-// eslint-disable-next-line no-unused-vars
-import ChainCodeProcess from "../module/ChainCodeProcess";
+
 import Component from "vue-class-component";
 import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
 import { CCtype, netWorkConfigPath } from "../models/EnvProject";
 import NetworkConfig from "../models/NetworkConfig";
-// eslint-disable-next-line no-unused-vars
-import ChainCode from "@/models/ChainCode";
-//import FabrickSDK from "../module/fabric/FabrickSDK";
 const ChaincodePageProps = Vue.extend({
   // props: {
   //   _display: Boolean,
@@ -42,23 +38,11 @@ const ChaincodePageProps = Vue.extend({
 @Component({
   components: { DigSetupCC },
 })
-// window.open("/chaincode","_self")
 export default class ChaincodePage extends ChaincodePageProps {
   ccName = "";
   ccType = CCtype.go;
   path = "";
   ccList = [];
-  // test function
-  testSDK() {
-    //FabrickSDK.connect();
-  }
-
-  testsetup() {
-    ChainCodeProcess.testFunction();
-  }
-  testcleanup() {
-    ChainCodeProcess.testClean();
-  }
   //end test
   close() {
     this.$emit("closeDig", false);

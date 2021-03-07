@@ -31,14 +31,13 @@ class OSProcess {
     logger.log("info", "OSProcess running: " + args + " at:" + path);
     return child;
   }
-  run_new(args: string[], type: OsType): any {
+  run_new(args: string[]): any {
     let ls: any;
     //set to minifab output
     let projectPath = ProjectConfig.getPathResolve(store.state.id);
     args.push("-f")
     args.push("minifab")
-    switch (type) {
-      case OsType.WINDOW:
+
         try {
           ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
@@ -53,15 +52,11 @@ class OSProcess {
           console.log("child running");
           return null;
         }
-      case OsType.WSL:
-        ls = spawn("minifab", args, { shell: true, cwd: path });
-        console.log("end run");
-        return ls;
-    }
+
   }
   //TODO:Override  for CC
   //to capture docker output for chainCode
-  run_CC_output( args: string[], type: OsType, methodName: string,version:any): any {
+  run_CC_output( args: string[], methodName: string,version:any): any {
     let ls: any;
     //set to minifab output
     let projectPath = ProjectConfig.getPathResolve(store.state.id);
@@ -70,8 +65,7 @@ class OSProcess {
     let scriptFile = "cc" + methodName + ".sh"
     let sourceDir = path.join(projectPath, "vars", "run", scriptFile)
     FileManager.createFile(sourceDir)
-    switch (type) {
-      case OsType.WINDOW:
+
         try {
           ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + projectPath);
@@ -94,11 +88,6 @@ class OSProcess {
           return null;
         }
 
-      case OsType.WSL:
-        ls = spawn("minifab", args, { shell: true, cwd: path });
-        console.log("end run");
-        return ls;
-    }
   }
 
 
@@ -145,16 +134,9 @@ class OSProcess {
       data = data.toString();
       console.error(`stderr: ${data}`);
     });
-    // //end pipe
-    // streamPipe.on('end', function () {
-    //   console.log("from stream Pipe die bitch");
-    // });
     ls.on("close", (code: any) => {
-
       code = code.toString();
       DockerProcess.killStreamPipe(streamPipe)
-
-      //console.log(streamPipe[1]);
       console.log(`child process exited with code ${code}`);
       return streamPipe[1]
     });

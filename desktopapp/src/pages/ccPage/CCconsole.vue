@@ -1,5 +1,21 @@
 <template>
   <div class="cc-page-wrapper">
+        <div class="p-grid p-fluid">
+      <div class="p-col-12">
+        <small>Selected Channel </small>
+        <br />
+        <Dropdown
+          v-model="selectedChannel"
+          :options="channelList"
+          optionLabel="name"
+        />
+      </div>
+      <div class="p-col-12">
+        <small>Selected Peer Organization</small>
+        <br />
+        <Dropdown v-model="selectedOrg" :options="orgList" />
+      </div>
+    </div>
     <div @click="toggle()">
       <div class="cc-list-header">
         <div class="p-grid p-ai-center vertical-container">
@@ -72,7 +88,7 @@
       </div>
 
       <div>
-        <!-- <Accordion>
+        <Accordion>
           <AccordionTab>
             <template #header>
               <span
@@ -83,7 +99,7 @@
             </template>
             {{ selectedCC }}
           </AccordionTab>
-        </Accordion> -->
+        </Accordion>
       </div>
       <div class="p-grid">
         <div class="cc-args-wrapper">
@@ -202,9 +218,7 @@ export default class CCconsole extends CCconsoleProps {
     this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
     // to do fix date to read
   }
-  test() {
-    console.log(NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath));
-  }
+
   setSelectedCC(e: any) {
     this.selectedCC = e.value;
     //console.log( this.selectedCC)

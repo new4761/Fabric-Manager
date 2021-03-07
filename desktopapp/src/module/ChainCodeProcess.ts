@@ -1,14 +1,11 @@
 import OSProcess from "./OSProcess";
 import {
-  OsType,
   CCtype,
   CCstate,
   netWorkConfigPath,
   ccOutputPayload,
 } from "../models/EnvProject";
 const path = require("path");
-const process = require("process");
-const isDevelopment = process.env.NODE_ENV !== "production";
 import { DirBuilder } from "./DirBuilder";
 import FileManager from "./FileManager";
 import ChainCode from "../models/ChainCode";
@@ -22,39 +19,14 @@ class ChainCodeProcess {
   // call dirBuilder module
   dirBuilder = new DirBuilder();
   // private variable for set CC command
-  private osType: OsType = OsType.WINDOW;
+
 
   constructor() {}
   //get set function
-  getOsType() {
-    return this.osType;
-  }
-  setOsType(_osType: OsType) {
-    this.osType = _osType;
-  }
-  // test function
-  async testFunction() {
-    if (isDevelopment) {
-      //  let org = "test3.test";
-      let org = "org1.example.com";
-      // await OSProcess.run_new(this.testPath, ['netup', '-e', 'true'], this.osType);
-      await OSProcess.run_new(["netup", "-o", org, "-e", "true"], this.osType);
-      await OSProcess.run_new(["create", "-c", "testchannel"], this.osType);
-      await OSProcess.run_new(["join"], this.osType);
-      await OSProcess.run_new(["anchorupdate"], this.osType);
-      await OSProcess.run_new(["explorerup"], this.osType);
-    }
-  }
+
   getPath() {
     return ProjectConfig.getPathResolve(store.state.id);
   }
-  async testClean() {
-    if (isDevelopment) {
-      let org = "org1.example.com";
-      await OSProcess.run_new(["cleanup", "-o", org], this.osType);
-    }
-  }
-
   //end test
   // basic setup
   setupFolder(ccObj: ChainCode): ChainCode {
@@ -92,7 +64,6 @@ class ChainCodeProcess {
         ccObj.name,
         ccObj.type
       );
-
       //this.dirBuilder.createDir_path(ccDir);
       // FileManager.removeDir(ccDir)
       FileManager.copyFilesDir(ccObj.directory, ccDir);
@@ -112,7 +83,7 @@ class ChainCodeProcess {
     args.push("install");
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.setupDir) {
-      return OSProcess.run_new(args, this.osType).then(() => {
+      return OSProcess.run_new(args).then(() => {
         ccObj.state = CCstate.installCC;
         return ccObj;
       });
@@ -128,7 +99,7 @@ class ChainCodeProcess {
     //   let projectPath = this.getPath()
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.installCC)
-      return OSProcess.run_new(args, this.osType).then(() => {
+      return OSProcess.run_new(args).then(() => {
         ccObj.state = CCstate.approveCC;
         this.updateNetworkConfig(ccObj);
         return ccObj;
@@ -143,7 +114,7 @@ class ChainCodeProcess {
     args.push("commit");
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.approveCC) {
-      return OSProcess.run_new(args, this.osType).then(() => {
+      return OSProcess.run_new(args).then(() => {
         ccObj.state = CCstate.commitCC;
         this.updateNetworkConfig(ccObj);
         return ccObj;
@@ -153,20 +124,12 @@ class ChainCodeProcess {
       return ccObj;
     }
   }
-  //end setup
-  // updateNetworkConfig() {
+
   updateNetworkConfig(ccObj: ChainCode) {
-    //console.log("from update")
-    //console.log(ccObj)
     let target = NetworkConfig.getValue(netWorkConfigPath.ccPath).findIndex(
       (res: ChainCode) => res.id == ccObj.id
     );
-    //let target = NetworkConfig.getValue(netWorkConfigPath.ccPath).findIndex(res => res.id == 2 );
-    // console.log(target)
     let path = netWorkConfigPath.ccPath + "." + target;
-    //   console.log(path)
-    // console.log(NetworkConfig.getValue(path))
-    //  NetworkConfig.updateNetworkConfig(path,CCstate.setupDir);
     NetworkConfig.updateNetworkConfig(path, ccObj);
   }
 
@@ -192,9 +155,7 @@ class ChainCodeProcess {
     NetworkConfig.pushValueToArray(netWorkConfigPath.ccPath, cc);
     return cc;
   }
-  getNetworkConfig(id: string) {
-    // to do  wait for env project file
-  }
+
   async deployCCtoFabric(
     ccObj: ChainCode,
     useInti: boolean,
@@ -235,7 +196,6 @@ class ChainCodeProcess {
   }
   initCC(ccObj: ChainCode, ccArgs: any, org: string): ChainCode {
     let args: any = [];
-    let projectPath = this.getPath();
     args = ["initialize"].concat(
       ArgsWrapper.basicCCWrapper(args, ccObj, org).concat(
         ArgsWrapper.argsCCWrapper(ccArgs)
@@ -243,7 +203,7 @@ class ChainCodeProcess {
     );
     //console.log(args)
     if (ccObj.state == CCstate.commitCC) {
-      return OSProcess.run_new(args, this.osType).then(() => {
+      return OSProcess.run_new(args).then(() => {
         ccObj.state = CCstate.initCC;
         this.updateNetworkConfig(ccObj);
         return ccObj;
@@ -264,7 +224,6 @@ class ChainCodeProcess {
     //if (ccObj.state == CCstate.initCC) {
     return OSProcess.run_CC_output(
       args,
-      this.osType,
       command,
       ccObj.version
     ).then((res: any[]) => {
@@ -310,22 +269,14 @@ class ChainCodeProcess {
     return output;
   }
   getResponse(data: Array<string>) {
-    // startTime = startTime.replace(/T|Z/g, ".");
-    // startTime = startTime.slice(0, -20) + ".*UTC.*->.*";
-    //  let regexStartTime = new RegExp(startTime)
     let regexStartTime = new RegExp(".*UTC.*->.*");
-    //console.log("regx:" + regexStartTime)
-    //console.log(data)
+
     let newData: Array<string> = [];
     data.forEach((res: any, index: number) => {
-      //  console.log("from " + index + ":" + regexStartTime.test(res))
       if (!regexStartTime.test(res)) {
-        //newData.splice(index,1)
         newData.push(res);
-        //console.log(data)
       }
     });
-    // data = data.replace(regexStartTime, "");
     return newData;
   }
 

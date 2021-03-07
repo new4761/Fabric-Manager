@@ -18,10 +18,10 @@ module.exports = {
         // asar: false,
         // Config this section for make built in dir for app (need to have some file in dir )
         // extraFiles: [{ from: "extraResources", to: "bin/" }],
-        // extraResources: [
-        //   { from: "extraResources/test", to: "extraResources/test" },
-        //   { from: "extraResources/bin", to: "bin" },
-        // ],
+        extraResources: [
+          // { from: "extraResources/test", to: "extraResources/test" },
+          { from: "extraResources/example_code", to: "example_code" },
+        ],
       },
     },
   },

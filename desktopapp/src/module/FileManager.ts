@@ -70,24 +70,34 @@ class FileManager {
             return fs.watch(sourceDir)
         }
         else {
-            console.log("fuck u")
+            // console.log("fuck u")
         }
 
     }
-    createFile(sourceDir: string) {
+    //TODO : add overwrite condition
+    createFile(destDir: string) {
         //console.log(sourceDir)
-        if (!fs.existsSync(sourceDir)) {
-            fs.writeFileSync(sourceDir, function (err: any) {
+        if (!fs.existsSync(destDir)) {
+            fs.writeFileSync(destDir, function (err: any) {
                 if (err) throw err;
                 console.log('Saved!');
             });
         }
     }
+    createFileWithData(destDir: string,data:string) {
+        //console.log(sourceDir)
+ 
+            fs.writeFileSync(destDir,data, function (err: any) {
+                if (err) throw err;
+                console.log('Saved!');
+            });
+        
+    }
 
     // call through to copy file
     copyFile(sourceDir: any, destDir: string) {
         let fileName = path.basename(sourceDir)
-        console.log(fileName)
+        // console.log(fileName)
         fs.copyFile(sourceDir, path.join(destDir, fileName), (err: any) => {
             if (err) throw err;
             console.log('success');
@@ -99,6 +109,17 @@ class FileManager {
         fse.copy(sourceDir, destDir)
             .then(() => console.log('copyFilesDir success!'))
             .catch((err: any) => console.error(err))
+    }
+    createDir(destDir: string, folderName: string) {
+        let target = path.join(destDir, folderName)
+        if (!fs.existsSync(target)) {
+            fs.mkdir(target, (err:any) => {
+                if (err) {
+                    return console.error(err);
+                }
+                console.log('Directory created successfully!');
+            });
+        }
     }
 }
 export default new FileManager()
