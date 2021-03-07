@@ -6,7 +6,11 @@
     <div class="table-wrapper p-grid p-jc-center">
       <TabView>
         <TabPanel header="container">
-          <DataTable :value="container" class="custom-table" :autoLayout="true">
+          <DataTable
+            :value="container"
+            class="container-table"
+            :autoLayout="true"
+          >
             <Column field="Names" header="Name">
               <template #body="slotProps">
                 <div class="p-text-nowrap p-text-truncate">
@@ -35,53 +39,15 @@
           </DataTable>
         </TabPanel>
         <TabPanel header="organization">
-          <DataTable
-            :value="Object.values(org)"
-            class="custom-table"
-            :autoLayout="true"
-          >
-            <Column field="Names" header="Name">
-              <template #body="slotProps">
-                <div class="p-text-nowrap p-text-truncate">
-                  {{ slotProps.data.name }}
-                </div>
-              </template>
-            </Column>
-
-            <Column field="Full name" header="Full name">
-              <template #body="slotProps">
-                <div class="p-text-nowrap p-text-truncate">
-                  {{ slotProps.data.fullname }}
-                </div>
-              </template>
-            </Column>
-
-            <Column field="Type" header="Type">
-              <template #body="slotProps">
-                <div class="p-d-flex">
-                  <span class="p-mx-1" v-if="slotProps.data.orderer">
-                    <Tag
-                      class="p-mr-2"
-                      severity="warning"
-                      value="orderer"
-                    ></Tag>
-                  </span>
-                  <span class="p-mx-1" v-if="slotProps.data.ca">
-                    <Tag severity="danger" value="ca"></Tag>
-                  </span>
-                  <span class="p-mx-1" v-if="slotProps.data.peer > 0">
-                    <Tag
-                      class="p-mr-2"
-                      severity="info"
-                      value="peer"
-                      v-badge="slotProps.data.peer"
-                    ></Tag>
-                  </span>
-                </div>
-              </template>
-            </Column>
-            <Column header="Status"> </Column>
-          </DataTable>
+          <div class="org-table-wrapper">
+            <div
+              class="org-table p-datatable p-component"
+              v-for="(item, index) in Object.values(org)"
+              :key="index"
+            >
+              <OrgColumn v-bind:item="item" />
+            </div>
+          </div>
         </TabPanel>
       </TabView>
     </div>
@@ -91,23 +57,25 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import OrgColumn from "../container/OrgColumn.vue";
 
 @Component({
-  components: {},
+  components: { OrgColumn },
   props: {
     container: Array,
     org: Object,
   },
 })
-export default class ContainerTable extends Vue {}
+export default class ContainerTable extends Vue {
+  showSection: boolean = false;
+  toggle() {
+    this.showSection = !this.showSection;
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-/* .custom-table .p-datatable-header {
-  background-color: rgb(255, 255, 255);
-  font-size: 20px;
-} */
 @import "@/assets/style/_variables.scss";
 .table-wrapper {
   padding: 10px 40px 40px 40px;
@@ -124,32 +92,32 @@ export default class ContainerTable extends Vue {}
   border-bottom: 9px solid rgb(161, 161, 161);
 }
 
-.custom-table.p-datatable {
+.container-table.p-datatable {
   background-color: $SubBgColor;
   font-size: 12px;
   overflow: auto;
-  height: calc(94vh - 390px);
+  height: calc(94vh - 400px);
   width: 100%;
 }
 
-.custom-table .p-column-title {
+.container-table .p-column-title {
   font-size: 17px;
 }
 
-.custom-table tr,
+.container-table tr,
 th {
   background-color: $SubBgColor !important;
   transition: all 0.3s !important;
 }
-.custom-table tr {
+.container-table tr {
   font-size: 15px;
 }
-.custom-table tr:hover {
+.container-table tr:hover {
   color: $primaryColor;
   background-color: $SubBgColorHover !important;
 }
 
-.custom-table a {
+.container-table a {
   color: $primaryColor;
 }
 
@@ -157,7 +125,34 @@ th {
   width: 50vh;
 }
 
-.custom-table .p-datatable-header {
+.container-table .p-datatable-header {
+  background-color: $SubBgColor !important;
+}
+
+.org-table-wrapper {
+  height: calc(94vh - 400px);
+  overflow: scroll;
+  width: 100%;
+}
+
+.org-table tr,
+th {
+  background-color: $SubBgColor !important;
+  transition: all 0.3s !important;
+}
+.org-table tr {
+  font-size: 15px;
+}
+.org-table tr:hover {
+  color: $primaryColor;
+  background-color: $SubBgColorHover !important;
+}
+
+.org-table a {
+  color: $primaryColor;
+}
+
+.org-table .p-datatable-header {
   background-color: $SubBgColor !important;
 }
 

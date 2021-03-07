@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Toast position="top-right" />
     <Dialog
       v-bind:visible="_displaylog"
       :closable="false"
@@ -8,7 +7,7 @@
       :style="{ width: '80vw' }"
       :contentStyle="{ overflow: 'visible' }"
     >
-      <Terminal @toast="showSuccess" />
+      <Terminal/>
       <Button class="p-button-danger p-m-2" label="close" @click="close()" />
     </Dialog>
   </div>
@@ -31,14 +30,6 @@ export default class ExplorerButton extends DialogueProps {
     this.$emit("update:_displaylog", false);
   }
 
-  showSuccess() {
-    this.$toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "operation complete ",
-      life: 3000,
-    });
-  }
 }
 </script>
 

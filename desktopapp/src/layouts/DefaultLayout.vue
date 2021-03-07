@@ -158,7 +158,6 @@ export default class DefaultLayout extends Vue {
   // 15: " XX_RUN_OUTPUT='minifab'↵"
 
   created() {
-    console.log("created");
     this.$store.commit("docker/setOrgContainer");
     this.$store.commit("docker/setActiveContainer");
     this.container = this.$store.state.docker.activeContainer;

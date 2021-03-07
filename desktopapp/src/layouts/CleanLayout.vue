@@ -15,8 +15,13 @@ import Component from "vue-class-component";
 @Component({
   components: {},
 })
-export default class CleanLayout extends Vue {}
+export default class CleanLayout extends Vue {
+  mounted() {
+    this.$store.commit("docker/setActiveContainer");
+  }
+}
 </script>
 
 <style lang="scss">
-@import "@/assets/style/_variables.scss";</style>
+@import "@/assets/style/_variables.scss";
+</style>

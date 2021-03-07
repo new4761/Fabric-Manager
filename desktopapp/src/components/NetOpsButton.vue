@@ -60,7 +60,7 @@
         <div class="p-d-flex p-jc-end p-mt-1">
           <Button
             class="p-button-primary p-m-2"
-            label="create"
+            label="start"
             @click="netup()"
           />
 
@@ -109,15 +109,18 @@ export default class NetOpsButton extends Vue {
     this.org = Object.keys(NetworkConfig.getOrgName());
   }
   async netup() {
+    this.display = false;
     this.displaylog = true;
     this.up = true;
     this.command = "";
     let args: string[] = ["restart"];
     if (this.orgSelected != "") {
-      args.push("-o " + this.orgSelected);
+      args.push("-o");
+      args.push(this.orgSelected);
     }
     if (this.port != "") {
-      args.push("-e " + this.port);
+      args.push("-e");
+      args.push(this.port);
     }
     await OSProcess.run_new(args, this.osType);
     this.$store.commit("docker/setActiveContainer");

@@ -1,0 +1,8 @@
+fabric:
+  cas: []
+  peers: []
+  orderers: []
+  settings:
+    - ca: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - peer: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - orderer: 'FABRIC_LOGGING_SPEC: DEBUG'

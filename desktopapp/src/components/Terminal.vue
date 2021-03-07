@@ -19,7 +19,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { removeColorCode } from "../module/StringBuilder";
-import StdoutCapture from "../module/OSProcess/StdoutCapture";
+// import StdoutCapture from "../module/OSProcess/StdoutCapture";
 import { mapState } from "vuex";
 
 const TerminalProps = Vue.extend({
@@ -51,12 +51,8 @@ export default class Terminal extends TerminalProps {
   displayOutput() {
     this.$store.state.process.stdout.setEncoding("utf-8");
     this.$store.state.process.stdout.on("data", (data: any) => {
-      let res = StdoutCapture.checkStatus(data.toString());
       this.output += removeColorCode(data.toString());
-      if (res.status) {
-        this.output += "\n from res" + res.message;
-        this.$emit('toast')
-      }
+
     });
     this.$store.state.process.stderr.on("data", (data: any) => {
       this.output += removeColorCode(data.toString());

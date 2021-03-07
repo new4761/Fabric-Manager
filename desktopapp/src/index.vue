@@ -2,56 +2,49 @@
   <div>
     <div class="container-header">
       <div class="p-col ">
-        <div class="p-d-flex p-jc-between">
-          <!-- <div class="p-datatable p-component p-datatable-auto-layout">
-            <table role="grid">
-              <tbody class="p-datatable-tbody">
-                <tr>
-                  <td>
-                    1
-                  </td>
-                  <td>
-                    2
-                  </td>
-                  <td>
-                    4
-                  </td>
-                  <td>
-                    5
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    1
-                  </td>
-                  <td>
-                    2
-                  </td>
-                  <td>
-                    4
-                  </td>
-                  <td>
-                    5
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
-          <div>
-            Network
+        <div class="p-d-flex p-jc-end p-ai-center">
+          <div class="p-col-6">
+            <div class="container-title p-text-left">
+              Network
+            </div>
           </div>
-          <div class="p-col-2">
-            {{ this.$store.getters["docker/getActiveContainerCount"] }} /
-            {{ this.$store.getters["docker/getContainerCount"] }}
-            <ProgressBar
-              :value="
-                (this.$store.getters['docker/getActiveContainerCount'] / 12) *
-                  100
-              "
-            >
-              Percent Complete:
-              {{ this.$store.getters["docker/getActiveContainerCount"] }}%
-            </ProgressBar>
+          <div class="p-col-3 container-text">
+            <div class="p-grid">
+              <div class="p-col p-text-right">
+                <a class="p-mx-1">
+                  {{ Object.values(org).length }}
+                </a>
+                organization
+              </div>
+            </div>
+          </div>
+          <div class="p-col-3 container-text">
+            <div class="p-grid">
+              <div class="p-col p-text-center">
+                <small>
+                  <a>
+                    {{ this.$store.getters["docker/getActiveContainerCount"] }}
+                  </a>
+                  /
+                  {{ this.$store.getters["docker/getContainerCount"] }}
+                  container
+                </small>
+              </div>
+            </div>
+            <div class="p-grid p-jc-center">
+              <div class="p-col-8">
+                <ProgressBar
+                  :value="
+                    (this.$store.getters['docker/getActiveContainerCount'] /
+                      12) *
+                      100
+                  "
+                >
+                  Percent Complete:
+                  {{ this.$store.getters["docker/getActiveContainerCount"] }}%
+                </ProgressBar>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -94,9 +87,9 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import ContainerTable from "./components/ContainerTable.vue";
-import LogView from "./components/LogView.vue";
-import ExplorerButton from "./components/ExplorerButton.vue";
+import ContainerTable from "./components/container/ContainerTable.vue";
+import LogView from "./components/container/LogView.vue";
+import ExplorerButton from "./components/container/ExplorerButton.vue";
 import NetworkConfig from "./models/NetworkConfig";
 
 /* eslint-disable no-unused-vars */
@@ -140,19 +133,20 @@ export default class Index extends Vue {
       },
       (newValue, oldValue) => {
         //something changed do something
-        console.log("component update old " + oldValue);
-        console.log("component update new" + newValue);
+        // console.log("component update old " + oldValue);
+        // console.log("component update new" + newValue);
         this.container = newValue;
 
         this.activeContainer = this.$store.getters[
           "docker/getActiveContainerCount"
         ];
-        console.log(this.container);
+        // console.log(this.container);
         if (this.activeContainer == 0) {
           this.statusClass = "offline";
         } else {
           this.statusClass = "online";
         }
+        this.filter();
         this.componentKey += 1;
       },
       //Optional Deep if you need it
@@ -177,7 +171,7 @@ export default class Index extends Vue {
   }
 
   set() {
-    this.$store.commit("docker/setActiveContainer");
+    console.log(this.$store.state.result);
   }
 
   beforeDestroy() {
@@ -199,6 +193,8 @@ export default class Index extends Vue {
   // }
 
   mounted() {
+    this.$store.commit("docker/setOrgContainer");
+    this.$store.commit("docker/setActiveContainer");
     this.container = this.$store.state.docker.activeContainer;
     this.org = NetworkConfig.getOrgName();
     this.filter();
@@ -305,16 +301,23 @@ export default class Index extends Vue {
   color: white;
 }
 .container-header {
-  padding: 30px;
+  padding: 10px 0px 0px 30px;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   color: white;
-  font-size: 20px;
-  font-weight: bold;
   height: 110px;
+  font-size: 15px;
+}
+.container-title {
+  font-size: 25px;
+  font-weight: bold;
 }
 
+.container-text {
+  font-size: 18px;
+  font-weight: bold;
+}
 .container-content {
 }
 

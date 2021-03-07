@@ -9,11 +9,14 @@ const state = {
 // getters
 const getters = {
   getPath(id: number) {
-    return ProjectConfig.getPath(0);
+    console.log("setpath project id: " + id)
+    return ProjectConfig.getPath(id);
   },
   getId() {
+    console.log("return project id: " + state.id)
     return state.id;
   },
+
 };
 
 // actions
@@ -21,12 +24,12 @@ const actions = {};
 
 // mutations
 const mutations = {
-  setId(state:any, id: number) {
+  setId(state: any, id: number) {
     state.id = id;
   },
 
   setPath(id: number) {
-    state.path =  ProjectConfig.getPath(id);
+    state.path = ProjectConfig.getPath(id);
   },
 };
 

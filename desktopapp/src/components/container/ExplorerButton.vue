@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import ConsoleDialogue from "./ConsoleDialogue.vue";
+import ConsoleDialogue from "../ConsoleDialogue.vue";
 
 @Component({
   components: { ConsoleDialogue },

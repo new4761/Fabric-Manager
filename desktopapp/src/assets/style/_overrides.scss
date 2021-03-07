@@ -35,18 +35,16 @@
 }
 
 .p-button-outlined.p-button-danger {
-  color:$dangerBgColor !important
+  color: $dangerBgColor !important;
 }
 
 .p-button-outlined.p-button-secondary {
-  color:$secondaryBgColor !important
+  color: $secondaryBgColor !important;
 }
 
 .p-button-outlined.p-button-primary {
-  color:$primaryColor !important
+  color: $primaryColor !important;
 }
-
-
 
 .p-inputtext:focus {
   box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
@@ -72,15 +70,21 @@
 .p-highlight a:focus {
   background-color: rgba(134, 224, 200, 0.185) !important ;
 }
-.p-tabview-ink-bar{
-    color: $primaryColor !important;
-    background-color: $primaryColor !important;
-}
-.p-tag-primary{
+.p-tabview-ink-bar {
+  color: $primaryColor !important;
   background-color: $primaryColor !important;
 }
-.p-tabview{
-  width:100% !important
+.p-tag-primary {
+  background-color: $primaryColor !important;
+}
+.p-tabview {
+  width: 100% !important;
 }
 
+.p-confirm-dialog-reject {
+  color: rgb(180, 180, 180) !important;
+}
 
+.p-confirm-dialog-accept {
+  background-color: $primaryColor !important;
+}

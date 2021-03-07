@@ -41,14 +41,16 @@ class OSProcess {
     switch (type) {
       case OsType.WINDOW:
         try {
-          ls = spawnSync("minifab", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
+          ls = spawnSync("minifab.cmd", args, { shell: true, cwd: projectPath, capture: ['stdout', 'stderr'] });
           logger.log("info", "OSProcess running Minifab Window: " + args + " at:" + path);
           storeProcess.commit("setProcess", ls.childProcess);
           // this.callback(ls.childProcess);
           return ls.then((res: any) => {
 
-            // console.log(StdoutCapture.checkStatus(res.stdout.toString()));
-            return StdoutCapture.checkStatus(res.stdout.toString())
+            //console.log(StdoutCapture.checkStatus(res.stdout.toString()));
+            let result = StdoutCapture.checkStatus(res.stdout.toString())
+            storeProcess.commit("setResult", result);
+            return result
           })
         } catch {
           //TODO: write return con

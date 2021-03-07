@@ -1,5 +1,6 @@
 import DockerProcess from "../../module/DockerProcess";
 import NetworkConfig from "../../models/NetworkConfig";
+import ConsoleProcess from "@/module/ChainCode/ConsoleProcess";
 
 // initial state
 const state = {
@@ -39,7 +40,6 @@ const mutations = {
   async setContainer() {
     await DockerProcess.listContainer()
       .then((result: any) => {
-        console.log("set from docker process " + result.length);
         state.container = result;
         return;
       })
@@ -62,19 +62,22 @@ const mutations = {
     // state.activeContainer = [];
     // @ts-ignore
     let temp = [];
-    state.container.forEach((element: any, index: number) => {
-      var el = state.orgContainer.find((a: string) =>
-        a.includes(element.Names[0].replace(/\//g, ""))
-      );
+    try {
+      state.container.forEach((element: any, index: number) => {
+        var el = state.orgContainer.find((a: string) =>
+          a.includes(element.Names[0].replace(/\//g, ""))
+        );
 
-      if (el !== undefined) {
-        // @ts-ignore
-        temp.push(element);
-      }
-    });
-    // @ts-ignore
-    state.activeContainer = temp;
-    console.log("store set to " + state.activeContainer);
+        if (el !== undefined) {
+          // @ts-ignore
+          temp.push(element);
+        }
+      });
+      // @ts-ignore
+      state.activeContainer = temp;
+    } catch (e) {
+      // console.log(e);
+    }
   },
 
   setNetworkId() {},

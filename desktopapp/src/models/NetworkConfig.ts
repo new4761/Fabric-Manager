@@ -15,6 +15,7 @@ export class NetworkConfig {
         ProjectConfig.getPath(store.state.id),
         "net-config.json"
       );
+
       this.file = editJsonFile(filePath);
       // logger.log("warn","switching path: " + filePath)
       store.mutations.setPath(store.state.id);
@@ -38,7 +39,6 @@ export class NetworkConfig {
       ...data,
     };
 
-  
     let file = editJsonFile(path.join(project.directory, "net-config.json"));
     file.set("project_config", data);
     if (quick) {
@@ -53,12 +53,11 @@ export class NetworkConfig {
   }
 
   updateNetworkConfig(key: string, value: any) {
-   // this.constructor();
+    // this.constructor();
     this.file.set(key, value);
     this.file.save();
     logger.log("info", "network-config sucessfully updated ");
   }
-
 
   //add data to array object
   pushValueToArray(key: string, value: any) {
@@ -77,19 +76,26 @@ export class NetworkConfig {
   }
   getValue(key: string) {
     // to do -> read file agin before get value ****
-    let filePath = path.join(ProjectConfig.getPath(store.state.id), "net-config.json");
-     // console.log(filePath);
+    let filePath = path.join(
+      ProjectConfig.getPath(store.state.id),
+      "net-config.json"
+    );
+    // console.log(filePath);
     this.file = editJsonFile(filePath);
     let data = this.file.get(key);
-    
-    logger.log("info","get " + key);
+
+    logger.log("info", "get " + key);
     return data;
   }
-  getUniqueOrgName(data:any){
-    data =this.getValue(data)
-    const regex = new RegExp('[a-zA-Z]*[0-9]*.(.*)');
-    const result = data.map((res:any) => res.match(regex)[1]).filter((value:any, index:number, self:any) =>self.indexOf(value) === index);
-    return result
+  getUniqueOrgName(data: any) {
+    data = this.getValue(data);
+    const regex = new RegExp("[a-zA-Z]*[0-9]*.(.*)");
+    const result = data
+      .map((res: any) => res.match(regex)[1])
+      .filter(
+        (value: any, index: number, self: any) => self.indexOf(value) === index
+      );
+    return result;
   }
 
   getOrgName() {
@@ -123,7 +129,7 @@ export class NetworkConfig {
           name: "",
           fullname: name,
           child: new Set(),
-          container:[],
+          container: [],
           ca: false,
           peer: 0,
           orderer: false,
@@ -146,7 +152,7 @@ export class NetworkConfig {
         name: name.split(".")[0],
         fullname: name,
         child: newOrg[name].child.add(element),
-        container:[],
+        container: [],
         ca: isCa,
         peer: isPeer ? (newOrg[name].peer += 1) : 0,
         orderer: isOrderer,

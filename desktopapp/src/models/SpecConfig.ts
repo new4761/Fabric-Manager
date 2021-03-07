@@ -30,15 +30,15 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
       cas: this.CAList,
       peers: this.peerList,
       orderers: this.orderers,
-      settings:[
-     {ca:"FABRIC_LOGGING_SPEC: DEBUG"},
-     {peer:"FABRIC_LOGGING_SPEC: DEBUG"},
-     {orderer:"FABRIC_LOGGING_SPEC: DEBUG"},
-      ]
+      settings: [
+        { ca: "FABRIC_LOGGING_SPEC: DEBUG" },
+        { peer: "FABRIC_LOGGING_SPEC: DEBUG" },
+        { orderer: "FABRIC_LOGGING_SPEC: DEBUG" },
+      ],
     };
     this.src = yaml.safeDump({ fabric: fabric });
-    console.log(this.src);
-    this.resetData();
+    // this.resetData();
+
   }
 
   saveFile(outputPath: string, inputFileData: string, fileName: string) {
@@ -69,7 +69,6 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     //this.updateNetworkConfig(outputPath);
   }
 
-
   cerateCAOrg() {
     this.orgList.forEach((item) => {
       if (item.useCA == true) {
@@ -78,7 +77,6 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     });
   }
 
-
   getCAList() {
     this.orgList.forEach((item) => {
       if (item.isOrderer == false) {
@@ -86,7 +84,6 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
       }
     });
   }
-
 
   getPeerList() {
     this.orgList.forEach((item) => {
@@ -97,21 +94,11 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     });
   }
 
-  editFile() {
+  editFile() {}
 
+  updateNetworkConfig() {}
 
-  }
-
-  updateNetworkConfig() {
-
-
-  }
-
-  getUserInput() {
-
-
-  }
-
+  getUserInput() {}
 
   newOrg(name: string, isOrderer: boolean) {
     let data;
@@ -151,12 +138,10 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     this.CAList = [];
     this.peerList = [];
     this.orderers = [];
-
   }
   removeOrg(target: OrgData) {
     //     console.log("test Remove")
     this.orgList = this.orgList.filter((item) => item !== target);
   }
-
 }
 export default new SpecConfig();

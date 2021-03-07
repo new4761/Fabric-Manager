@@ -56,7 +56,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 /* eslint-disable no-unused-vars */
-import OrgData from "../models/OrgData";
+import OrgData from "../../models/OrgData";
 @Component({
   props: {
     object: Array,
