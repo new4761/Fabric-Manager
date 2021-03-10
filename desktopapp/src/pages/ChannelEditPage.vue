@@ -91,10 +91,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
+import ChannelConfig from "../models/ChannelConfig";
 import ConsoleDialogue from "../components/ConsoleDialogue.vue";
 // import NetworkConfig from "../models/NetworkConfig";
-const fs = require("fs");
-const path = require("path");
+// const fs = require("fs");
+// const path = require("path");
 import { OsType } from "../models/EnvProject";
 const ChannelProps = Vue.extend({
   props: {
@@ -109,7 +110,6 @@ export default class ChannelEditPage extends ChannelProps {
   projectDir: string = "";
   display: boolean = false;
   displaylog: boolean = false;
-  channelConfig: any = {};
   channelPolicies: any = {};
   channelValues: any = {};
   channelApplication: any = {};
@@ -124,22 +124,19 @@ export default class ChannelEditPage extends ChannelProps {
   init() {
     this.projectDir = this.$store.state.project.path;
     try {
-      let str = fs.readFileSync(
-        path.join(
-          this.$store.state.project.path +
-            "/vars/" +
-            this.channelName +
-            "_config.json"
-        ),
-        "utf8"
+      ChannelConfig.setFile(this.channelName);
+      this.channelPolicies = ChannelConfig.getValue("channel_group.policies");
+      this.channelValues = ChannelConfig.getValue("channel_group.values");
+      this.channelApplication = ChannelConfig.getValue(
+        "channel_group.groups.Application"
       );
-
-      this.channelConfig = JSON.parse(str);
-      this.channelPolicies = this.channelConfig.channel_group.policies;
-      this.channelValues = this.channelConfig.channel_group.values;
-      this.channelApplication = this.channelConfig.channel_group.groups.Application;
-      this.channelOrderer = this.channelConfig.channel_group.groups.Orderer;
-      this.channelPoliciesString = JSON.stringify(this.channelPolicies);
+      this.channelOrderer = ChannelConfig.getValue(
+        "channel_group.groups.Orderer"
+      );
+      ChannelConfig.updateConfig(
+        "channel_group.groups.Application.groups.org1-example-com.mod_policy",
+        "Admins"
+      );
     } catch (e) {
       console.log(e);
       this.notshow = true;

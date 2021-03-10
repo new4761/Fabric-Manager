@@ -40,6 +40,27 @@
         </TabPanel>
         <TabPanel header="organization">
           <div class="org-table-wrapper">
+            <div class="p-datatable p-component">
+              <table role="grid" class="p-my-1">
+                <thead class="p-datatable-thead">
+                  <tr>
+                    <th>
+                      <span class="p-column-title">Name</span>
+                    </th>
+                    <th>
+                      <span class="p-column-title">Fullname</span>
+                    </th>
+                    <th>
+                      <span class="p-column-title">Role</span>
+                    </th>
+                    <th>
+                      <span class="p-column-title">Status</span>
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
             <div
               class="org-table p-datatable p-component"
               v-for="(item, index) in Object.values(org)"

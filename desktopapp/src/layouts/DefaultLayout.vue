@@ -7,66 +7,14 @@
             <div class="p-col-12"></div>
           </div>
 
-          <div class="p-d-flex p-jc-center p-mt-3">
+          <div class="p-d-flex p-jc-center p-mt-3  p-mb-5">
             <net-ops-button />
           </div>
-          <div class="p-d-row p-jc-center ">
+          <!-- <div class="p-d-row p-jc-center ">
             <AppProfile />
-          </div>
+          </div> -->
 
           <AppMenu :model="menu" class="scroll-menu" />
-
-          <!-- <div class="p-col-8 status">
-            <div class="p-d-flex">
-              <div class="p-col-5 status-container" :class="statusClass">
-                <div class="p-d-flex  p-jc-center">
-                  <Knob
-                    v-model="activeContainer"
-                    :size="110"
-                    :min="0"
-                    :max="this.$store.getters['docker/getContainerCount']"
-                    :readonly="true"
-                    :valueColor="'#fff'"
-                    :strokeWidth="15"
-                    :textColor="'#fff'"
-                    :valueTemplate="
-                      activeContainer +
-                        '/' +
-                        this.$store.getters['docker/getContainerCount']
-                    "
-                  />
-                </div>
-                <div class="p-d-flex  p-jc-center">Active containers</div>
-              </div>
-              <div class="p-col-auto status-detail">
-                <div class="p-col  p-as-center">
-                  <div class="p-d-flex status-text">
-                    net stat
-                    <a>
-                      {{
-                        (activeContainer /
-                          this.$store.getters["docker/getContainerCount"]) *
-                          100
-                      }}
-                      %
-                    </a>
-                  </div>
-                  <div class="p-d-flex status-text">
-                    fabric version <a>{{ env.version }}</a>
-                  </div>
-                  <div class="p-d-flex status-text">
-                    expose port <a>{{ env.port }}</a>
-                  </div>
-                  <div
-                    class="p-d-flex status-text p-text-nowrap p-text-truncate"
-                    style="width: 12rem"
-                  >
-                    current org <a>{{ env.org }}</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
 
           <div class="p-d-row p-mt-auto">
             <div class="p-d-flex status-text">
@@ -219,13 +167,8 @@ export default class DefaultLayout extends Vue {
   data() {
     return {
       menu: [
-        { label: "Home", icon: "pi pi-fw pi-home", to: "/home" },
-
-        {
-          label: "Organization",
-          icon: "pi pi-fw pi-sitemap",
-          to: "/org",
-        },
+          { label: "Project", icon: "pi pi-list", to: "/" },
+        { label: "Network", icon: "pi pi-fw pi-sitemap", to: "/home" },
         {
           label: "Channel",
           icon: "pi pi-fw pi-globe",

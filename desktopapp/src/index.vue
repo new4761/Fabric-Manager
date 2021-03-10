@@ -146,6 +146,7 @@ export default class Index extends Vue {
         } else {
           this.statusClass = "online";
         }
+        this.org = NetworkConfig.getOrgName();
         this.filter();
         this.componentKey += 1;
       },
@@ -154,20 +155,6 @@ export default class Index extends Vue {
         deep: true,
       }
     );
-
-    // this.unsubscribe = this.$store.subscribe((mutation, state) => {
-    //   if (mutation.type === "docker/setActiveContainer") {
-    //     console.log(`Updating to ${state.docker.activeContainer}`);
-    //     this.getContainer();
-    //   }
-    // });
-
-    // this.unwatch = this.$store.watch(
-    //   (state, getters) => getters.getActiveContainer,
-    //   (newValue, oldValue) => {
-    //     console.log(`Updating from ${oldValue} to ${newValue}`);
-    //   }
-    // );
   }
 
   set() {
@@ -178,19 +165,6 @@ export default class Index extends Vue {
     // this.unsubscribe();
     this.unwatch();
   }
-
-  // getContainer() {
-  //   this.container = this.$store.state.docker.activeContainer;
-  //   this.activeContainer = this.$store.getters[
-  //     "docker/getActiveContainerCount"
-  //   ];
-  //   console.log(this.container);
-  //   if (this.activeContainer == 0) {
-  //     this.statusClass = "offline";
-  //   } else {
-  //     this.statusClass = "online";
-  //   }
-  // }
 
   mounted() {
     this.$store.commit("docker/setOrgContainer");

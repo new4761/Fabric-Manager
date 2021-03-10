@@ -55,13 +55,6 @@
           </Column>
           <Column>
             <template #body="slotProps">
-              <div class="p-text-nowrap p-text-truncate">
-                {{ slotProps.data.Image }}
-              </div>
-            </template>
-          </Column>
-          <Column>
-            <template #body="slotProps">
               <a v-if="slotProps.data.State == 'running'">●</a>
               {{ slotProps.data.Status }}
             </template>

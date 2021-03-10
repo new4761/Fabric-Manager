@@ -22,8 +22,9 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
   }
   createFile() {
     console.log("call createed");
+
     this.addOrdererOrg();
-    this.cerateCAOrg();
+    this.createCAOrg();
     this.getCAList();
     this.getPeerList();
     let fabric = {
@@ -37,8 +38,10 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
       ],
     };
     this.src = yaml.safeDump({ fabric: fabric });
+    this.CAList = [];
+    this.peerList = [];
+    this.orderers = [];
     // this.resetData();
-
   }
 
   saveFile(outputPath: string, inputFileData: string, fileName: string) {
@@ -69,7 +72,7 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
     //this.updateNetworkConfig(outputPath);
   }
 
-  cerateCAOrg() {
+  createCAOrg() {
     this.orgList.forEach((item) => {
       if (item.useCA == true) {
         item.addCA();

@@ -4,6 +4,8 @@ import ProjectConfig from "../../models/ProjectConfig";
 const state = {
   path: "",
   id: 0,
+  explorer:false,
+  portainer:false
 };
 
 // getters
