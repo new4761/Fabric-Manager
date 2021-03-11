@@ -18,18 +18,18 @@ export class ChannelConfig {
       );
 
       this.file = editJsonFile(filePath);
-      console.log(this.file);
+      // console.log(this.file);
     } catch (e) {
       logger.log("error", "error net-config path");
     }
   }
 
   updateConfig(key: string, value: any) {
-    console.log(this.getValue(key));
+    console.log(key);
     this.file.set(key, value);
     this.file.save();
     logger.log("info", "channel-config sucessfully updated ");
-    console.log(this.file);
+    // console.log(this.file);
   }
 
   //add data to array object
@@ -52,6 +52,7 @@ export class ChannelConfig {
     let data = this.file.get(key);
 
     logger.log("info", "get " + key);
+    // console.log(data);
     return data;
   }
 }

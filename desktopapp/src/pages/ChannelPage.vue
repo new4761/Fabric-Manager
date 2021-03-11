@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- <div class="p-grid p-jc-between">
-      <div class="channel-header">
-        Channel
-        <hr class="dotted" />
-      </div>
-    </div> -->
-
     <div @click="toggle()">
       <div class="channel-list-header p-grid p-ai-center vertical-container">
         Channel
@@ -30,15 +23,6 @@
     <transition name="channel-smooth">
       <div v-show="showSection">
         <div class="channel-list-wrapper p-grid p-jc-center p-my-4">
-          <!-- <div class="channel-list-header">
-            Channel list
-            <div class="p-col-4">
-              <div class="p-inputgroup">
-                <InputText placeholder="new channel" v-model="channelName" />
-                <Button label="create" @click="create()" />
-              </div>
-            </div>
-          </div> -->
           <div v-if="channels">
             <DataTable :value="channels" class="channel-list">
               <Column field="name" header="name"></Column>
@@ -69,6 +53,8 @@
 
     <hr class="dotted" />
 
+    <ChannelEditPage :channelName="'app'" />
+
     <div>
       <Dialog
         header="log"
@@ -96,9 +82,10 @@ import OSProcess from "../module/OSProcess";
 import Terminal from "../components/Terminal.vue";
 import NetworkConfig from "../models/NetworkConfig";
 import logger from "../module/Logger";
+import ChannelEditPage from "./ChannelEditPage.vue";
 
 @Component({
-  components: { Terminal },
+  components: { Terminal, ChannelEditPage },
 })
 export default class ChannelPage extends Vue {
   projectDir: string = "";
@@ -269,5 +256,4 @@ th {
   transform: rotate(180deg);
   color: $primaryColor;
 }
-
 </style>

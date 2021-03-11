@@ -81,9 +81,6 @@ import BadgeDirective from "primevue/badgedirective";
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 
-const Autoscroll  = require('vue-autoscroll');
-Vue.use(Autoscroll)
-
 // import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 import "primevue/resources/themes/mdc-dark-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -93,6 +90,8 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "./assets/style/style.scss";
 import store from "./store";
+
+
 
 Vue.use(ToastService);
 Vue.use(ConfirmationService);
