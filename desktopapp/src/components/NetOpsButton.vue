@@ -113,7 +113,7 @@ export default class NetOpsButton extends Vue {
     this.displaylog = true;
     this.up = true;
     this.command = "";
-    let args: string[] = ["restart"];
+    let args: string[] = ["restart,anchorupdate"];
     if (this.orgSelected != "") {
       args.push("-o");
       args.push(this.orgSelected);

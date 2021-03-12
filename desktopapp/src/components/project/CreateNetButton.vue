@@ -154,6 +154,16 @@
             <OrgInputText @new-org="newOrgTolist"></OrgInputText>
           </div>
 
+
+          <!-- <div class="p-d-flex p-jc-between p-ai-center">
+            <div class="p-col">
+              <small >start network after create project</small>
+            </div>
+            <div class="p-col">
+              <small>default network channel</small>
+            </div>
+          </div> -->
+
           <div class="p-d-flex p-mt-1 p-jc-between p-ai-center">
             <div class="p-col">
               <!-- <div class="p-d-flex">
@@ -167,9 +177,9 @@
               </div>
             </div>
             <div class="p-col">
-              <div class="p-d-flex">
+              <!-- <div class="p-d-flex">
                 <small class="p-mx-5">create default channel</small>
-              </div>
+              </div> -->
               <div class="p-d-flex">
                 <div class="p-field-checkbox p-mx-5">
                   <div class="p-inputgroup">
@@ -194,7 +204,9 @@
             </div>
           </div>
 
-          <div class="p-grid p-mt-3">
+        </div>
+        <template #footer>
+          <div class="p-grid">
             <Button
               class="p-button-danger p-button-outlined p-m-2 p-my-2"
               label="close"
@@ -207,7 +219,7 @@
               @click="showConfirm()"
             />
           </div>
-        </div>
+        </template>
       </Dialog>
     </div>
   </div>
@@ -262,8 +274,12 @@ export default class CreateNetButton extends Vue {
     let id = ProjectConfig.addProject(project);
 
     if (this.quick) {
-      let defaultOrg = NetworkConfig.createConfig(project, this.channel,this.channelName);
-      let command:string[] = [];
+      let defaultOrg = NetworkConfig.createConfig(
+        project,
+        this.channel,
+        this.channelName
+      );
+      let command: string[] = [];
       if (this.channel) {
         command.push("netup,create,join,channelquery", "-c", this.channelName);
       } else {
@@ -273,7 +289,7 @@ export default class CreateNetButton extends Vue {
       this.$router.push({
         name: "SplashConsole",
         params: {
-          command: command.join('#'),
+          command: command.join("#"),
           directory: this.projectDir,
           id: id,
         },
@@ -340,7 +356,8 @@ export default class CreateNetButton extends Vue {
 //   // overflow: auto;
 // }
 .create-net-wrapper {
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .preview-wrapper {

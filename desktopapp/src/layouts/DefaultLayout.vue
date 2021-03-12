@@ -47,7 +47,7 @@
         </div>
       </transition>
 
-      <div class="scroll-main layout-main p-col p-as-stretch">
+      <div class="scroll-main layout-main">
         <div class=" p-d-flex p-jc-center">
           <div class="layout-wrapper">
             <slot />

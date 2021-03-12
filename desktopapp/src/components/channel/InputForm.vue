@@ -1,18 +1,18 @@
 <template>
-  <div class="p-col-10">
-    <!-- <small>{{ jsonKey }}</small> -->
-    <h5>Policy</h5>
-    <div v-if="formData.policies != null">
-      <div
-        v-for="(policy, index) in Object.keys(formData.policies)"
-        :key="index"
-        class="p-my-3"
-      >
-        <Panel :header="policy">
-          <!-- <h5>{{ policy }}</h5> -->
+  <div class="p-grid">
+    <div class="p-col-10">
+      <h4 class="p-text-bold text-primary">Policy</h4>
+      <div v-if="formData.policies != null">
+        <div
+          v-for="(policy, index) in Object.keys(formData.policies)"
+          :key="index"
+          class="p-my-3"
+        >
+          <Panel :header="policy">
+            <!-- <h5>{{ policy }}</h5> -->
 
-          <!-- ** type: {{ formData.policies[policy].policy.type }} -->
-          <!-- <div class="p-field p-grid">
+            <!-- ** type: {{ formData.policies[policy].policy.type }} -->
+            <!-- <div class="p-field p-grid">
             <label for="policytype" class="p-col-fixed p-mr-5" style="width:100px"
               >policytype</label
             >
@@ -26,66 +26,71 @@
             </div>
           </div> -->
 
-          <div v-if="formData.policies[policy].policy.value.identities != null">
             <div
-              v-for="(identifier, index) in formData.policies[policy].policy
-                .value.identities"
-              :key="'indentity' + index"
+              v-if="formData.policies[policy].policy.value.identities != null"
             >
-              <small>{{ identifier.principal.role }}</small>
-              <hr />
-              <div class="p-field p-grid">
-                <label
-                  for="msp_identifier"
-                  class="p-col-fixed p-mr-5"
-                  style="width:100px"
-                  >msp_identifier</label
-                >
-                <div class="p-ml-5">
-                  <InputText
-                    id="msp_identifier"
-                    type="text"
-                    v-model="identifier.principal.msp_identifier"
-                    @input="save()"
-                    class="p-inputtext-sm"
-                  />
+              <div
+                v-for="(identifier, index) in formData.policies[policy].policy
+                  .value.identities"
+                :key="'indentity' + index"
+              >
+                <small>{{ identifier.principal.role }}</small>
+                <hr />
+                <div class="p-field p-grid">
+                  <label
+                    for="msp_identifier"
+                    class="p-col-fixed p-mr-5"
+                    style="width:100px"
+                    >msp_identifier</label
+                  >
+                  <div class="p-ml-5">
+                    <InputText
+                      id="msp_identifier"
+                      type="text"
+                      v-model="identifier.principal.msp_identifier"
+                      @input="save()"
+                      class="p-inputtext-sm"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div class="p-field p-grid">
-                <label for="role" class="p-col-fixed p-mr-5" style="width:100px"
-                  >role</label
-                >
-                <div class="p-ml-5">
-                  <InputText
-                    id="role"
-                    type="text"
-                    v-model="identifier.principal.role"
-                    @input="save()"
-                    class="p-inputtext-sm"
-                  />
+                <div class="p-field p-grid">
+                  <label
+                    for="role"
+                    class="p-col-fixed p-mr-5"
+                    style="width:100px"
+                    >role</label
+                  >
+                  <div class="p-ml-5">
+                    <InputText
+                      id="role"
+                      type="text"
+                      v-model="identifier.principal.role"
+                      @input="save()"
+                      class="p-inputtext-sm"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div class="p-field p-grid">
-                <label
-                  for="principal_classification"
-                  class="p-col-fixed p-mr-5"
-                  style="width:100px"
-                  >principal_classification</label
-                >
-                <div class="p-ml-5">
-                  <InputText
-                    id="principal_classification"
-                    type="text"
-                    v-model="identifier.principal_classification"
-                    @input="save()"
-                    class="p-inputtext-sm"
-                  />
+                <div class="p-field p-grid">
+                  <label
+                    for="principal_classification"
+                    class="p-col-fixed p-mr-5"
+                    style="width:100px"
+                    >principal_classification</label
+                  >
+                  <div class="p-ml-5">
+                    <InputText
+                      id="principal_classification"
+                      type="text"
+                      v-model="identifier.principal_classification"
+                      @input="save()"
+                      class="p-inputtext-sm"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- **** n_out_of.n:
+              <!-- **** n_out_of.n:
           {{ formData.policies[policy].policy.value.rule.n_out_of.n }}
           <br />
 
@@ -98,64 +103,66 @@
             {{ rule.signed_by }}
             <br />
           </div> -->
-          </div>
+            </div>
 
-          <div
-            v-if="
-              typeof formData.policies[policy].policy.value.rule === 'string'
-            "
-          >
-            <div class="p-field p-grid">
-              <label for="rule" class="p-col-fixed p-mr-5" style="width:100px"
-                >rule</label
-              >
-              <div class="p-ml-5">
-                <select
-                  id="rule"
-                  v-model="formData.policies[policy].policy.value.rule"
-                  v-on:change="save()"
+            <div
+              v-if="
+                typeof formData.policies[policy].policy.value.rule === 'string'
+              "
+            >
+              <div class="p-field p-grid">
+                <label for="rule" class="p-col-fixed p-mr-5" style="width:100px"
+                  >rule</label
                 >
-                  <option value="MAJORITY">MAJORITY</option>
-                  <option value="ANY">ANY</option>
-                  {{
-                    formData.policies[policy].policy.value.rule
-                  }}
-                </select>
+                <div class="p-ml-5">
+                  <select
+                    id="rule"
+                    v-model="formData.policies[policy].policy.value.rule"
+                    v-on:change="save()"
+                  >
+                    <option value="MAJORITY">MAJORITY</option>
+                    <option value="ANY">ANY</option>
+                    {{
+                      formData.policies[policy].policy.value.rule
+                    }}
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div class="p-field p-grid">
-              <label
-                for="sub_policy"
-                class="p-col-fixed p-mr-5"
-                style="width:100px"
-                >sub_policy</label
-              >
-              <div class="p-ml-5">
-                <InputText
-                  id="sub_policy"
-                  type="text"
-                  v-model="formData.policies[policy].policy.value.sub_policy"
-                  @input="save()"
-                  class="p-inputtext-sm"
-                />
+              <div class="p-field p-grid">
+                <label
+                  for="sub_policy"
+                  class="p-col-fixed p-mr-5"
+                  style="width:100px"
+                  >sub_policy</label
+                >
+                <div class="p-ml-5">
+                  <InputText
+                    id="sub_policy"
+                    type="text"
+                    v-model="formData.policies[policy].policy.value.sub_policy"
+                    @input="save()"
+                    class="p-inputtext-sm"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- **** rule: {{ formData.policies[policy].policy.value.rule }} <br />
+              <!-- **** rule: {{ formData.policies[policy].policy.value.rule }} <br />
           **** rule: {{ formData.policies[policy].policy.value.sub_policy }} -->
-            <br />
-          </div>
-        </Panel>
-      </div>
+              <br />
+            </div>
+          </Panel>
+        </div>
 
-      <!-- <div v-if="formData.values.Capabilities != null">
+        <!-- <div v-if="formData.values.Capabilities != null">
           [Capabilities] :
         </div> -->
-    </div>
+      </div>
 
-    <!-- <div class="config-view-panel">{{ data }}</div> -->
-    <!-- 
+      <!-- <div class="config-view-panel">{{ data }}</div> -->
+      <!-- 
       <Button @click="save" label="save" /> -->
+      <hr class="faded" />
+    </div>
   </div>
 </template>
 

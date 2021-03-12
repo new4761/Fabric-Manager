@@ -1,13 +1,13 @@
 /* Typography */
 .card {
-    background-color:$SubBgColor;
-    padding: 1em;
-    margin-bottom: 16px;
-    border-radius: $borderRadius;
+  background-color: $SubBgColor;
+  padding: 1em;
+  margin-bottom: 16px;
+  border-radius: $borderRadius;
 
-    &.card-w-title {
-        padding-bottom: 2em;
-    }
+  &.card-w-title {
+    padding-bottom: 2em;
+  }
 }
 
 /* Code Highlight */
@@ -44,4 +44,40 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
+select {
+  // margin: 50px;
+  border-radius: 1.5px;
+  width: 185px;
+  padding: 5px 35px 5px 5px;
+  font-size: 16px;
+  border: 1px solid rgb(119, 119, 119);
+  background-color: rgb(36, 36, 36);
+  color: rgb(194, 194, 194);
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-size: 0.5em auto;
+  background-position: right 0.25em center;
+  background-image: url("data:image/svg+xml;charset=utf-8, \
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
+      <polygon points='0,0 60,0 30,40' style='fill:white;'/> \
+    </svg>");
+}
 
+select:focus {
+  box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
+  border-color: $primaryFocusColor !important;
+  outline: 0;
+  outline-color: transparent;
+  outline-style: none;
+}
+
+select:active {
+  box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
+  border-color: $primaryFocusColor !important;
+  outline: 0;
+  outline-color: transparent;
+  outline-style: none;
+}

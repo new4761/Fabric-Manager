@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dirty-fix">
     <div @click="toggle()">
       <div class="channel-list-header p-grid p-ai-center vertical-container">
         Channel
@@ -61,8 +61,8 @@
       </div>
     </transition>
 
-    <hr class="dotted" />
-    <div class="p-grid p-ai-center p-jc-between channel-config-header">
+    <hr />
+    <!-- <div class="p-grid p-ai-center p-jc-between channel-config-header">
       <div class="p-col">Config</div>
       <div class="p-col p-text-right">
         <Dropdown
@@ -72,6 +72,38 @@
           optionValue="name"
           v-on:change="updateForm()"
         />
+      </div>
+    </div> -->
+    <div class=" p-grid p-jc-center">
+      <div class="config-view-header">
+        <span>
+          Channel:
+          <Dropdown
+            v-model="channelSelected"
+            :options="channels"
+            optionLabel="name"
+            optionValue="name"
+            v-on:change="updateForm()"
+            class="channel-dropdown"
+          />
+        </span>
+        <div class="p-col-6 p-text-right">
+          <div class="p-d-flex p-jc-end">
+            <Button
+              icon="pi pi-download"
+              class="p-button-sm p-button-secondary p-mx-3"
+              label="query config"
+              @click="channelQuery()"
+            />
+
+            <Button
+              icon="pi pi-refresh"
+              class="p-button-sm p-button-secondary"
+              label="update channel"
+              @click="channelUpdate()"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
@@ -230,21 +262,22 @@ export default class ChannelPage extends Vue {
     this.componentKey += 1;
   }
 
-  // join(name: string) {
-  //   this.displaylog = true;
-  //   let args: string[] = ["join"];
-  //   args.push("-c " + name);
-  //   const child = OSProcess.run(this.projectDir, args);
-  //   this.$store.commit("setProcess", child);
-  // }
+  async channelQuery() {
+    this.displaylog = true;
+    let args: string[] = ["channelquery"];
+    args.push("-c");
+    args.push(this.channelSelected);
+    await OSProcess.run_new(args, this.osType);
+  }
 
-  // query(name: string) {
-  //   this.displaylog = true;
-  //   let args: string[] = ["channelquery"];
-  //   args.push("-c " + name);
-  //   const child = OSProcess.run(this.projectDir, args);
-  //   this.$store.commit("setProcess", child);
-  // }
+  async channelUpdate() {
+    this.displaylog = true;
+    let args: string[] = ["channelsign,channelupdate"];
+    args.push("-c");
+    args.push(this.channelSelected);
+    await OSProcess.run_new(args, this.osType);
+    this.channelQuery();
+  }
 }
 </script>
 
@@ -354,9 +387,23 @@ th {
   color: $primaryColor;
 }
 
+.config-view-header {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(73, 73, 73);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+}
+
 .channel-config-header {
   padding: 10px 30px 10px 30px;
-  width: 100%;
   align-items: center;
   justify-content: space-between;
   color: white;
@@ -365,6 +412,18 @@ th {
 }
 .channel-config-header {
   font-size: 20px;
+  font-weight: bold;
+  background-color: $SubBgColor;
+}
+
+// .channel-dropdown.p-dropdown {
+//   height: 30px;
+// }
+
+.channel-dropdown .p-dropdown-label {
+  font-size: 15px;
+  padding: 5px 10px 5px 10px;
+  color: $primaryColor;
   font-weight: bold;
 }
 </style>

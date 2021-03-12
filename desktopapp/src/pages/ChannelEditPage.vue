@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dirty-fix">
     <!-- <div class="p-d-flex p-jc-between">
       <div class="p-col">
         <Button
@@ -16,136 +16,118 @@
 
     <div class=" p-grid p-jc-center">
       <div class="channel-edit-config-view">
-        <div class="config-view-header">
-          <span>
-            Channel: <a>{{ channelName }}</a>
-          </span>
-          <div class="p-col-6 p-text-right">
-            <div class="p-d-flex p-jc-end">
-              <Button
-                icon="pi pi-download"
-                class="p-button-sm p-button-secondary p-mx-3"
-                label="query config"
-                @click="channelQuery()"
-              />
-
-              <Button
-                icon="pi pi-refresh"
-                class="p-button-sm p-button-secondary"
-                label="update channel"
-                @click="channelUpdate()"
-              />
-            </div>
-          </div>
-        </div>
-
         <div class="edit-config-panel">
           <div class="p-grid">
             <div class="edit-config-menu p-col-3">
               <PanelMenu :model="items" />
             </div>
+            <div class="p-col">
+              <div class="edit-config-content p-p-5 p-grid p-jc-center">
+                <div class="p-col-9">
+                  <ScrollPanel style="width: 100%; height: calc(63vh - 12px)">
+                    <div v-show="selectedMenu === '_app'">
+                      <h3 class="p-text-bold">Application</h3>
+                      <hr class="dott" />
 
-            <div class="edit-config-content p-col-9 p-p-5">
-              <ScrollPanel style="width: 100%; height: 55vh">
-                <div v-show="selectedMenu === '_app'">
-                  <h4>Application</h4>
-                  <hr class="dott" />
+                      <InputForm
+                        :data="channelApplication"
+                        :jsonKey="'channel_group.groups.Application'"
+                        :channel="channelName"
+                      />
 
-                  <InputForm
-                    :data="channelApplication"
-                    :jsonKey="'channel_group.groups.Application'"
-                    :channel="channelName"
-                  />
-
-                  <!-- <ValueForm
+                      <!-- <ValueForm
                     :data="channelApplication"
                     :jsonKey="'channel_group.groups.Application'"
                     :channel="channelName"
                   /> -->
-                </div>
-                <div v-show="selectedMenu === '_orderer'">
-                  <h4>Orderer</h4>
-                  <hr class="dott" />
-                  <InputForm
-                    :data="channelOrderer"
-                    :jsonKey="'channel_group.groups.Orderer'"
-                    :channel="channelName"
-                  />
+                    </div>
+                    <div v-show="selectedMenu === '_orderer'">
+                      <h3 class="p-text-bold">Orderer</h3>
+                      <hr class="dott" />
+                      <InputForm
+                        :data="channelOrderer"
+                        :jsonKey="'channel_group.groups.Orderer'"
+                        :channel="channelName"
+                      />
 
-                  <ValueForm
-                    :data="channelOrderer"
-                    :jsonKey="'channel_group.groups.Orderer'"
-                    :channel="channelName"
-                  />
-                </div>
-                <div v-show="selectedMenu === '_channel'">
-                  <h4>Channel</h4>
-                  <hr class="dott" />
-                  <InputForm
-                    :data="channel"
-                    :jsonKey="'channel_group'"
-                    :channel="channelName"
-                  />
+                      <ValueForm
+                        :data="channelOrderer"
+                        :jsonKey="'channel_group.groups.Orderer'"
+                        :channel="channelName"
+                      />
+                    </div>
+                    <div v-show="selectedMenu === '_channel'">
+                      <h3 class="p-text-bold">Channel</h3>
+                      <hr class="dott" />
+                      <InputForm
+                        :data="channel"
+                        :jsonKey="'channel_group'"
+                        :channel="channelName"
+                      />
 
-                  <ValueForm
-                    :data="channel"
-                    :jsonKey="'channel_group'"
-                    :channel="channelName"
-                  />
-                </div>
-                <div v-show="selectedMenu === '_apporg'">
-                  <h4>Application Organization</h4>
-                  <hr class="dott" />
-                  <div
-                    v-for="(item, index) in Object.keys(
-                      channelApplication.groups
-                    )"
-                    :key="index + 'app'"
-                    class="p-my-2"
-                    v-show="selectedMenu === '_apporg'"
-                  >
-                    <h5>{{ item }}</h5>
-                    <InputForm
-                      :data="channelApplication.groups[item]"
-                      :jsonKey="'channel_group.groups.Application.groups'"
-                      :groupKey="item"
-                      :channel="channelName"
-                    />
+                      <ValueForm
+                        :data="channel"
+                        :jsonKey="'channel_group'"
+                        :channel="channelName"
+                      />
+                    </div>
+                    <div v-show="selectedMenu === '_apporg'">
+                      <h3 class="p-text-bold">Application Organization</h3>
+                      <hr class="dott" />
+                      <div
+                        v-for="(item, index) in Object.keys(
+                          channelApplication.groups
+                        )"
+                        :key="index + 'app'"
+                        class="p-my-2"
+                        v-show="selectedMenu === '_apporg'"
+                      >
+                        <h5>{{ item }}</h5>
+                        <InputForm
+                          :data="channelApplication.groups[item]"
+                          :jsonKey="'channel_group.groups.Application.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
 
-                    <ValueForm
-                      :data="channelApplication.groups[item]"
-                      :jsonKey="'channel_group.groups.Application.groups'"
-                      :groupKey="item"
-                      :channel="channelName"
-                    />
-                  </div>
-                </div>
-                <div v-show="selectedMenu === '_ordererorg'">
-                  <h4>orderer Organization</h4>
-                  <hr class="dott" />
-                  <div
-                    v-for="(item, index) in Object.keys(channelOrderer.groups)"
-                    :key="index + 'ord'"
-                    class="p-my-2"
-                    v-show="selectedMenu === '_ordererorg'"
-                  >
-                    <h5>{{ item }}</h5>
-                    <InputForm
-                      :data="channelOrderer.groups[item]"
-                      :jsonKey="'channel_group.groups.Orderer.groups'"
-                      :groupKey="item"
-                      :channel="channelName"
-                    />
+                        <ValueForm
+                          :data="channelApplication.groups[item]"
+                          :jsonKey="'channel_group.groups.Application.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
+                      </div>
+                    </div>
+                    <div v-show="selectedMenu === '_ordererorg'">
+                      <h3 class="p-text-bold">orderer Organization</h3>
+                      <hr class="dott" />
+                      <div
+                        v-for="(item, index) in Object.keys(
+                          channelOrderer.groups
+                        )"
+                        :key="index + 'ord'"
+                        class="p-my-2"
+                        v-show="selectedMenu === '_ordererorg'"
+                      >
+                        <h5>{{ item }}</h5>
+                        <InputForm
+                          :data="channelOrderer.groups[item]"
+                          :jsonKey="'channel_group.groups.Orderer.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
 
-                    <ValueForm
-                      :data="channelOrderer.groups[item]"
-                      :jsonKey="'channel_group.groups.Orderer.groups'"
-                      :groupKey="item"
-                      :channel="channelName"
-                    />
-                  </div>
+                        <ValueForm
+                          :data="channelOrderer.groups[item]"
+                          :jsonKey="'channel_group.groups.Orderer.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
+                      </div>
+                    </div>
+                  </ScrollPanel>
                 </div>
-              </ScrollPanel>
+              </div>
             </div>
           </div>
         </div>
@@ -164,7 +146,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import OSProcess from "../module/OSProcess";
+
 import ChannelConfig from "../models/ChannelConfig";
 import ConsoleDialogue from "../components/ConsoleDialogue.vue";
 import InputForm from "../components/channel/InputForm.vue";
@@ -172,7 +154,7 @@ import ValueForm from "../components/channel/ValueForm.vue";
 // import NetworkConfig from "../models/NetworkConfig";
 // const fs = require("fs");
 // const path = require("path");
-import { OsType } from "../models/EnvProject";
+
 const ChannelProps = Vue.extend({
   props: {
     channelName: String,
@@ -196,7 +178,7 @@ export default class ChannelEditPage extends ChannelProps {
 
   selectedAppOrg: string = "";
   componentKey: number = 0;
-  selectedMenu: string = "_app";
+  selectedMenu: string = "_channel";
 
   items: any = [
     {
@@ -243,7 +225,6 @@ export default class ChannelEditPage extends ChannelProps {
     },
   ];
 
-  private osType: OsType = OsType.WINDOW;
   created() {
     this.init();
   }
@@ -275,23 +256,6 @@ export default class ChannelEditPage extends ChannelProps {
     // this.componentKey += 1;
     this.selectedMenu = selected;
   }
-
-  async channelQuery() {
-    this.displaylog = true;
-    let args: string[] = ["channelquery"];
-    args.push("-c");
-    args.push(this.channelName);
-    await OSProcess.run_new(args, this.osType);
-  }
-
-  async channelUpdate() {
-    this.displaylog = true;
-    let args: string[] = ["channelsign,channelupdate"];
-    args.push("-c");
-    args.push(this.channelName);
-    await OSProcess.run_new(args, this.osType);
-    this.channelQuery();
-  }
 }
 </script>
 
@@ -305,19 +269,6 @@ export default class ChannelEditPage extends ChannelProps {
 }
 .p-accordion-tab.p-accordion-tab-active {
   margin: 0 !important;
-}
-.config-view-header {
-  width: 100%;
-  padding: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: rgb(73, 73, 73);
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
 }
 
 .channel-edit-config-view {
@@ -338,18 +289,23 @@ export default class ChannelEditPage extends ChannelProps {
   width: 100%;
 }
 .edit-config-panel {
-  height: calc(65vh - 11px);
-  background-color: rgb(168, 168, 168);
+  height: calc(74vh - 15px);
+  background-color: rgb(51, 51, 51);
   // text-align: center;
 }
 
 .edit-config-content {
-  height: calc(65vh - 11px);
-  background-color: rgb(87, 87, 87);
+  height: calc(74vh - 15px);
+  background-color: rgb(51, 51, 51);
 }
 
 .edit-config-menu {
-  height: calc(65vh - 11px);
+  padding-top: 30px;
+  height: calc(74vh - 15px);
   background-color: rgb(37, 37, 37);
+}
+
+.dirty-fix {
+  overflow: hidden;
 }
 </style>
