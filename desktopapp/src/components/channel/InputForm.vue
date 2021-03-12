@@ -166,6 +166,7 @@ import ChannelConfig from "../../models/ChannelConfig";
 
 const FormProps = Vue.extend({
   props: {
+    channel:String,
     data: Object,
     jsonKey: String,
     groupKey: String,
@@ -179,7 +180,7 @@ export default class OrgColumn extends FormProps {
   mounted() {
     this.formData = this.data;
     try {
-      ChannelConfig.setFile("app");
+      ChannelConfig.setFile(this.channel);
       if (this.jsonKey != null) {
         //@ts-ignore
         // console.log(
@@ -193,8 +194,12 @@ export default class OrgColumn extends FormProps {
   }
 
   save() {
-    // console.log("update!!!");
-    // ChannelConfig.updateConfig(this.jsonKey, this.formData);
+    if (this.groupKey) {
+      ChannelConfig.updateConfig(
+        this.jsonKey,
+        this.formData + "." + this.groupKey
+      );
+    }
   }
 }
 </script>

@@ -17,7 +17,7 @@
     <div class=" p-grid p-jc-center">
       <div class="channel-edit-config-view">
         <div class="config-view-header">
-          channel config
+         {{channelName}}
           <div class="p-col-4 p-text-right">
             <Button
               icon="pi pi-refresh"
@@ -43,11 +43,13 @@
                   <InputForm
                     :data="channelApplication"
                     :jsonKey="'channel_group.groups.Application'"
+                    :channel="channelName"
                   />
 
                   <ValueForm
                     :data="channelApplication"
                     :jsonKey="'channel_group.groups.Application'"
+                    :channel="channelName"
                   />
                 </div>
                 <div v-show="selectedMenu === '_orderer'">
@@ -56,19 +58,29 @@
                   <InputForm
                     :data="channelOrderer"
                     :jsonKey="'channel_group.groups.Orderer'"
+                    :channel="channelName"
                   />
 
                   <ValueForm
                     :data="channelOrderer"
                     :jsonKey="'channel_group.groups.Orderer'"
+                    :channel="channelName"
                   />
                 </div>
                 <div v-show="selectedMenu === '_channel'">
                   <h4>Channel</h4>
                   <hr class="dott" />
-                  <InputForm :data="channel" :jsonKey="'channel_group'" />
+                  <InputForm
+                    :data="channel"
+                    :jsonKey="'channel_group'"
+                    :channel="channelName"
+                  />
 
-                  <ValueForm :data="channel" :jsonKey="'channel_group'" />
+                  <ValueForm
+                    :data="channel"
+                    :jsonKey="'channel_group'"
+                    :channel="channelName"
+                  />
                 </div>
                 <div v-show="selectedMenu === '_apporg'">
                   <h4>Application Organization</h4>
@@ -86,12 +98,14 @@
                       :data="channelApplication.groups[item]"
                       :jsonKey="'channel_group.groups.Application.groups'"
                       :groupKey="item"
+                      :channel="channelName"
                     />
 
                     <ValueForm
                       :data="channelApplication.groups[item]"
                       :jsonKey="'channel_group.groups.Application.groups'"
                       :groupKey="item"
+                      :channel="channelName"
                     />
                   </div>
                 </div>
@@ -109,12 +123,14 @@
                       :data="channelOrderer.groups[item]"
                       :jsonKey="'channel_group.groups.Orderer.groups'"
                       :groupKey="item"
+                      :channel="channelName"
                     />
 
                     <ValueForm
                       :data="channelOrderer.groups[item]"
                       :jsonKey="'channel_group.groups.Orderer.groups'"
                       :groupKey="item"
+                      :channel="channelName"
                     />
                   </div>
                 </div>

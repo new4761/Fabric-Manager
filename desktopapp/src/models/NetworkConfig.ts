@@ -25,7 +25,7 @@ export class NetworkConfig {
     }
   }
 
-  createConfig(project: any, quick?: boolean) {
+  createConfig(project: any, quick?: boolean,channelName?:string) {
     // this.constructor();
     let data = yaml.load(
       fs.readFileSync(path.join(project.directory, "spec.yaml"), "utf8")
@@ -42,7 +42,13 @@ export class NetworkConfig {
     let file = editJsonFile(path.join(project.directory, "net-config.json"));
     file.set("project_config", data);
     if (quick) {
-      file.set("channel", [{ name: "mychannel" }]);
+      file.set("channel", [
+        {
+          name: channelName,
+          date_create: +new Date(),
+          date_modify: +new Date(),
+        },
+      ]);
     }
     file.save();
     logger.log(

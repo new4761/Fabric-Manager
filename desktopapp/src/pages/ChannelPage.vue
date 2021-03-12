@@ -62,8 +62,18 @@
     </transition>
 
     <hr class="dotted" />
-
-    <ChannelEditPage :channelName="'app'" />
+    <div class="p-grid p-ai-center p-jc-between">
+      <div class="p-col"><h5>Config</h5></div>
+      <div class="p-col">
+        <Dropdown
+          v-model="channelSelected"
+          :options="channels"
+          optionLabel="name"
+          optionValue="name"
+        />
+      </div>
+    </div>
+    <ChannelEditPage :channelName="channelSelected" />
 
     <div>
       <ConsoleDialogue
@@ -126,12 +136,12 @@ export default class ChannelPage extends Vue {
   displaylog: boolean = false;
   channelName: string = "";
   channelSelected: string = "";
-  channels: Array<string> = [];
+  channels: any = [];
   showSection: boolean = false;
   join: boolean = false;
   private osType: OsType = OsType.WINDOW;
 
-  mounted() {
+  created() {
     this.init();
   }
 
@@ -139,7 +149,8 @@ export default class ChannelPage extends Vue {
     this.projectDir = this.$store.state.project.path;
     try {
       this.channels = NetworkConfig.getValue("channel");
-      this.channelSelected = this.channels[0];
+      this.channelSelected = this.channels[0].name;
+      console.log(this.channelSelected);
     } catch (err) {
       logger.log("warn", "no channel");
     }
@@ -183,6 +194,11 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["create"];
     args.push("-c", this.channelName);
     await OSProcess.run_new(args, this.osType);
+    await OSProcess.run_new(["join", "-c", this.channelName], this.osType);
+    await OSProcess.run_new(
+      ["channelquery", "-c", this.channelName],
+      this.osType
+    );
 
     if (this.join) {
       await OSProcess.run_new(["join", "-c", this.channelName], this.osType);

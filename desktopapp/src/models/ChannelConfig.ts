@@ -25,8 +25,12 @@ export class ChannelConfig {
   }
 
   updateConfig(key: string, value: any) {
-    console.log(key);
-    this.file.set(key, value);
+    if (isNaN(Number(value))) {
+      this.file.set(key, value);
+    } else {
+      console.log("is number!!")
+      this.file.set(key, Number(value));
+    }
     this.file.save();
     logger.log("info", "channel-config sucessfully updated ");
     // console.log(this.file);
@@ -51,7 +55,7 @@ export class ChannelConfig {
   getValue(key: string) {
     let data = this.file.get(key);
 
-    logger.log("info", "get " + key);
+    // logger.log("info", "get " + key);
     // console.log(data);
     return data;
   }

@@ -88,3 +88,9 @@
 .p-confirm-dialog-accept {
   background-color: $primaryColor !important;
 }
+
+.p-checkbox-box.p-highlight {
+  background-color: $primaryHoverColor !important;
+  box-shadow: $primaryHoverColor !important;
+  border-color: $primaryHoverColor !important;
+}

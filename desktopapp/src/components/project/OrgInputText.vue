@@ -3,7 +3,6 @@
     <div class="p-inputgroup">
       <InputText placeholder="Organization name" v-model="orgName" />
       <InputText placeholder="Organization Domain" v-model="orgDomain" />
-
       <span class="p-inputgroup-addon">
         <Checkbox v-model="isOrderer" :binary="true" />
         <label for="binary" class="p-ml-2">Orderer</label>

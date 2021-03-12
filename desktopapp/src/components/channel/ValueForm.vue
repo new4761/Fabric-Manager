@@ -1,7 +1,7 @@
 <template>
   <div class="p-col-10">
     <!-- <small>{{ jsonKey }}</small> -->
-<h5>Value </h5>
+    <h5>Value</h5>
     <div v-if="formData.values.BlockDataHashingStructure" class="p-my-3">
       <Panel header="BlockDataHashingStructure">
         <div class="p-field p-grid">
@@ -14,9 +14,14 @@
           <div class="p-col p-ml-5">
             <InputText
               id="BlockDataHashing"
-              type="text"
+              type="number"
               v-model="formData.values.BlockDataHashingStructure.value.width"
-              @input="save()"
+              @input="
+                update(
+                  'values.BlockDataHashingStructure.value.width',
+                  formData.values.BlockDataHashingStructure.value.width
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -38,7 +43,12 @@
               id="HashingAlgorithm"
               type="text"
               v-model="formData.values.HashingAlgorithm.value.name"
-              @input="save()"
+              @input="
+                update(
+                  'values.HashingAlgorithm.value.name',
+                  formData.values.HashingAlgorithm.value.name
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -67,7 +77,12 @@
                 v-model="
                   formData.values.OrdererAddresses.value.addresses[index]
                 "
-                @input="save()"
+                @input="
+                  update(
+                    'values.OrdererAddresses.value.addresses[index]',
+                    formData.values.OrdererAddresses.value.addresses[index]
+                  )
+                "
                 class="p-inputtext-sm"
               />
             </div>
@@ -106,7 +121,12 @@
               id="absolute_max_bytes"
               type="text"
               v-model="formData.values.BatchSize.value.absolute_max_bytes"
-              @input="save()"
+              @input="
+                update(
+                  'values.BatchSize.value.absolute_max_bytes',
+                  formData.values.BatchSize.value.absolute_max_bytes
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -124,7 +144,12 @@
               id="max_message_count"
               type="text"
               v-model="formData.values.BatchSize.value.max_message_count"
-              @input="save()"
+              @input="
+                update(
+                  'values.BatchSize.value.max_message_count',
+                  formData.values.BatchSize.value.max_message_count
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -142,7 +167,12 @@
               id="preferred_max_bytes"
               type="text"
               v-model="formData.values.BatchSize.value.preferred_max_bytes"
-              @input="save()"
+              @input="
+                update(
+                  'values.BatchSize.value.preferred_max_bytes',
+                  formData.values.BatchSize.value.preferred_max_bytes
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -164,7 +194,12 @@
               id="BatchTimeout"
               type="text"
               v-model="formData.values.BatchTimeout.value.timeout"
-              @input="save()"
+              @input="
+                update(
+                  'values.BatchTimeout.value.timeout',
+                  formData.values.BatchTimeout.value.timeout
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -189,7 +224,13 @@
                 formData.values.ConsensusType.value.metadata.options
                   .election_tick
               "
-              @input="save()"
+              @input="
+                update(
+                  'values.ConsensusType.value.metadata.options.election_tick',
+                  formData.values.ConsensusType.value.metadata.options
+                    .election_tick
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -210,7 +251,13 @@
                 formData.values.ConsensusType.value.metadata.options
                   .heartbeat_tick
               "
-              @input="save()"
+              @input="
+                update(
+                  'values.ConsensusType.value.metadata.options.heartbeat_tick',
+                  formData.values.ConsensusType.value.metadata.options
+                    .heartbeat_tick
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -231,7 +278,13 @@
                 formData.values.ConsensusType.value.metadata.options
                   .max_inflight_blocks
               "
-              @input="save()"
+              @input="
+                update(
+                  'values.ConsensusType.value.metadata.options.max_inflight_blocks',
+                  formData.values.ConsensusType.value.metadata.options
+                    .max_inflight_blocks
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -252,7 +305,13 @@
                 formData.values.ConsensusType.value.metadata.options
                   .snapshot_interval_size
               "
-              @input="save()"
+              @input="
+                update(
+                  'values.ConsensusType.value.metadata.options.snapshot_interval_size',
+                  formData.values.ConsensusType.value.metadata.options
+                    .snapshot_interval_size
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -273,7 +332,13 @@
                 formData.values.ConsensusType.value.metadata.options
                   .tick_interval
               "
-              @input="save()"
+              @input="
+                update(
+                  'values.ConsensusType.value.metadata.options.tick_interval',
+                  formData.values.ConsensusType.value.metadata.options
+                    .tick_interval
+                )
+              "
               class="p-inputtext-sm"
             />
           </div>
@@ -290,6 +355,7 @@ import ChannelConfig from "../../models/ChannelConfig";
 
 const FormProps = Vue.extend({
   props: {
+    channel: String,
     data: Object,
     jsonKey: String,
     groupKey: String,
@@ -303,7 +369,7 @@ export default class ValueForm extends FormProps {
   created() {
     this.formData = this.data;
     try {
-      ChannelConfig.setFile("app");
+      ChannelConfig.setFile(this.channel);
       if (this.jsonKey != null) {
         //@ts-ignore
         // console.log(
@@ -318,7 +384,12 @@ export default class ValueForm extends FormProps {
 
   save() {
     // console.log("update!!!");
-    // ChannelConfig.updateConfig(this.jsonKey, this.formData);
+    ChannelConfig.updateConfig(this.jsonKey, this.formData);
+  }
+  update(key: string, value: any) {
+    console.log(key, value);
+    ChannelConfig.updateConfig(this.jsonKey + "." + key, value);
+    ChannelConfig.setFile(this.channel);
   }
 }
 </script>
