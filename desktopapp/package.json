@@ -25,6 +25,7 @@
     "edit-json-file": "^1.5.0",
     "electron-rebuild": "^2.3.4",
     "eslint-plugin-vue": "^7.5.0",
+    "fabric-ca-client": "^2.2.5",
     "fabric-network": "^2.2.5",
     "file-system": "^1.2.2",
     "js-yaml": "^3.14.1",

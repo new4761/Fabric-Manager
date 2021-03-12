@@ -1,5 +1,8 @@
 // data file for declare all type of all env variable
 
+import store from "../store/modules/project";
+import ProjectConfig from "./ProjectConfig";
+
 // use for set&check os type
 export enum OsType {
     WINDOW,
@@ -26,8 +29,10 @@ export enum CCstate {
 }
 export enum netWorkConfigPath{
     channelPath="channel",
+    caPath ="project_config.fabric.cas",
     ccPath =  "chain_codes",
     peerPath="project_config.fabric.peers",
+    userPath="users"
 }
 
 export class ccOutputPayload {
@@ -35,4 +40,8 @@ export class ccOutputPayload {
   response: Array<string>  = [];
   fabricPayload: string = "";
 
+}
+export function  getProjectPath(){
+//   console.log(await ProjectConfig.getPathResolve(store.state.id))
+    return ProjectConfig.getPathResolve(store.state.id);
 }

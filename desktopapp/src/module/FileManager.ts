@@ -43,10 +43,17 @@ class FileManager {
 
     }
     //to do  remove file function
-    removeFile() { }
+    async removeFile(destDir: string) {
+        await fs.unlinkSync(destDir, (err:any) => {
+            if (err) {
+                throw err;
+            }
+            console.log("File is deleted.");
+        });
+     }
 
-    removeDir(destDir: string) {
-        fse.removeSync(destDir)
+     async removeDir(destDir: string) {
+        await  fse.removeSync(destDir)
             .then(() => console.log('removeDir success!'))
             .catch((err: any) => console.error(err))
 
@@ -65,6 +72,14 @@ class FileManager {
             return data
         })
     }
+
+    async writeDataToFile(destDir: string, data: any) {
+        await fs.appendFile(destDir, data, function (err: any) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+    }
+
     WaitToReadFile(sourceDir: string) {
         if (fs.existsSync(sourceDir)) {
             return fs.watch(sourceDir)
@@ -84,14 +99,13 @@ class FileManager {
             });
         }
     }
-    createFileWithData(destDir: string,data:string) {
+    async  createFileWithData(destDir: string, data: string) {
         //console.log(sourceDir)
- 
-            fs.writeFileSync(destDir,data, function (err: any) {
-                if (err) throw err;
-                console.log('Saved!');
-            });
-        
+        await  fs.writeFileSync(destDir, data, function (err: any) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+
     }
 
     // call through to copy file
@@ -105,15 +119,15 @@ class FileManager {
 
     }
     // call through to copy files
-    copyFilesDir(sourceDir: any, destDir: string) {
-        fse.copy(sourceDir, destDir)
+    async copyFilesDir(sourceDir: any, destDir: string) {
+        await fse.copy(sourceDir, destDir)
             .then(() => console.log('copyFilesDir success!'))
             .catch((err: any) => console.error(err))
     }
     createDir(destDir: string, folderName: string) {
         let target = path.join(destDir, folderName)
         if (!fs.existsSync(target)) {
-            fs.mkdir(target, (err:any) => {
+            fs.mkdir(target, (err: any) => {
                 if (err) {
                     return console.error(err);
                 }

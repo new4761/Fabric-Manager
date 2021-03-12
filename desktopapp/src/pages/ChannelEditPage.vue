@@ -95,7 +95,7 @@ import ConsoleDialogue from "../components/ConsoleDialogue.vue";
 // import NetworkConfig from "../models/NetworkConfig";
 const fs = require("fs");
 const path = require("path");
-import { OsType } from "../models/EnvProject";
+
 const ChannelProps = Vue.extend({
   props: {
     channelName: String,
@@ -116,7 +116,7 @@ export default class ChannelEditPage extends ChannelProps {
   channelOrderer: any = {};
   channelPoliciesString: string = "";
   notshow: boolean = false;
-  private osType: OsType = OsType.WINDOW;
+
   created() {
     this.init();
   }
@@ -155,7 +155,7 @@ export default class ChannelEditPage extends ChannelProps {
     let args: string[] = ["channelquery"];
     args.push("-c");
     args.push(this.channelName);
-    await OSProcess.run_new(args, this.osType);
+    await OSProcess.run_new(args);
   }
 }
 </script>

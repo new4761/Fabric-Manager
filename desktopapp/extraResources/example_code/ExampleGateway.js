@@ -10,6 +10,7 @@ ExampleGateway();
 
 
 //ExampleGateway  function
+const gateway = new Gateway();
 async function ExampleGateway() {
   try {
     // Connect to a gateway peer
@@ -18,7 +19,7 @@ async function ExampleGateway() {
     const wallet =await  Wallets.newFileSystemWallet('./wallets/OrgName'); // Example ./wallets/Org1 || ./wallets/Org2
     const connectionProfileData = fs.readFileSync(connectionProfilePath);
     const connectionProfile = yaml.safeLoad(connectionProfileData);
-    const gateway = new Gateway();
+    
     //Connect to gateway to localhost with wallet identity 
     await gateway.connect(connectionProfile, { wallet, identity: 'Some identity in Wallet' // Example identity: 'Admin' 
     ,discovery: { enabled: true, asLocalhost: true },  // Previously imported identity

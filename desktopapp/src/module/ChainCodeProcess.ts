@@ -4,6 +4,7 @@ import {
   CCstate,
   netWorkConfigPath,
   ccOutputPayload,
+  getProjectPath,
 } from "../models/EnvProject";
 const path = require("path");
 import { DirBuilder } from "./DirBuilder";
@@ -12,8 +13,7 @@ import ChainCode from "../models/ChainCode";
 import NetworkConfig from "../models/NetworkConfig";
 import ArgsWrapper from "../models/ArgsWrapper";
 import DockerProcess from "@/module/DockerProcess";
-import store from "../store/modules/project";
-import ProjectConfig from "@/models/ProjectConfig";
+
 
 class ChainCodeProcess {
   // call dirBuilder module
@@ -24,14 +24,11 @@ class ChainCodeProcess {
   constructor() {}
   //get set function
 
-  getPath() {
-    return ProjectConfig.getPathResolve(store.state.id);
-  }
   //end test
   // basic setup
   setupFolder(ccObj: ChainCode): ChainCode {
     let ccDir = "";
-    let projectPath = this.getPath();
+    let projectPath = getProjectPath();
     // console.log(srcPath + ":from ccSetup")
     try {
       //to do use project path for replace testPath
@@ -54,7 +51,7 @@ class ChainCodeProcess {
   upDateFolder(ccObj: ChainCode): ChainCode {
     let ccDir = "";
     // console.log(srcPath + ":from ccSetup")
-    let projectPath = this.getPath();
+    let projectPath = getProjectPath();
     try {
       //to do use project path for replace testPath
       ccDir = path.join(
@@ -79,7 +76,7 @@ class ChainCodeProcess {
   //  init command CC
   installCC(ccObj: ChainCode, org: string): ChainCode {
     let args: any = [];
-    //  let projectPath = this.getPath()
+    //  let projectPath = getProjectPath()
     args.push("install");
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.setupDir) {
@@ -96,7 +93,7 @@ class ChainCodeProcess {
   approve(ccObj: ChainCode, org: string): ChainCode {
     let args: any = [];
     args.push("approve");
-    //   let projectPath = this.getPath()
+    //   let projectPath = getProjectPath()
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.installCC)
       return OSProcess.run_new(args).then(() => {
@@ -109,7 +106,7 @@ class ChainCodeProcess {
     }
   }
   commit(ccObj: ChainCode, org: string): ChainCode {
-    //   let projectPath = this.getPath()
+    //   let projectPath = getProjectPath()
     let args: any = [];
     args.push("commit");
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);

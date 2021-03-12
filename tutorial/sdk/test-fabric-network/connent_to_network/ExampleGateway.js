@@ -17,7 +17,7 @@ async function ExampleGateway() {
     // Get wallet identity 
     const wallet =await  Wallets.newFileSystemWallet('./wallets/OrgName'); // Example ./wallets/Org1 || ./wallets/Org2
     const connectionProfileData = fs.readFileSync(connectionProfilePath);
-    const connectionProfile = yaml.safeLoad(connectionProfileData);
+    const connectionProfile =   
     const gateway = new Gateway();
     //Connect to gateway to localhost with wallet identity 
     await gateway.connect(connectionProfile, { wallet, identity: 'Some identity in Wallet' // Example identity: 'Admin' 

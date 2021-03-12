@@ -122,7 +122,7 @@ export default class NetOpsButton extends Vue {
       args.push("-e");
       args.push(this.port);
     }
-    await OSProcess.run_new(args, this.osType);
+    await OSProcess.run_new(args);
     this.$store.commit("docker/setActiveContainer");
     this.command = args.join();
   }
@@ -130,7 +130,7 @@ export default class NetOpsButton extends Vue {
     this.displaylog = true;
     this.up = false;
     this.command = "";
-    await OSProcess.run_new(["down"], this.osType);
+    await OSProcess.run_new(["down"]);
     this.$store.commit("docker/setActiveContainer");
     this.command = "down";
   }

@@ -62,6 +62,11 @@ export default new Router({
       component: () => import("./pages/ExportApplicationPage.vue"),
       props: true
     },
+    {
+      path: "/identityManger",
+      name: "IdentityManger",
+      component: () => import("./pages/IdentityManger.vue"),
+    },
 
     {
       path: "/home",

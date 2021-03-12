@@ -61,6 +61,7 @@ export class ProjectConfig {
   }
 
  getPathResolve(id: number) {
+ //  console.log( path.resolve(this.file.data[id].directory))
     return  path.resolve(this.file.data[id].directory)
   }
 

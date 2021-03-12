@@ -1,10 +1,9 @@
 const { spawn } = require("child_process");
 
 const spawnSync = require('child-process-promise').spawn;
-import store from "../store/modules/project";
 import storeProcess from "../store";
 import { strict } from "assert";
-import { OsType } from "../models/EnvProject";
+import { getProjectPath, OsType } from "../models/EnvProject";
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const events = require("events");
@@ -14,7 +13,7 @@ import DockerProcess from "./DockerProcess";
 import FileManager from "./FileManager";
 import StdoutCapture from "./OSProcess/StdoutCapture";
 import { removeColorCode } from "./StringBuilder";
-import ProjectConfig from "@/models/ProjectConfig";
+
 
 
 class OSProcess {
@@ -35,7 +34,7 @@ class OSProcess {
   run_new(args: string[]): any {
     let ls: any;
     //set to minifab output
-    let projectPath = ProjectConfig.getPathResolve(store.state.id);
+    let projectPath = getProjectPath()
     args.push("-f")
     args.push("minifab")
 
@@ -63,7 +62,7 @@ class OSProcess {
   run_CC_output( args: string[], methodName: string,version:any): any {
     let ls: any;
     //set to minifab output
-    let projectPath = ProjectConfig.getPathResolve(store.state.id);
+    let projectPath = getProjectPath()
     args.push("-f")
     args.push("minifab")
     let scriptFile = "cc" + methodName + ".sh"
