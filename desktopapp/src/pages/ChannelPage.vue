@@ -62,18 +62,19 @@
     </transition>
 
     <hr class="dotted" />
-    <div class="p-grid p-ai-center p-jc-between">
-      <div class="p-col"><h5>Config</h5></div>
-      <div class="p-col">
+    <div class="p-grid p-ai-center p-jc-between channel-config-header">
+      <div class="p-col">Config</div>
+      <div class="p-col p-text-right">
         <Dropdown
           v-model="channelSelected"
           :options="channels"
           optionLabel="name"
           optionValue="name"
+          v-on:change="updateForm()"
         />
       </div>
     </div>
-    <ChannelEditPage :channelName="channelSelected" />
+    <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
 
     <div>
       <ConsoleDialogue
@@ -88,17 +89,20 @@
         v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '40vw' }"
+        :style="{ width: '30vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-col-12 p-d-flex">
-          <div class="p-ml-5 p-my-1">
-            <span class="p-float-label">
-              <InputText id="channelName" v-model="channelName" />
-              <label for="channelName">channelName</label>
-            </span>
-          </div>
+        <div class="p-grid p-jc-center p-p-3">
+          <span class="p-float-label">
+            <InputText id="channelName" v-model="channelName" />
+            <label for="channelName">channelName</label>
+          </span>
         </div>
+
+        <div class="p-grid p-jc-center p-mb-2">
+          <small class="text-error">*this operation cannot be undone</small>
+        </div>
+
         <div class="p-d-flex p-jc-end p-mt-1">
           <Button
             class="p-button-primary p-m-2"
@@ -139,6 +143,7 @@ export default class ChannelPage extends Vue {
   channels: any = [];
   showSection: boolean = false;
   join: boolean = false;
+  componentKey: number = 0;
   private osType: OsType = OsType.WINDOW;
 
   created() {
@@ -219,6 +224,10 @@ export default class ChannelPage extends Vue {
         channelName: name,
       },
     });
+  }
+
+  updateForm() {
+    this.componentKey += 1;
   }
 
   // join(name: string) {
@@ -343,5 +352,19 @@ th {
 .channel-toggle-open {
   transform: rotate(180deg);
   color: $primaryColor;
+}
+
+.channel-config-header {
+  padding: 10px 30px 10px 30px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+.channel-config-header {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

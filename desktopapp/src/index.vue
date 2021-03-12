@@ -62,10 +62,10 @@
       />
     </div>
 
-    <div class="container-footer">
+    <!-- <div class="container-footer">
       <ExplorerButton />
     </div>
-    <Button @click="set()" label="test" />
+    <Button @click="set()" label="test" /> -->
     <!-- <LogView /> -->
 
     <!-- <div class="p-d-flex p-my-1">

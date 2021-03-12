@@ -1,5 +1,36 @@
 <template>
   <div class="">
+    <Dialog
+      header="Header"
+      v-bind:visible="display"
+      :style="{ width: '50vw' }"
+      :modal="true"
+    >
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+        mollit anim id est laborum.
+      </p>
+      <template #footer>
+        <Button
+          label="No"
+          icon="pi pi-times"
+          @click="display = false"
+          class="p-button-text"
+        />
+        <Button
+          label="Yes"
+          icon="pi pi-check"
+          @click="display = false"
+          autofocus
+        />
+      </template>
+    </Dialog>
+
     <table role="grid" class="p-my-1">
       <tbody class="p-datatable-tbody">
         <tr @click="toggle()">
@@ -37,9 +68,7 @@
               </span>
             </div>
           </td>
-          <td>
-            {{ item.container.length }}
-          </td>
+          <td>{{ item.container.length }} running container</td>
         </tr>
       </tbody>
     </table>
@@ -63,9 +92,9 @@
           <Column>
             <template #body="slotProps">
               <Button
-                label="Execute"
-                class="p-button-outlined p-button-primary"
-                @click="openInfo(slotProps.data)"
+                icon="fas fa-terminal"
+                class="p-button-outlined p-button-primary p-button-sm"
+                @click="func(slotProps.data.Names[0])"
               />
             </template>
           </Column>
@@ -87,12 +116,15 @@ const { exec } = require("child_process");
 })
 export default class OrgColumn extends Vue {
   showSection: boolean = false;
+  display: boolean = false;
 
   toggle() {
     this.showSection = !this.showSection;
   }
 
   func(container: string) {
+    this.display = true;
+    console.log("display", this.display);
     exec(' start cmd.exe @cmd /k "docker exec -it ' + container + ' /bin/sh"');
   }
 }

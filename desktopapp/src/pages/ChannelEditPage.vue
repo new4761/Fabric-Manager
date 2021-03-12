@@ -17,14 +17,25 @@
     <div class=" p-grid p-jc-center">
       <div class="channel-edit-config-view">
         <div class="config-view-header">
-         {{channelName}}
-          <div class="p-col-4 p-text-right">
-            <Button
-              icon="pi pi-refresh"
-              class="p-button-sm p-button-secondary"
-              label="query config"
-              @click="query()"
-            />
+          <span>
+            Channel: <a>{{ channelName }}</a>
+          </span>
+          <div class="p-col-6 p-text-right">
+            <div class="p-d-flex p-jc-end">
+              <Button
+                icon="pi pi-download"
+                class="p-button-sm p-button-secondary p-mx-3"
+                label="query config"
+                @click="channelQuery()"
+              />
+
+              <Button
+                icon="pi pi-refresh"
+                class="p-button-sm p-button-secondary"
+                label="update channel"
+                @click="channelUpdate()"
+              />
+            </div>
           </div>
         </div>
 
@@ -35,7 +46,7 @@
             </div>
 
             <div class="edit-config-content p-col-9 p-p-5">
-              <ScrollPanel style="width: 100%; height: 60vh">
+              <ScrollPanel style="width: 100%; height: 55vh">
                 <div v-show="selectedMenu === '_app'">
                   <h4>Application</h4>
                   <hr class="dott" />
@@ -46,11 +57,11 @@
                     :channel="channelName"
                   />
 
-                  <ValueForm
+                  <!-- <ValueForm
                     :data="channelApplication"
                     :jsonKey="'channel_group.groups.Application'"
                     :channel="channelName"
-                  />
+                  /> -->
                 </div>
                 <div v-show="selectedMenu === '_orderer'">
                   <h4>Orderer</h4>
@@ -209,20 +220,26 @@ export default class ChannelEditPage extends ChannelProps {
         this.updateComponent("_orderer");
       },
     },
+    {
+      label: "org(//TODO)",
+      icon: "fas fa-address-card",
 
-    {
-      label: "app org",
-      icon: "fas fa-address-card",
-      command: () => {
-        this.updateComponent("_apporg");
-      },
-    },
-    {
-      label: "orderer org",
-      icon: "fas fa-address-card",
-      command: () => {
-        this.updateComponent("_ordererorg");
-      },
+      items: [
+        {
+          label: "app org",
+          icon: "fas fa-address-card",
+          command: () => {
+            this.updateComponent("_apporg");
+          },
+        },
+        {
+          label: "orderer org",
+          icon: "fas fa-address-card",
+          command: () => {
+            this.updateComponent("_ordererorg");
+          },
+        },
+      ],
     },
   ];
 
@@ -259,12 +276,21 @@ export default class ChannelEditPage extends ChannelProps {
     this.selectedMenu = selected;
   }
 
-  async query() {
+  async channelQuery() {
     this.displaylog = true;
     let args: string[] = ["channelquery"];
     args.push("-c");
     args.push(this.channelName);
     await OSProcess.run_new(args, this.osType);
+  }
+
+  async channelUpdate() {
+    this.displaylog = true;
+    let args: string[] = ["channelsign,channelupdate"];
+    args.push("-c");
+    args.push(this.channelName);
+    await OSProcess.run_new(args, this.osType);
+    this.channelQuery();
   }
 }
 </script>
@@ -312,18 +338,18 @@ export default class ChannelEditPage extends ChannelProps {
   width: 100%;
 }
 .edit-config-panel {
-  height: 70vh;
+  height: calc(65vh - 11px);
   background-color: rgb(168, 168, 168);
   // text-align: center;
 }
 
 .edit-config-content {
-  height: 70vh;
+  height: calc(65vh - 11px);
   background-color: rgb(87, 87, 87);
 }
 
 .edit-config-menu {
-  height: 70vh;
+  height: calc(65vh - 11px);
   background-color: rgb(37, 37, 37);
 }
 </style>

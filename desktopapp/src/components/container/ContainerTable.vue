@@ -30,9 +30,10 @@
             <Column header="Action">
               <template #body="slotProps">
                 <Button
-                  label="Execute"
-                  class="p-button-outlined p-button-primary"
-                  @click="openInfo(slotProps.data)"
+                  label="exec"
+                  icon="fas fa-terminal"
+                  class="p-button-outlined p-button-primary p-button-sm"
+                  @click="func(slotProps.data.Names[0])"
                 />
               </template>
             </Column>
@@ -76,6 +77,7 @@
 </template>
 
 <script lang="ts">
+import { exec } from "child_process";
 import Vue from "vue";
 import Component from "vue-class-component";
 import OrgColumn from "../container/OrgColumn.vue";
@@ -91,6 +93,10 @@ export default class ContainerTable extends Vue {
   showSection: boolean = false;
   toggle() {
     this.showSection = !this.showSection;
+  }
+
+  func(container: string) {
+    exec(' start cmd.exe @cmd /k "docker exec -it ' + container + ' /bin/sh"');
   }
 }
 </script>
