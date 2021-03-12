@@ -36,7 +36,7 @@ import ExportApplicationPage from "@/pages/ExportApplicationPage";
 
 export default {
   data() {
-    return { exportAppDisplay: true };
+    return { exportAppDisplay: false };
   },
 
   props: {
