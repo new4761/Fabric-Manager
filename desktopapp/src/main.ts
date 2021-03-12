@@ -72,11 +72,13 @@ import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressspinner";
 import Knob from "primevue/knob";
 
+
 import Avatar from "primevue/avatar";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
 import Tag from "primevue/tag";
 import BadgeDirective from "primevue/badgedirective";
+import Divider from 'primevue/divider';
 
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
@@ -90,6 +92,8 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "./assets/style/style.scss";
 import store from "./store";
+
+
 
 Vue.use(ToastService);
 Vue.use(ConfirmationService);
@@ -109,6 +113,7 @@ Vue.component("Avatar", Avatar);
 Vue.component("Skeleton", Skeleton);
 Vue.component("ConfirmDialog", ConfirmDialog);
 Vue.component("Tag", Tag);
+Vue.component("Divider", Divider);
 
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);

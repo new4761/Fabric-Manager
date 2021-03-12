@@ -4,16 +4,16 @@ class OrgData {
   CAList: string[] = [];
   peerList: string[] = [];
   isOrderer: boolean;
-  isDefault :boolean;
+  isDefault: boolean;
   constructor(name: string, isOrderer: boolean) {
     this.name = name;
     this.isOrderer = isOrderer;
-    this.useCA = false;
+    this.useCA = true;
     this.isDefault = false;
   }
   addCA() {
     if (!this.isOrderer && this.useCA) {
-      this.CAList.push("ca" + (this.CAList.length + 1) + "." + this.name);
+      this.CAList[0] = "ca" + 1 + "." + this.name;
     }
   }
   addPeer() {
@@ -40,7 +40,7 @@ class OrgData {
     this.isOrderer = false;
   }
 
-  setDefault(){
+  setDefault() {
     this.isDefault = true;
   }
 }

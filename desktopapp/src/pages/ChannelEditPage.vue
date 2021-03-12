@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="p-d-flex p-jc-between">
+  <div class="dirty-fix">
+    <!-- <div class="p-d-flex p-jc-between">
       <div class="p-col">
         <Button
           label="back"
@@ -12,66 +12,122 @@
       <div class="p-col  p-text-right">
         <h1>Channel {{ channelName }}</h1>
       </div>
-    </div>
-    <div class="channel-edit-wrapper p-d-flex p-jc-center ">
-      <div class="p-col">
-        <div class="p-d-flex p-jc-center">
-          <div class="channel-edit-config-view p-col">
-            <div class="config-view-header">
-              channel config
-              <div class="p-col-4 p-text-right">
-                <Button
-                  icon="pi pi-refresh"
-                  class="p-button-sm p-button-secondary"
-                  label="query config"
-                  @click="query()"
-                />
-              </div>
-            </div>
+    </div> -->
 
-            <Accordion :multiple="true" v-if="!notshow">
-              <AccordionTab header="Application">
-                <div
-                  v-for="(item, index) in Object.keys(
-                    channelApplication.groups
-                  )"
-                  :key="index"
-                  class="p-my-2"
-                >
-                  <div class="config-view-panel">
-                    {{ channelApplication.groups[item].policies }}
-                    <br />
-                    {{ channelApplication.groups[item].Values }}
-                  </div>
+    <div class=" p-grid p-jc-center">
+      <div class="channel-edit-config-view">
+        <div class="edit-config-panel">
+          <div class="p-grid">
+            <div class="edit-config-menu p-col-3">
+              <PanelMenu :model="items" />
+            </div>
+            <div class="p-col">
+              <div class="edit-config-content p-p-5 p-grid p-jc-center">
+                <div class="p-col-9">
+                  <ScrollPanel style="width: 100%; height: calc(63vh - 12px)">
+                    <div v-show="selectedMenu === '_app'">
+                      <h3 class="p-text-bold">Application</h3>
+                      <hr class="dott" />
+
+                      <InputForm
+                        :data="channelApplication"
+                        :jsonKey="'channel_group.groups.Application'"
+                        :channel="channelName"
+                      />
+
+                      <!-- <ValueForm
+                    :data="channelApplication"
+                    :jsonKey="'channel_group.groups.Application'"
+                    :channel="channelName"
+                  /> -->
+                    </div>
+                    <div v-show="selectedMenu === '_orderer'">
+                      <h3 class="p-text-bold">Orderer</h3>
+                      <hr class="dott" />
+                      <InputForm
+                        :data="channelOrderer"
+                        :jsonKey="'channel_group.groups.Orderer'"
+                        :channel="channelName"
+                      />
+
+                      <ValueForm
+                        :data="channelOrderer"
+                        :jsonKey="'channel_group.groups.Orderer'"
+                        :channel="channelName"
+                      />
+                    </div>
+                    <div v-show="selectedMenu === '_channel'">
+                      <h3 class="p-text-bold">Channel</h3>
+                      <hr class="dott" />
+                      <InputForm
+                        :data="channel"
+                        :jsonKey="'channel_group'"
+                        :channel="channelName"
+                      />
+
+                      <ValueForm
+                        :data="channel"
+                        :jsonKey="'channel_group'"
+                        :channel="channelName"
+                      />
+                    </div>
+                    <div v-show="selectedMenu === '_apporg'">
+                      <h3 class="p-text-bold">Application Organization</h3>
+                      <hr class="dott" />
+                      <div
+                        v-for="(item, index) in Object.keys(
+                          channelApplication.groups
+                        )"
+                        :key="index + 'app'"
+                        class="p-my-2"
+                        v-show="selectedMenu === '_apporg'"
+                      >
+                        <h5>{{ item }}</h5>
+                        <InputForm
+                          :data="channelApplication.groups[item]"
+                          :jsonKey="'channel_group.groups.Application.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
+
+                        <ValueForm
+                          :data="channelApplication.groups[item]"
+                          :jsonKey="'channel_group.groups.Application.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
+                      </div>
+                    </div>
+                    <div v-show="selectedMenu === '_ordererorg'">
+                      <h3 class="p-text-bold">orderer Organization</h3>
+                      <hr class="dott" />
+                      <div
+                        v-for="(item, index) in Object.keys(
+                          channelOrderer.groups
+                        )"
+                        :key="index + 'ord'"
+                        class="p-my-2"
+                        v-show="selectedMenu === '_ordererorg'"
+                      >
+                        <h5>{{ item }}</h5>
+                        <InputForm
+                          :data="channelOrderer.groups[item]"
+                          :jsonKey="'channel_group.groups.Orderer.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
+
+                        <ValueForm
+                          :data="channelOrderer.groups[item]"
+                          :jsonKey="'channel_group.groups.Orderer.groups'"
+                          :groupKey="item"
+                          :channel="channelName"
+                        />
+                      </div>
+                    </div>
+                  </ScrollPanel>
                 </div>
-              </AccordionTab>
-              <AccordionTab header="Orderer">
-                <div
-                  v-for="(item, index) in Object.keys(channelOrderer.groups)"
-                  :key="index"
-                  class="p-my-2"
-                >
-                  <div class="config-view-panel">
-                    {{ channelOrderer.groups[item] }}
-                    <br />
-                    {{ channelOrderer.groups[item].values }}
-                  </div>
-                </div>
-              </AccordionTab>
-              <AccordionTab header="policies">
-                <!-- <div class="config-view-panel">{{ channelPolicies }}</div> -->
-                <Textarea v-model="channelPoliciesString" rows="5" cols="30" />
-              </AccordionTab>
-              <AccordionTab header="value">
-                <div class="config-view-panel">{{ channelValues }}</div>
-              </AccordionTab>
-            </Accordion>
-          </div>
-        </div>
-        <div class="p-d-grid p-jc-center">
-          <div class="channel-edit-config-edit p-col ">
-            <div class="edit-config-panel">
-              for editing
+              </div>
             </div>
           </div>
         </div>
@@ -90,11 +146,14 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import OSProcess from "../module/OSProcess";
+
+import ChannelConfig from "../models/ChannelConfig";
 import ConsoleDialogue from "../components/ConsoleDialogue.vue";
+import InputForm from "../components/channel/InputForm.vue";
+import ValueForm from "../components/channel/ValueForm.vue";
 // import NetworkConfig from "../models/NetworkConfig";
-const fs = require("fs");
-const path = require("path");
+// const fs = require("fs");
+// const path = require("path");
 
 const ChannelProps = Vue.extend({
   props: {
@@ -103,19 +162,68 @@ const ChannelProps = Vue.extend({
 });
 
 @Component({
-  components: { ConsoleDialogue },
+  components: { ConsoleDialogue, InputForm, ValueForm },
 })
 export default class ChannelEditPage extends ChannelProps {
   projectDir: string = "";
   display: boolean = false;
   displaylog: boolean = false;
-  channelConfig: any = {};
+  channel: any = {};
   channelPolicies: any = {};
   channelValues: any = {};
   channelApplication: any = {};
   channelOrderer: any = {};
   channelPoliciesString: string = "";
   notshow: boolean = false;
+
+  selectedAppOrg: string = "";
+  componentKey: number = 0;
+  selectedMenu: string = "_channel";
+
+  items: any = [
+    {
+      label: "Channel",
+      icon: "fas fa-network-wired",
+      command: () => {
+        this.updateComponent("_channel");
+      },
+    },
+    {
+      label: "Application",
+      icon: "fas fa-file",
+      command: () => {
+        this.updateComponent("_app");
+      },
+    },
+    {
+      label: "Orderer",
+      icon: "fas fa-file-signature",
+      command: () => {
+        this.updateComponent("_orderer");
+      },
+    },
+    {
+      label: "org(//TODO)",
+      icon: "fas fa-address-card",
+
+      items: [
+        {
+          label: "app org",
+          icon: "fas fa-address-card",
+          command: () => {
+            this.updateComponent("_apporg");
+          },
+        },
+        {
+          label: "orderer org",
+          icon: "fas fa-address-card",
+          command: () => {
+            this.updateComponent("_ordererorg");
+          },
+        },
+      ],
+    },
+  ];
 
   created() {
     this.init();
@@ -124,22 +232,16 @@ export default class ChannelEditPage extends ChannelProps {
   init() {
     this.projectDir = this.$store.state.project.path;
     try {
-      let str = fs.readFileSync(
-        path.join(
-          this.$store.state.project.path +
-            "/vars/" +
-            this.channelName +
-            "_config.json"
-        ),
-        "utf8"
+      ChannelConfig.setFile(this.channelName);
+      this.channel = ChannelConfig.getValue("channel_group");
+      this.channelPolicies = ChannelConfig.getValue("channel_group.policies");
+      this.channelValues = ChannelConfig.getValue("channel_group.values");
+      this.channelApplication = ChannelConfig.getValue(
+        "channel_group.groups.Application"
       );
-
-      this.channelConfig = JSON.parse(str);
-      this.channelPolicies = this.channelConfig.channel_group.policies;
-      this.channelValues = this.channelConfig.channel_group.values;
-      this.channelApplication = this.channelConfig.channel_group.groups.Application;
-      this.channelOrderer = this.channelConfig.channel_group.groups.Orderer;
-      this.channelPoliciesString = JSON.stringify(this.channelPolicies);
+      this.channelOrderer = ChannelConfig.getValue(
+        "channel_group.groups.Orderer"
+      );
     } catch (e) {
       console.log(e);
       this.notshow = true;
@@ -150,12 +252,9 @@ export default class ChannelEditPage extends ChannelProps {
     this.$router.push("/channel");
   }
 
-  async query() {
-    this.displaylog = true;
-    let args: string[] = ["channelquery"];
-    args.push("-c");
-    args.push(this.channelName);
-    await OSProcess.run_new(args);
+  updateComponent(selected: string) {
+    // this.componentKey += 1;
+    this.selectedMenu = selected;
   }
 }
 </script>
@@ -170,20 +269,6 @@ export default class ChannelEditPage extends ChannelProps {
 }
 .p-accordion-tab.p-accordion-tab-active {
   margin: 0 !important;
-}
-.config-view-header {
-  border-radius: 5px 5px 0px 0px;
-  width: 100%;
-  padding: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: rgb(73, 73, 73);
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
 }
 
 .channel-edit-config-view {
@@ -204,11 +289,23 @@ export default class ChannelEditPage extends ChannelProps {
   width: 100%;
 }
 .edit-config-panel {
-  width: 100%;
-  height: 300px;
-  line-height: 300px;
-  font-size: 30px;
-  background-color: rgb(168, 168, 168);
-  text-align: center;
+  height: calc(74vh - 15px);
+  background-color: rgb(51, 51, 51);
+  // text-align: center;
+}
+
+.edit-config-content {
+  height: calc(74vh - 15px);
+  background-color: rgb(51, 51, 51);
+}
+
+.edit-config-menu {
+  padding-top: 30px;
+  height: calc(74vh - 15px);
+  background-color: rgb(37, 37, 37);
+}
+
+.dirty-fix {
+  overflow: hidden;
 }
 </style>

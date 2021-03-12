@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="object">
+  <DataTable :value="object" :autoLayout="true">
     <Column field="name" header="Name"></Column>
     <Column header="Type">
       <template #body="slotProps">
@@ -13,6 +13,7 @@
         <InputSwitch
           v-model="slotProps.data.useCA"
           v-if="!slotProps.data.isOrderer"
+          @click="caWarn"
         />
       </template>
     </Column>
@@ -63,6 +64,9 @@ import OrgData from "../../models/OrgData";
   },
 })
 export default class OrgEditButton extends Vue {
+  caWarn() {
+    this.$emit("ca-warn");
+  }
   removeOrg(target: OrgData) {
     this.$emit("remove-org", target);
   }

@@ -1,12 +1,5 @@
 <template>
-  <div>
-    <!-- <div class="p-grid p-jc-between">
-      <div class="channel-header">
-        Channel
-        <hr class="dotted" />
-      </div>
-    </div> -->
-
+  <div class="dirty-fix">
     <div @click="toggle()">
       <div class="channel-list-header p-grid p-ai-center vertical-container">
         Channel
@@ -23,26 +16,27 @@
           class="p-ml-auto p-button-sm p-button-primary"
           icon="pi pi-plus"
           label="Create new channel"
-          @click.stop=""
+          @click.stop="display = true"
         ></Button>
       </div>
     </div>
     <transition name="channel-smooth">
       <div v-show="showSection">
         <div class="channel-list-wrapper p-grid p-jc-center p-my-4">
-          <!-- <div class="channel-list-header">
-            Channel list
-            <div class="p-col-4">
-              <div class="p-inputgroup">
-                <InputText placeholder="new channel" v-model="channelName" />
-                <Button label="create" @click="create()" />
-              </div>
-            </div>
-          </div> -->
           <div v-if="channels">
             <DataTable :value="channels" class="channel-list">
-              <Column field="name" header="name"></Column>
-              <Column header="operation">
+              <Column field="name" header="Name"></Column>
+              <Column header="Date create">
+                <template #body="slotProps">
+                  {{ toDate(slotProps.data.date_create) }}
+                </template>
+              </Column>
+              <Column header="Last updated">
+                <template #body="slotProps">
+                  {{ convertTime(slotProps.data.date_modify) }}
+                </template>
+              </Column>
+              <!-- <Column header="operation">
                 <template #body="slotProps">
                   <div class="p-d-flex p-jc-center p-ai-center">
                     <Button
@@ -57,7 +51,7 @@
                     />
                   </div>
                 </template>
-              </Column>
+              </Column> -->
             </DataTable>
           </div>
           <div v-else class="channel-list-empty p-text-center">
@@ -67,23 +61,93 @@
       </div>
     </transition>
 
-    <hr class="dotted" />
+    <hr />
+    <!-- <div class="p-grid p-ai-center p-jc-between channel-config-header">
+      <div class="p-col">Config</div>
+      <div class="p-col p-text-right">
+        <Dropdown
+          v-model="channelSelected"
+          :options="channels"
+          optionLabel="name"
+          optionValue="name"
+          v-on:change="updateForm()"
+        />
+      </div>
+    </div> -->
+    <div class=" p-grid p-jc-center">
+      <div class="config-view-header">
+        <span>
+          Channel:
+          <Dropdown
+            v-model="channelSelected"
+            :options="channels"
+            optionLabel="name"
+            optionValue="name"
+            v-on:change="updateForm()"
+            class="channel-dropdown"
+          />
+        </span>
+        <div class="p-col-6 p-text-right">
+          <div class="p-d-flex p-jc-end">
+            <Button
+              icon="pi pi-download"
+              class="p-button-sm p-button-secondary p-mx-3"
+              label="query config"
+              @click="channelQuery()"
+            />
+
+            <Button
+              icon="pi pi-refresh"
+              class="p-button-sm p-button-secondary"
+              label="update channel"
+              @click="channelUpdate()"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
+
+    <div>
+      <ConsoleDialogue
+        :_displaylog="displaylog"
+        @update:_displaylog="(val) => (displaylog = val)"
+      />
+    </div>
 
     <div>
       <Dialog
-        header="log"
-        v-bind:visible="displaylog"
+        header="Create network"
+        v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '80vw' }"
+        :style="{ width: '30vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <Terminal />
-        <Button
-          class="p-button-danger p-ml-auto p-m-2"
-          label="close"
-          @click="displaylog = false"
-        />
+        <div class="p-grid p-jc-center p-p-3">
+          <span class="p-float-label">
+            <InputText id="channelName" v-model="channelName" />
+            <label for="channelName">channelName</label>
+          </span>
+        </div>
+
+        <div class="p-grid p-jc-center p-mb-2">
+          <small class="text-error">*this operation cannot be undone</small>
+        </div>
+
+        <div class="p-d-flex p-jc-end p-mt-1">
+          <Button
+            class="p-button-primary p-m-2"
+            label="create"
+            @click="create()"
+          />
+
+          <Button
+            class="p-button-danger p-ml-auto p-m-2 p-button-outlined"
+            label="close"
+            @click="display = false"
+          />
+        </div>
       </Dialog>
     </div>
   </div>
@@ -93,12 +157,14 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
-import Terminal from "../components/Terminal.vue";
 import NetworkConfig from "../models/NetworkConfig";
 import logger from "../module/Logger";
+import ChannelEditPage from "./ChannelEditPage.vue";
+import ConsoleDialogue from "../components/ConsoleDialogue.vue";
+import { OsType } from "../models/EnvProject";
 
 @Component({
-  components: { Terminal },
+  components: { ConsoleDialogue, ChannelEditPage },
 })
 export default class ChannelPage extends Vue {
   projectDir: string = "";
@@ -106,10 +172,13 @@ export default class ChannelPage extends Vue {
   displaylog: boolean = false;
   channelName: string = "";
   channelSelected: string = "";
-  channels: Array<string> = [];
+  channels: any = [];
   showSection: boolean = false;
+  join: boolean = false;
+  componentKey: number = 0;
+  private osType: OsType = OsType.WINDOW;
 
-  mounted() {
+  created() {
     this.init();
   }
 
@@ -117,23 +186,67 @@ export default class ChannelPage extends Vue {
     this.projectDir = this.$store.state.project.path;
     try {
       this.channels = NetworkConfig.getValue("channel");
-      this.channelSelected = this.channels[0];
+      this.channelSelected = this.channels[0].name;
+      console.log(this.channelSelected);
     } catch (err) {
       logger.log("warn", "no channel");
     }
+  }
+
+  convertTime(unix: number) {
+    let dateNow: number = Date.now();
+    //  console.log(new Date(unix).getDate());
+    let dayNow = new Date(dateNow).getTime();
+    let dayUpdate = new Date(unix).getTime();
+    return this.msToTime(dayNow - dayUpdate);
+  }
+  msToTime(s: number) {
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = ((s - mins) / 60) % 24;
+    var day = Math.round((s - mins) / 60 / 24);
+    if (day >= 1) {
+      return day + " " + "Days ago";
+    } else if (hrs >= 1) {
+      return hrs + " " + "Hours ago";
+    } else {
+      return mins + " " + "Minutes ago";
+    }
+  }
+
+  toDate(stamp: any) {
+    var date = new Date(stamp).toDateString();
+    return date;
   }
 
   toggle() {
     this.showSection = !this.showSection;
   }
 
-  create() {
-    let args: string[] = ["create"];
-    args.push("-c " + this.channelName);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
-    NetworkConfig.pushValueToArray("channel", { name: this.channelName });
+  async create() {
     this.displaylog = true;
+    let args: string[] = ["create"];
+    args.push("-c", this.channelName);
+    await OSProcess.run_new(args, this.osType);
+    await OSProcess.run_new(["join", "-c", this.channelName], this.osType);
+    await OSProcess.run_new(
+      ["channelquery", "-c", this.channelName],
+      this.osType
+    );
+
+    if (this.join) {
+      await OSProcess.run_new(["join", "-c", this.channelName], this.osType);
+      this.join = false;
+    }
+    NetworkConfig.pushValueToArray("channel", {
+      name: this.channelName,
+      date_create: +new Date(),
+      date_modify: +new Date(),
+    });
+    this.display = false;
   }
 
   editChannel(name: string) {
@@ -145,20 +258,25 @@ export default class ChannelPage extends Vue {
     });
   }
 
-  join(name: string) {
-    let args: string[] = ["join"];
-    args.push("-c " + name);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
-    this.displaylog = true;
+  updateForm() {
+    this.componentKey += 1;
   }
 
-  query(name: string) {
-    let args: string[] = ["channelquery"];
-    args.push("-c " + name);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
+  async channelQuery() {
     this.displaylog = true;
+    let args: string[] = ["channelquery"];
+    args.push("-c");
+    args.push(this.channelSelected);
+    await OSProcess.run_new(args, this.osType);
+  }
+
+  async channelUpdate() {
+    this.displaylog = true;
+    let args: string[] = ["channelsign,channelupdate"];
+    args.push("-c");
+    args.push(this.channelSelected);
+    await OSProcess.run_new(args, this.osType);
+    this.channelQuery();
   }
 }
 </script>
@@ -193,7 +311,6 @@ export default class ChannelPage extends Vue {
   color: white;
   font-size: 20px;
   font-weight: bold;
-  width: 100%;
 }
 
 .channel-list-empty {
@@ -270,4 +387,43 @@ th {
   color: $primaryColor;
 }
 
+.config-view-header {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(73, 73, 73);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.channel-config-header {
+  padding: 10px 30px 10px 30px;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+.channel-config-header {
+  font-size: 20px;
+  font-weight: bold;
+  background-color: $SubBgColor;
+}
+
+// .channel-dropdown.p-dropdown {
+//   height: 30px;
+// }
+
+.channel-dropdown .p-dropdown-label {
+  font-size: 15px;
+  padding: 5px 10px 5px 10px;
+  color: $primaryColor;
+  font-weight: bold;
+}
 </style>

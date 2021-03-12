@@ -30,9 +30,10 @@
             <Column header="Action">
               <template #body="slotProps">
                 <Button
-                  label="Execute"
-                  class="p-button-outlined p-button-primary"
-                  @click="openInfo(slotProps.data)"
+                  label="exec"
+                  icon="fas fa-terminal"
+                  class="p-button-outlined p-button-primary p-button-sm"
+                  @click="func(slotProps.data.Names[0])"
                 />
               </template>
             </Column>
@@ -40,6 +41,27 @@
         </TabPanel>
         <TabPanel header="organization">
           <div class="org-table-wrapper">
+            <div class="p-datatable p-component">
+              <table role="grid" class="p-my-1">
+                <thead class="p-datatable-thead">
+                  <tr>
+                    <th>
+                      <span class="p-column-title">Name</span>
+                    </th>
+                    <th>
+                      <span class="p-column-title">Fullname</span>
+                    </th>
+                    <th>
+                      <span class="p-column-title">Role</span>
+                    </th>
+                    <th>
+                      <span class="p-column-title">Status</span>
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
             <div
               class="org-table p-datatable p-component"
               v-for="(item, index) in Object.values(org)"
@@ -55,6 +77,7 @@
 </template>
 
 <script lang="ts">
+import { exec } from "child_process";
 import Vue from "vue";
 import Component from "vue-class-component";
 import OrgColumn from "../container/OrgColumn.vue";
@@ -70,6 +93,10 @@ export default class ContainerTable extends Vue {
   showSection: boolean = false;
   toggle() {
     this.showSection = !this.showSection;
+  }
+
+  func(container: string) {
+    exec(' start cmd.exe @cmd /k "docker exec -it ' + container + ' /bin/sh"');
   }
 }
 </script>

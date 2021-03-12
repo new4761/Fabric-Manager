@@ -27,9 +27,6 @@
         <div class="explorer-footer p-grid p-ai-center"></div>
         <!-- <img src="../assets/explorer.svg" class="icon" /> -->
       </div>
-
-
-      
     </div>
 
     <ConsoleDialogue
@@ -57,6 +54,9 @@ export default class ExplorerButton extends Vue {
 
   explorerUp() {
     this.displaylog = true;
+    //explorer up
+    // /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+    //set store
   }
 }
 </script>
