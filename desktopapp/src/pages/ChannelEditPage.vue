@@ -13,131 +13,114 @@
         <h1>Channel {{ channelName }}</h1>
       </div>
     </div> -->
-    <div class="channel-edit-wrapper">
-      <div class="p-d-flex p-jc-center">
-        <div class="channel-edit-config-view">
-          <div class="config-view-header">
-            channel config
-            <div class="p-col-4 p-text-right">
-              <Button
-                icon="pi pi-refresh"
-                class="p-button-sm p-button-secondary"
-                label="query config"
-                @click="query()"
-              />
-            </div>
-          </div>
 
-          <div class="edit-config-panel">
-            <div class="p-grid">
-              <div class="edit-config-menu p-col-3">
-                <PanelMenu :model="items" />
-              </div>
-
-              <div class="edit-config-content p-col-9 p-p-5">
-                <InputForm
-                  :data="channelApplication"
-                  :jsonKey="'channel_group.groups.Application'"
-                  v-show="selectedMenu === '_app'"
-                />
-
-                <InputForm
-                  :data="channelOrderer"
-                  :jsonKey="'channel_group.groups.Orderer'"
-                  v-show="selectedMenu === '_orderer'"
-                />
-
-                <InputForm
-                  :data="channel"
-                  :jsonKey="'channel_group'"
-                  v-show="selectedMenu === '_channel'"
-                />
-
-                <div
-                  v-for="(item, index) in Object.keys(
-                    channelApplication.groups
-                  )"
-                  :key="index+'app'"
-                  class="p-my-2"
-                  v-show="selectedMenu === '_apporg'"
-                >
-                  <InputForm
-                    :data="channelApplication.groups[item]"
-                    :jsonKey="'channel_group.groups.Application.groups'"
-                    :groupKey="item"
-                    class="p-my-5"
-                  />
-                </div>
-
-                <div
-                  v-for="(item, index) in Object.keys(channelOrderer.groups)"
-                  :key="index+'ord'"
-                  class="p-my-2"
-                   v-show="selectedMenu === '_ordererorg'"
-                >
-                  ---{{ item }}---
-                  <InputForm
-                    :data="channelOrderer.groups[item]"
-                    class="p-my-5"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- <InputForm :data="channelApplication" class="p-my-5" /> -->
-          </div>
-          <!-- <Dropdown
-              v-model="selectedAppOrg"
-              :options="Object.keys(channelApplication.groups)"
-              placeholder="Select a City"
-              v-on:change="updateComponent()"
+    <div class=" p-grid p-jc-center">
+      <div class="channel-edit-config-view">
+        <div class="config-view-header">
+          channel config
+          <div class="p-col-4 p-text-right">
+            <Button
+              icon="pi pi-refresh"
+              class="p-button-sm p-button-secondary"
+              label="query config"
+              @click="query()"
             />
-            ---{{ selectedAppOrg }}---
-            <InputForm
-              :data="channelApplication.groups[selectedAppOrg]"
-              :jsonKey="'channel_group.groups.Application.groups'"
-              :groupKey="selectedAppOrg"
-              class="p-my-5"
-              :key="componentKey"
-            /> -->
+          </div>
+        </div>
 
-          <!-- <Accordion :multiple="true" v-show="!notshow">
-              <AccordionTab header="app org">
-                <div
-                  v-for="(item, index) in Object.keys(
-                    channelApplication.groups
-                  )"
-                  :key="index"
-                  class="p-my-2"
-                >
-                </div>
-              </AccordionTab>
-              <AccordionTab header="app">
-                <InputForm :data="channelApplication" class="p-my-5" />
-              </AccordionTab>
-              <AccordionTab header="orderer org">
-                <div
-                  v-for="(item, index) in Object.keys(channelOrderer.groups)"
-                  :key="index"
-                  class="p-my-2"
-                >
-                  ---{{ item }}---
+        <div class="edit-config-panel">
+          <div class="p-grid">
+            <div class="edit-config-menu p-col-3">
+              <PanelMenu :model="items" />
+            </div>
+
+            <div class="edit-config-content p-col-9 p-p-5">
+              <ScrollPanel style="width: 100%; height: 60vh">
+                <div v-show="selectedMenu === '_app'">
+                  <h4>Application</h4>
+                  <hr class="dott" />
+
                   <InputForm
-                    :data="channelOrderer.groups[item]"
-                    class="p-my-5"
+                    :data="channelApplication"
+                    :jsonKey="'channel_group.groups.Application'"
+                  />
+
+                  <ValueForm
+                    :data="channelApplication"
+                    :jsonKey="'channel_group.groups.Application'"
                   />
                 </div>
-              </AccordionTab>
-              <AccordionTab header="orderer">
-                <InputForm :data="channelOrderer" class="p-my-5" />
-              </AccordionTab>
-              <AccordionTab header="channel">
-                <InputForm
-                  :data="channel"
-                  class="p-my-5"
-                  :jsonKey="'channel_group'"
-              /></AccordionTab>
-            </Accordion> -->
+                <div v-show="selectedMenu === '_orderer'">
+                  <h4>Orderer</h4>
+                  <hr class="dott" />
+                  <InputForm
+                    :data="channelOrderer"
+                    :jsonKey="'channel_group.groups.Orderer'"
+                  />
+
+                  <ValueForm
+                    :data="channelOrderer"
+                    :jsonKey="'channel_group.groups.Orderer'"
+                  />
+                </div>
+                <div v-show="selectedMenu === '_channel'">
+                  <h4>Channel</h4>
+                  <hr class="dott" />
+                  <InputForm :data="channel" :jsonKey="'channel_group'" />
+
+                  <ValueForm :data="channel" :jsonKey="'channel_group'" />
+                </div>
+                <div v-show="selectedMenu === '_apporg'">
+                  <h4>Application Organization</h4>
+                  <hr class="dott" />
+                  <div
+                    v-for="(item, index) in Object.keys(
+                      channelApplication.groups
+                    )"
+                    :key="index + 'app'"
+                    class="p-my-2"
+                    v-show="selectedMenu === '_apporg'"
+                  >
+                    <h5>{{ item }}</h5>
+                    <InputForm
+                      :data="channelApplication.groups[item]"
+                      :jsonKey="'channel_group.groups.Application.groups'"
+                      :groupKey="item"
+                    />
+
+                    <ValueForm
+                      :data="channelApplication.groups[item]"
+                      :jsonKey="'channel_group.groups.Application.groups'"
+                      :groupKey="item"
+                    />
+                  </div>
+                </div>
+                <div v-show="selectedMenu === '_ordererorg'">
+                  <h4>orderer Organization</h4>
+                  <hr class="dott" />
+                  <div
+                    v-for="(item, index) in Object.keys(channelOrderer.groups)"
+                    :key="index + 'ord'"
+                    class="p-my-2"
+                    v-show="selectedMenu === '_ordererorg'"
+                  >
+                    <h5>{{ item }}</h5>
+                    <InputForm
+                      :data="channelOrderer.groups[item]"
+                      :jsonKey="'channel_group.groups.Orderer.groups'"
+                      :groupKey="item"
+                    />
+
+                    <ValueForm
+                      :data="channelOrderer.groups[item]"
+                      :jsonKey="'channel_group.groups.Orderer.groups'"
+                      :groupKey="item"
+                    />
+                  </div>
+                </div>
+              </ScrollPanel>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -158,6 +141,7 @@ import OSProcess from "../module/OSProcess";
 import ChannelConfig from "../models/ChannelConfig";
 import ConsoleDialogue from "../components/ConsoleDialogue.vue";
 import InputForm from "../components/channel/InputForm.vue";
+import ValueForm from "../components/channel/ValueForm.vue";
 // import NetworkConfig from "../models/NetworkConfig";
 // const fs = require("fs");
 // const path = require("path");
@@ -169,7 +153,7 @@ const ChannelProps = Vue.extend({
 });
 
 @Component({
-  components: { ConsoleDialogue, InputForm },
+  components: { ConsoleDialogue, InputForm, ValueForm },
 })
 export default class ChannelEditPage extends ChannelProps {
   projectDir: string = "";
@@ -190,21 +174,21 @@ export default class ChannelEditPage extends ChannelProps {
   items: any = [
     {
       label: "Channel",
-      icon: "pi pi-fw pi-file",
+      icon: "fas fa-network-wired",
       command: () => {
         this.updateComponent("_channel");
       },
     },
     {
       label: "Application",
-      icon: "pi pi-fw pi-file",
+      icon: "fas fa-file",
       command: () => {
         this.updateComponent("_app");
       },
     },
     {
       label: "Orderer",
-      icon: "pi pi-fw pi-file",
+      icon: "fas fa-file-signature",
       command: () => {
         this.updateComponent("_orderer");
       },
@@ -212,14 +196,14 @@ export default class ChannelEditPage extends ChannelProps {
 
     {
       label: "app org",
-      icon: "pi pi-fw pi-file",
+      icon: "fas fa-address-card",
       command: () => {
         this.updateComponent("_apporg");
       },
     },
     {
       label: "orderer org",
-      icon: "pi pi-fw pi-file",
+      icon: "fas fa-address-card",
       command: () => {
         this.updateComponent("_ordererorg");
       },
@@ -244,10 +228,6 @@ export default class ChannelEditPage extends ChannelProps {
       this.channelOrderer = ChannelConfig.getValue(
         "channel_group.groups.Orderer"
       );
-      // ChannelConfig.updateConfig(
-      //   "channel_group.groups.Application.groups.org1-example-com.mod_policy",
-      //   "Admins"
-      // );
     } catch (e) {
       console.log(e);
       this.notshow = true;
@@ -324,12 +304,10 @@ export default class ChannelEditPage extends ChannelProps {
 .edit-config-content {
   height: 70vh;
   background-color: rgb(87, 87, 87);
-  overflow: auto;
 }
 
 .edit-config-menu {
   height: 70vh;
   background-color: rgb(37, 37, 37);
-  overflow: auto;
 }
 </style>

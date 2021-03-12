@@ -1,11 +1,7 @@
 <template>
-  <div class="p-col-8">
-    <small>{{ jsonKey }}</small>
-
-    <div class="p-d-flex">
-      <!-- <h2>mod policy : {{ formData.mod_policy }}</h2> -->
-    </div>
-
+  <div class="p-col-10">
+    <!-- <small>{{ jsonKey }}</small> -->
+    <h5>Policy</h5>
     <div v-if="formData.policies != null">
       <div
         v-for="(policy, index) in Object.keys(formData.policies)"
@@ -17,7 +13,7 @@
 
           <!-- ** type: {{ formData.policies[policy].policy.type }} -->
           <!-- <div class="p-field p-grid">
-            <label for="policytype" class="p-col-fixed" style="width:100px"
+            <label for="policytype" class="p-col-fixed p-mr-5" style="width:100px"
               >policytype</label
             >
             <div class="p-col">
@@ -36,35 +32,37 @@
                 .value.identities"
               :key="'indentity' + index"
             >
+              <small>{{ identifier.principal.role }}</small>
+              <hr />
               <div class="p-field p-grid">
                 <label
                   for="msp_identifier"
-                  class="p-col-fixed"
+                  class="p-col-fixed p-mr-5"
                   style="width:100px"
                   >msp_identifier</label
                 >
-                <div class="p-col">
+                <div class="p-ml-5">
                   <InputText
                     id="msp_identifier"
                     type="text"
                     v-model="identifier.principal.msp_identifier"
                     @input="save()"
-                     class="p-inputtext-sm"
+                    class="p-inputtext-sm"
                   />
                 </div>
               </div>
 
               <div class="p-field p-grid">
-                <label for="role" class="p-col-fixed" style="width:100px"
+                <label for="role" class="p-col-fixed p-mr-5" style="width:100px"
                   >role</label
                 >
-                <div class="p-col">
+                <div class="p-ml-5">
                   <InputText
                     id="role"
                     type="text"
                     v-model="identifier.principal.role"
                     @input="save()"
-                     class="p-inputtext-sm"
+                    class="p-inputtext-sm"
                   />
                 </div>
               </div>
@@ -72,17 +70,17 @@
               <div class="p-field p-grid">
                 <label
                   for="principal_classification"
-                  class="p-col-fixed"
+                  class="p-col-fixed p-mr-5"
                   style="width:100px"
                   >principal_classification</label
                 >
-                <div class="p-col">
+                <div class="p-ml-5">
                   <InputText
                     id="principal_classification"
                     type="text"
                     v-model="identifier.principal_classification"
                     @input="save()"
-                     class="p-inputtext-sm"
+                    class="p-inputtext-sm"
                   />
                 </div>
               </div>
@@ -108,22 +106,10 @@
             "
           >
             <div class="p-field p-grid">
-              <label for="rule" class="p-col-fixed" style="width:100px"
+              <label for="rule" class="p-col-fixed p-mr-5" style="width:100px"
                 >rule</label
               >
-              <div class="p-col">
-                <!-- <InputText
-                id="rule"
-                type="text"
-                v-model="formData.policies[policy].policy.value.rule"
-              /> -->
-
-                <!-- <Dropdown
-                v-model.lazy="formData.policies[policy].policy.value.rule"
-                :options="rules"
-                optionLabel="name"
-              /> -->
-
+              <div class="p-ml-5">
                 <select
                   id="rule"
                   v-model="formData.policies[policy].policy.value.rule"
@@ -136,20 +122,22 @@
                   }}
                 </select>
               </div>
-              <!-- {{ formData.policies[policy].policy.value.rule }} -->
             </div>
 
             <div class="p-field p-grid">
-              <label for="sub_policy" class="p-col-fixed" style="width:100px"
+              <label
+                for="sub_policy"
+                class="p-col-fixed p-mr-5"
+                style="width:100px"
                 >sub_policy</label
               >
-              <div class="p-col">
+              <div class="p-ml-5">
                 <InputText
                   id="sub_policy"
                   type="text"
                   v-model="formData.policies[policy].policy.value.sub_policy"
                   @input="save()"
-                   class="p-inputtext-sm"
+                  class="p-inputtext-sm"
                 />
               </div>
             </div>

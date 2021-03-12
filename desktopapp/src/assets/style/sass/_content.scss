@@ -13,7 +13,8 @@
 }
 
 .scroll-main {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   height: 94vh;
   background-color: $bodyBgColor;

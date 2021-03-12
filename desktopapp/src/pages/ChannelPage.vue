@@ -16,7 +16,7 @@
           class="p-ml-auto p-button-sm p-button-primary"
           icon="pi pi-plus"
           label="Create new channel"
-          @click.stop=""
+          @click.stop="display = true"
         ></Button>
       </div>
     </div>
@@ -25,8 +25,18 @@
         <div class="channel-list-wrapper p-grid p-jc-center p-my-4">
           <div v-if="channels">
             <DataTable :value="channels" class="channel-list">
-              <Column field="name" header="name"></Column>
-              <Column header="operation">
+              <Column field="name" header="Name"></Column>
+              <Column header="Date create">
+                <template #body="slotProps">
+                  {{ toDate(slotProps.data.date_create) }}
+                </template>
+              </Column>
+              <Column header="Last updated">
+                <template #body="slotProps">
+                  {{ convertTime(slotProps.data.date_modify) }}
+                </template>
+              </Column>
+              <!-- <Column header="operation">
                 <template #body="slotProps">
                   <div class="p-d-flex p-jc-center p-ai-center">
                     <Button
@@ -41,7 +51,7 @@
                     />
                   </div>
                 </template>
-              </Column>
+              </Column> -->
             </DataTable>
           </div>
           <div v-else class="channel-list-empty p-text-center">
@@ -56,20 +66,42 @@
     <ChannelEditPage :channelName="'app'" />
 
     <div>
+      <ConsoleDialogue
+        :_displaylog="displaylog"
+        @update:_displaylog="(val) => (displaylog = val)"
+      />
+    </div>
+
+    <div>
       <Dialog
-        header="log"
-        v-bind:visible="displaylog"
+        header="Create network"
+        v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '80vw' }"
+        :style="{ width: '40vw' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <Terminal />
-        <Button
-          class="p-button-danger p-ml-auto p-m-2"
-          label="close"
-          @click="displaylog = false"
-        />
+        <div class="p-col-12 p-d-flex">
+          <div class="p-ml-5 p-my-1">
+            <span class="p-float-label">
+              <InputText id="channelName" v-model="channelName" />
+              <label for="channelName">channelName</label>
+            </span>
+          </div>
+        </div>
+        <div class="p-d-flex p-jc-end p-mt-1">
+          <Button
+            class="p-button-primary p-m-2"
+            label="create"
+            @click="create()"
+          />
+
+          <Button
+            class="p-button-danger p-ml-auto p-m-2 p-button-outlined"
+            label="close"
+            @click="display = false"
+          />
+        </div>
       </Dialog>
     </div>
   </div>
@@ -79,13 +111,14 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import OSProcess from "../module/OSProcess";
-import Terminal from "../components/Terminal.vue";
 import NetworkConfig from "../models/NetworkConfig";
 import logger from "../module/Logger";
 import ChannelEditPage from "./ChannelEditPage.vue";
+import ConsoleDialogue from "../components/ConsoleDialogue.vue";
+import { OsType } from "../models/EnvProject";
 
 @Component({
-  components: { Terminal, ChannelEditPage },
+  components: { ConsoleDialogue, ChannelEditPage },
 })
 export default class ChannelPage extends Vue {
   projectDir: string = "";
@@ -95,6 +128,8 @@ export default class ChannelPage extends Vue {
   channelSelected: string = "";
   channels: Array<string> = [];
   showSection: boolean = false;
+  join: boolean = false;
+  private osType: OsType = OsType.WINDOW;
 
   mounted() {
     this.init();
@@ -110,17 +145,55 @@ export default class ChannelPage extends Vue {
     }
   }
 
+  convertTime(unix: number) {
+    let dateNow: number = Date.now();
+    //  console.log(new Date(unix).getDate());
+    let dayNow = new Date(dateNow).getTime();
+    let dayUpdate = new Date(unix).getTime();
+    return this.msToTime(dayNow - dayUpdate);
+  }
+  msToTime(s: number) {
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = ((s - mins) / 60) % 24;
+    var day = Math.round((s - mins) / 60 / 24);
+    if (day >= 1) {
+      return day + " " + "Days ago";
+    } else if (hrs >= 1) {
+      return hrs + " " + "Hours ago";
+    } else {
+      return mins + " " + "Minutes ago";
+    }
+  }
+
+  toDate(stamp: any) {
+    var date = new Date(stamp).toDateString();
+    return date;
+  }
+
   toggle() {
     this.showSection = !this.showSection;
   }
 
-  create() {
-    let args: string[] = ["create"];
-    args.push("-c " + this.channelName);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
-    NetworkConfig.pushValueToArray("channel", { name: this.channelName });
+  async create() {
     this.displaylog = true;
+    let args: string[] = ["create"];
+    args.push("-c", this.channelName);
+    await OSProcess.run_new(args, this.osType);
+
+    if (this.join) {
+      await OSProcess.run_new(["join", "-c", this.channelName], this.osType);
+      this.join = false;
+    }
+    NetworkConfig.pushValueToArray("channel", {
+      name: this.channelName,
+      date_create: +new Date(),
+      date_modify: +new Date(),
+    });
+    this.display = false;
   }
 
   editChannel(name: string) {
@@ -132,21 +205,21 @@ export default class ChannelPage extends Vue {
     });
   }
 
-  join(name: string) {
-    let args: string[] = ["join"];
-    args.push("-c " + name);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
-    this.displaylog = true;
-  }
+  // join(name: string) {
+  //   this.displaylog = true;
+  //   let args: string[] = ["join"];
+  //   args.push("-c " + name);
+  //   const child = OSProcess.run(this.projectDir, args);
+  //   this.$store.commit("setProcess", child);
+  // }
 
-  query(name: string) {
-    let args: string[] = ["channelquery"];
-    args.push("-c " + name);
-    const child = OSProcess.run(this.projectDir, args);
-    this.$store.commit("setProcess", child);
-    this.displaylog = true;
-  }
+  // query(name: string) {
+  //   this.displaylog = true;
+  //   let args: string[] = ["channelquery"];
+  //   args.push("-c " + name);
+  //   const child = OSProcess.run(this.projectDir, args);
+  //   this.$store.commit("setProcess", child);
+  // }
 }
 </script>
 
@@ -180,7 +253,6 @@ export default class ChannelPage extends Vue {
   color: white;
   font-size: 20px;
   font-weight: bold;
-  width: 100%;
 }
 
 .channel-list-empty {
