@@ -22,11 +22,6 @@
           <label for="city1">{{ item.name }}</label>
         </div>
       </div>
-      <!-- <br />
-    <Button label="test" iconPos="right" @click="test()" />
-    <br /><br />
-       <Button label="enroll" iconPos="right" @click="enroll()" />
-    <br /><br /> -->
       <Button label="EXPORT" iconPos="right" @click="generate()" />
     </div>
   </div>
@@ -38,7 +33,6 @@ import ExportAppProcess from "@/module/ExportAppProcess";
 import NetworkConfig from "@/models/NetworkConfig";
 import Vue from "vue";
 import Component from "vue-class-component";
-import FabricSDK from "@/module/FabricSDK/FabricSDKController";
 
 //import IdentityManger from "@/module/Minifabric/IdentityManger";
 const ExportApplicationPageProps = Vue.extend({
@@ -70,9 +64,7 @@ export default class ExportApplicationPage extends ExportApplicationPageProps {
     );
     return newArray;
   }
-  enroll() {
-    FabricSDK.testEnroll();
-  }
+
 }
 </script>
 

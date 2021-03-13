@@ -1,10 +1,11 @@
 
 // const FabricCAServices = require("electron").remote.require('fabric-ca-client');
-import { netWorkConfigPath } from "@/models/EnvProject";
+import { getProjectPath,netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
+import FileManager from "@/module/FileManager";
 import MinifabricIdentityManger from "@/module/Minifabric/MinifabricIdentityManger";
 import { fixOrgName } from "@/module/StringBuilder";
-
+const path = require('path');
 // const {RegisterRequest} = require("electron").remote.require("fabric-common");
 class IdentityManger {
 
@@ -12,15 +13,18 @@ class IdentityManger {
         let wallet = await caConnection.getWallet()
         let caGateway = await caConnection.getGateway()
         const enrollment = await caGateway.enroll({ enrollmentID: enrollmentID, enrollmentSecret: enrollmentPW });
+
+      //  let newPrkData =enrollment.key.toBytes().replace(regexWindow,'')
+       // console.log(newPrkData)
         const x509Identity = {
             credentials: {
                 certificate: enrollment.certificate,
-                privateKey: enrollment.key.toBytes(),
+                privateKey:enrollment.key.toBytes(),
             },
             mspId:fixOrgName(mspId),
             type: 'X.509',
         };
-        
+        //console.log(enrollment.key)
         await MinifabricIdentityManger.addNewIdentity(mspId, enrollmentID, enrollment.certificate, enrollment.key.toBytes())
         await wallet.put(enrollmentID, x509Identity);
         let user = {
@@ -31,6 +35,12 @@ class IdentityManger {
             enroll: true
         }
         //TODO: find better way to handle it
+        // let idFilePath = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets",mspId,enrollmentID+".id")
+        // let data =await  FileManager.readFile(idFilePath);
+        // let regexWindow =/\\r/g
+        // data = data.replace(regexWindow,'')
+        // console.log(data)
+        // await FileManager.createFileWithData(idFilePath, data)
         let configPath = netWorkConfigPath.userPath + "." + fixOrgName(mspId) + "." + enrollmentID  
         NetworkConfig.updateNetworkConfig(configPath, user);
 

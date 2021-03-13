@@ -19,7 +19,6 @@ class MinifabricIdentityManger {
         keyListData[fullUserName] = (data)
         //console.log(keyListData)
         await FileManager.createFileWithData(keyVarsFile, JSON.stringify(keyListData))
-
         await this.setUpMSP(org, userName, singcert, pkey)
 
 
@@ -39,6 +38,7 @@ class MinifabricIdentityManger {
     async cretePkeyFolder(newUserPath: string, data: any) {
        // console.log(data)
         let targetPath = path.join(newUserPath, "msp", "keystore", "priv_sk")
+        //TODO: find better way to handle it (only work in window)
         await FileManager.createFileWithData(targetPath, data)
     }
     async createSigncert(newUserPath: string, userName: string, org: string, data: any) {

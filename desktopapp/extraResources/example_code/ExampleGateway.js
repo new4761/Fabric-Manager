@@ -16,14 +16,18 @@ async function ExampleGateway() {
     // Connect to a gateway peer
     let connectionProfilePath = "./profiles/mychannel_connection_for_nodesdk.yaml";
     // Get wallet identity 
-    const wallet =await  Wallets.newFileSystemWallet('./wallets/OrgName'); // Example ./wallets/Org1 || ./wallets/Org2
+    const wallet =await  Wallets.newFileSystemWallet('./wallets/peer.qweasdasad'); // Example ./wallets/Org1 || ./wallets/Org2
     const connectionProfileData = fs.readFileSync(connectionProfilePath);
     const connectionProfile = yaml.safeLoad(connectionProfileData);
-    
+    //console.log(connectionProfile)
     //Connect to gateway to localhost with wallet identity 
-    await gateway.connect(connectionProfile, { wallet, identity: 'Some identity in Wallet' // Example identity: 'Admin' 
-    ,discovery: { enabled: true, asLocalhost: true },  // Previously imported identity
-    });
+    const identity = await wallet.get('asdwqwe');
+    await gateway.connect(connectionProfile,{
+      wallet, identity,discovery: { enabled: true, asLocalhost: true },  // Previously imported identity
+  });
+  const network = await gateway.getNetwork('mychannel');
+  //console.error(`successful connection`);
+  console.log(network)
   } catch (error) {
     console.error(`******** FAILED : ${error}`);
   }

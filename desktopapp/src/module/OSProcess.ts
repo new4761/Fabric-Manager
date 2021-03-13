@@ -31,18 +31,15 @@ class OSProcess {
     logger.log("info", "OSProcess running: " + args + " at:" + path);
     return child;
   }
-  run_new(args: string[], type: OsType, projectPath?: string): any {
+  run_new(args: string[], projectPath?: string): any {
     let ls: any;
     //set to minifab output
     if (projectPath == null) {
       projectPath = ProjectConfig.getPathResolve(store.state.id);
     }
-
     args.push("-f");
     args.push("minifab");
-    console.log(args);
-    switch (type) {
-      case OsType.WINDOW:
+   // console.log(args);
         try {
           ls = spawnSync("minifab.cmd", args, {
             shell: true,
@@ -66,26 +63,18 @@ class OSProcess {
           console.log("child running");
           return null;
         }
-
-    }
   }
     //TODO:Override  for CC
     //to capture docker output for chainCode
-    run_CC_output(args: string[],
-      type: OsType,
-      methodName: string,
-      version: any
-    ): any {
+    run_CC_output(args: string[],methodName: string,version: any): any {
       let ls: any;
       //set to minifab output
-      let projectPath = ProjectConfig.getPathResolve(store.state.id);
+      let projectPath = getProjectPath()
       args.push("-f");
       args.push("minifab");
       let scriptFile = "cc" + methodName + ".sh";
       let sourceDir = path.join(projectPath, "vars", "run", scriptFile);
       FileManager.createFile(sourceDir);
-      switch (type) {
-        case OsType.WINDOW:
           try {
             ls = spawnSync("minifab", args, {
               shell: true,
@@ -116,7 +105,6 @@ class OSProcess {
             return null;
           }
 
-      }
     }
       callback(ls: any) {
         ls.stdout.on("data", (data: any) => {

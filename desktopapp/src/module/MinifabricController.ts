@@ -1,5 +1,6 @@
 import { getProjectPath, netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
+import FileManager from "./FileManager";
 
 const { Gateway, Wallets } = require("electron").remote.require("fabric-network");
 import OSProcess from "./OSProcess";
@@ -24,6 +25,29 @@ class MinifabricController {
 
 
     }
+    fixWalletIdentitiesForWindow() {
+        let sourceDir = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets")
+        fs.readdir(sourceDir, function (err: any, files: any) {
+            if (err) {
+                console.error("Could not list the directory.", err);
+                process.exit(1);
+            }
+            files.forEach((file: any) => {
+                let fileDir = path.join(sourceDir, file)
+                fs.readdir(fileDir, function (err: any, idFile: any) {
+                    idFile.forEach(async (file: any) => {
+                        let idFilePath = path.join(fileDir,file)
+                        let data = await FileManager.readFile(idFilePath);
+                        let regexWindow =/\s\\n/g
+                        data = data.replace(regexWindow,'\\n')
+                        await FileManager.createFileWithData(idFilePath, data)
+                    })
+                })
+                //console.log(file)
+            })
+
+        })
+    }
     //return Identity in org
     async getWalletIdentities(org: string) {
         let sourceDir = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets", org)
@@ -39,8 +63,8 @@ class MinifabricController {
             console.log("profileGen")
             await this.profileGen(channel)
         }
-        const connectionProfileData =await fs.readFileSync(sourceDir);
-        return yaml.safeLoad(connectionProfileData);
+        const connectionProfileData = await fs.readFileSync(sourceDir);
+        return yaml.load(connectionProfileData);
     }
 
 

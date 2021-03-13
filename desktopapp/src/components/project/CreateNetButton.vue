@@ -285,7 +285,7 @@ export default class CreateNetButton extends Vue {
       } else {
         command.push("netup");
       }
-      command.push("-o", defaultOrg, "-c", "true");
+      command.push("-o", defaultOrg, "-e", "true");
       this.$router.push({
         name: "SplashConsole",
         params: {

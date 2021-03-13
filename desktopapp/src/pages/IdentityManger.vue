@@ -61,14 +61,13 @@
 
 <script lang="ts">
 import { netWorkConfigPath } from "@/models/EnvProject";
-
 import NetworkConfig from "@/models/NetworkConfig";
 import { fixOrgName } from "@/module/StringBuilder";
 import Vue from "vue";
 import Component from "vue-class-component";
 import FabricSDK from "@/module/FabricSDK/FabricSDKController";
 //import FabricSDK from "@/module/FabricSDK/FabricSDKController";
-//import IdentityManger from "@/module/Minifabric/IdentityManger";
+import MinifabricController from "@/module/MinifabricController";
 const IdentityMangerProps = Vue.extend({});
 @Component({
   components: {},
@@ -108,6 +107,9 @@ export default class IdentityManger extends IdentityMangerProps {
     this.userDataList = newUserData;
 
     //  console.log( this.userDataList)
+  }
+  test(){
+    MinifabricController.fixWalletIdentitiesForWindow()
   }
   async enroll() {
    await FabricSDK.EnrollIdentity(

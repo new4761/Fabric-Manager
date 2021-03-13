@@ -1,9 +1,9 @@
 [
   {
     "id": 0,
-    "name": "test-1",
+    "name": "catest",
     "date_create": 1610698257055,
-    "directory": "D:\\test\\dasdadwqe",
+    "directory": "D:\\hyperledger_project\\testproject\\catest",
     "date_modify": 1610698257079
   },
   {
@@ -173,5 +173,12 @@
     "directory": "D:\\blockchain\\testtest",
     "id": 24,
     "date_modify": 1615553346946
+  },
+  {
+    "name": "anchor",
+    "date_create": 1615609912349,
+    "directory": "D:\\hyperledger_project\\testproject",
+    "id": 25,
+    "date_modify": 1615609912349
   }
 ]
