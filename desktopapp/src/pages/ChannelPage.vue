@@ -99,7 +99,7 @@
             <Button
               icon="pi pi-refresh"
               class="p-button-sm p-button-secondary"
-              label="update channel"
+              label="update config"
               @click="channelUpdate()"
             />
           </div>

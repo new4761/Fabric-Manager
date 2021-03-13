@@ -82,7 +82,7 @@
         </div>
         <div class="preview-wrapper  p-d-flex p-jc-center">
           <small class="text-error">
-            *you cannot modify Organizations once created</small
+            *you cannot modify, delete organizations and channel after its creation</small
           >
         </div>
         <template #footer>
@@ -154,7 +154,6 @@
             <OrgInputText @new-org="newOrgTolist"></OrgInputText>
           </div>
 
-
           <!-- <div class="p-d-flex p-jc-between p-ai-center">
             <div class="p-col">
               <small >start network after create project</small>
@@ -203,7 +202,6 @@
               </div>
             </div>
           </div>
-
         </div>
         <template #footer>
           <div class="p-grid">
@@ -281,6 +279,7 @@ export default class CreateNetButton extends Vue {
       );
       let command: string[] = [];
       if (this.channel) {
+        console.log(command);
         command.push("netup,create,join,channelquery", "-c", this.channelName);
       } else {
         command.push("netup");
