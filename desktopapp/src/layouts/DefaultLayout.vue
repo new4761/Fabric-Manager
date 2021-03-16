@@ -42,7 +42,7 @@
             </div>
             <div class="status-container p-text-center" :class="statusClass">
               {{ statusClass }}
-            </div>
+            </div>b  
           </div>
         </div>
       </transition>
@@ -179,10 +179,6 @@ export default class DefaultLayout extends Vue {
           icon: "pi pi-fw pi-clone",
           to: "/chaincode/console",
         }
-        //   label: "ExportApplication",
-        //   icon: "pi pi-fw pi-clone",
-        //   to: "/exportapplication",
-        // }
         ,{
           label: "IdentityManger",
           icon: "pi pi-fw pi-clone",

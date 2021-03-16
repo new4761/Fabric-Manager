@@ -1,9 +1,11 @@
 import { getProjectPath, netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
+const fs = require("fs");
 // import ProjectConfig from "@/models/ProjectConfig";
 // import store from "../store/modules/project";
 import FileManager from "./FileManager";
 import MinifabricController from "./MinifabricController";
+import { fixOrgName } from "./StringBuilder";
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const path = require('path');
 class ExportAppProcess {
@@ -20,18 +22,19 @@ class ExportAppProcess {
         await FileManager.createDir(targetPath, "profiles")
         await FileManager.createDir(targetPath, "wallets")
         await this.getChannelProfile(channel, profilePath)
-        await this.getExampleGetaway(channel, targetPath)
+
         //TODO: find better way
-        await MinifabricController.fixWalletIdentitiesForWindow()        
+        await MinifabricController.fixWalletIdentitiesForWindow()
         await this.getWallet(walletPath, peerList)
+        await this.getExampleGetaway(channel, targetPath, peerList)
         // console.log(targetPath)
 
     }
     //only work on peer right now
-    getWallet(targetPath: string, peerList: Array<object>) {
+    async getWallet(targetPath: string, peerList: Array<object>) {
         let walletPath = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets")
         //let peerList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
-        peerList.forEach(async (res: any) => {
+        await peerList.forEach(async (res: any) => {
             if (res.checked == true) {
                 let sourceDir = path.join(walletPath, res.name)
                 let newDir = path.join(targetPath, res.name)
@@ -39,13 +42,14 @@ class ExportAppProcess {
                 await FileManager.removeFile(path.join(newDir, "Admin.id"))
             }
         })
+        // console.log(targetPath)
     }
     getChannelProfile(channel: string, targetPath: string) {
         let gatewayFile = channel + "_connection_for_nodesdk" + ".yaml"
         let sourceDir = path.join(getProjectPath(), "vars", "profiles", gatewayFile)
         FileManager.copyFile(sourceDir, targetPath);
     }
-    getExampleGetaway(channel: string, targetPath: string) {
+    async getExampleGetaway(channel: string, targetPath: string, peerList: Array<object>) {
         let gatewayFile = "ExampleGateway.js"
         let packageFile = "package.json"
         let gatewayPath = path.join(targetPath, gatewayFile)
@@ -62,13 +66,35 @@ class ExportAppProcess {
             }
             let data = FileManager.readFile(gatewaySourcePath);
             data = data.replace(/mychannel/g, channel)
-            FileManager.createFileWithData(gatewayPath, data)
-           // console.log(packageFileSourcePath)
-            FileManager.copyFile(packageFileSourcePath,targetPath)
+            data =  await this.setFirstIdentity( data, peerList)
+            console.log(data)
+            await FileManager.createFileWithData(gatewayPath, data)
+            await FileManager.copyFile(packageFileSourcePath, targetPath)
+            //console.log("END getExampleGetaway")
         }
         catch (error) {
             console.error(`getExampleGetaway FAILED : ${error}`);
         }
+    }
+
+    setFirstIdentity(fileData: string, peerList: Array<object>) {
+        const orgList: any = peerList.filter((res: any) => res.checked == true);
+        console.log(orgList)
+        if (orgList.length!=0) { 
+            for (let index = 0; index < orgList.length; index++) {
+                let orgName = orgList[index].name
+                let userList =NetworkConfig.getValue(netWorkConfigPath.userPath + "." + fixOrgName(orgName))
+                if (userList!=undefined){
+                let userName =Object.keys(userList)[0]
+                fileData = fileData.replace(/wallet.get\('identity'\)/, "wallet.get('"+userName+"')")
+                fileData = fileData.replace(/\('.\/wallets\/Org'\)/, "('./wallets/"+orgName+"')")
+
+                break;
+                }
+            }
+           // console.log(fileData)
+        }
+        return fileData
     }
 }
 

@@ -57,9 +57,9 @@ export default new Router({
       props: true
     },
     {
-      path: "/exportapplication",
-      name: "ExportApplicationPage",
-      component: () => import("./pages/ExportApplicationPage.vue"),
+      path: "/exportConnectionProfile",
+      name: "ExportConnectionProfile",
+      component: () => import("./pages/ExportConnectionProfile.vue"),
       props: true
     },
     {

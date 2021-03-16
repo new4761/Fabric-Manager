@@ -119,10 +119,16 @@ class FileManager {
 
     }
     // call through to copy files
-    async copyFilesDir(sourceDir: any, destDir: string) {
-        await fse.copy(sourceDir, destDir)
-            .then(() => console.log('copyFilesDir success!'))
-            .catch((err: any) => console.error(err))
+     copyFilesDir(sourceDir: any, destDir: string) {
+        try {
+            fse.copySync(sourceDir, destDir)
+            console.log('copyFilesDir success!')
+          } catch (err) {
+            console.error(err)
+          }
+        //  fse.copySync(sourceDir, destDir)
+        //     .then(() => console.log('copyFilesDir success!'))
+        //     .catch((err: any) => console.error(err))
     }
     createDir(destDir: string, folderName: string) {
         let target = path.join(destDir, folderName)
