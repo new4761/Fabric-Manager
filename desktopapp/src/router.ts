@@ -56,6 +56,17 @@ export default new Router({
       component: () => import("./pages/ccPage/CCconsole.vue"),
       props: true
     },
+    {
+      path: "/exportapplication",
+      name: "ExportApplicationPage",
+      component: () => import("./pages/ExportApplicationPage.vue"),
+      props: true
+    },
+    {
+      path: "/identityManger",
+      name: "IdentityManger",
+      component: () => import("./pages/IdentityManger.vue"),
+    },
 
     {
       path: "/home",

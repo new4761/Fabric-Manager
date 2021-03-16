@@ -230,15 +230,14 @@ export default class ChannelPage extends Vue {
     this.displaylog = true;
     let args: string[] = ["create"];
     args.push("-c", this.channelName);
-    await OSProcess.run_new(args, this.osType);
-    await OSProcess.run_new(["join", "-c", this.channelName], this.osType);
+    await OSProcess.run_new(args);
+    await OSProcess.run_new(["join", "-c", this.channelName]);
     await OSProcess.run_new(
       ["channelquery", "-c", this.channelName],
-      this.osType
     );
 
     if (this.join) {
-      await OSProcess.run_new(["join", "-c", this.channelName], this.osType);
+      await OSProcess.run_new(["join", "-c", this.channelName]);
       this.join = false;
     }
     NetworkConfig.pushValueToArray("channel", {
@@ -267,7 +266,7 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["channelquery"];
     args.push("-c");
     args.push(this.channelSelected);
-    await OSProcess.run_new(args, this.osType);
+    await OSProcess.run_new(args);
   }
 
   async channelUpdate() {
@@ -275,7 +274,7 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["channelsign,channelupdate"];
     args.push("-c");
     args.push(this.channelSelected);
-    await OSProcess.run_new(args, this.osType);
+    await OSProcess.run_new(args);
     this.channelQuery();
   }
 }

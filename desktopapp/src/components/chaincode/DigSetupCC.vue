@@ -109,7 +109,6 @@ export default class DigSetupCC extends DigSetupCCProps {
   }
   async getDir() {
     this.path = await FileManager.getDirPath();
-    this.$emit("setPath", this.path);
   }
   created() {
     this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);

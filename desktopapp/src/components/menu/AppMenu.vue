@@ -6,13 +6,39 @@
       :root="true"
       @menuitem-click="onMenuItemClick"
     />
+    <ul>
+      <li @click="exportAppDisplay = true">
+        <i></i> <span>ExportApplication</span>
+      </li>
+    </ul>
+    <Dialog
+      modal
+      :dismissableMask="true"
+      :closable="false"
+      v-bind:visible="exportAppDisplay"
+    >
+      <template #header>
+        <span>ExportApplication</span>
+        <Button
+          @click="exportAppDisplay = false"
+          icon="pi pi-times"
+          class="p-button-text p-ml-auto p-button-rounded"
+        />
+      </template>
+      <ExportApplicationPage />
+    </Dialog>
   </div>
 </template>
 
 <script>
 import AppSubmenu from "./AppSubmenu";
+import ExportApplicationPage from "@/pages/ExportApplicationPage";
 
 export default {
+  data() {
+    return { exportAppDisplay: false };
+  },
+
   props: {
     model: Array,
   },
@@ -23,6 +49,7 @@ export default {
   },
   components: {
     AppSubmenu: AppSubmenu,
+    ExportApplicationPage,
   },
 };
 </script>

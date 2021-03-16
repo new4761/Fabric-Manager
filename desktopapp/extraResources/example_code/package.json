@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fabric-network": "^2.2.5",
+    "js-yaml": "^3.14.1"
+  }
+}

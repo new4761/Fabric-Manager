@@ -178,6 +178,15 @@ export default class DefaultLayout extends Vue {
           label: "ChainCode",
           icon: "pi pi-fw pi-clone",
           to: "/chaincode/console",
+        }
+        //   label: "ExportApplication",
+        //   icon: "pi pi-fw pi-clone",
+        //   to: "/exportapplication",
+        // }
+        ,{
+          label: "IdentityManger",
+          icon: "pi pi-fw pi-clone",
+          to: "/identityManger",
         },
       ],
     };

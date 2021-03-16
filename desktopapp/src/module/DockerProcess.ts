@@ -19,10 +19,6 @@ class DockerProcess {
       });
     });
   }
-
-  filterData(container: Object) {
-
-  }
   async findFirstContainerByName(name: string) {
     //console.log(name)
     name = "/" + name;
@@ -39,6 +35,7 @@ class DockerProcess {
     });
     return this.getContainerByID(container.Id)
   }
+
   //TODO:Override  for CC
   async findFirstContainerByRegex(name: string, flags: string) {
   //  console.log(name)
@@ -57,10 +54,9 @@ class DockerProcess {
     });
     return this.getContainerByID(container.Id)
   }
+
   getContainerByID(containerID: string) {
-
     let container = docker.getContainer(containerID)
-
     return container
 
   }
@@ -136,11 +132,6 @@ class DockerProcess {
   }
 
   killStreamPipe(target: any) {
-    // target.on('end', function () {
-    //   //console.log("from stream Pipe die bitch");
-    //    // console.log();
-    // });
-   // console.log("killStreamPipe")
     target.destroy();
   }
 
