@@ -35,12 +35,6 @@ class IdentityManger {
             enroll: true
         }
         //TODO: find better way to handle it
-        // let idFilePath = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets",mspId,enrollmentID+".id")
-        // let data =await  FileManager.readFile(idFilePath);
-        // let regexWindow =/\\r/g
-        // data = data.replace(regexWindow,'')
-        // console.log(data)
-        // await FileManager.createFileWithData(idFilePath, data)
         let configPath = netWorkConfigPath.userPath + "." + fixOrgName(mspId) + "." + enrollmentID  
         NetworkConfig.updateNetworkConfig(configPath, user);
 
