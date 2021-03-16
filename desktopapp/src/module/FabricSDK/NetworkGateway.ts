@@ -1,7 +1,7 @@
 import { netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 import MinifabricController from "../MinifabricController";
-import { getOrgName } from "../StringBuilder";
+import { getOrgData } from "../StringBuilder";
 const { Gateway } = require("electron").remote.require("fabric-network");
 
 
@@ -20,7 +20,7 @@ class NetworkGateway {
         let connectionProfile = await MinifabricController.getChannelProfile(channel[0].name);
         // console.log(connectionProfile.certificateAuthorities)
         try {
-            this.org = getOrgName(NetworkConfig.getValue(netWorkConfigPath.caPath)[0]);
+            this.org = getOrgData(NetworkConfig.getValue(netWorkConfigPath.caPath)[0]);
             let wallet = await MinifabricController.getWalletIdentities(this.org);
             const identity = await wallet.get('Admin');
             // console.log(identity)
@@ -48,7 +48,7 @@ class NetworkGateway {
         gateway.disconnect();
     }
     getWallet() {
-        return MinifabricController.getWalletIdentities(getOrgName(this.org));
+        return MinifabricController.getWalletIdentities(getOrgData(this.org));
 
     }
 

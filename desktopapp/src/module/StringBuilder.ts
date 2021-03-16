@@ -4,7 +4,7 @@ export function removeColorCode(input: string) {
     return input.replace(regex, '')
 }
 //cut type of node in Network config etc orderer,peer,ca
-export function getOrgName(input:string){
+export function getOrgData(input:string){
    // console.log(input)
     const regex = /[a-zA-Z0-9]*./;
     return input.replace(regex, '')

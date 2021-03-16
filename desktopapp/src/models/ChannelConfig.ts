@@ -1,11 +1,10 @@
-import fs from "fs";
-import store from "../store/modules/project";
+import logger from '../module/Logger';
+import store from '../store/modules/project';
+import ProjectConfig from './ProjectConfig';
 const yaml = require("js-yaml");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
-import ProjectConfig from "./ProjectConfig";
-import logger from "../module/Logger";
 export class ChannelConfig {
   file: any;
 
@@ -18,7 +17,6 @@ export class ChannelConfig {
       );
 
       this.file = editJsonFile(filePath);
-      // console.log(this.file);
     } catch (e) {
       logger.log("error", "error net-config path");
     }
@@ -33,15 +31,12 @@ export class ChannelConfig {
     }
     this.file.save();
     logger.log("info", "channel-config sucessfully updated ");
-    // console.log(this.file);
   }
 
   //add data to array object
   pushValueToArray(key: string, value: any) {
     let target = this.getValue(key);
-    // console.log(target)
     if (target == undefined) {
-      //console.log(key)
       value = [value];
       this.updateConfig(key, value);
     } else {
@@ -54,9 +49,6 @@ export class ChannelConfig {
 
   getValue(key: string) {
     let data = this.file.get(key);
-
-    // logger.log("info", "get " + key);
-    // console.log(data);
     return data;
   }
 }

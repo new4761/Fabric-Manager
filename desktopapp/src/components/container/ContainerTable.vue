@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- <div class="table-header p-grid ">
-      Network containers
-    </div> -->
     <div class="table-wrapper p-grid p-jc-center">
       <TabView>
         <TabPanel header="container">
@@ -182,17 +179,4 @@ th {
 .org-table .p-datatable-header {
   background-color: $SubBgColor !important;
 }
-
-/* p-datatable-header
-p-datatable-footer
-p-column-title
-p-sortable-column
-p-column-filter
-p-datatable-scrollable-header
-p-datatable-scrollable-body
-p-datatable-scrollable-footer
-p-datatable-responsive
-p-datatable-emptymessage
-p-rowgroup-header
-p-rowgroup-footer */
 </style>

@@ -44,9 +44,6 @@ export default class SplashConsolePage extends TerminalProps {
   created() {
     console.log(this.command);
     this.run();
-    // console.log(this.directory);
-    // const child = OSProcess.run(this.directory, args);
-    // this.$store.commit("setProcess", child);
   }
 
   async run() {

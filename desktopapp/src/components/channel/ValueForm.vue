@@ -1,7 +1,6 @@
 <template>
   <div class="p-grid">
     <div class="p-col-10">
-      <!-- <small>{{ jsonKey }}</small> -->
       <h4 class="p-text-bold text-primary">Value</h4>
       <div v-if="formData.values.BlockDataHashingStructure" class="p-my-3">
         <Panel header="BlockDataHashingStructure">
@@ -376,11 +375,7 @@ export default class ValueForm extends FormProps {
     try {
       ChannelConfig.setFile(this.channel);
       if (this.jsonKey != null) {
-        //@ts-ignore
-        // console.log(
-        //   ChannelConfig.getValue(this.jsonKey + '["' + this.groupKey + '"]')
-        // );
-        // console.log(ChannelConfig.getValue(this.jsonKey + "." + this.groupKey));
+        //TODO
       }
     } catch (e) {
       console.log(e);
@@ -388,7 +383,6 @@ export default class ValueForm extends FormProps {
   }
 
   save() {
-    // console.log("update!!!");
     ChannelConfig.updateConfig(this.jsonKey, this.formData);
   }
   update(key: string, value: any) {

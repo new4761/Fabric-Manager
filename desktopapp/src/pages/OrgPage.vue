@@ -74,7 +74,7 @@ export default class OrgPage extends Vue {
   }
 
   init() {
-    this.org = NetworkConfig.getOrgName();
+    this.org = NetworkConfig.getOrgData();
   }
 }
 </script>

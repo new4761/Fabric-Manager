@@ -65,17 +65,6 @@ export default class Terminal extends TerminalProps {
 
   highlight() {
     var temp = this.output;
-    // temp = temp.replace(new RegExp("INFO", "gi"), (match: string) => {
-    //   return '<span class="info">' + match + "</span>";
-    // });
-
-    // temp = temp.replace(new RegExp("WARN", "gi"), (match: string) => {
-    //   return '<span class="warn">' + match + "</span>";
-    // });
-
-    // temp = temp.replace(new RegExp("minifab", "gi"), (match: string) => {
-    //   return '<span class="term-info">' + match + "</span>";
-    // });
 
     temp = temp.replace(new RegExp("ok", "gi"), (match: string) => {
       return '<span class="term-success">' + match + "</span>";
@@ -101,13 +90,6 @@ export default class Terminal extends TerminalProps {
       }
     );
 
-    // var term = document.getElementById("term");
-    // if (term!.scrollHeight == null) {
-    //   // term!.scrollTop = term!.scrollHeight;
-    //   console.log("null");
-    // }
-    // term!.scrollTop = term!.scrollHeight;
-
     return temp;
   }
 
@@ -123,7 +105,6 @@ export default class Terminal extends TerminalProps {
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
 
-/* \x{1B} */
 .console {
   background-color: rgb(29, 29, 29);
   color: rgb(212, 212, 212);
@@ -132,9 +113,7 @@ export default class Terminal extends TerminalProps {
   white-space: break-spaces;
   padding: 1em;
   overflow: auto;
-  height: 300px;
-  // display: flex;
-  // flex-direction: column-reverse;
+  height: 50vh;
 }
 .p-progressbar {
   height: 10px;
