@@ -9,23 +9,6 @@
           class="p-my-3"
         >
           <Panel :header="policy">
-            <!-- <h5>{{ policy }}</h5> -->
-
-            <!-- ** type: {{ formData.policies[policy].policy.type }} -->
-            <!-- <div class="p-field p-grid">
-            <label for="policytype" class="p-col-fixed p-mr-5" style="width:100px"
-              >policytype</label
-            >
-            <div class="p-col">
-              <InputText
-                id="policytype"
-                type="text"
-                v-model="formData.policies[policy].policy.type"
-                @input="save()"
-              />
-            </div>
-          </div> -->
-
             <div
               v-if="formData.policies[policy].policy.value.identities != null"
             >
@@ -90,19 +73,6 @@
                   </div>
                 </div>
               </div>
-              <!-- **** n_out_of.n:
-          {{ formData.policies[policy].policy.value.rule.n_out_of.n }}
-          <br />
-
-          <div
-            v-for="(rule, index) in formData.policies[policy].policy.value.rule
-              .n_out_of.rules"
-            :key="'rule' + index"
-          >
-            ***** signed_by:
-            {{ rule.signed_by }}
-            <br />
-          </div> -->
             </div>
 
             <div
@@ -146,21 +116,11 @@
                   />
                 </div>
               </div>
-              <!-- **** rule: {{ formData.policies[policy].policy.value.rule }} <br />
-          **** rule: {{ formData.policies[policy].policy.value.sub_policy }} -->
               <br />
             </div>
           </Panel>
         </div>
-
-        <!-- <div v-if="formData.values.Capabilities != null">
-          [Capabilities] :
-        </div> -->
       </div>
-
-      <!-- <div class="config-view-panel">{{ data }}</div> -->
-      <!-- 
-      <Button @click="save" label="save" /> -->
       <hr class="faded" />
     </div>
   </div>

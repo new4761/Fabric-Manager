@@ -1,46 +1,50 @@
-import fs from "fs";
-import store from "../store/modules/project";
+import fs from 'fs';
+
+import logger from '../module/Logger';
+import store from '../store/modules/project';
+import ProjectConfig from './ProjectConfig';
+
 const yaml = require("js-yaml");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
-import ProjectConfig from "./ProjectConfig";
-import logger from "../module/Logger";
 export class NetworkConfig {
   file: any;
 
   constructor() {
     try {
+      //set filepath
       let filePath = path.join(
         ProjectConfig.getPath(store.state.id),
         "net-config.json"
       );
-
       this.file = editJsonFile(filePath);
-      // logger.log("warn","switching path: " + filePath)
+      //set store
       store.mutations.setPath(store.state.id);
-      // logger.log("info","net-config path: " + ProjectConfig.getPath(store.state.id));
     } catch (e) {
       logger.log("error", "error net-config path");
     }
   }
 
-  createConfig(project: any, quick?: boolean,channelName?:string) {
-    // this.constructor();
+  //create new network-config
+  //reading spec.yaml file and add it to the config
+  //if using default channel, it will also add it
+  createConfig(project: any, quick?: boolean, channelName?: string) {
+    //load yaml
     let data = yaml.load(
       fs.readFileSync(path.join(project.directory, "spec.yaml"), "utf8")
     );
-
+    //set first peer org to default org
     let defaultOrg = data.fabric.peers[0].replace(/^[^.]*./gm, "");
-
     data = {
       ...project,
       date_modify: +new Date(),
       ...data,
     };
-
+    //set config file directory
     let file = editJsonFile(path.join(project.directory, "net-config.json"));
     file.set("project_config", data);
+    //check if using default channel
     if (quick) {
       file.set("channel", [
         {
@@ -50,16 +54,18 @@ export class NetworkConfig {
         },
       ]);
     }
+    //save file
     file.save();
     logger.log(
       "info",
       "network-config sucessfully created at " + project.directory
     );
+    //return config object
     return defaultOrg;
   }
 
+  //update config using value
   updateNetworkConfig(key: string, value: any) {
-    // this.constructor();
     this.file.set(key, value);
     this.file.save();
     logger.log("info", "network-config sucessfully updated ");
@@ -68,9 +74,7 @@ export class NetworkConfig {
   //add data to array object
   pushValueToArray(key: string, value: any) {
     let target = this.getValue(key);
-    // console.log(target)
     if (target == undefined) {
-      //console.log(key)
       value = [value];
       this.updateNetworkConfig(key, value);
     } else {
@@ -80,6 +84,7 @@ export class NetworkConfig {
     this.file.set(key, value);
     this.file.save();
   }
+
   getValue(key: string) {
     // to do -> read file agin before get value ****
     let filePath = path.join(
@@ -93,6 +98,7 @@ export class NetworkConfig {
     logger.log("info", "get " + key);
     return data;
   }
+
   getUniqueOrgName(data: any) {
     data = this.getValue(data);
     const regex = new RegExp("[a-zA-Z]*[0-9]*.(.*)");
@@ -104,13 +110,16 @@ export class NetworkConfig {
     return result;
   }
 
-  getOrgName() {
+  getOrgData() {
+    //read file, refresh
     this.constructor();
+    //get all container name
     let org = this.file.data.project_config.fabric.orderers.concat(
       this.file.data.project_config.fabric.cas,
       this.file.data.project_config.fabric.peers
     );
 
+    //set object structure
     let newOrg: {
       [key: string]: {
         name: string;
@@ -123,6 +132,7 @@ export class NetworkConfig {
       };
     } = {};
 
+    //set data
     org.forEach((element: string) => {
       var isCa: boolean = false;
       var isOrderer: boolean = false;
@@ -164,7 +174,6 @@ export class NetworkConfig {
         orderer: isOrderer,
       };
     });
-    // logger.log("info","network-config get org name");
     return newOrg;
   }
 }

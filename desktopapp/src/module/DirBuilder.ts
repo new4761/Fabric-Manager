@@ -1,3 +1,4 @@
+import del from "del";
 import fs from "fs";
 // check is  isDevelopment?
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -41,16 +42,28 @@ export class DirBuilder {
     }
   }
 
-  deleteDir(path: string) {
-   fs.rmdir(path,{ recursive: true }, (err) => {
+  //delete project related files
+  //using fs, yhis may cause problem later
+  //TODO using specific modules instead
+  deleteDir(destination: string) {
+    let miniPath = path.join(destination, "minifab.cmd");
+    let configPath = path.join(destination, "net-config.json");
+    let specPath = path.join(destination, "spec.yaml");
+    let varsPath = path.join(destination, "vars");
+
+    console.log(miniPath);
+    try {
+      fs.unlinkSync(miniPath);
+      fs.unlinkSync(configPath);
+      fs.unlinkSync(specPath);
+      fs.unlinkSync(miniPath);
+    } catch (err) {
+      console.error(err);
+    }
+
+    fs.rmdir(varsPath, { recursive: true }, (err) => {
       if (err) throw err;
-      console.log(path + ' was deleted');
+      console.log(path + " was deleted");
     });
-    //  try {
-    //    del.sync([path + '/*/']);
-    //    logger.log("INFO", `${path} is deleted!`);
-    //  } catch (err) {
-    //    logger.log("ERROR", `Error while deleting ${path}`);
-    //  }
   }
 }

@@ -124,7 +124,7 @@ export default class Index extends Vue {
 
   created() {
     this.container = this.$store.state.docker.activeContainer;
-    this.org = NetworkConfig.getOrgName();
+    this.org = NetworkConfig.getOrgData();
     this.filter();
 
     this.unwatch = this.$store.watch(
@@ -146,7 +146,7 @@ export default class Index extends Vue {
         } else {
           this.statusClass = "online";
         }
-        this.org = NetworkConfig.getOrgName();
+        this.org = NetworkConfig.getOrgData();
         this.filter();
         this.componentKey += 1;
       },
@@ -170,7 +170,7 @@ export default class Index extends Vue {
     this.$store.commit("docker/setOrgContainer");
     this.$store.commit("docker/setActiveContainer");
     this.container = this.$store.state.docker.activeContainer;
-    this.org = NetworkConfig.getOrgName();
+    this.org = NetworkConfig.getOrgData();
     this.filter();
   }
 
@@ -204,7 +204,7 @@ export default class Index extends Vue {
 
 //   created() {
 //     this.container = this.$store.state.docker.activeContainer;
-//     this.org = NetworkConfig.getOrgName();
+//     this.org = NetworkConfig.getOrgData();
 //     this.filter();
 
 //     // @ts-ignore
@@ -218,7 +218,7 @@ export default class Index extends Vue {
 
 //   mounted() {
 //     this.container = this.$store.state.docker.activeContainer;
-//     this.org = NetworkConfig.getOrgName();
+//     this.org = NetworkConfig.getOrgData();
 //     this.filter();
 //   },
 

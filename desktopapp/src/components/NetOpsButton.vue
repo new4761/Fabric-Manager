@@ -78,12 +78,11 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import OSProcess from "../module/OSProcess";
-import NetworkConfig from "../models/NetworkConfig";
-import ProjectConfig from "../models/ProjectConfig";
 import ConsoleDialogue from "./ConsoleDialogue.vue";
-
+import NetworkConfig from "../models/NetworkConfig";
+import OSProcess from "../module/OSProcess";
 import { OsType } from "../models/EnvProject";
+import ProjectConfig from "../models/ProjectConfig";
 
 @Component({
   components: { ConsoleDialogue },
@@ -106,7 +105,7 @@ export default class NetOpsButton extends Vue {
   }
   init() {
     this.projectDir = ProjectConfig.getPath(this.$store.state.project.id);
-    this.org = Object.keys(NetworkConfig.getOrgName());
+    this.org = Object.keys(NetworkConfig.getOrgData());
   }
   async netup() {
     this.display = false;

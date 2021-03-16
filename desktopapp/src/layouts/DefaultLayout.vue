@@ -10,9 +10,6 @@
           <div class="p-d-flex p-jc-center p-mt-3  p-mb-5">
             <net-ops-button />
           </div>
-          <!-- <div class="p-d-row p-jc-center ">
-            <AppProfile />
-          </div> -->
 
           <AppMenu :model="menu" class="scroll-menu" />
 
@@ -167,7 +164,7 @@ export default class DefaultLayout extends Vue {
   data() {
     return {
       menu: [
-          { label: "Project", icon: "pi pi-list", to: "/" },
+        { label: "Project", icon: "pi pi-list", to: "/" },
         { label: "Network", icon: "pi pi-fw pi-sitemap", to: "/home" },
         {
           label: "Channel",
@@ -192,28 +189,24 @@ export default class DefaultLayout extends Vue {
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
-
 .status-container {
   color: #fff;
-  font-weight: bold;
   font-size: 20px;
+  font-weight: bold;
 }
-
 .status-text {
-  margin: 5px;
-  font-size: 15px;
   color: $textSecondaryColor;
+  font-size: 15px;
+  margin: 5px;
 }
 .status-text a {
-  margin-left: 5px;
-  font-weight: normal;
   color: $textprimaryColor;
+  font-weight: normal;
+  margin-left: 5px;
 }
-
 .status-detail {
   width: 100%;
 }
-
 .online {
   background-color: $primaryColor;
 }

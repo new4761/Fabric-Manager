@@ -1,8 +1,9 @@
+import { DirBuilder } from '../module/DirBuilder';
+import logger from '../module/Logger';
+
 const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
-import logger from "../module/Logger";
-import { DirBuilder } from "../module/DirBuilder";
 
 export class ProjectConfig {
   file: any;
@@ -24,6 +25,7 @@ export class ProjectConfig {
     }
   }
 
+  //add new project to config file
   addProject(project: any) {
     project.id = this.file.data.length++;
     project.date_modify = +new Date();
@@ -33,20 +35,19 @@ export class ProjectConfig {
     return project.id;
   }
 
+  //delete project from config file
   deleteProject(id: number) {
     let dirBuilder = new DirBuilder();
     let target = this.file.data.find((element: any) => element.id == id);
     let dir = target.directory;
-
     console.log(dir);
-
-    // dirBuilder.deleteDir(dir);
-
+    dirBuilder.deleteDir(dir);
     logger.log(
       "warn",
       "project-config: delete project id: " + target.id + "at: " + dir
     );
 
+    //remove project object form array
     if (target.id > -1) {
       this.file.data.splice(
         this.file.data.findIndex((element: any) => element.id == id),
@@ -56,26 +57,30 @@ export class ProjectConfig {
     this.file.save();
   }
 
+  //get current project path
   getPath(id: number) {
     return this.file.data[id].directory;
   }
 
+  //??
  getPathResolve(id: number) {
- //  console.log( path.resolve(this.file.data[id].directory))
     return  path.resolve(this.file.data[id].directory)
   }
 
+  //update modify date
   updateDate(id: number) {
     this.file.data[id].set("date_modify", +new Date());
     logger.log("info", "project-config: update date_modify");
   }
 
+  //update config using key
   updateProjectConfig(id: number, key: string, value: any) {
     this.file.data[id].set(key, value);
     this.file.save();
     logger.log("info", "project-config: update key-value");
   }
 
+  //get config value using key
   getValue(key: string) { }
 }
 export default new ProjectConfig();
