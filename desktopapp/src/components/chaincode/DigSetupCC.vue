@@ -22,7 +22,6 @@
         <small>Chaincode directory</small>
         <br />
         <div class="p-inputgroup">
-          
           <InputText disabled v-model="path" />
           <Button label="dir" @click="getDir()" />
         </div>
@@ -61,9 +60,17 @@
     <br />
     <br />
 
-    <Button label="deploy" @click="deployCC()"  class="p-button-outlined p-button-primary" />
+    <Button
+      label="deploy"
+      @click="deployCC()"
+      class="p-button-outlined p-button-primary"
+    />
 
-    <Button label="close" @click="close()"  class="p-button-outlined p-button-danger" />
+    <Button
+      label="close"
+      @click="close()"
+      class="p-button-outlined p-button-danger"
+    />
   </div>
 </template>
 
@@ -132,19 +139,32 @@ export default class DigSetupCC extends DigSetupCCProps {
   async deployCC() {
     this.$emit("openLog", true);
     //TODO: fix channel
-    let ccObj = await ChainCodeProcess.initNetworkConfig(
-      this.ccName,
-      this.selectedCCtype.data,
-      this.path,
-      this.selectedChannel.name
+    let _ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+   // console.log(_ccList);
+    let target = _ccList.find(
+      (item: any) =>
+        item.name == this.ccName &&
+        item.type == this.selectedCCtype.data &&
+        item.channel == this.selectedChannel.name
     );
-    await ChainCodeProcess.deployCCtoFabric(
-      ccObj,
-      this.useInit,
-      this.args,
-      this.selectedOrg
-    );
-    // this.hookCClist();
+   let ccObj;
+    if (target == undefined) {
+      ccObj = await ChainCodeProcess.initNetworkConfig(
+        this.ccName,
+        this.selectedCCtype.data,
+        this.path,
+        this.selectedChannel.name
+      );
+    }
+    else {
+      ccObj = target
+    }
+      await ChainCodeProcess.deployCCtoFabric(
+        ccObj,
+        this.useInit,
+        this.args,
+        this.selectedOrg
+      );
   }
 }
 </script>

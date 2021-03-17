@@ -58,9 +58,9 @@ class OSProcess {
             storeProcess.commit("setResult", result);
             return result;
           });
-        } catch {
+        } catch (error) {
           //TODO: write return con
-          console.log("child running");
+          console.log("OSProcess error:"+(error));
           return null;
         }
   }
@@ -86,10 +86,6 @@ class OSProcess {
               "OSProcess running Minifab Window: " + args + " at:" + projectPath
             );
             storeProcess.commit("setProcess", ls.childProcess);
-            //console.log(sourceDir)
-            // FileManager.createFile(sourceDir)
-            // let watcher = FileManager.WaitToReadFile(sourceDir)
-            //console.log(watcher)
             let payloadData: any[] = [];
             this.callbackCC(ls.childProcess, sourceDir, payloadData, version);
             let message: any[] = [];
@@ -99,9 +95,9 @@ class OSProcess {
               message.push(payloadData);
               return message;
             });
-          } catch {
+          } catch (error) {
             //TODO: write return con
-            console.log("child running");
+            console.log("OSProcess error:"+(error));
             return null;
           }
 
@@ -109,17 +105,17 @@ class OSProcess {
       callback(ls: any) {
         ls.stdout.on("data", (data: any) => {
           data = data.toString();
-          console.log(`${removeColorCode(data)}`);
+        //  console.log(`${removeColorCode(data)}`);
         });
 
         ls.stderr.on("data", (data: any) => {
           data = data.toString();
-          console.error(`stderr: ${data}`);
+         // console.error(`stderr: ${data}`);
         });
 
         ls.on("close", (code: any) => {
           code = code.toString();
-          console.log(`child process exited with code ${code}`);
+       //   console.log(`child process exited with code ${code}`);
         });
       }
       //TODO:Override  for CC
@@ -140,22 +136,16 @@ class OSProcess {
           streamPipe = await DockerProcess.callbackAttach(container, payloadData);
           //  console.log("watcher die bitch")
         });
-
-        // ls.stdout.on("data", async (data: any) => {      //  const regex = new RegExp(/changed: \[minifab]*/);
-        //   data = data.toString();
-        //   console.log(`${removeColorCode(data)}`);
-        // });
-
         ls.stderr.on("data", (data: any) => {
           data = data.toString();
-          console.error(`stderr: ${data}`);
+         // console.error(`stderr: ${data}`);
         });
         ls.on("close", (code: any) => {
           code = code.toString();
           DockerProcess.killStreamPipe(streamPipe);
 
           //console.log(streamPipe[1]);
-          console.log(`child process exited with code ${code}`);
+         // console.log(`child process exited with code ${code}`);
           return streamPipe[1];
         });
       }
