@@ -111,7 +111,7 @@ export class NetworkConfig {
       return result;
     }
     else {
-      console.log("no organizations in this data")
+      console.log("error from getUniqueOrgName()")
       return []
     }
   }

@@ -1,7 +1,4 @@
 import ChainCode  from "./ChainCode";
-
-
-
 class ArgsCCWrapper {
 
     argsCCWrapper(args: any) {

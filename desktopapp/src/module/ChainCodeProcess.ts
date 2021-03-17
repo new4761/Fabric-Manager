@@ -74,10 +74,18 @@ class ChainCodeProcess {
   }
 
   //  init command CC
-  installCC(ccObj: ChainCode, org: string): ChainCode {
+  installCC(ccObj: ChainCode, org: string, useInti: boolean,): ChainCode {
     let args: any = [];
     //  let projectPath = getProjectPath()
     args.push("install");
+    if( useInti==false){
+      args.push("-d")
+      args.push("false")
+    }
+    else{
+      args.push("-d")
+      args.push("true")
+    }
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.setupDir) {
       return OSProcess.run_new(args).then(() => {
@@ -160,7 +168,7 @@ class ChainCodeProcess {
     org: string
   ) {
     ccObj = await this.setupFolder(ccObj);
-    ccObj = await this.installCC(ccObj, org);
+    ccObj = await this.installCC(ccObj, org,useInti);
     ccObj = await this.approve(ccObj, org);
     ccObj = await this.commit(ccObj, org);
     if (useInti) {
@@ -175,7 +183,7 @@ class ChainCodeProcess {
     this.updateVersion(ccObj);
     // console.log(ccObj)
     ccObj = await this.upDateFolder(ccObj);
-    ccObj = await this.installCC(ccObj, org);
+    ccObj = await this.installCC(ccObj, org,ccObj.useInit);
     ccObj = await this.approve(ccObj, org);
     ccObj = await this.commit(ccObj, org);
     if (ccObj.useInit == true) {

@@ -44,11 +44,13 @@ class ExportAppProcess {
         })
         // console.log(targetPath)
     }
+
     getChannelProfile(channel: string, targetPath: string) {
         let gatewayFile = channel + "_connection_for_nodesdk" + ".yaml"
         let sourceDir = path.join(getProjectPath(), "vars", "profiles", gatewayFile)
         FileManager.copyFile(sourceDir, targetPath);
     }
+    
     async getExampleGetaway(channel: string, targetPath: string, peerList: Array<object>) {
         let gatewayFile = "ExampleGateway.js"
         let packageFile = "package.json"
@@ -66,8 +68,10 @@ class ExportAppProcess {
             }
             let data = FileManager.readFile(gatewaySourcePath);
             data = data.replace(/mychannel/g, channel)
-            data =  await this.setFirstIdentity( data, peerList)
-            console.log(data)
+            if(peerList.length!=0){
+            data = await this.setFirstIdentity( data, peerList)
+            }
+            //console.log(data)
             await FileManager.createFileWithData(gatewayPath, data)
             await FileManager.copyFile(packageFileSourcePath, targetPath)
             //console.log("END getExampleGetaway")
@@ -79,7 +83,7 @@ class ExportAppProcess {
 
     setFirstIdentity(fileData: string, peerList: Array<object>) {
         const orgList: any = peerList.filter((res: any) => res.checked == true);
-        console.log(orgList)
+        //console.log(orgList)
         if (orgList.length!=0) { 
             for (let index = 0; index < orgList.length; index++) {
                 let orgName = orgList[index].name

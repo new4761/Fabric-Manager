@@ -211,19 +211,21 @@ export default class CCconsole extends CCconsoleProps {
     this.hookCClist();
     try{
     let _channelList =NetworkConfig.getValue(netWorkConfigPath.channelPath);
-    // this.selectedChannel = this.channelList[0];
+    // 
     let _orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
     console.log(_channelList)
     console.log(_orgList)
-    if(_orgList!=undefined){
-    this.selectedOrg = this.orgList[0];
+    if(_orgList.length > 0){
     this.orgList = _orgList
+    this.selectedOrg = this.orgList[0];
     }
     if(_channelList!=undefined){
+  
     this.selectedCC = this.ccList[0];
     this.channelList = _channelList;
+    this.selectedChannel = this.channelList[0];
     }}
-    catch(e:any){console.log(e)}
+    catch(e){console.log(e)}
     
     //console.log(NetworkConfig.getValue(netWorkConfigPath.channelPath)+":dasdasdasdasd")
   }

@@ -138,9 +138,6 @@ export default class DigSetupCC extends DigSetupCCProps {
       this.path,
       this.selectedChannel.name
     );
-    // this.hookCClist();
-    //TODO: Get real project path
-
     await ChainCodeProcess.deployCCtoFabric(
       ccObj,
       this.useInit,
