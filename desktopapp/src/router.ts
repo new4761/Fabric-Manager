@@ -78,7 +78,7 @@ export default new Router({
       path: "/exportConnectionProfile",
       name: "ExportConnectionProfile",
       component: () => import("./pages/ExportConnectionProfile.vue"),
-      props: true
+      props: true,
       meta: {
         layout: "default-layout",
       },

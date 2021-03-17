@@ -213,8 +213,8 @@ export default class CCconsole extends CCconsoleProps {
     let _channelList =NetworkConfig.getValue(netWorkConfigPath.channelPath);
     // 
     let _orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
-    console.log(_channelList)
-    console.log(_orgList)
+    //console.log(_channelList)
+    //console.log(_orgList)
     if(_orgList.length > 0){
     this.orgList = _orgList
     this.selectedOrg = this.orgList[0];
