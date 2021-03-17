@@ -1,8 +1,8 @@
-import fs from 'fs';
+import fs from "fs";
 
-import logger from '../module/Logger';
-import store from '../store/modules/project';
-import ProjectConfig from './ProjectConfig';
+import logger from "../module/Logger";
+import store from "../store/modules/project";
+import ProjectConfig from "./ProjectConfig";
 
 const yaml = require("js-yaml");
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -95,7 +95,7 @@ export class NetworkConfig {
     this.file = editJsonFile(filePath);
     let data = this.file.get(key);
 
-    logger.log("info", "get " + key);
+    // logger.log("info", "get " + key);
     return data;
   }
 
@@ -114,10 +114,15 @@ export class NetworkConfig {
     //read file, refresh
     this.constructor();
     //get all container name
-    let org = this.file.data.project_config.fabric.orderers.concat(
-      this.file.data.project_config.fabric.cas,
-      this.file.data.project_config.fabric.peers
-    );
+    var org;
+    try {
+      org = this.file.data.project_config.fabric.orderers.concat(
+        this.file.data.project_config.fabric.cas,
+        this.file.data.project_config.fabric.peers
+      );
+    } catch (error) {
+      return {};
+    }
 
     //set object structure
     let newOrg: {

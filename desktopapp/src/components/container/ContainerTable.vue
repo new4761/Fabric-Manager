@@ -3,7 +3,17 @@
     <div class="table-wrapper p-grid p-jc-center">
       <TabView>
         <TabPanel header="container">
+          <div
+            v-if="container.length === 0"
+            class="container-table-blocked p-d-flex p-jc-center p-ai-center"
+          >
+            <div class="p-col p-text-center">
+              <i class="fas fa-unlink"></i> network is currently offline
+            </div>
+          </div>
+
           <DataTable
+            v-else
             :value="container"
             class="container-table"
             :autoLayout="true"
@@ -145,6 +155,11 @@ th {
   color: $primaryColor;
 }
 
+.container-table-blocked {
+  height: calc(94vh - 400px);
+  color: rgb(126, 126, 126);
+  font-size: 20px;
+}
 .container-info {
   width: 50vh;
 }
