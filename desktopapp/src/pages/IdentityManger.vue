@@ -28,7 +28,7 @@
         v-bind:visible="newUserDisplay"
       >
         <template #header>
-          <span>Add newuser</span>
+          <span>Add newuser to <b>{{selectedOrg}}</b></span>
           <Button
             @click="newUserDisplay = false"
             icon="pi pi-times"
@@ -48,6 +48,10 @@
               :toggleMask="true"
             />
           </div>
+           <div class="p-field p-col-12">
+             <label>Role Identified</label>
+          <Dropdown v-model="userRole" :options="roleType" />
+          </div>
           <Button
             label="Enroll"
             clase="p-ml-auto  p-button-sm p-button-primary"
@@ -66,25 +70,33 @@ import { fixOrgName } from "@/module/StringBuilder";
 import Vue from "vue";
 import Component from "vue-class-component";
 import FabricSDK from "@/module/FabricSDK/FabricSDKController";
-//import FabricSDK from "@/module/FabricSDK/FabricSDKController";
-import MinifabricController from "@/module/MinifabricController";
 const IdentityMangerProps = Vue.extend({});
 @Component({
   components: {},
 })
 export default class IdentityManger extends IdentityMangerProps {
-  userDataList: object = {};
+  userDataList: Array<object>  = [];
   orgUserList: object = {};
   orgList: Array<string> = [];
   newUserDisplay = false;
   userName: string = "";
   userPassword: string = "";
+  userRole:string = "";
   selectedOrg = "";
+  roleType =[
+    "client","peer","admin","orderer"
+  ]
   created() {
-    this.orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
-    this.orgUserList = NetworkConfig.getValue(netWorkConfigPath.userPath);
+    let _orgList =  NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
+    this.userRole = this.roleType[0]
+    if(_orgList.length > 0){
+    // let _orgUserList = NetworkConfig.getValue(netWorkConfigPath.userPath);
+   // console.log(_orgList)
+    this.orgList = _orgList
+    // this.orgUserList = _orgUserList
     this.selectedOrg = this.orgList[0];
     this.setUserDataList(this.orgList[0]);
+     }
     //this.selectedChannel = this.channelList[0];
   }
   setUserDataList(data: string) {
@@ -105,17 +117,15 @@ export default class IdentityManger extends IdentityMangerProps {
       );
     }
     this.userDataList = newUserData;
-
     //  console.log( this.userDataList)
-  }
-  test(){
-    MinifabricController.fixWalletIdentitiesForWindow()
   }
   async enroll() {
    await FabricSDK.EnrollIdentity(
       this.selectedOrg,
       this.userName,
-      this.userPassword
+      this.userPassword,
+      this.userRole
+
     );
     this.setUserDataList(this.selectedOrg)
   }
