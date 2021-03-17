@@ -82,7 +82,8 @@
         </div>
         <div class="preview-wrapper  p-d-flex p-jc-center">
           <small class="text-error">
-            *you cannot modify, delete organizations and channel after its creation</small
+            *you cannot modify, delete organizations and channel after its
+            creation</small
           >
         </div>
         <template #footer>
@@ -127,7 +128,13 @@
         <div class="create-net-wrapper">
           <div class="p-col-12">
             <div class="p-inputgroup">
-              <InputText placeholder="projectName" v-model="projectName" />
+              <InputText
+                placeholder="projectName"
+                v-model="projectName"
+                :class="{
+                  'p-invalid': invalid,
+                }"
+              />
             </div>
           </div>
           <div class="p-col-12">
@@ -135,7 +142,13 @@
               <span class="p-inputgroup-addon">
                 <i class="pi pi-folder-open"></i>
               </span>
-              <InputText placeholder="projectdirectory" v-model="projectDir" />
+              <InputText
+                placeholder="projectdirectory"
+                v-model="projectDir"
+                :class="{
+                  'p-invalid': invalid,
+                }"
+              />
               <Button
                 class="p-button-primary p-button-outlined"
                 label="SetProjectDirectory"
@@ -214,7 +227,7 @@
             <Button
               class="p-button-primary  p-ml-auto p-my-2"
               label="create"
-              @click="showConfirm()"
+              @click="checkInput()"
             />
           </div>
         </template>
@@ -254,6 +267,7 @@ export default class CreateNetButton extends Vue {
   projectName: string = "";
   defaultOrg: string = "";
   channelName: string = "mychannel";
+  invalid: boolean = false;
 
   newOrgTolist(name: string, isOrderer: boolean) {
     this.object.newOrg(name, isOrderer);
@@ -298,6 +312,28 @@ export default class CreateNetButton extends Vue {
     }
     this.display = false;
   }
+
+  checkInput() {
+    var falsy;
+    if (!this.projectName) {
+      this.invalid = true;
+      falsy = true;
+    }
+    if (!this.projectDir) {
+      this.invalid = true;
+      falsy = true;
+    }
+    if (!this.object.orgList.length) {
+      this.invalid = true;
+      falsy = true;
+    }
+    if (falsy) {
+      console.log("INVALID!!!");
+    } else {
+      this.showConfirm();
+    }
+  }
+
   closeDialogue() {
     this.object.resetData();
     this.display = false;
