@@ -14,28 +14,30 @@
           <AppMenu :model="menu" class="scroll-menu" />
 
           <div class="p-d-row p-mt-auto">
-            <div class="p-d-flex status-text">
-              active container
-              <a
-                >{{
-                  activeContainer +
-                    "/" +
-                    this.$store.getters["docker/getContainerCount"]
-                }}
-              </a>
-            </div>
-            <div class="p-d-flex status-text">
-              fabric version <a>{{ env.version }}</a>
-            </div>
+            <div v-if="!firstTime">
+              <div class="p-d-flex status-text">
+                active container
+                <a
+                  >{{
+                    activeContainer +
+                      "/" +
+                      this.$store.getters["docker/getContainerCount"]
+                  }}
+                </a>
+              </div>
+              <div class="p-d-flex status-text">
+                fabric version <a>{{ env.version }}</a>
+              </div>
 
-            <div class="p-d-flex status-text">
-              expose port <a>{{ env.port }}</a>
-            </div>
-            <div
-              class="p-d-flex status-text p-text-nowrap p-text-truncate"
-              style="width: 12rem"
-            >
-              current org <a>{{ env.org }}</a>
+              <div class="p-d-flex status-text">
+                expose port <a>{{ env.port }}</a>
+              </div>
+              <div
+                class="p-d-flex status-text p-text-nowrap p-text-truncate"
+                style="width: 12rem"
+              >
+                current org <a>{{ env.org }}</a>
+              </div>
             </div>
             <div class="status-container p-text-center" :class="statusClass">
               {{ statusClass }}
@@ -71,6 +73,7 @@ const path = require("path");
   components: { NetOpsButton, AppProfile, AppMenu },
 })
 export default class DefaultLayout extends Vue {
+  firstTime: boolean = false;
   envConfig: any;
   container: Array<Object> = [];
   activeContainer: number = 0;
@@ -128,12 +131,17 @@ export default class DefaultLayout extends Vue {
   }
 
   mounted() {
-    this.envConfig = fs.readFileSync(
-      path.join(this.$store.state.project.path + "/vars/envsettings"),
-      "utf8"
-    );
-    this.split = this.envConfig.split("declare");
-    this.getEnv();
+    try {
+      this.envConfig = fs.readFileSync(
+        path.join(this.$store.state.project.path + "/vars/envsettings"),
+        "utf8"
+      );
+      this.split = this.envConfig.split("declare");
+      this.getEnv();
+    } catch (error) {
+      this.firstTime = true;
+    }
+
     this.checkStatus();
   }
 

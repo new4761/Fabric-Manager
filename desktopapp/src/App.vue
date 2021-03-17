@@ -42,7 +42,7 @@ export default class App extends Vue {
   // @ts-ignore
   unwatch: Function;
   get layout() {
-    return this.$route.meta.layout || "default-layout";
+    return this.$route.meta.layout || "clean-layout";
   }
 
   created() {

@@ -49,12 +49,17 @@ const mutations = {
   },
 
   setOrgContainer() {
-    state.orgContainer = NetworkConfig.getValue(
-      "project_config.fabric.orderers"
-    ).concat(
-      NetworkConfig.getValue("project_config.fabric.cas"),
-      NetworkConfig.getValue("project_config.fabric.peers")
-    );
+    try {
+      state.orgContainer = NetworkConfig.getValue(
+        "project_config.fabric.orderers"
+      ).concat(
+        NetworkConfig.getValue("project_config.fabric.cas"),
+        NetworkConfig.getValue("project_config.fabric.peers")
+      );
+    } catch (error) {
+      //TODO error
+      return
+    }
   },
 
   async setActiveContainer() {

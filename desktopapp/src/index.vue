@@ -51,11 +51,7 @@
     </div>
 
     <div class="container-content">
-      <div v-if="false" class="container">
-        network is currently offline
-      </div>
       <ContainerTable
-        v-else
         v-bind:container="container"
         v-bind:org="org"
         :key="componentKey"
@@ -155,6 +151,7 @@ export default class Index extends Vue {
         deep: true,
       }
     );
+    console.log(this.container);
   }
 
   set() {
