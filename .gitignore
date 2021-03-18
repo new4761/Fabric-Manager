@@ -9,3 +9,5 @@ node_modules
 desktopapp/tests/net-config.json
 
 desktopapp/tests/projects.json
+
+desktopapp/tests/
