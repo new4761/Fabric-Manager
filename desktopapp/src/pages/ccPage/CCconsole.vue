@@ -207,6 +207,7 @@ export default class CCconsole extends CCconsoleProps {
     { label: "QUERY", value: "query" },
   ];
   showSection: boolean = false;
+  
   created() {
     this.hookCClist();
     try{

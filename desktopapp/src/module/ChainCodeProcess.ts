@@ -189,6 +189,7 @@ class ChainCodeProcess {
         ccObj = await this.initCC(ccObj, args, org);
       }
     }
+    
   }
   // user  command
   async updateCCtoFabric(ccObj: any, org: string) {
