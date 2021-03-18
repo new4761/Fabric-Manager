@@ -156,7 +156,7 @@
               />
             </div>
           </div>
-          <ScrollPanel style="height: 200px" class="p-p-1 p-my-3">
+          <ScrollPanel style="height: 200px; background-color:rgb(30,30,30)" class="p-p-1 p-my-3">
             <OrgEditButton
               v-bind:object="object.orgList"
               @remove-org="removeOrgFromList"

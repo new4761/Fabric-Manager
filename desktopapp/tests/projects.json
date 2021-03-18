@@ -3,7 +3,7 @@
     "id": 0,
     "name": "catest",
     "date_create": 1610698257055,
-    "directory": "D:\\hyperledger_project\\testproject\\catest",
+    "directory": "D:\\blockchain\\repo\\join",
     "date_modify": 1610698257079
   },
   {
@@ -152,5 +152,12 @@
     "directory": "",
     "id": 26,
     "date_modify": 1615860095892
+  },
+  {
+    "name": "test",
+    "date_create": 1615974292435,
+    "directory": "D:\\blockchain\\repo\\test dir",
+    "id": 22,
+    "date_modify": 1615974292435
   }
 ]

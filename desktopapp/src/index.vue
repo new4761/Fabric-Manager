@@ -58,10 +58,11 @@
       />
     </div>
 
-    <!-- <div class="container-footer">
-      <ExplorerButton />
+    <div class="container-footer">
+      <!-- <ExplorerButton /> -->
+      <ExportConfig />
     </div>
-    <Button @click="set()" label="test" /> -->
+    <!-- <Button @click="set()" label="test" /> -->
     <!-- <LogView /> -->
 
     <!-- <div class="p-d-flex p-my-1">
@@ -86,6 +87,7 @@ import Component from "vue-class-component";
 import ContainerTable from "./components/container/ContainerTable.vue";
 import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
+import ExportConfig from "./components/export/ExportConfig.vue";
 import NetworkConfig from "./models/NetworkConfig";
 
 /* eslint-disable no-unused-vars */
@@ -94,6 +96,7 @@ import NetworkConfig from "./models/NetworkConfig";
     ContainerTable,
     LogView,
     ExplorerButton,
+    ExportConfig,
   },
 })
 export default class Index extends Vue {

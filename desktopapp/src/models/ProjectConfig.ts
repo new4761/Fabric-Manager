@@ -1,4 +1,4 @@
-import { DirBuilder } from '../module/DirBuilder';
+import FileManager from '../module/FileManager';
 import logger from '../module/Logger';
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -37,11 +37,11 @@ export class ProjectConfig {
 
   //delete project from config file
   deleteProject(id: number) {
-    let dirBuilder = new DirBuilder();
+   
     let target = this.file.data.find((element: any) => element.id == id);
     let dir = target.directory;
     console.log(dir);
-    dirBuilder.deleteDir(dir);
+    FileManager.cleanUpDir(dir);
     logger.log(
       "warn",
       "project-config: delete project id: " + target.id + "at: " + dir

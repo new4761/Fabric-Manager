@@ -36,22 +36,6 @@
                   {{ convertTime(slotProps.data.date_modify) }}
                 </template>
               </Column>
-              <!-- <Column header="operation">
-                <template #body="slotProps">
-                  <div class="p-d-flex p-jc-center p-ai-center">
-                    <Button
-                      class="p-mx-1"
-                      label="join"
-                      @click="join(slotProps.data.name)"
-                    />
-                    <Button
-                      class="p-mx-1"
-                      label="edit"
-                      @click="editChannel(slotProps.data.name)"
-                    />
-                  </div>
-                </template>
-              </Column> -->
             </DataTable>
           </div>
           <div v-else class="channel-list-empty p-text-center">
@@ -62,47 +46,33 @@
     </transition>
 
     <hr />
-    <!-- <div class="p-grid p-ai-center p-jc-between channel-config-header">
-      <div class="p-col">Config</div>
-      <div class="p-col p-text-right">
+    <div class="p-d-flex p-jc-between p-ai-center config-view-header">
+      <div>
+        Channel:
         <Dropdown
           v-model="channelSelected"
           :options="channels"
           optionLabel="name"
           optionValue="name"
           v-on:change="updateForm()"
+          class="channel-dropdown"
         />
       </div>
-    </div> -->
-    <div class=" p-grid p-jc-center">
-      <div class="config-view-header">
-        <span>
-          Channel:
-          <Dropdown
-            v-model="channelSelected"
-            :options="channels"
-            optionLabel="name"
-            optionValue="name"
-            v-on:change="updateForm()"
-            class="channel-dropdown"
+      <div class="p-col-6 p-text-right">
+        <div class="p-d-flex p-jc-end">
+          <Button
+            icon="pi pi-download"
+            class="p-button-sm p-button-secondary p-mx-3"
+            label="query config"
+            @click="channelQuery()"
           />
-        </span>
-        <div class="p-col-6 p-text-right">
-          <div class="p-d-flex p-jc-end">
-            <Button
-              icon="pi pi-download"
-              class="p-button-sm p-button-secondary p-mx-3"
-              label="query config"
-              @click="channelQuery()"
-            />
 
-            <Button
-              icon="pi pi-refresh"
-              class="p-button-sm p-button-secondary"
-              label="update config"
-              @click="channelUpdate()"
-            />
-          </div>
+          <Button
+            icon="pi pi-refresh"
+            class="p-button-sm p-button-secondary"
+            label="update config"
+            @click="channelUpdate()"
+          />
         </div>
       </div>
     </div>
@@ -232,9 +202,7 @@ export default class ChannelPage extends Vue {
     args.push("-c", this.channelName);
     await OSProcess.run_new(args);
     await OSProcess.run_new(["join", "-c", this.channelName]);
-    await OSProcess.run_new(
-      ["channelquery", "-c", this.channelName],
-    );
+    await OSProcess.run_new(["channelquery", "-c", this.channelName]);
 
     if (this.join) {
       await OSProcess.run_new(["join", "-c", this.channelName]);
@@ -392,13 +360,11 @@ th {
   padding-bottom: 15px;
   padding-left: 30px;
   padding-right: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background-color: rgb(73, 73, 73);
   color: white;
   font-size: 15px;
   font-weight: bold;
+  overflow: visible;
 }
 
 .channel-config-header {
@@ -424,5 +390,10 @@ th {
   padding: 5px 10px 5px 10px;
   color: $primaryColor;
   font-weight: bold;
+  // z-index: 99 !important;
 }
+
+// .p-dropdown-item {
+//   z-index: 99 !important;
+// }
 </style>
