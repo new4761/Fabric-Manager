@@ -40,7 +40,7 @@
                   label="exec"
                   icon="fas fa-terminal"
                   class="p-button-outlined p-button-primary p-button-sm"
-                  @click="func(slotProps.data.Names[0])"
+                  @click="executeDocker(slotProps.data.Names[0])"
                 />
               </template>
             </Column>
@@ -102,7 +102,7 @@ export default class ContainerTable extends Vue {
     this.showSection = !this.showSection;
   }
 
-  func(container: string) {
+  executeDocker(container: string) {
     exec(' start cmd.exe @cmd /k "docker exec -it ' + container + ' /bin/sh"');
   }
 }

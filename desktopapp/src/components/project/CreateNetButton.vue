@@ -156,7 +156,10 @@
               />
             </div>
           </div>
-          <ScrollPanel style="height: 200px; background-color:rgb(30,30,30)" class="p-p-1 p-my-3">
+          <ScrollPanel
+            style="height: 200px; background-color:rgb(30,30,30)"
+            class="p-p-1 p-my-3"
+          >
             <OrgEditButton
               v-bind:object="object.orgList"
               @remove-org="removeOrgFromList"
@@ -166,21 +169,8 @@
           <div class="p-grid p-fluid p-field">
             <OrgInputText @new-org="newOrgTolist"></OrgInputText>
           </div>
-
-          <!-- <div class="p-d-flex p-jc-between p-ai-center">
-            <div class="p-col">
-              <small >start network after create project</small>
-            </div>
-            <div class="p-col">
-              <small>default network channel</small>
-            </div>
-          </div> -->
-
           <div class="p-d-flex p-mt-1 p-jc-between p-ai-center">
             <div class="p-col">
-              <!-- <div class="p-d-flex">
-                <small class="p-mx-5">start the network</small>
-              </div> -->
               <div class="p-d-flex">
                 <div class="p-field-checkbox p-mx-5">
                   <Checkbox id="quick" v-model="quick" :binary="true" />
@@ -189,16 +179,13 @@
               </div>
             </div>
             <div class="p-col">
-              <!-- <div class="p-d-flex">
-                <small class="p-mx-5">create default channel</small>
-              </div> -->
               <div class="p-d-flex">
                 <div class="p-field-checkbox p-mx-5">
                   <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
                       <Checkbox
                         id="binary"
-                        v-model="channel"
+                        v-model="createChannel"
                         :binary="true"
                         :disabled="!quick"
                       />
@@ -257,7 +244,7 @@ import Terminal from "../Terminal.vue";
 })
 export default class CreateNetButton extends Vue {
   quick: boolean = true;
-  channel: boolean = true;
+  createChannel: boolean = true;
   display: boolean = false;
   displayConfirm: boolean = false;
   warnCA: boolean = false;
@@ -288,11 +275,11 @@ export default class CreateNetButton extends Vue {
     if (this.quick) {
       let defaultOrg = NetworkConfig.createConfig(
         project,
-        this.channel,
+        this.createChannel,
         this.channelName
       );
       let command: string[] = [];
-      if (this.channel) {
+      if (this.createChannel) {
         console.log(command);
         command.push("netup,create,join,channelquery", "-c", this.channelName);
       } else {
