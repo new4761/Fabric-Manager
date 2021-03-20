@@ -9,7 +9,7 @@ const path = require('path');
 // const {RegisterRequest} = require("electron").remote.require("fabric-common");
 class IdentityManger {
 
-    async enrollment(enrollmentID: string, enrollmentPW: string, caConnection: any, mspId: string) {
+    async enrollment(enrollmentID: string, enrollmentPW: string,enrollmentRole:string, caConnection: any, mspId: string) {
         let wallet = await caConnection.getWallet()
         let caGateway = await caConnection.getGateway()
         const enrollment = await caGateway.enroll({ enrollmentID: enrollmentID, enrollmentSecret: enrollmentPW });
@@ -31,16 +31,10 @@ class IdentityManger {
             name: enrollmentID,
             pw: enrollmentPW,
             certificate: enrollment.certificate,
-            role: "client",
+            role: enrollmentRole,
             enroll: true
         }
         //TODO: find better way to handle it
-        // let idFilePath = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets",mspId,enrollmentID+".id")
-        // let data =await  FileManager.readFile(idFilePath);
-        // let regexWindow =/\\r/g
-        // data = data.replace(regexWindow,'')
-        // console.log(data)
-        // await FileManager.createFileWithData(idFilePath, data)
         let configPath = netWorkConfigPath.userPath + "." + fixOrgName(mspId) + "." + enrollmentID  
         NetworkConfig.updateNetworkConfig(configPath, user);
 
@@ -64,15 +58,15 @@ class IdentityManger {
 
     }
 
-    async registerAndEnrollUser(enrollmentID: string, enrollmentPW: string, caConnection: any, mspId: string) {
+    async registerAndEnrollUser(enrollmentID: string, enrollmentPW: string,enrollmentRole:string, caConnection: any, mspId: string) {
         let caGateway = await caConnection.getGateway()
         let req = {
             enrollmentID: enrollmentID,
             enrollmentSecret: enrollmentPW,
-            role: 'client', maxEnrollments: 500
+            role: enrollmentRole, maxEnrollments: 500
         }
         const register = await caGateway.register(req, await caConnection.getAdmin())
-        await this.enrollment(enrollmentID, enrollmentPW, caConnection, mspId)
+        await this.enrollment(enrollmentID, enrollmentPW,enrollmentRole, caConnection, mspId)
         // console.log(register)
     }
 

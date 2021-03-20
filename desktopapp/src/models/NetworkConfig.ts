@@ -102,12 +102,18 @@ export class NetworkConfig {
   getUniqueOrgName(data: any) {
     data = this.getValue(data);
     const regex = new RegExp("[a-zA-Z]*[0-9]*.(.*)");
-    const result = data
-      .map((res: any) => res.match(regex)[1])
-      .filter(
-        (value: any, index: number, self: any) => self.indexOf(value) === index
-      );
-    return result;
+    if (data != undefined) {
+      const result = data
+        .map((res: any) => res.match(regex)[1])
+        .filter(
+          (value: any, index: number, self: any) => self.indexOf(value) === index
+        );
+      return result;
+    }
+    else {
+      console.log("error from getUniqueOrgName()")
+      return []
+    }
   }
 
   getOrgData() {

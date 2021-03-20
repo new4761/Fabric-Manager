@@ -21,7 +21,7 @@ class ChainCodeProcess {
   // private variable for set CC command
 
 
-  constructor() {}
+  constructor() { }
   //get set function
 
   //end test
@@ -53,7 +53,6 @@ class ChainCodeProcess {
     // console.log(srcPath + ":from ccSetup")
     let projectPath = getProjectPath();
     try {
-      //to do use project path for replace testPath
       ccDir = path.join(
         projectPath,
         "vars",
@@ -61,10 +60,7 @@ class ChainCodeProcess {
         ccObj.name,
         ccObj.type
       );
-      //this.dirBuilder.createDir_path(ccDir);
-      // FileManager.removeDir(ccDir)
       FileManager.copyFilesDir(ccObj.directory, ccDir);
-      ///FileManager.copyFilesDir(ccObj.directory, ccDir)
       ccObj.state = CCstate.setupDir;
       this.updateNetworkConfig(ccObj);
     } catch {
@@ -74,20 +70,28 @@ class ChainCodeProcess {
   }
 
   //  init command CC
-  installCC(ccObj: ChainCode, org: string): ChainCode {
+  installCC(ccObj: ChainCode, org: string, useInti: boolean,): ChainCode {
     let args: any = [];
     //  let projectPath = getProjectPath()
     args.push("install");
+    if (useInti == false) {
+      args.push("-d")
+      args.push("false")
+    }
+    else {
+      args.push("-d")
+      args.push("true")
+    }
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
-    if (ccObj.state == CCstate.setupDir) {
-      return OSProcess.run_new(args).then(() => {
+    return OSProcess.run_new(args).then((res: any) => {
+      if (res.status == true) {
         ccObj.state = CCstate.installCC;
         return ccObj;
-      });
-    } else {
-      //console.log("pls setup dir")
-      return ccObj;
-    }
+      } {
+        return ccObj
+      }
+    });
+
   }
 
   approve(ccObj: ChainCode, org: string): ChainCode {
@@ -95,15 +99,17 @@ class ChainCodeProcess {
     args.push("approve");
     //   let projectPath = getProjectPath()
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
-    if (ccObj.state == CCstate.installCC)
-      return OSProcess.run_new(args).then(() => {
+
+    return OSProcess.run_new(args).then((res: any) => {
+      if (res.status == true) {
         ccObj.state = CCstate.approveCC;
         this.updateNetworkConfig(ccObj);
         return ccObj;
-      });
-    else {
-      return ccObj;
-    }
+      }
+      else {
+        return ccObj
+      }
+    });
   }
   commit(ccObj: ChainCode, org: string): ChainCode {
     //   let projectPath = getProjectPath()
@@ -111,10 +117,15 @@ class ChainCodeProcess {
     args.push("commit");
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org);
     if (ccObj.state == CCstate.approveCC) {
-      return OSProcess.run_new(args).then(() => {
-        ccObj.state = CCstate.commitCC;
-        this.updateNetworkConfig(ccObj);
-        return ccObj;
+      return OSProcess.run_new(args).then((res: any) => {
+        if (res.status == true) {
+          ccObj.state = CCstate.commitCC;
+          this.updateNetworkConfig(ccObj);
+          return ccObj;
+        }
+        else {
+          return ccObj
+        }
       });
     } else {
       //console.log("pls approve cc")
@@ -159,15 +170,26 @@ class ChainCodeProcess {
     args: any,
     org: string
   ) {
+    if (ccObj.state == CCstate.unSetupCC) {
     ccObj = await this.setupFolder(ccObj);
-    ccObj = await this.installCC(ccObj, org);
-    ccObj = await this.approve(ccObj, org);
-    ccObj = await this.commit(ccObj, org);
-    if (useInti) {
-      ccObj.useInit = true;
-      this.setInitArgs(ccObj, args);
-      ccObj = await this.initCC(ccObj, args, org);
+  }
+    if (ccObj.state == CCstate.setupDir) {
+      ccObj = await this.installCC(ccObj, org, useInti);
     }
+    if (ccObj.state == CCstate.installCC) {
+      ccObj = await this.approve(ccObj, org);
+    }
+    if (ccObj.state == CCstate.approveCC) {
+      ccObj = await this.commit(ccObj, org);
+    }
+    if (ccObj.state == CCstate.commitCC) {
+      if (useInti) {
+        ccObj.useInit = true;
+        this.setInitArgs(ccObj, args);
+        ccObj = await this.initCC(ccObj, args, org);
+      }
+    }
+    
   }
   // user  command
   async updateCCtoFabric(ccObj: any, org: string) {
@@ -175,7 +197,7 @@ class ChainCodeProcess {
     this.updateVersion(ccObj);
     // console.log(ccObj)
     ccObj = await this.upDateFolder(ccObj);
-    ccObj = await this.installCC(ccObj, org);
+    ccObj = await this.installCC(ccObj, org, ccObj.useInit);
     ccObj = await this.approve(ccObj, org);
     ccObj = await this.commit(ccObj, org);
     if (ccObj.useInit == true) {
@@ -191,6 +213,7 @@ class ChainCodeProcess {
   updateVersion(ccObj: ChainCode) {
     ccObj.version += 1.0;
   }
+
   initCC(ccObj: ChainCode, ccArgs: any, org: string): ChainCode {
     let args: any = [];
     args = ["initialize"].concat(
@@ -199,21 +222,21 @@ class ChainCodeProcess {
       )
     );
     //console.log(args)
-    if (ccObj.state == CCstate.commitCC) {
-      return OSProcess.run_new(args).then(() => {
+    return OSProcess.run_new(args).then((res: any) => {
+      if (res.status == true) {
         ccObj.state = CCstate.initCC;
         this.updateNetworkConfig(ccObj);
         return ccObj;
-      });
-    } else {
-      //console.log("pls approve cc")
-      return ccObj;
-    }
+      }
+      else {
+        return ccObj
+      }
+    });
+
   }
 
   callCC_command(ccObj: any, ccArgs: any, command: string, org: string) {
     let args: any = [];
-
     args.push(command);
     args = ArgsWrapper.basicCCWrapper(args, ccObj, org).concat(
       ArgsWrapper.argsCCWrapper(ccArgs)
@@ -239,6 +262,7 @@ class ChainCodeProcess {
       ""
     );
   }
+
   getEndorserNameByRegex(data: string) {
     let regex = /tlsRootCertFiles.\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/[a-z1-9.A-Z]*\/([a-z1-9.A-Z]*)\//;
     let name = data.match(regex);
@@ -275,22 +299,6 @@ class ChainCodeProcess {
       }
     });
     return newData;
-  }
-
-  discover(ccObj: ChainCode) {
-    // // get channel endorser
-    // if (ccObj.state == CCstate.readyCC) {
-    //     let args = [];
-    //     args.push("discover")
-    //     args = ArgsWrapper.basicCCWrapper(args, ccObj,org)
-    //     //TODO:get env version from cc setting
-    //     if (isDevelopment) {
-    //         OSProcess.run_new(this.testPath, args, this.osType);
-    //     }
-    //     else {
-    //         OSProcess.run_new(this.testPath, args, this.osType);
-    //     }
-    // }
   }
 }
 

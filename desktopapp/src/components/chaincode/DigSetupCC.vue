@@ -16,29 +16,38 @@
         <Dropdown v-model="selectedOrg" :options="orgList" />
       </div>
     </div>
-    <br />
     <div class="p-grid p-fluid">
       <div class="p-col-12">
         <small>Chaincode directory</small>
         <br />
         <div class="p-inputgroup">
-          
-          <InputText disabled v-model="path" />
+          <InputText disabled v-model="path" :class="{'p-invalid':inputGroup.inputDir}" />
           <Button label="dir" @click="getDir()" />
         </div>
+        <small  v-if="inputGroup.inputDir" class="p-error">Need selected directly.</small>
         <br />
-
-        <small>Chaincode and language</small>
+        <small>Chaincode Name and language type</small>
         <br />
         <div class="p-inputgroup">
-          <InputText placeholder="CCName" v-model="ccName" />
+          <InputText
+            placeholder="CCName"
+            v-model="ccName"
+            :class="{'p-invalid':ccExists||inputGroup.inputName}"
+            @change="checkCCisExit(),checkInputgroup()"
+          />
           <Dropdown
             v-model="selectedCCtype"
             :options="ccType"
+            :class="{'p-invalid':ccExists||inputGroup.inputName}"
             optionLabel="text"
             placeholder="Select CC type"
+            @change="checkCCisExit(),checkInputgroup()"
           />
         </div>
+       <small v-if="inputGroup.inputName" class="p-error">Required Chaincode name </small>
+        <small v-if="ccExists" class="p-error"
+          >ChainCode name with selected type already exists in this channel
+        </small>
         <br />
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
@@ -60,10 +69,16 @@
     </div>
     <br />
     <br />
-
-    <Button label="deploy" @click="deployCC()"  class="p-button-outlined p-button-primary" />
-
-    <Button label="close" @click="close()"  class="p-button-outlined p-button-danger" />
+    <Button
+      label="deploy"
+      @click="deployCC(),checkInputgroup()"
+      class="p-button-outlined p-button-primary"
+    />
+    <Button
+      label="close"
+      @click="close()"
+      class="p-button-outlined p-button-danger"
+    />
   </div>
 </template>
 
@@ -72,7 +87,6 @@ import Vue from "vue";
 
 import Component from "vue-class-component";
 import { CCtype, netWorkConfigPath } from "../../models/EnvProject";
-
 import FileManager from "../../module/FileManager";
 import InputArg from "../../components/chaincode/InputArg.vue";
 import ChainCodeProcess from "@/module/ChainCodeProcess";
@@ -94,10 +108,15 @@ export default class DigSetupCC extends DigSetupCCProps {
   args: any = [];
   showDig: boolean = false;
   selectedOrg = "";
+  ccExists = false;
   selectedChannel = { name: "" };
   selectedCCtype: { data: CCtype; text: string } = {
     data: CCtype.go,
     text: "go",
+  };
+  inputGroup = {
+    inputDir: false,
+    inputName: false,
   };
   ccType = [
     { data: CCtype.go, text: "go" },
@@ -120,7 +139,36 @@ export default class DigSetupCC extends DigSetupCCProps {
     //handle vue array change
     this.$set(this.args, index, value);
   }
+  checkCCisExit() {
+    let _ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+    let target = _ccList.find(
+      (item: any) =>
+        item.name == this.ccName &&
+        item.type == this.selectedCCtype.data &&
+        item.channel == this.selectedChannel.name
+    );
+    if (target == undefined) {
+     // console.log(target);
+      this.ccExists = false;
+    } else {
+      this.ccExists = true;
+    }
+  }
+  checkInputgroup(){
+    if(this.ccName==""){
+      this.inputGroup.inputName=true
+    }
+    else{
+      this.inputGroup.inputName=false
+    }
+    if(this.path==""){
+      this.inputGroup.inputDir=true
+    }
+    else{
+      this.inputGroup.inputDir=false
+    }
 
+  }
   deleteArg(index: number) {
     if (index == 0) {
       this.args = [];
@@ -130,24 +178,35 @@ export default class DigSetupCC extends DigSetupCCProps {
     }
   }
   async deployCC() {
+    if(!(this.ccName==""||this.path=="")){
     this.$emit("openLog", true);
     //TODO: fix channel
-    let ccObj = await ChainCodeProcess.initNetworkConfig(
-      this.ccName,
-      this.selectedCCtype.data,
-      this.path,
-      this.selectedChannel.name
+    let _ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+    // console.log(_ccList);
+    let target = _ccList.find(
+      (item: any) =>
+        item.name == this.ccName &&
+        item.type == this.selectedCCtype.data &&
+        item.channel == this.selectedChannel.name
     );
-    // this.hookCClist();
-    //TODO: Get real project path
-
+    let ccObj;
+    if (target == undefined) {
+      ccObj = await ChainCodeProcess.initNetworkConfig(
+        this.ccName,
+        this.selectedCCtype.data,
+        this.path,
+        this.selectedChannel.name
+      );
+    } else {
+      ccObj = target;
+    }
     await ChainCodeProcess.deployCCtoFabric(
       ccObj,
       this.useInit,
       this.args,
       this.selectedOrg
     );
-    // this.hookCClist();
+  }
   }
 }
 </script>

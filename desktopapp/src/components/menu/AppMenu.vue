@@ -8,7 +8,7 @@
     />
     <ul>
       <li @click="exportAppDisplay = true">
-        <i></i> <span>ExportApplication</span>
+        <i></i> <span>ExportConnectionProfile</span>
       </li>
     </ul>
     <Dialog
@@ -18,21 +18,21 @@
       v-bind:visible="exportAppDisplay"
     >
       <template #header>
-        <span>ExportApplication</span>
+        <span>ExportConnectionProfile</span>
         <Button
           @click="exportAppDisplay = false"
           icon="pi pi-times"
           class="p-button-text p-ml-auto p-button-rounded"
         />
       </template>
-      <ExportApplicationPage />
+      <ExportConnectionProfile />
     </Dialog>
   </div>
 </template>
 
 <script>
 import AppSubmenu from "./AppSubmenu";
-import ExportApplicationPage from "@/pages/ExportApplicationPage";
+import ExportConnectionProfile from "@/pages/ExportConnectionProfile";
 
 export default {
   data() {
@@ -49,7 +49,7 @@ export default {
   },
   components: {
     AppSubmenu: AppSubmenu,
-    ExportApplicationPage,
+    ExportConnectionProfile,
   },
 };
 </script>

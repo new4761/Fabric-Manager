@@ -207,13 +207,27 @@ export default class CCconsole extends CCconsoleProps {
     { label: "QUERY", value: "query" },
   ];
   showSection: boolean = false;
+  
   created() {
     this.hookCClist();
-    this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
-    // this.selectedChannel = this.channelList[0];
-    this.orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
+    try{
+    let _channelList =NetworkConfig.getValue(netWorkConfigPath.channelPath);
+    // 
+    let _orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
+    //console.log(_channelList)
+    //console.log(_orgList)
+    if(_orgList.length > 0){
+    this.orgList = _orgList
     this.selectedOrg = this.orgList[0];
+    }
+    if(_channelList!=undefined){
+  
     this.selectedCC = this.ccList[0];
+    this.channelList = _channelList;
+    this.selectedChannel = this.channelList[0];
+    }}
+    catch(e){console.log(e)}
+    
     //console.log(NetworkConfig.getValue(netWorkConfigPath.channelPath)+":dasdasdasdasd")
   }
   mounted() {
@@ -222,8 +236,11 @@ export default class CCconsole extends CCconsoleProps {
   //TODO hook on selected channel
   hookCClist() {
     // console.log("hook")
-    this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+    let _ccList =NetworkConfig.getValue(netWorkConfigPath.ccPath)
+    if(_ccList!=undefined){
+    this.ccList = _ccList;
     // to do fix date to read
+    }
   }
 
   setSelectedCC(e: any) {

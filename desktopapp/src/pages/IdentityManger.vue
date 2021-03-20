@@ -13,7 +13,7 @@
           <Button
             label="Add newuser"
             clase="p-ml-auto  p-button-sm p-button-primary"
-            @click="newUserDisplay = true"
+            @click="newUserDisplay = true,resetInput()"
           />
         </div>
       </div>
@@ -28,7 +28,9 @@
         v-bind:visible="newUserDisplay"
       >
         <template #header>
-          <span>Add newuser</span>
+          <span
+            >Add newuser to <b>{{ selectedOrg }}</b></span
+          >
           <Button
             @click="newUserDisplay = false"
             icon="pi pi-times"
@@ -38,20 +40,36 @@
         <div class="p-fluid p-grid p-formgrid">
           <div class="p-field p-col-12">
             <label>Username</label>
-            <InputText placeholder="Username" v-model="userName"/>
+            <InputText
+              :class="{ 'p-invalid': inputGroup.inputName }"
+              placeholder="Username"
+              v-model="userName"
+            />
+            <small v-if="inputGroup.inputName" class="p-error"
+              >Required input UserName
+            </small>
           </div>
           <div class="p-field p-col-12">
             <label>Password</label>
             <Password
+              :class="{ 'p-invalid': inputGroup.inputPW }"
               v-model="userPassword"
               placeholder="Password"
               :toggleMask="true"
             />
+            <small v-if="inputGroup.inputPW" class="p-error"
+              >Required input Password
+            </small>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label>Role Identified</label>
+            <Dropdown v-model="userRole" :options="roleType" />
           </div>
           <Button
             label="Enroll"
             clase="p-ml-auto  p-button-sm p-button-primary"
-            @click="enroll()"
+            @click="enroll(), checkInputGroup()"
           />
         </div>
       </Dialog>
@@ -66,25 +84,35 @@ import { fixOrgName } from "@/module/StringBuilder";
 import Vue from "vue";
 import Component from "vue-class-component";
 import FabricSDK from "@/module/FabricSDK/FabricSDKController";
-//import FabricSDK from "@/module/FabricSDK/FabricSDKController";
-import MinifabricController from "@/module/MinifabricController";
 const IdentityMangerProps = Vue.extend({});
 @Component({
   components: {},
 })
 export default class IdentityManger extends IdentityMangerProps {
-  userDataList: object = {};
+  userDataList: Array<object> = [];
   orgUserList: object = {};
   orgList: Array<string> = [];
   newUserDisplay = false;
   userName: string = "";
   userPassword: string = "";
+  userRole: string = "";
   selectedOrg = "";
+  inputGroup = {
+    inputName: false,
+    inputPW: false,
+  };
+  roleType = ["client", "peer", "admin", "orderer"];
   created() {
-    this.orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
-    this.orgUserList = NetworkConfig.getValue(netWorkConfigPath.userPath);
-    this.selectedOrg = this.orgList[0];
-    this.setUserDataList(this.orgList[0]);
+    let _orgList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
+    this.userRole = this.roleType[0];
+    if (_orgList.length > 0) {
+      // let _orgUserList = NetworkConfig.getValue(netWorkConfigPath.userPath);
+      // console.log(_orgList)
+      this.orgList = _orgList;
+      // this.orgUserList = _orgUserList
+      this.selectedOrg = this.orgList[0];
+      this.setUserDataList(this.orgList[0]);
+    }
     //this.selectedChannel = this.channelList[0];
   }
   setUserDataList(data: string) {
@@ -105,21 +133,37 @@ export default class IdentityManger extends IdentityMangerProps {
       );
     }
     this.userDataList = newUserData;
-
     //  console.log( this.userDataList)
   }
-  test(){
-    MinifabricController.fixWalletIdentitiesForWindow()
+  resetInput() {
+    this.userName = "";
+    this.userPassword = "";
+    this.inputGroup.inputName = false;
+    this.inputGroup.inputPW = false;
+  }
+  checkInputGroup() {
+    if (this.userName == "") {
+      this.inputGroup.inputName = true;
+    } else {
+      this.inputGroup.inputName = false;
+    }
+    if (this.userPassword == "") {
+      this.inputGroup.inputPW = true;
+    } else {
+      this.inputGroup.inputPW = false;
+    }
   }
   async enroll() {
-   await FabricSDK.EnrollIdentity(
-      this.selectedOrg,
-      this.userName,
-      this.userPassword
-    );
-    this.setUserDataList(this.selectedOrg)
+    if (!(this.userName == "" || this.userPassword == "")) {
+      await FabricSDK.EnrollIdentity(
+        this.selectedOrg,
+        this.userName,
+        this.userPassword,
+        this.userRole
+      );
+      this.setUserDataList(this.selectedOrg);
+    }
   }
-
 }
 </script>
 

@@ -26,6 +26,7 @@ package-lock.json
 /dist_electron
 #Test output
 tests/*
-!tests/*.bat
-!tests/*.yaml
+#!tests/*.bat
+#!tests/*.yaml
 !*.md
+
