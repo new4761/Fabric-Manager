@@ -54,55 +54,6 @@
             </div>
           </template>
 
-          <!-- <template #grid="slotProps">
-        <div class="p-col-2 p-md-4">
-          <div @click="confirmOpen(slotProps.data.id)">
-            <Card class="p-m-3 project-card">
-              <template #title>
-                <div class="project-card-title">
-                  {{ slotProps.data.name }}
-                </div>
-              </template>
-              <template #content>
-                <div class="project-card-content">
-                  <div class="project-card-text">
-                    date created
-                    <Chip class="p-m-1">
-                      {{ toDate(slotProps.data.date_create) }}
-                    </Chip>
-                  </div>
-
-                  <div class="project-card-text">
-                    last updated
-                    <Chip class="p-m-1">
-                      {{ toDate(slotProps.data.date_modify) }}
-                    </Chip>
-                  </div>
-                </div>
-              </template>
-
-              <template #footer>
-                <div class="project-card-footer">
-                  <div class="p-d-flex  p-ai-center p-jc-end">
-                    <Button
-                      icon="pi pi-trash"
-                      class="p-button-sm p-button-danger p-mx-3"
-                      @click.stop="confirmDelete(slotProps.data.id)"
-                    />
-
-                    <Button
-                      icon="fas fa-info"
-                      class="p-button-sm p-button-info"
-                      @click.stop="openInfo(slotProps.data.id)"
-                    />
-                  </div>
-                </div>
-              </template>
-            </Card>
-          </div>
-        </div>
-      </template> -->
-
           <template #list="slotProps">
             <div class="p-col-12 p-my-1">
               <div class="list-item" @click="confirmOpen(slotProps.data.id)">
