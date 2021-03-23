@@ -11,13 +11,8 @@
         :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
         modal
       >
-        <!-- <pre>
-      {{ object }}
-      </pre -->
-
         <div class="preview-wrapper  p-d-flex p-jc-center">
           <div class="p-col-12">
-            <!-- <div class="p-d-flex">quick start {{ quick }}</div> -->
             <div class="p-d-flex p-mb-2">
               Default channel:
               <a class="text-primary p-mx-1">{{ channelName }}</a>
@@ -126,39 +121,64 @@
         class="create-net"
       >
         <div class="create-net-wrapper">
-          <div class="p-col-12">
-            <div class="p-inputgroup">
+          <div class="p-fluid">
+            <div class="p-field p-mt-1">
               <InputText
                 placeholder="projectName"
                 v-model="projectName"
                 :class="{
-                  'p-invalid': invalid,
+                  'p-invalid': invalidProjectName,
                 }"
+                id="project-name"
+                type="username"
+                aria-describedby="project-name-help"
               />
+
+              <small
+                id="project-name-help"
+                class="p-error"
+                v-if="invalidProjectName"
+                >{{ errorProjectName }}</small
+              >
+            </div>
+            <div class="p-field">
+              <div
+                class="p-inputgroup"
+                id="project-directory"
+                aria-describedby="project-directory-help"
+              >
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-folder-open"></i>
+                </span>
+                <InputText
+                  placeholder="projectdirectory"
+                  v-model="projectDir"
+                  :class="{
+                    'p-invalid': invalidProjectDir,
+                  }"
+                />
+                <Button
+                  class="p-button-primary p-button-outlined"
+                  label="SetProjectDirectory"
+                  @click="getFilepath()"
+                />
+              </div>
+
+              <small
+                id="project-directory-help"
+                class="p-error"
+                v-if="invalidProjectDir"
+                >{{ errorProjectDir }}</small
+              >
             </div>
           </div>
-          <div class="p-col-12">
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon">
-                <i class="pi pi-folder-open"></i>
-              </span>
-              <InputText
-                placeholder="projectdirectory"
-                v-model="projectDir"
-                :class="{
-                  'p-invalid': invalid,
-                }"
-              />
-              <Button
-                class="p-button-primary p-button-outlined"
-                label="SetProjectDirectory"
-                @click="getFilepath()"
-              />
-            </div>
-          </div>
+
           <ScrollPanel
             style="height: 200px; background-color:rgb(30,30,30)"
-            class="p-p-1 p-my-3"
+            class="p-p-1 p-mt-3"
+            :class="{
+              'empty-org': invalidProjectOrg,
+            }"
           >
             <OrgEditButton
               v-bind:object="object.orgList"
@@ -166,40 +186,51 @@
               @ca-warn="caWarn"
             ></OrgEditButton>
           </ScrollPanel>
-          <div class="p-grid p-fluid p-field">
+
+          <small class="p-error" v-if="invalidProjectOrg">{{
+            errorProjectOrg
+          }}</small>
+
+          <div class="p-grid p-fluid p-field p-mt-3">
             <OrgInputText @new-org="newOrgTolist"></OrgInputText>
           </div>
-          <div class="p-d-flex p-mt-1 p-jc-between p-ai-center">
-            <div class="p-col">
-              <div class="p-d-flex">
-                <div class="p-field-checkbox p-mx-5">
-                  <Checkbox id="quick" v-model="quick" :binary="true" />
-                  <label for="quick">start network</label>
-                </div>
+          <div class="p-fluid p-formgrid p-grid p-my-0">
+            <div class="p-field-checkbox p-col p-my-0">
+              <Checkbox id="quick" v-model="quick" :binary="true" />
+              <label for="quick">start network</label>
+            </div>
+
+            <div class="p-field p-col p-my-0">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <Checkbox
+                    id="binary"
+                    v-model="createChannel"
+                    :binary="true"
+                    :disabled="!quick"
+                  />
+                </span>
+
+                <InputText
+                  v-model="channelName"
+                  placeholder="channel name"
+                  :disabled="!quick"
+                  class="p-inputtext-sm"
+                  :class="{
+                    'p-invalid': invalidChannel,
+                  }"
+                />
               </div>
             </div>
-            <div class="p-col">
-              <div class="p-d-flex">
-                <div class="p-field-checkbox p-mx-5">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <Checkbox
-                        id="binary"
-                        v-model="createChannel"
-                        :binary="true"
-                        :disabled="!quick"
-                      />
-                    </span>
+          </div>
 
-                    <InputText
-                      v-model="channelName"
-                      placeholder="channel name"
-                      :disabled="!quick"
-                      class="p-inputtext-sm"
-                    />
-                  </div>
-                </div>
-              </div>
+          <div class="p-fluid p-formgrid p-grid p-my-0">
+            <div class="p-field p-col p-my-0"></div>
+
+            <div class="p-field p-col p-my-0">
+              <small class="p-error" v-if="invalidChannel">{{
+                errorChannel
+              }}</small>
             </div>
           </div>
         </div>
@@ -254,7 +285,16 @@ export default class CreateNetButton extends Vue {
   projectName: string = "";
   defaultOrg: string = "";
   channelName: string = "mychannel";
-  invalid: boolean = false;
+
+  invalidProjectName: boolean = false;
+  invalidProjectDir: boolean = false;
+  invalidProjectOrg: boolean = false;
+  invalidChannel: boolean = false;
+
+  errorProjectName: string = "";
+  errorProjectDir: string = "";
+  errorProjectOrg: string = "";
+  errorChannel: string = "";
 
   newOrgTolist(name: string, isOrderer: boolean) {
     this.object.newOrg(name, isOrderer);
@@ -301,19 +341,50 @@ export default class CreateNetButton extends Vue {
   }
 
   checkInput() {
+    this.invalidProjectName = false;
+    this.invalidProjectDir = false;
+    this.invalidProjectOrg = false;
+    this.invalidChannel = false;
+
     var falsy;
     if (!this.projectName) {
-      this.invalid = true;
+      this.errorProjectName = "project name cannot be empty.";
+      this.invalidProjectName = true;
+      falsy = true;
+    }
+    //eslint-disable-next-line
+    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.projectName)) {
+      this.errorProjectName = "project name cannot contain special character.";
+      this.invalidProjectName = true;
       falsy = true;
     }
     if (!this.projectDir) {
-      this.invalid = true;
+      this.errorProjectDir = "directory cannot be empty.";
+      this.invalidProjectDir = true;
       falsy = true;
     }
     if (!this.object.orgList.length) {
-      this.invalid = true;
+      this.errorProjectOrg = "organization cannot be empty.";
+      this.invalidProjectOrg = true;
       falsy = true;
     }
+
+    if (!this.channelName && this.createChannel) {
+      this.errorChannel = "channel name cannot be empty.";
+      this.invalidChannel = true;
+      falsy = true;
+    }
+    /* eslint-disable no-useless-escape */
+    if (
+      /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.channelName) &&
+      this.createChannel
+    ) {
+      this.errorChannel =
+        "channel name cannot  cannot contain special character.";
+      this.invalidChannel = true;
+      falsy = true;
+    }
+
     if (falsy) {
       console.log("INVALID!!!");
     } else {
@@ -384,5 +455,10 @@ export default class CreateNetButton extends Vue {
 
 .preview-wrapper {
   width: auto;
+}
+
+.empty-org {
+  border: 1px solid red;
+  border-radius: 2px;
 }
 </style>

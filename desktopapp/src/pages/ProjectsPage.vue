@@ -45,7 +45,7 @@
                   @click="switchSort()"
                 />
               </div>
-              <div class="p-col-6" style="text-align: right">
+              <div class="p-col-6">
                 <div class="p-d-flex  p-ai-center p-jc-end">
                   <CreateNetButton class="p-mx-1" />
                   <!-- <DataViewLayoutOptions v-model="layout" /> -->

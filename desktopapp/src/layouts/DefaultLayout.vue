@@ -41,7 +41,7 @@
             </div>
             <div class="status-container p-text-center" :class="statusClass">
               {{ statusClass }}
-            </div>b  
+            </div>
           </div>
         </div>
       </transition>
