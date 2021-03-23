@@ -69,6 +69,7 @@ export class NetworkConfig {
     this.file.set(key, value);
     this.file.save();
     logger.log("info", "network-config sucessfully updated ");
+    ProjectConfig.updateDate(store.state.id);
   }
 
   //add data to array object
@@ -83,6 +84,7 @@ export class NetworkConfig {
 
     this.file.set(key, value);
     this.file.save();
+    ProjectConfig.updateDate(store.state.id);
   }
 
   getValue(key: string) {
@@ -106,13 +108,13 @@ export class NetworkConfig {
       const result = data
         .map((res: any) => res.match(regex)[1])
         .filter(
-          (value: any, index: number, self: any) => self.indexOf(value) === index
+          (value: any, index: number, self: any) =>
+            self.indexOf(value) === index
         );
       return result;
-    }
-    else {
-      console.log("error from getUniqueOrgName()")
-      return []
+    } else {
+      console.log("error from getUniqueOrgName()");
+      return [];
     }
   }
 

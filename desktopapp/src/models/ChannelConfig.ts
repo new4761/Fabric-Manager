@@ -1,12 +1,14 @@
-import logger from '../module/Logger';
-import store from '../store/modules/project';
-import ProjectConfig from './ProjectConfig';
+import logger from "../module/Logger";
+import store from "../store/modules/project";
+import ProjectConfig from "./ProjectConfig";
+import NetworkConfig from "./NetworkConfig";
 const yaml = require("js-yaml");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
 const path = require("path");
 export class ChannelConfig {
   file: any;
+  channelName: string = "";
 
   setFile(channelName: string) {
     try {
@@ -17,6 +19,7 @@ export class ChannelConfig {
       );
 
       this.file = editJsonFile(filePath);
+      this.channelName = channelName;
     } catch (e) {
       logger.log("error", "error net-config path");
     }
@@ -26,11 +29,21 @@ export class ChannelConfig {
     if (isNaN(Number(value))) {
       this.file.set(key, value);
     } else {
-      console.log("is number!!")
+      console.log("is number!!");
       this.file.set(key, Number(value));
     }
     this.file.save();
     logger.log("info", "channel-config sucessfully updated ");
+    this.updateDateModify();
+  }
+
+  updateDateModify() {
+    const state = NetworkConfig.getValue("channel");
+    const newState = state.map((obj: any) =>
+      obj.name === this.channelName ? { ...obj, date_modify: +new Date() } : obj
+    );
+    NetworkConfig.updateNetworkConfig("channel", newState);
+    // console.log(newState);
   }
 
   //add data to array object

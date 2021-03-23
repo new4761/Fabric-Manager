@@ -1,5 +1,5 @@
-import FileManager from '../module/FileManager';
-import logger from '../module/Logger';
+import FileManager from "../module/FileManager";
+import logger from "../module/Logger";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 const editJsonFile = require("edit-json-file");
@@ -37,7 +37,6 @@ export class ProjectConfig {
 
   //delete project from config file
   deleteProject(id: number) {
-   
     let target = this.file.data.find((element: any) => element.id == id);
     let dir = target.directory;
     console.log(dir);
@@ -59,28 +58,35 @@ export class ProjectConfig {
 
   //get current project path
   getPath(id: number) {
-    return this.file.data[id].directory;
+    let target = this.file.data.find((element: any) => element.id == id);
+    return target.directory;
   }
 
   //??
- getPathResolve(id: number) {
-    return  path.resolve(this.file.data[id].directory)
+  getPathResolve(id: number) {
+    let target = this.file.data.find((element: any) => element.id == id);
+    return target.directory;
   }
 
   //update modify date
   updateDate(id: number) {
-    this.file.data[id].set("date_modify", +new Date());
+    let target = this.file.data.find((element: any) => element.id == id);
+    let index = this.file.data.indexOf(target);
+    console.log(this.file.data[index]);
+    this.file.data[index].date_modify = +new Date();
+    this.file.save();
     logger.log("info", "project-config: update date_modify");
   }
 
   //update config using key
-  updateProjectConfig(id: number, key: string, value: any) {
-    this.file.data[id].set(key, value);
-    this.file.save();
-    logger.log("info", "project-config: update key-value");
-  }
+  // updateProjectConfig(id: number, key: string, value: any) {
+  //   this.updateDate(id);
+  //   this.file.data[id].set(key, value);
+  //   this.file.save();
+  //   logger.log("info", "project-config: update key-value");
+  // }
 
   //get config value using key
-  getValue(key: string) { }
+  getValue(key: string) {}
 }
 export default new ProjectConfig();

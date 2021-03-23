@@ -163,7 +163,7 @@ export default class ProjectPage extends Vue {
 
   confirmOpen(id: number) {
     this.$confirm.require({
-      message: "open project : " + data[id].name + " ?",
+      message: " ?",
       header: "Confirmation",
       icon: "pi pi-info-circle",
       accept: () => {
