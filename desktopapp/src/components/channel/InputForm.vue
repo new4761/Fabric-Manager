@@ -3,93 +3,13 @@
     <div class="p-col-10">
       <h4 class="p-text-bold text-primary">Policy</h4>
       <div v-if="formData.policies != null">
-        <div
-          v-for="(policy, index) in Object.keys(formData.policies)"
-          :key="index"
-          class="p-my-3"
-        >
+        <div v-for="(policy, index) in Object.keys(formData.policies)" :key="index" class="p-my-3">
           <Panel :header="policy">
-            <div
-              v-if="formData.policies[policy].policy.value.identities != null"
-            >
-              <div
-                v-for="(identifier, index) in formData.policies[policy].policy
-                  .value.identities"
-                :key="'indentity' + index"
-              >
-                <small>{{ identifier.principal.role }}</small>
-                <hr />
-                <div class="p-field p-grid">
-                  <label
-                    for="msp_identifier"
-                    class="p-col-fixed p-mr-5"
-                    style="width:100px"
-                    >msp_identifier</label
-                  >
-                  <div class="p-ml-5">
-                    <InputText
-                      id="msp_identifier"
-                      type="text"
-                      v-model="identifier.principal.msp_identifier"
-                      @input="save()"
-                      class="p-inputtext-sm"
-                    />
-                  </div>
-                </div>
-
-                <div class="p-field p-grid">
-                  <label
-                    for="role"
-                    class="p-col-fixed p-mr-5"
-                    style="width:100px"
-                    >role</label
-                  >
-                  <div class="p-ml-5">
-                    <InputText
-                      id="role"
-                      type="text"
-                      v-model="identifier.principal.role"
-                      @input="save()"
-                      class="p-inputtext-sm"
-                    />
-                  </div>
-                </div>
-
-                <div class="p-field p-grid">
-                  <label
-                    for="principal_classification"
-                    class="p-col-fixed p-mr-5"
-                    style="width:100px"
-                    >principal_classification</label
-                  >
-                  <div class="p-ml-5">
-                    <InputText
-                      id="principal_classification"
-                      type="text"
-                      v-model="identifier.principal_classification"
-                      @input="save()"
-                      class="p-inputtext-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              v-if="
-                typeof formData.policies[policy].policy.value.rule === 'string'
-              "
-            >
+            <div v-if="typeof formData.policies[policy].policy.value.rule === 'string'">
               <div class="p-field p-grid">
-                <label for="rule" class="p-col-fixed p-mr-5" style="width:100px"
-                  >rule</label
-                >
+                <label for="rule" class="p-col-fixed p-mr-5" style="width:100px">rule</label>
                 <div class="p-ml-5">
-                  <select
-                    id="rule"
-                    v-model="formData.policies[policy].policy.value.rule"
-                    v-on:change="save()"
-                  >
+                  <select id="rule" v-model="formData.policies[policy].policy.value.rule" v-on:change="checkValid()">
                     <option value="MAJORITY">MAJORITY</option>
                     <option value="ANY">ANY</option>
                     {{
@@ -100,20 +20,9 @@
               </div>
 
               <div class="p-field p-grid">
-                <label
-                  for="sub_policy"
-                  class="p-col-fixed p-mr-5"
-                  style="width:100px"
-                  >sub_policy</label
-                >
+                <label for="sub_policy" class="p-col-fixed p-mr-5" style="width:100px">sub_policy</label>
                 <div class="p-ml-5">
-                  <InputText
-                    id="sub_policy"
-                    type="text"
-                    v-model="formData.policies[policy].policy.value.sub_policy"
-                    @input="save()"
-                    class="p-inputtext-sm"
-                  />
+                  <InputText id="sub_policy" type="text" v-model="formData.policies[policy].policy.value.sub_policy" @input="checkValid(policy)" class="p-inputtext-sm" :class="{ 'p-invalid': invalidSubPolicy.has(policy) && invalidSubPolicy.get(policy) }" />
                 </div>
               </div>
               <br />
@@ -144,6 +53,8 @@ const FormProps = Vue.extend({
 export default class OrgColumn extends FormProps {
   formData: any = {};
   rules: object = [{ name: "MAJORITY" }, { name: "ANY" }];
+  invalidSubPolicy = new Map();
+
   mounted() {
     this.formData = this.data;
     try {
@@ -160,16 +71,37 @@ export default class OrgColumn extends FormProps {
     }
   }
 
-  save() {
-    console.log("save");
-    if (this.groupKey) {
-      ChannelConfig.updateConfig(
-        this.jsonKey,
-        this.formData + "." + this.groupKey
-      );
-    } else {
-      ChannelConfig.updateConfig(this.jsonKey, this.formData);
+  checkValid(policy: any) {
+    console.log(this.formData.policies[policy].policy.value.sub_policy);
+
+    var falsy;
+    if (!this.formData.policies[policy].policy.value.sub_policy) {
+      console.log("cannot be empty.");
+      this.invalidSubPolicy.set(policy, true);
+      falsy = true;
     }
+    //eslint-disable-next-line
+    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.formData.policies[policy].policy.value.sub_policy)) {
+      console.log("cannot be special.");
+      this.invalidSubPolicy.set(policy, true);
+      falsy = true;
+    }
+
+    if (falsy) {
+      console.log(falsy);
+    } else {
+      this.invalidSubPolicy.set(policy, false);
+    }
+
+    // console.log("save");
+    // if (this.groupKey) {
+    //   ChannelConfig.updateConfig(
+    //     this.jsonKey,
+    //     this.formData + "." + this.groupKey
+    //   );
+    // } else {
+    //   ChannelConfig.updateConfig(this.jsonKey, this.formData);
+    // }
   }
 
   update(key: string, value: any) {

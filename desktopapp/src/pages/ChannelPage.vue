@@ -76,7 +76,11 @@
         </div>
       </div>
     </div>
-    <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
+    <div class="p-d-flex">
+      <div class="p-col-12">
+        <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
+      </div>
+    </div>
 
     <div>
       <ConsoleDialogue
