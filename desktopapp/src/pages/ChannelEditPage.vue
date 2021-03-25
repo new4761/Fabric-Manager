@@ -1,19 +1,5 @@
 <template>
-  <div class="dirty-fix">
-    <!-- <div class="p-d-flex p-jc-between">
-      <div class="p-col">
-        <Button
-          label="back"
-          icon="fas fa-angle-double-left"
-          class="p-button"
-          @click="back()"
-        />
-      </div>
-      <div class="p-col  p-text-right">
-        <h1>Channel {{ channelName }}</h1>
-      </div>
-    </div> -->
-
+  <div class="dirty-fix" v-if="channel">
     <div class=" p-grid p-jc-center">
       <div class="channel-edit-config-view">
         <div class="edit-config-panel">

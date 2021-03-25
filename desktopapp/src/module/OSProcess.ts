@@ -22,15 +22,6 @@ class OSProcess {
     this.emitter = new events();
   }
 
-  run(path: string, args: string[]) {
-    const child = spawn("minifab.cmd", args, {
-      shell: true,
-      cwd: path,
-      // stdio: "inherit",
-    });
-    logger.log("info", "OSProcess running: " + args + " at:" + path);
-    return child;
-  }
   run_new(args: string[], projectPath?: string): any {
     let ls: any;
     //set to minifab output

@@ -96,7 +96,6 @@ export default class NetOpsButton extends Vue {
   orgSelected: string = "";
   org: any[] = [];
   port: string = "";
-  command: string = "";
 
   private osType: OsType = OsType.WINDOW;
 
@@ -108,10 +107,10 @@ export default class NetOpsButton extends Vue {
     this.org = Object.keys(NetworkConfig.getOrgData());
   }
   async netup() {
+    this.$store.commit("setProcessContext", "netup");
     this.display = false;
     this.displaylog = true;
     this.up = true;
-    this.command = "";
     let args: string[] = ["restart"];
     if (this.orgSelected != "") {
       args.push("-o");
@@ -123,22 +122,20 @@ export default class NetOpsButton extends Vue {
     }
     await OSProcess.run_new(args);
     this.$store.commit("docker/setActiveContainer");
-    this.command = args.join();
+    this.$store.commit("setProcessStatus", true);
   }
   async netdown() {
+    this.$store.commit("setProcessContext", "netdown");
     this.displaylog = true;
     this.up = false;
-    this.command = "";
     await OSProcess.run_new(["down"]);
     this.$store.commit("docker/setActiveContainer");
-    this.command = "down";
+    this.$store.commit("setProcessStatus", true);
   }
-  cleanup() {
+  async cleanup() {
     this.displaylog = true;
-    this.command = "";
-    const child = OSProcess.run(this.projectDir, ["cleanup"]);
-    this.$store.commit("setProcess", child);
-    this.command = "cleanup";
+    await OSProcess.run_new(["cleanup"]);
+    this.$store.commit("docker/setActiveContainer");
   }
 
   data() {

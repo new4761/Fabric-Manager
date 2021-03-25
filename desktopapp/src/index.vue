@@ -67,7 +67,7 @@
     <!-- <div class="container-footer">
       <ExplorerButton />
     </div>
-    <Button @click="set()" label="test" /> -->
+    <!-- <Button @click="set()" label="test" /> -->
     <!-- <LogView /> -->
 
     <!-- <div class="p-d-flex p-my-1">
@@ -108,6 +108,7 @@ import Component from "vue-class-component";
 import ContainerTable from "./components/container/ContainerTable.vue";
 import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
+import ExportConfig from "./components/export/ExportConfig.vue";
 import NetworkConfig from "./models/NetworkConfig";
 import ExportConnectionProfile from "@/pages/ExportConnectionProfile.vue";
 /* eslint-disable no-unused-vars */

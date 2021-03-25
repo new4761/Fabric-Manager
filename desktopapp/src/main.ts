@@ -200,6 +200,6 @@ router.beforeEach((to, from, next) => {
 });
 router.afterEach(() => {
   app.loading = false;
-  // setTimeout(() => (app.loading = false), 1500); // timeout for demo purposes
+  // setTimeout(() => (app.loading = false), 15000); // timeout for demo purposes
 });
 store.commit("setPlatform", process.platform);

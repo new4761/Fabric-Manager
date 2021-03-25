@@ -29,12 +29,12 @@
         <span v-if="!slotProps.data.isOrderer">
           <Button
             icon="pi pi-plus"
-            class="p-button-rounded p-button-success p-mr-2"
+            class="p-button p-button-sm p-button-success p-mr-2"
             @click="addPeer(slotProps.data)"
           />
           <Button
             icon="pi pi-minus"
-            class="p-button-rounded p-button-warning"
+            class="p-button p-button-sm p-button-warning"
             @click="removePeer(slotProps.data)"
           />
         </span>
@@ -45,7 +45,7 @@
         <Button
           v-if="slotProps.data.name != 'example.com'"
           icon="pi pi-trash"
-          class="p-button-rounded p-button-danger p-mr-auto"
+          class="p-button-outlined p-button-sm p-button-danger p-mr-auto"
           @click="removeOrg(slotProps.data)"
         />
       </template>

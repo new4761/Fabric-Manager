@@ -18,7 +18,7 @@
     <transition name="fade" mode="out-in">
       <component :is="layout">
         <div v-if="$root.loading">
-          loading...
+          <SplashScreen/>
         </div>
         <router-view v-else />
       </component>
@@ -32,11 +32,12 @@ import Component from "vue-class-component";
 import NetOpsButton from "./components/NetOpsButton.vue";
 import AppProfile from "./components/menu/AppProfile.vue";
 import AppMenu from "./components/menu/AppMenu.vue";
+import SplashScreen from "./components/SplashScreen.vue";
 const remote = require("electron").remote;
 
 /* eslint-disable no-unused-vars */
 @Component({
-  components: { NetOpsButton, AppProfile, AppMenu },
+  components: { NetOpsButton, AppProfile, AppMenu, SplashScreen },
 })
 export default class App extends Vue {
   // @ts-ignore
@@ -103,7 +104,6 @@ export default class App extends Vue {
       life: 10000,
     });
   }
-
 }
 </script>
 
