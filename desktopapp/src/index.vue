@@ -64,25 +64,7 @@
       />
        </div>
     </div>
-    <!-- <div class="container-footer">
-      <ExplorerButton />
-    </div>
-    <!-- <Button @click="set()" label="test" /> -->
-    <!-- <LogView /> -->
 
-    <!-- <div class="p-d-flex p-my-1">
-      <div class="p-col-4">
-        <a class="btn teal p-ripple" v-ripple
-          >Explorer
-          <img src="./assets/explorer.svg" class="btn-icon btn-icon--vis" />
-        </a>
-
-        <a class="btn light-blue p-ripple" v-ripple
-          >Portainer
-          <img src="./assets/portainer.svg" class="btn-icon btn-icon--vis"
-        /></a>
-      </div>
-    </div> -->
     <Dialog
       modal
       :dismissableMask="true"
@@ -97,7 +79,7 @@
           class="p-button-text p-ml-auto p-button-rounded"
         />
       </template>
-      <ExportConnectionProfile />
+      <ExportConnectionProfile  @closeExportCon="closeExportCon"/>
     </Dialog>
   </div>
 </template>
@@ -108,7 +90,6 @@ import Component from "vue-class-component";
 import ContainerTable from "./components/container/ContainerTable.vue";
 import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
-import ExportConfig from "./components/export/ExportConfig.vue";
 import NetworkConfig from "./models/NetworkConfig";
 import ExportConnectionProfile from "@/pages/ExportConnectionProfile.vue";
 /* eslint-disable no-unused-vars */
@@ -142,7 +123,9 @@ export default class Index extends Vue {
       orderer: boolean;
     };
   } = {};
-
+closeExportCon(){
+    this.exportAppDisplay = false;
+}
   created() {
     this.container = this.$store.state.docker.activeContainer;
     this.org = NetworkConfig.getOrgData();

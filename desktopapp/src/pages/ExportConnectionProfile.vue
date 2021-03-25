@@ -22,8 +22,21 @@
           <label for="city1">{{ item.name }}</label>
         </div>
       </div>
-      <Button label="EXPORT" iconPos="right" @click="generate()" />
     </div>
+    <div class="p-grid">
+             <Button
+        label="Cancle"
+        icon="pi pi-times"
+        @click="close()"
+        class="p-button-outlined p-button-danger"
+      />
+    <Button
+      label="Generate"
+      icon="pi pi-download"
+      @click="generate()"
+         class="p-button-outlined p-button-primary p-ml-auto p-px-3"
+    />
+     </div>
   </div>
 </template>
 
@@ -47,6 +60,9 @@ export default class ExportConnectionProfile extends ExportConnectionProfileProp
   selectedChannel = { name: "" };
   channelList = [];
   orgList: Array<object> = [];
+    close() {
+    this.$emit("closeExportCon");
+  }
   created() {
     this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
     this.selectedChannel = this.channelList[0];
