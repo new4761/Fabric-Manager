@@ -1,35 +1,22 @@
 <template>
   <div class="">
-    <Dialog
-      header="Header"
-      v-bind:visible="display"
-      :style="{ width: '50vw' }"
-      :modal="true"
-    >
+    <Dialog header="Header" v-bind:visible="display" :style="{ width: '50vw' }" :modal="true">
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
       </p>
       <template #footer>
-        <Button
-          label="No"
-          icon="pi pi-times"
-          @click="display = false"
-          class="p-button-text"
-        />
-        <Button
-          label="Yes"
-          icon="pi pi-check"
-          @click="display = false"
-          autofocus
-        />
+        <Button label="No" icon="pi pi-times" @click="display = false" class="p-button-text" />
+        <Button label="Yes" icon="pi pi-check" @click="display = false" autofocus />
       </template>
     </Dialog>
+
+    <pre>
+          {{ Array.from(item.child) }}
+          </pre>
 
     <table role="grid" class="p-my-1">
       <tbody class="p-datatable-tbody">
@@ -59,12 +46,7 @@
                 <Tag severity="danger" value="ca"></Tag>
               </span>
               <span class="p-mx-1" v-if="item.peer > 0">
-                <Tag
-                  class="p-mr-2"
-                  severity="info"
-                  value="peer"
-                  v-badge="item.peer"
-                ></Tag>
+                <Tag class="p-mr-2" severity="info" value="peer" v-badge="item.peer"></Tag>
               </span>
             </div>
           </td>
