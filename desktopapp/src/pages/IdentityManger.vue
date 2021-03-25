@@ -1,26 +1,36 @@
 <template>
-  <div>
+  <div class="p-mx-4">
     <div class="p-col-12">
-      <div class="cc-list-header p-grid p-ai-center vertical-container">
-        <div class="p-col-10">
+      <h5 class="p-text-bold p-mt-2">Identity Manager</h5>
+      <hr />
+
+      <div class="p-grid p-fluid p-nogutter">
+        <div class="p-col-3">
+          <small>Selected Peer Organization</small>
           <Dropdown
+            class="p-mt-1"
             :options="orgList"
             v-model="selectedOrg"
             @change="setUserDataList($event.value)"
           />
         </div>
-        <div class="p-col p-ml-auto">
+        <div class="p-col"></div>
+        <div class="p-co3">
           <Button
-            label="Add newuser"
-            clase="p-ml-auto  p-button-sm p-button-primary"
-            @click="newUserDisplay = true,resetInput()"
+            label="ADD NEW USER"
+            icon="pi pi-user-plus"
+            class="p-mt-4 p-ml-auto p-button-outlined p-button-sm p-button-warning"
+            @click="(newUserDisplay = true), resetInput()"
           />
         </div>
       </div>
-      <DataTable :value="userDataList">
-        <Column field="name" header="Name"></Column>
-        <Column field="role" header="Role"></Column>
-      </DataTable>
+      <Panel class="p-mt-2">
+        <template #header>Identity List</template>
+        <DataTable :value="userDataList">
+          <Column field="name" header="Name"></Column>
+          <Column field="role" header="Role"></Column>
+        </DataTable>
+      </Panel>
       <Dialog
         modal
         :dismissableMask="true"
@@ -66,9 +76,18 @@
             <label>Role Identified</label>
             <Dropdown v-model="userRole" :options="roleType" />
           </div>
+        </div>
+        <div class="p-grid p-mx-1 p-mt-1">
+          <Button
+            label="Cancle"
+            icon="pi pi-times"
+            @click="newUserDisplay = false"
+            class="p-button-outlined p-button-danger"
+          />
           <Button
             label="Enroll"
-            clase="p-ml-auto  p-button-sm p-button-primary"
+            icon="pi pi-user-plus"
+            class="p-button-outlined p-button-primary p-ml-auto p-px-3"
             @click="enroll(), checkInputGroup()"
           />
         </div>

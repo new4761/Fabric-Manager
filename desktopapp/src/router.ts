@@ -56,19 +56,10 @@ export default new Router({
         layout: "default-layout",
       },
     },
-
-    {
-      path: "/chaincode/manager",
-      name: "CCManager",
-      component: () => import("./pages/ChaincodePage.vue"),
-      meta: {
-        layout: "default-layout",
-      },
-    },
     {
       path: "/chaincode/console",
       name: "ConsoleCC",
-      component: () => import("./pages/ccPage/CCconsole.vue"),
+      component: () => import("./pages/CCconsole.vue"),
       meta: {
         layout: "default-layout",
       },

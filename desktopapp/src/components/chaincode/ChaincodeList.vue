@@ -1,11 +1,10 @@
 <template>
   <div class="cc-list-wrapper">
-    <!-- {{ ccList }} -->
-    <DataTable :value="ccList" class="cc-list" :autoLayout="true">
+    <DataTable :value="ccList" class="cc-list" 
+    :paginator="true" :rows="5">
       <Column field="name" header="Name"></Column>
       <Column field="type" header="Language"></Column>
       <Column field="channel" header="Channel"></Column>
-
       <Column header="state">
         <template #body="obj">
           <Tag class="p-tag-primary" :value="obj.data.state"></Tag>
@@ -16,11 +15,6 @@
           {{ convertTime(obj.data.lastUpdate) }}
         </template></Column
       >
-      <!-- <Column>
-        <template #body="obj">
-          {{ obj.data }}
-        </template>
-      </Column> -->
     </DataTable>
   </div>
 </template>
@@ -29,18 +23,16 @@
 import Vue from "vue";
 
 import Component from "vue-class-component";
-import DigSetupCC from "../components/chaincode/DigSetupCC.vue";
-import { CCtype, netWorkConfigPath } from "../models/EnvProject";
-import NetworkConfig from "../models/NetworkConfig";
-const ChaincodePageProps = Vue.extend({
+import { CCtype, netWorkConfigPath } from "@/models/EnvProject";
+import NetworkConfig from "@/models/NetworkConfig";
+const ChaincodeListProps = Vue.extend({
   // props: {
   //   _display: Boolean,
   // },
 });
 @Component({
-  components: { DigSetupCC },
 })
-export default class ChaincodePage extends ChaincodePageProps {
+export default class ChaincodeList extends ChaincodeListProps {
   ccName = "";
   ccType = CCtype.go;
   path = "";

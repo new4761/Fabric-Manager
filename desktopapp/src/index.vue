@@ -1,12 +1,10 @@
 <template>
   <div>
     <div class="container-header">
-      <div class="p-col ">
+      <div class="p-col">
         <div class="p-d-flex p-jc-end p-ai-center">
           <div class="p-col-6">
-            <div class="container-title p-text-left">
-              Network
-            </div>
+            <div class="container-title p-text-left">Network</div>
           </div>
           <div class="p-col-3 container-text">
             <div class="p-grid">
@@ -37,7 +35,7 @@
                   :value="
                     (this.$store.getters['docker/getActiveContainerCount'] /
                       12) *
-                      100
+                    100
                   "
                 >
                   Percent Complete:
@@ -57,7 +55,15 @@
         :key="componentKey"
       />
     </div>
-
+    <div class="p-grid p-mt-2 p-mr-1">
+       <div class="p-col p-text-right">
+      <Button
+        label="ExportConnectionProfile"
+        class="p-button-outlined p-button-primary p-button-sm"
+        @click="exportAppDisplay = true"
+      />
+       </div>
+    </div>
     <!-- <div class="container-footer">
       <ExplorerButton />
     </div>
@@ -77,6 +83,22 @@
         /></a>
       </div>
     </div> -->
+    <Dialog
+      modal
+      :dismissableMask="true"
+      :closable="false"
+      v-bind:visible="exportAppDisplay"
+    >
+      <template #header>
+        <span>ExportConnectionProfile</span>
+        <Button
+          @click="exportAppDisplay = false"
+          icon="pi pi-times"
+          class="p-button-text p-ml-auto p-button-rounded"
+        />
+      </template>
+      <ExportConnectionProfile />
+    </Dialog>
   </div>
 </template>
 
@@ -87,17 +109,19 @@ import ContainerTable from "./components/container/ContainerTable.vue";
 import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
 import NetworkConfig from "./models/NetworkConfig";
-
+import ExportConnectionProfile from "@/pages/ExportConnectionProfile.vue";
 /* eslint-disable no-unused-vars */
 @Component({
   components: {
     ContainerTable,
     LogView,
     ExplorerButton,
+    ExportConnectionProfile,
   },
 })
 export default class Index extends Vue {
   envConfig: any;
+  exportAppDisplay = false;
   container: Array<Object> = [];
   activeContainer: number = 0;
   statusClass: string = "";

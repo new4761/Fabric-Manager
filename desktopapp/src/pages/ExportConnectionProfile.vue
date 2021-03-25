@@ -35,7 +35,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 //import IdentityManger from "@/module/Minifabric/IdentityManger";
-const ExportApplicationPageProps = Vue.extend({
+const ExportConnectionProfileProps = Vue.extend({
   props: {
     _display: Boolean,
   },
@@ -43,7 +43,7 @@ const ExportApplicationPageProps = Vue.extend({
 @Component({
   components: {},
 })
-export default class ExportApplicationPage extends ExportApplicationPageProps {
+export default class ExportConnectionProfile extends ExportConnectionProfileProps {
   selectedChannel = { name: "" };
   channelList = [];
   orgList: Array<object> = [];
