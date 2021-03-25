@@ -17,9 +17,7 @@
               Default channel:
               <a class="text-primary p-mx-1">{{ channelName }}</a>
             </div>
-            <div class="p-d-flex">
-              {{ object.orgList.length }} Organizations
-            </div>
+            <div class="p-d-flex">{{ object.orgList.length }} Organizations</div>
           </div>
         </div>
         <div class="preview-wrapper  p-d-flex p-jc-center">
@@ -32,42 +30,23 @@
                   </div>
 
                   <span class="p-mx-1" v-if="item.isOrderer">
-                    <Tag
-                      class="p-mr-2"
-                      severity="warning"
-                      value="orderer"
-                    ></Tag>
+                    <Tag class="p-mr-2" severity="warning" value="orderer"></Tag>
                   </span>
                   <span class="p-mx-1" v-if="item.CAList.length > 0">
                     <Tag severity="danger" value="ca"></Tag>
                   </span>
                   <span class="p-mx-1" v-if="item.peerList.length > 0">
-                    <Tag
-                      class="p-mr-2"
-                      severity="info"
-                      value="peer"
-                      v-badge="item.peerList.length"
-                    ></Tag>
+                    <Tag class="p-mr-2" severity="info" value="peer" v-badge="item.peerList.length"></Tag>
                   </span>
                 </div>
                 <ul>
-                  <li v-if="item.isOrderer" class="preview-orderer">
-                    orderer.{{ item.name }}
-                  </li>
+                  <li v-if="item.isOrderer" class="preview-orderer">orderer.{{ item.name }}</li>
 
-                  <li
-                    class="preview-ca"
-                    v-for="(ca, index) in item.CAList"
-                    :key="index + 'ca'"
-                  >
+                  <li class="preview-ca" v-for="(ca, index) in item.CAList" :key="index + 'ca'">
                     {{ ca }}
                   </li>
 
-                  <li
-                    class="preview-peer"
-                    v-for="(peer, index) in item.peerList"
-                    :key="index + 'peer'"
-                  >
+                  <li class="preview-peer" v-for="(peer, index) in item.peerList" :key="index + 'peer'">
                     {{ peer }}
                   </li>
                 </ul>
@@ -76,37 +55,19 @@
           </div>
         </div>
         <div class="preview-wrapper  p-d-flex p-jc-center">
-          <small class="text-error">
-            *you cannot modify, delete organizations and channel after its
-            creation</small
-          >
+          <small class="text-error"> *you cannot modify, delete organizations and channel after its creation</small>
         </div>
         <template #footer>
           <div class="p-d-flex p-jc-between">
-            <Button
-              label="No"
-              icon="pi pi-times"
-              @click="closeConfirm()"
-              class="p-button-text text-error"
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              @click="createNetwork()"
-              class="p-button-primary"
-            />
+            <Button label="No" icon="pi pi-times" @click="closeConfirm()" class="p-button-text text-error" />
+            <Button label="Yes" icon="pi pi-check" @click="createNetwork()" class="p-button-primary" />
           </div>
         </template>
       </Dialog>
     </div>
 
     <span @click="display = true">
-      <Button
-        label="Create Project"
-        icon="fas fa-plus-square fa-lg"
-        iconPos="left"
-        class="p-button-primary"
-      />
+      <Button label="Create Project" icon="fas fa-plus-square fa-lg" iconPos="left" class="p-button-primary" />
     </span>
 
     <div>
@@ -134,19 +95,10 @@
                 aria-describedby="project-name-help"
               />
 
-              <small
-                id="project-name-help"
-                class="p-error"
-                v-if="invalidProjectName"
-                >{{ errorProjectName }}</small
-              >
+              <small id="project-name-help" class="p-error" v-if="invalidProjectName">{{ errorProjectName }}</small>
             </div>
             <div class="p-field">
-              <div
-                class="p-inputgroup"
-                id="project-directory"
-                aria-describedby="project-directory-help"
-              >
+              <div class="p-inputgroup" id="project-directory" aria-describedby="project-directory-help">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-folder-open"></i>
                 </span>
@@ -157,19 +109,10 @@
                     'p-invalid': invalidProjectDir,
                   }"
                 />
-                <Button
-                  class="p-button-primary p-button-outlined"
-                  label="SetProjectDirectory"
-                  @click="getFilepath()"
-                />
+                <Button class="p-button-primary p-button-outlined" label="SetProjectDirectory" @click="getFilepath()" />
               </div>
 
-              <small
-                id="project-directory-help"
-                class="p-error"
-                v-if="invalidProjectDir"
-                >{{ errorProjectDir }}</small
-              >
+              <small id="project-directory-help" class="p-error" v-if="invalidProjectDir">{{ errorProjectDir }}</small>
             </div>
           </div>
 
@@ -187,9 +130,7 @@
             ></OrgEditButton>
           </ScrollPanel>
 
-          <small class="p-error" v-if="invalidProjectOrg">{{
-            errorProjectOrg
-          }}</small>
+          <small class="p-error" v-if="invalidProjectOrg">{{ errorProjectOrg }}</small>
 
           <div class="p-grid p-fluid p-field p-mt-3">
             <OrgInputText @new-org="newOrgTolist"></OrgInputText>
@@ -203,12 +144,7 @@
             <div class="p-field p-col p-my-0">
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
-                  <Checkbox
-                    id="binary"
-                    v-model="createChannel"
-                    :binary="true"
-                    :disabled="!quick"
-                  />
+                  <Checkbox id="binary" v-model="createChannel" :binary="true" :disabled="!quick" />
                 </span>
 
                 <InputText
@@ -228,25 +164,14 @@
             <div class="p-field p-col p-my-0"></div>
 
             <div class="p-field p-col p-my-0">
-              <small class="p-error" v-if="invalidChannel">{{
-                errorChannel
-              }}</small>
+              <small class="p-error" v-if="invalidChannel">{{ errorChannel }}</small>
             </div>
           </div>
         </div>
         <template #footer>
           <div class="p-grid">
-            <Button
-              class="p-button-danger p-button-outlined p-m-2 p-my-2"
-              label="close"
-              @click="closeDialogue()"
-            />
-
-            <Button
-              class="p-button-primary  p-ml-auto p-my-2"
-              label="create"
-              @click="checkInput()"
-            />
+            <Button class="p-button-danger p-button-outlined p-m-2 p-my-2" label="close" @click="closeDialogue()" />
+            <Button class="p-button-primary  p-ml-auto p-my-2" label="create" @click="checkInput()" />
           </div>
         </template>
       </Dialog>
@@ -313,11 +238,7 @@ export default class CreateNetButton extends Vue {
     let id = ProjectConfig.addProject(project);
 
     if (this.quick) {
-      let defaultOrg = NetworkConfig.createConfig(
-        project,
-        this.createChannel,
-        this.channelName
-      );
+      let defaultOrg = NetworkConfig.createConfig(project, this.createChannel, this.channelName);
       let command: string[] = [];
       if (this.createChannel) {
         console.log(command);
@@ -375,12 +296,8 @@ export default class CreateNetButton extends Vue {
       falsy = true;
     }
     /* eslint-disable no-useless-escape */
-    if (
-      /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.channelName) &&
-      this.createChannel
-    ) {
-      this.errorChannel =
-        "channel name cannot  cannot contain special character.";
+    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.channelName) && this.createChannel) {
+      this.errorChannel = "channel name cannot  cannot contain special character.";
       this.invalidChannel = true;
       falsy = true;
     }
@@ -409,8 +326,7 @@ export default class CreateNetButton extends Vue {
   caWarn() {
     if (!this.warnCA)
       this.$confirm.require({
-        message:
-          "If you disable CA you won't be able to create or export custom certificate for user ",
+        message: "If you disable CA you won't be able to create or export custom certificate for user ",
         header: "Disabling CA",
         icon: "pi pi-info-circle",
         acceptClass: "p-button-primary",

@@ -9,7 +9,7 @@
               <div class="p-field p-grid">
                 <label for="rule" class="p-col-fixed p-mr-5" style="width:100px">rule</label>
                 <div class="p-ml-5">
-                  <select id="rule" v-model="formData.policies[policy].policy.value.rule" v-on:change="checkValid()">
+                  <select id="rule" v-model="formData.policies[policy].policy.value.rule" v-on:change="save()">
                     <option value="MAJORITY">MAJORITY</option>
                     <option value="ANY">ANY</option>
                     {{
@@ -19,10 +19,27 @@
                 </div>
               </div>
 
-              <div class="p-field p-grid">
+              <div class="p-field p-grid p-ai-start  vertical-container">
                 <label for="sub_policy" class="p-col-fixed p-mr-5" style="width:100px">sub_policy</label>
                 <div class="p-ml-5">
-                  <InputText id="sub_policy" type="text" v-model="formData.policies[policy].policy.value.sub_policy" @input="checkValid(policy)" class="p-inputtext-sm" :class="{ 'p-invalid': invalidSubPolicy.has(policy) && invalidSubPolicy.get(policy) }" />
+                  <InputText
+                    id="sub_policy"
+                    type="text"
+                    v-model="formData.policies[policy].policy.value.sub_policy"
+                    @input="checkValid(policy)"
+                    class="p-inputtext-sm"
+                    ria-describedby="sub-policy-help"
+                    :class="{
+                      'p-invalid': invalidSubPolicy.has(policy) && invalidSubPolicy.get(policy),
+                    }"
+                  />
+                  <br />
+                  <small
+                    id="sub-policy-help"
+                    class="p-error"
+                    v-if="invalidSubPolicy.has(policy) && invalidSubPolicy.get(policy)"
+                    >{{ errorSubPolicy.get(policy) }}</small
+                  >
                 </div>
               </div>
               <br />
@@ -54,6 +71,7 @@ export default class OrgColumn extends FormProps {
   formData: any = {};
   rules: object = [{ name: "MAJORITY" }, { name: "ANY" }];
   invalidSubPolicy = new Map();
+  errorSubPolicy = new Map();
 
   mounted() {
     this.formData = this.data;
@@ -76,13 +94,13 @@ export default class OrgColumn extends FormProps {
 
     var falsy;
     if (!this.formData.policies[policy].policy.value.sub_policy) {
-      console.log("cannot be empty.");
+      this.errorSubPolicy.set(policy, "cannot be empty.");
       this.invalidSubPolicy.set(policy, true);
       falsy = true;
     }
     //eslint-disable-next-line
     if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.formData.policies[policy].policy.value.sub_policy)) {
-      console.log("cannot be special.");
+      this.errorSubPolicy.set(policy, "cannot contain special character.");
       this.invalidSubPolicy.set(policy, true);
       falsy = true;
     }
@@ -91,17 +109,17 @@ export default class OrgColumn extends FormProps {
       console.log(falsy);
     } else {
       this.invalidSubPolicy.set(policy, false);
+      this.save()
     }
+  }
 
-    // console.log("save");
-    // if (this.groupKey) {
-    //   ChannelConfig.updateConfig(
-    //     this.jsonKey,
-    //     this.formData + "." + this.groupKey
-    //   );
-    // } else {
-    //   ChannelConfig.updateConfig(this.jsonKey, this.formData);
-    // }
+  save() {
+    console.log("save");
+    if (this.groupKey) {
+      ChannelConfig.updateConfig(this.jsonKey, this.formData + "." + this.groupKey);
+    } else {
+      ChannelConfig.updateConfig(this.jsonKey, this.formData);
+    }
   }
 
   update(key: string, value: any) {

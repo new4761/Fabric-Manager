@@ -1,5 +1,7 @@
 module.exports = {
-  chainWebpack: config => { config.externals({ 'pkcs11js': 'require("pkcs11js")' }) },
+  chainWebpack: (config) => {
+    config.externals({ pkcs11js: 'require("pkcs11js")' });
+  },
   // chainWebpack: config => {
   //   config.module       .rule('ts')
   //       .use('ts-loader')
@@ -13,14 +15,16 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
-      // externals: ["pkcs11js"],
+      externals: ["fabric-network"],
       builderOptions: {
-        // asar: false,
+        asar: false,
         // Config this section for make built in dir for app (need to have some file in dir )
         // extraFiles: [{ from: "extraResources", to: "bin/" }],
         extraResources: [
           // { from: "extraResources/test", to: "extraResources/test" },
           { from: "extraResources/example_code", to: "example_code" },
+          { from: "extraResources/bin", to: "extraResources/bin" },
+          { from: "extraResources/config", to: "extraResources/config" },
         ],
       },
     },

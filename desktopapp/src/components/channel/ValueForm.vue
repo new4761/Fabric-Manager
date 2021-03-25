@@ -121,7 +121,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="absolute_max_bytes"
-                type="text"
+                type="number"
                 v-model="formData.values.BatchSize.value.absolute_max_bytes"
                 @input="
                   update(
@@ -144,7 +144,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="max_message_count"
-                type="text"
+                type="number"
                 v-model="formData.values.BatchSize.value.max_message_count"
                 @input="
                   update(
@@ -167,7 +167,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="preferred_max_bytes"
-                type="text"
+                type="number"
                 v-model="formData.values.BatchSize.value.preferred_max_bytes"
                 @input="
                   update(
@@ -221,7 +221,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="election_tick"
-                type="text"
+                type="number"
                 v-model="
                   formData.values.ConsensusType.value.metadata.options
                     .election_tick
@@ -248,7 +248,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="heartbeat_tick"
-                type="text"
+                type="number"
                 v-model="
                   formData.values.ConsensusType.value.metadata.options
                     .heartbeat_tick
@@ -275,7 +275,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="max_inflight_blocks"
-                type="text"
+                type="number"
                 v-model="
                   formData.values.ConsensusType.value.metadata.options
                     .max_inflight_blocks
@@ -302,7 +302,7 @@
             <div class="p-col p-ml-5">
               <InputText
                 id="snapshot_interval_size"
-                type="text"
+                type="number"
                 v-model="
                   formData.values.ConsensusType.value.metadata.options
                     .snapshot_interval_size

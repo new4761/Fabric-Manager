@@ -16,7 +16,7 @@ export class ProjectConfig {
         // logger.log("info",(path.dirname(__dirname)))
       }
       let filePath = path.join(
-        !isDevelopment ? path.join(path.dirname(__dirname), "bin") : "tests",
+        !isDevelopment ? path.join(process.resourcesPath,"extraResources","config") : "tests",
         "projects.json"
       );
       this.file = editJsonFile(filePath);
