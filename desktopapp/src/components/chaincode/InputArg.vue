@@ -4,7 +4,7 @@
     @mouseover="showDelete = true"
     @mouseleave="showDelete = false"
   >
-    <InputText placeholder="value" v-model="value" @input="setArg()" />
+    <InputText placeholder="+ Addnew" v-model="value" @input="setArg()" />
     <i
       class="pi pi-times"
       v-if="showDelete"
@@ -17,13 +17,23 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+
+const InputArgProps = Vue.extend({
+  props: {
+    _value:String,
+  },
+});
 @Component({
   components: {},
   // Vuex's component binding helper can use here
 })
-export default class InputArg extends Vue {
+export default class InputArg extends InputArgProps {
+  //TODO: need to find bette way to delete array
   showDelete = false;
-  value=""
+  value:any=""
+  created(){
+    this.value=this._value
+  }
   deleteArg() {
    //console.log(index);
     this.$emit("deleteArg");

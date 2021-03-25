@@ -185,7 +185,7 @@ export default class DefaultLayout extends Vue {
           to: "/chaincode/console",
         }
         ,{
-          label: "IdentityManger",
+          label: "IdentityManager",
           icon: "pi pi-fw pi-clone",
           to: "/identityManger",
         },

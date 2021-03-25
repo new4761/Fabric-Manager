@@ -24,7 +24,7 @@
           <InputText disabled v-model="path" :class="{'p-invalid':inputGroup.inputDir}" />
           <Button label="dir" @click="getDir()" />
         </div>
-        <small  v-if="inputGroup.inputDir" class="p-error">Need selected directly.</small>
+        <small  v-if="inputGroup.inputDir" class="p-error">Required selected directory</small>
         <br />
         <small>Chaincode Name and language type</small>
         <br />
@@ -58,27 +58,35 @@
           </span>
         </div>
         <br />
+        <Panel  v-if="useInit">
+          <template #header>
+            <small>Parameter List</small>
+          </template>
         <div v-for="(item, index) in args.length + 1" :key="index">
           <InputArg
-            v-if="useInit"
             @setArg="setArg($event, index)"
             @deleteArg="deleteArg(index)"
           ></InputArg>
         </div>
+        </Panel>
       </div>
     </div>
     <br />
     <br />
+     <div class="p-grid">
+             <Button
+        label="Cancle"
+        icon="pi pi-times"
+        @click="close()"
+        class="p-button-outlined p-button-danger"
+      />
     <Button
-      label="deploy"
+      label="Deploy"
+      icon="pi pi-upload"
       @click="deployCC(),checkInputgroup()"
-      class="p-button-outlined p-button-primary"
+         class="p-button-outlined p-button-primary p-ml-auto p-px-3"
     />
-    <Button
-      label="close"
-      @click="close()"
-      class="p-button-outlined p-button-danger"
-    />
+     </div>
   </div>
 </template>
 

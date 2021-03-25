@@ -6,38 +6,15 @@
       :root="true"
       @menuitem-click="onMenuItemClick"
     />
-    <ul>
-      <li @click="exportAppDisplay = true">
-        <i></i> <span>ExportConnectionProfile</span>
-      </li>
-    </ul>
-    <Dialog
-      modal
-      :dismissableMask="true"
-      :closable="false"
-      v-bind:visible="exportAppDisplay"
-    >
-      <template #header>
-        <span>ExportConnectionProfile</span>
-        <Button
-          @click="exportAppDisplay = false"
-          icon="pi pi-times"
-          class="p-button-text p-ml-auto p-button-rounded"
-        />
-      </template>
-      <ExportConnectionProfile />
-    </Dialog>
   </div>
 </template>
 
 <script>
 import AppSubmenu from "./AppSubmenu";
-import ExportConnectionProfile from "@/pages/ExportConnectionProfile";
+
 
 export default {
-  data() {
-    return { exportAppDisplay: false };
-  },
+
 
   props: {
     model: Array,
@@ -49,7 +26,7 @@ export default {
   },
   components: {
     AppSubmenu: AppSubmenu,
-    ExportConnectionProfile,
+ 
   },
 };
 </script>

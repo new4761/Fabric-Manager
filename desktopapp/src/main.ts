@@ -82,6 +82,8 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 import CleanLayout from "./layouts/CleanLayout.vue";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 
+import Splitter from 'primevue/splitter';
+import SplitterPanel from 'primevue/splitterpanel';
 // import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 import "primevue/resources/themes/mdc-dark-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -178,6 +180,10 @@ Vue.component("Toolbar", Toolbar);
 Vue.component("TreeTable", TreeTable);
 Vue.component("Tree", Tree);
 Vue.component("TriStateCheckbox", TriStateCheckbox);
+
+
+Vue.component("Splitter", Splitter );
+Vue.component("SplitterPanel", SplitterPanel );
 
 const app = new Vue({
   data() {

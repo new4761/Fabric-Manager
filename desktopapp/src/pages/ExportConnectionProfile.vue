@@ -22,8 +22,21 @@
           <label for="city1">{{ item.name }}</label>
         </div>
       </div>
-      <Button label="EXPORT" iconPos="right" @click="generate()" />
     </div>
+    <div class="p-grid">
+             <Button
+        label="Cancle"
+        icon="pi pi-times"
+        @click="close()"
+        class="p-button-outlined p-button-danger"
+      />
+    <Button
+      label="Generate"
+      icon="pi pi-download"
+      @click="generate()"
+         class="p-button-outlined p-button-primary p-ml-auto p-px-3"
+    />
+     </div>
   </div>
 </template>
 
@@ -35,7 +48,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 //import IdentityManger from "@/module/Minifabric/IdentityManger";
-const ExportApplicationPageProps = Vue.extend({
+const ExportConnectionProfileProps = Vue.extend({
   props: {
     _display: Boolean,
   },
@@ -43,10 +56,13 @@ const ExportApplicationPageProps = Vue.extend({
 @Component({
   components: {},
 })
-export default class ExportApplicationPage extends ExportApplicationPageProps {
+export default class ExportConnectionProfile extends ExportConnectionProfileProps {
   selectedChannel = { name: "" };
   channelList = [];
   orgList: Array<object> = [];
+    close() {
+    this.$emit("closeExportCon");
+  }
   created() {
     this.channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
     this.selectedChannel = this.channelList[0];

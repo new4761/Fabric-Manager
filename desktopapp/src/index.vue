@@ -1,12 +1,10 @@
 <template>
   <div>
     <div class="container-header">
-      <div class="p-col ">
+      <div class="p-col">
         <div class="p-d-flex p-jc-end p-ai-center">
           <div class="p-col-6">
-            <div class="container-title p-text-left">
-              Network
-            </div>
+            <div class="container-title p-text-left">Network</div>
           </div>
           <div class="p-col-3 container-text">
             <div class="p-grid">
@@ -37,7 +35,7 @@
                   :value="
                     (this.$store.getters['docker/getActiveContainerCount'] /
                       12) *
-                      100
+                    100
                   "
                 >
                   Percent Complete:
@@ -57,27 +55,32 @@
         :key="componentKey"
       />
     </div>
-
-    <div class="container-footer">
-      <!-- <ExplorerButton /> -->
-      <ExportConfig />
+    <div class="p-grid p-mt-2 p-mr-1">
+       <div class="p-col p-text-right">
+      <Button
+        label="ExportConnectionProfile"
+        class="p-button-outlined p-button-primary p-button-sm"
+        @click="exportAppDisplay = true"
+      />
+       </div>
     </div>
-    <!-- <Button @click="set()" label="test" /> -->
-    <!-- <LogView /> -->
 
-    <!-- <div class="p-d-flex p-my-1">
-      <div class="p-col-4">
-        <a class="btn teal p-ripple" v-ripple
-          >Explorer
-          <img src="./assets/explorer.svg" class="btn-icon btn-icon--vis" />
-        </a>
-
-        <a class="btn light-blue p-ripple" v-ripple
-          >Portainer
-          <img src="./assets/portainer.svg" class="btn-icon btn-icon--vis"
-        /></a>
-      </div>
-    </div> -->
+    <Dialog
+      modal
+      :dismissableMask="true"
+      :closable="false"
+      v-bind:visible="exportAppDisplay"
+    >
+      <template #header>
+        <span>ExportConnectionProfile</span>
+        <Button
+          @click="exportAppDisplay = false"
+          icon="pi pi-times"
+          class="p-button-text p-ml-auto p-button-rounded"
+        />
+      </template>
+      <ExportConnectionProfile  @closeExportCon="closeExportCon"/>
+    </Dialog>
   </div>
 </template>
 
@@ -87,20 +90,20 @@ import Component from "vue-class-component";
 import ContainerTable from "./components/container/ContainerTable.vue";
 import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
-import ExportConfig from "./components/export/ExportConfig.vue";
 import NetworkConfig from "./models/NetworkConfig";
-
+import ExportConnectionProfile from "@/pages/ExportConnectionProfile.vue";
 /* eslint-disable no-unused-vars */
 @Component({
   components: {
     ContainerTable,
     LogView,
     ExplorerButton,
-    ExportConfig,
+    ExportConnectionProfile,
   },
 })
 export default class Index extends Vue {
   envConfig: any;
+  exportAppDisplay = false;
   container: Array<Object> = [];
   activeContainer: number = 0;
   statusClass: string = "";
@@ -120,7 +123,9 @@ export default class Index extends Vue {
       orderer: boolean;
     };
   } = {};
-
+closeExportCon(){
+    this.exportAppDisplay = false;
+}
   created() {
     this.container = this.$store.state.docker.activeContainer;
     this.org = NetworkConfig.getOrgData();
