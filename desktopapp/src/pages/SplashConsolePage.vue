@@ -24,7 +24,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Terminal from "../components/Terminal.vue";
-import OSProcess from "../module/OSProcess";
+import OSProcess from "../module/OSProcess/OSProcess";
 const TerminalProps = Vue.extend({
   props: {
     command: String,

@@ -17,7 +17,6 @@ const getters = {
   getContainer() {
     return state.container;
   },
-
   getContainerCount() {
     return state.orgContainer.length;
   },

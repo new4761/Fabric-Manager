@@ -28,7 +28,7 @@
               <Column field="name" header="Name"></Column>
               <Column header="Date create">
                 <template #body="slotProps">
-                  {{ toDate(slotProps.data.date_create) }}
+                  {{ convertDate(slotProps.data.date_create) }}
                 </template>
               </Column>
               <Column header="Last updated">
@@ -44,8 +44,6 @@
         </div>
       </div>
     </transition>
-
-    <hr />
     <div class="p-d-flex p-jc-between p-ai-center config-view-header">
       <div>
         Channel:
@@ -76,17 +74,11 @@
         </div>
       </div>
     </div>
-    <div class="p-d-flex">
-      <div class="p-col-12">
-        <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
-      </div>
-    </div>
+
+    <ChannelEditPage :channelName="channelSelected" :key="componentKey" class="p-mt-3" />
 
     <div>
-      <ConsoleDialogue
-        :_displaylog="displaylog"
-        @update:_displaylog="(val) => (displaylog = val)"
-      />
+      <ConsoleDialogue :_displaylog="displaylog" @update:_displaylog="(val) => (displaylog = val)" />
     </div>
 
     <div>
@@ -110,17 +102,9 @@
         </div>
 
         <div class="p-d-flex p-jc-end p-mt-1">
-          <Button
-            class="p-button-primary p-m-2"
-            label="create"
-            @click="create()"
-          />
+          <Button class="p-button-primary p-m-2" label="create" @click="checkValid()" />
 
-          <Button
-            class="p-button-danger p-ml-auto p-m-2 p-button-outlined"
-            label="close"
-            @click="display = false"
-          />
+          <Button class="p-button-danger p-ml-auto p-m-2 p-button-outlined" label="close" @click="display = false" />
         </div>
       </Dialog>
     </div>
@@ -130,12 +114,12 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import OSProcess from "../module/OSProcess";
+import OSProcess from "../module/OSProcess/OSProcess";
 import NetworkConfig from "../models/NetworkConfig";
 import logger from "../module/Logger";
-import ChannelEditPage from "./ChannelEditPage.vue";
+import ChannelEditPage from "../components/channel/ChannelEdit.vue";
 import ConsoleDialogue from "../components/ConsoleDialogue.vue";
-import { OsType } from "../models/EnvProject";
+import TimeConverter from "../module/Util/TimeConverter";
 
 @Component({
   components: { ConsoleDialogue, ChannelEditPage },
@@ -150,7 +134,8 @@ export default class ChannelPage extends Vue {
   showSection: boolean = false;
   join: boolean = false;
   componentKey: number = 0;
-  private osType: OsType = OsType.WINDOW;
+  invalidChannel: boolean = false;
+  errorChannel: string = "";
 
   created() {
     this.init();
@@ -168,36 +153,45 @@ export default class ChannelPage extends Vue {
   }
 
   convertTime(unix: number) {
-    let dateNow: number = Date.now();
-    //  console.log(new Date(unix).getDate());
-    let dayNow = new Date(dateNow).getTime();
-    let dayUpdate = new Date(unix).getTime();
-    return this.msToTime(dayNow - dayUpdate);
-  }
-  msToTime(s: number) {
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = ((s - mins) / 60) % 24;
-    var day = Math.round((s - mins) / 60 / 24);
-    if (day >= 1) {
-      return day + " " + "Days ago";
-    } else if (hrs >= 1) {
-      return hrs + " " + "Hours ago";
-    } else {
-      return mins + " " + "Minutes ago";
-    }
+    return TimeConverter.convertTime(unix);
   }
 
-  toDate(stamp: any) {
-    var date = new Date(stamp).toDateString();
-    return date;
+  convertDate(unix: number) {
+    return TimeConverter.convertDate(unix);
   }
 
   toggle() {
     this.showSection = !this.showSection;
+  }
+
+  checkValid() {
+    let channels = NetworkConfig.getValue("channel");
+    let duplicate = false;
+    let falsy = false;
+    this.invalidChannel = false;
+    console.log(channels);
+
+    if (!this.channelName) {
+      this.errorChannel = "cannot be empty.";
+      this.invalidChannel = true;
+      falsy = true;
+    }
+    //eslint-disable-next-line
+    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.channelName)) {
+      this.errorChannel = "cannot contain special character.";
+      this.invalidChannel = true;
+      falsy = true;
+    }
+
+    channels.forEach((element: any) => {
+      if (element.name == this.channelName) {
+        duplicate = true;
+      }
+    });
+
+    if (!falsy && !duplicate) {
+      this.created();
+    }
   }
 
   async create() {

@@ -1,5 +1,5 @@
 import { stdoutPayLoad } from "@/lib/payload-data"
-import { removeColorCode } from "../StringBuilder";
+import { removeColorCode } from "./StringBuilder";
 
 class StdoutCapture {
 

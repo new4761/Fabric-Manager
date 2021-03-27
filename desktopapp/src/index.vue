@@ -34,7 +34,7 @@
                 <ProgressBar
                   :value="
                     (this.$store.getters['docker/getActiveContainerCount'] /
-                      12) *
+                      this.$store.getters['docker/getContainerCount']) *
                     100
                   "
                 >
@@ -73,11 +73,6 @@
     >
       <template #header>
         <span>ExportConnectionProfile</span>
-        <Button
-          @click="exportAppDisplay = false"
-          icon="pi pi-times"
-          class="p-button-text p-ml-auto p-button-rounded"
-        />
       </template>
       <ExportConnectionProfile  @closeExportCon="closeExportCon"/>
     </Dialog>
@@ -91,7 +86,7 @@ import ContainerTable from "./components/container/ContainerTable.vue";
 import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
 import NetworkConfig from "./models/NetworkConfig";
-import ExportConnectionProfile from "@/pages/ExportConnectionProfile.vue";
+import ExportConnectionProfile from "@/components/export/ExportProfile.vue";
 /* eslint-disable no-unused-vars */
 @Component({
   components: {
@@ -188,85 +183,6 @@ closeExportCon(){
   }
 }
 
-// export default {
-//   components: {
-//     ContainerTable,
-
-//     ExplorerButton,
-//   },
-//   computed: mapState(["docker/activeContainer"]),
-
-//   data() {
-//     return {
-//       envConfig: "",
-//       container: [],
-//       activeContainer: 0,
-//       statusClass: "",
-//       expandedRows: [],
-//       org: {},
-//     };
-//   },
-
-//   created() {
-//     this.container = this.$store.state.docker.activeContainer;
-//     this.org = NetworkConfig.getOrgData();
-//     this.filter();
-
-//     // @ts-ignore
-//     this.unsubscribe = this.$store.subscribe((mutation) => {
-//       if (mutation.type === "docker/setActiveContainer") {
-//         console.log("getContainer");
-//         this.getContainer();
-//       }
-//     });
-//   },
-
-//   mounted() {
-//     this.container = this.$store.state.docker.activeContainer;
-//     this.org = NetworkConfig.getOrgData();
-//     this.filter();
-//   },
-
-//  // @ts-ignore
-//   beforeDestroy() {
-//     // @ts-ignore
-//     this.unsubscribe();
-//   },
-
-//   methods: {
-//     getContainer() {
-//       this.container = this.$store.state.docker.activeContainer;
-//       this.activeContainer = this.$store.getters[
-//         "docker/getActiveContainerCount"
-//       ];
-//       console.log(this.activeContainer);
-//       if (this.activeContainer == 0) {
-//         this.statusClass = "offline";
-//       } else {
-//         this.statusClass = "online";
-//       }
-//     },
-//     filter() {
-//       this.container.forEach((element: any) => {
-//         element.Names[0] = element.Names[0].replace(/\//g, "");
-//         let name = element.Names[0].replace(/^[^.]*./gm, "");
-//         // @ts-ignore
-//         this.org[name].container.push(element);
-//       });
-//     },
-//   },
-// };
-
-// const Props = Vue.extend({
-//   created() {
-//      const unsubscribe = this.$store.subscribe((mutation) => {
-//       if (mutation.type === "docker/setActiveContainer") {
-//         console.log("getContainer")
-//         getContainer();
-//       }
-//     });
-//   }
-// });
 </script>
 
 <style lang="scss">

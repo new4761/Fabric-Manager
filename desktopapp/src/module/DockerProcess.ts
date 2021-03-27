@@ -1,7 +1,7 @@
 var Docker = require("dockerode");
 var docker = new Docker({ socketPath: "//./pipe/docker_engine" });
 import logger from "../module/Logger";
-import { removeColorCode } from "./StringBuilder";
+import { removeColorCode } from "./OSProcess/StringBuilder";
 var stream = require('stream');
 import store from "../store/modules/project";
 class DockerProcess {

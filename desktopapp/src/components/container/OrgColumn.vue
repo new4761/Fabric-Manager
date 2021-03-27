@@ -14,13 +14,9 @@
       </template>
     </Dialog>
 
-    <pre>
-          {{ Array.from(item.child) }}
-          </pre>
-
     <table role="grid" class="p-my-1">
       <tbody class="p-datatable-tbody">
-        <tr @click="toggle()">
+        <tr @click="toggle()" class="orgcolumn-tr">
           <td>
             <div class="p-grid">
               <div
@@ -50,13 +46,55 @@
               </span>
             </div>
           </td>
-          <td>{{ item.container.length }} running container</td>
+          <td>{{ Array.from(item.child).length }} container(s)</td>
         </tr>
       </tbody>
     </table>
     <transition name="smooth-org">
-      <div v-show="showSection" class="p-px-5 sub-table-wrapper">
-        <DataTable :value="item.container" :autoLayout="true" class="sub-table">
+      <div v-show="showSection" class="p-px-5 sub-table-wrapper p-mb-3">
+        <div v-if="item.container == 0">
+          <table role="grid" class="p-my-1">
+            <tbody class="p-datatable-tbody">
+              <tr v-for="(item, index) in Array.from(item.child)" :key="index">
+                <td>
+                  {{ item }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-else>
+          <table role="grid" class="p-my-1">
+            <tbody class="p-datatable-tbody">
+              <tr v-for="(item, index) in item.container" :key="index">
+                <td>
+                  <div class="p-text-nowrap p-text-truncate">
+                    {{ item.Names[0] }}
+                  </div>
+                </td>
+                <td>
+                   <div class="p-text-nowrap p-text-truncate">
+                    {{ item.Image }}
+                  </div>
+                </td>
+                <td>
+                  <a v-if="item.State == 'running'">●</a>
+                  {{ item.Status }}
+                </td>
+                <td>
+                  <Button
+                    icon="fas fa-terminal"
+                    class="p-button-outlined p-button-primary p-button-sm"
+                    @click="executeDocker(item.Names[0])"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- <DataTable :value="item.container" :autoLayout="true" class="sub-table" v-else>
           <Column>
             <template #body="slotProps">
               <div class="p-text-nowrap p-text-truncate">
@@ -80,7 +118,7 @@
               />
             </template>
           </Column>
-        </DataTable>
+        </DataTable> -->
       </div>
     </transition>
   </div>
@@ -151,6 +189,10 @@ export default class OrgColumn extends Vue {
 .smooth-org-enter-active {
   overflow: hidden;
   transition: max-height 1s;
+}
+
+.orgcolumn-tr:hover {
+  cursor: pointer;
 }
 
 .column-toggle {

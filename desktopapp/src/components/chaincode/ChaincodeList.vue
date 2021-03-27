@@ -25,6 +25,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { CCtype, netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
+import TimeConverter from "@/module/Util/TimeConverter";
 const ChaincodeListProps = Vue.extend({
   // props: {
   //   _display: Boolean,
@@ -52,27 +53,7 @@ export default class ChaincodeList extends ChaincodeListProps {
   //end emit
   //render function
   convertTime(unix: number) {
-    let dateNow: number = Date.now();
-    //  console.log(new Date(unix).getDate());
-    let dayNow = new Date(dateNow).getTime();
-    let dayUpdate = new Date(unix).getTime();
-    return this.msToTime(dayNow - dayUpdate);
-  }
-  msToTime(s: number) {
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = ((s - mins) / 60) % 24;
-    var day = Math.round((s - mins) / 60 / 24);
-    if (day >= 1) {
-      return day + " " + "Days ago";
-    } else if (hrs >= 1) {
-      return hrs + " " + "Hours ago";
-    } else {
-      return mins + " " + "Minutes ago";
-    }
+    return TimeConverter.convertTime(unix);
   }
   //end render
 }

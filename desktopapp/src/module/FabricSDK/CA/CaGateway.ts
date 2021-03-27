@@ -2,8 +2,8 @@
 import NetworkGateway from "../NetworkGateway";
 import { netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
-import MinifabricController from "../../MinifabricController";
-import { getOrgData } from "@/module/StringBuilder";
+import MinifabricController from "../../Minifabric/MinifabricController";
+import { getOrgData } from "@/module/OSProcess/StringBuilder";
 import IdentityManger from "./IdentityManger";
 const FabricCAServices = require("electron").remote.require('fabric-ca-client');
 

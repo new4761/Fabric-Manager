@@ -80,7 +80,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ConsoleDialogue from "./ConsoleDialogue.vue";
 import NetworkConfig from "../models/NetworkConfig";
-import OSProcess from "../module/OSProcess";
+import OSProcess from "../module/OSProcess/OSProcess";
 import { OsType } from "../models/EnvProject";
 import ProjectConfig from "../models/ProjectConfig";
 
