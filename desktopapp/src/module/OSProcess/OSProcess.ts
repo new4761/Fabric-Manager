@@ -22,7 +22,7 @@ class OSProcess {
     this.emitter = new events();
   }
 
-  run_new(args: string[], projectPath?: string): any {
+  run(args: string[], projectPath?: string): any {
     let ls: any;
     //set to minifab output
     if (projectPath == null) {

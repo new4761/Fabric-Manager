@@ -4,28 +4,33 @@
       Indentity Manager
     </div>
 
-    <div class="p-grid p-nogutter  identity-wrapper p-jc-center">
+    <div class="p-grid p-nogutter  identity-wrapper p-jc-center p-mt-5 ">
       <div class="p-col-10">
-        <div class="p-grid p-fluid p-nogutter">
-          <div class="p-col-3">
-            <small>Selected Peer Organization</small>
-            <Dropdown class="p-mt-1" :options="orgList" v-model="selectedOrg" @change="setUserDataList($event.value)" />
+        <div class="p-d-flex p-jc-between p-ai-center identity-table-header p-py-2 p-px-1">
+          <div class="p-col">
+            <!-- <small>Peer Organization</small> <br />
+                <Dropdown
+                  class="p-mt-1"
+                  :options="orgList"
+                  v-model="selectedOrg"
+                  @change="setUserDataList($event.value)"
+                /> -->
+            <div class="identity-table-header-text">
+              Identity List
+            </div>
           </div>
-          <div class="p-col"></div>
-          <div class="p-co3">
+          <div class="p-col p-text-right">
             <Button
               label="ADD NEW USER"
               icon="pi pi-user-plus"
-              class="p-mt-4 p-ml-auto p-button-outlined p-button-sm p-button-warning"
+              class="p-ml-auto p-button-outlined p-button-sm p-button-warning"
               @click="(newUserDisplay = true), resetInput()"
             />
           </div>
         </div>
-        <Panel class="p-mt-2">
+        <Panel>
           <template #header>
-            <h5 class="text-primary p-p-3">
-              Identity List
-            </h5>
+            <div></div>
           </template>
           <div v-if="userDataList.length === 0" class="table-indentity-blocked p-d-flex p-jc-center p-ai-center">
             <div class="p-col p-text-center"><i class="fas fa-unlink"></i> no user indentity</div>
@@ -36,18 +41,37 @@
             <Column field="role" header="Role"></Column>
           </DataTable>
         </Panel>
-        <Dialog modal :dismissableMask="true" :closable="false" v-bind:visible="newUserDisplay">
+        <Dialog
+          modal
+          :dismissableMask="true"
+          :closable="false"
+          v-bind:visible="newUserDisplay"
+          :style="{ width: '400px', padding: '0px' }"
+          :contentStyle="{ overflow: 'visible' }"
+        >
           <template #header>
-            <span
+            <span>Add newuser</span>
+            <!-- <span
               >Add newuser to <b>{{ selectedOrg }}</b></span
             >
             <Button
               @click="newUserDisplay = false"
               icon="pi pi-times"
               class="p-button-text p-ml-auto p-button-rounded"
-            />
+            /> -->
           </template>
           <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12">
+              <label>Peer Organization</label>
+
+              <Dropdown
+                class="p-mt-1"
+                :options="orgList"
+                v-model="selectedOrg"
+                @change="setUserDataList($event.value)"
+              />
+            </div>
+
             <div class="p-field p-col-12">
               <label>Username</label>
               <InputText :class="{ 'p-invalid': inputGroup.inputName }" placeholder="Username" v-model="userName" />
@@ -65,7 +89,7 @@
             </div>
 
             <div class="p-field p-col-12">
-              <label>Role Identified</label>
+              <label>Role</label>
               <Dropdown v-model="userRole" :options="roleType" />
             </div>
           </div>
@@ -178,11 +202,11 @@ export default class IdentityManger extends IdentityMangerProps {
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
 .table-indentity {
-  height: calc(70vh - 120px);
+  height: calc(94vh - 350px);
 }
 
 .table-indentity-blocked {
-  height: calc(70vh - 120px);
+  height: calc(94vh - 350px);
 }
 
 .identity-header {
@@ -194,14 +218,13 @@ export default class IdentityManger extends IdentityMangerProps {
   font-weight: bold;
   height: 90px;
 }
-
-.identity-wrapper {
-  padding: 20px;
-  align-items: center;
-  color: white;
-  font-size: 20px;
+.identity-table-header {
+  width: 100%;
+  background-color: rgb(73, 73, 73);
+}
+.identity-table-header-text {
+  color: $primaryColor;
+  font-size: 18px;
   font-weight: bold;
-  height: calc(100vh - 122px);
-  overflow: scroll;
 }
 </style>

@@ -35,7 +35,7 @@
                   :value="
                     (this.$store.getters['docker/getActiveContainerCount'] /
                       this.$store.getters['docker/getContainerCount']) *
-                    100
+                      100
                   "
                 >
                   Percent Complete:
@@ -49,13 +49,20 @@
     </div>
 
     <div class="container-content">
-      <ContainerTable
-        v-bind:container="container"
-        v-bind:org="org"
-        :key="componentKey"
+      <ContainerTable v-bind:container="container" v-bind:org="org" :key="componentKey" />
+    </div>
+
+    <div class="container-footer">
+      <ExportConfig />
+
+      <Button
+        label="ExportConnectionProfile"
+        class="p-button-outlined p-button-primary p-button-sm"
+        @click="exportAppDisplay = true"
       />
     </div>
-    <div class="p-grid p-mt-2 p-mr-1">
+
+    <!-- <div class="p-grid p-mt-2 p-mr-1">
        <div class="p-col p-text-right">
       <Button
         label="ExportConnectionProfile"
@@ -63,18 +70,13 @@
         @click="exportAppDisplay = true"
       />
        </div>
-    </div>
+    </div> -->
 
-    <Dialog
-      modal
-      :dismissableMask="true"
-      :closable="false"
-      v-bind:visible="exportAppDisplay"
-    >
+    <Dialog modal :dismissableMask="true" :closable="false" v-bind:visible="exportAppDisplay">
       <template #header>
         <span>ExportConnectionProfile</span>
       </template>
-      <ExportConnectionProfile  @closeExportCon="closeExportCon"/>
+      <ExportConnectionProfile @closeExportCon="closeExportCon" />
     </Dialog>
   </div>
 </template>
@@ -87,6 +89,7 @@ import LogView from "./components/container/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
 import NetworkConfig from "./models/NetworkConfig";
 import ExportConnectionProfile from "@/components/export/ExportProfile.vue";
+import ExportConfig from "./components/export/ExportConfig.vue";
 /* eslint-disable no-unused-vars */
 @Component({
   components: {
@@ -94,6 +97,7 @@ import ExportConnectionProfile from "@/components/export/ExportProfile.vue";
     LogView,
     ExplorerButton,
     ExportConnectionProfile,
+    ExportConfig
   },
 })
 export default class Index extends Vue {
@@ -118,9 +122,9 @@ export default class Index extends Vue {
       orderer: boolean;
     };
   } = {};
-closeExportCon(){
+  closeExportCon() {
     this.exportAppDisplay = false;
-}
+  }
   created() {
     this.container = this.$store.state.docker.activeContainer;
     this.org = NetworkConfig.getOrgData();
@@ -136,9 +140,7 @@ closeExportCon(){
         // console.log("component update new" + newValue);
         this.container = newValue;
 
-        this.activeContainer = this.$store.getters[
-          "docker/getActiveContainerCount"
-        ];
+        this.activeContainer = this.$store.getters["docker/getActiveContainerCount"];
         // console.log(this.container);
         if (this.activeContainer == 0) {
           this.statusClass = "offline";
@@ -182,7 +184,6 @@ closeExportCon(){
     });
   }
 }
-
 </script>
 
 <style lang="scss">

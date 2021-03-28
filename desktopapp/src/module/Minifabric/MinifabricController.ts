@@ -21,7 +21,7 @@ class MinifabricController {
         //add org
         args.push("-o")
         args.push(NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath)[0])
-        return await OSProcess.run_new(args)
+        return await OSProcess.run(args)
 
 
     }

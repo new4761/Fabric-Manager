@@ -83,28 +83,37 @@
 
     <div>
       <Dialog
-        header="Create network"
+        header="Create new channel"
         v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '30vw' }"
+        :style="{ width: '300px' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-grid p-jc-center p-p-3">
-          <span class="p-float-label">
-            <InputText id="channelName" v-model="channelName" />
-            <label for="channelName">channelName</label>
-          </span>
+        <div class="p-field p-grid p-fluid  p-jc-center">
+          <div class="p-col-12 p-px-5">
+            <small>Channel name</small>
+            <br />
+            <InputText
+              id="channelName"
+              v-model="channelName"
+              :class="{
+                'p-invalid': invalidChannel,
+              }"
+            />
+            <br />
+            <small class="p-error" v-if="invalidChannel">{{ errorChannel }}</small>
+          </div>
         </div>
 
-        <div class="p-grid p-jc-center p-mb-2">
+        <!-- <div class="p-grid p-jc-center p-mb-2">
           <small class="text-error">*this operation cannot be undone</small>
-        </div>
+        </div> -->
 
-        <div class="p-d-flex p-jc-end p-mt-1">
-          <Button class="p-button-primary p-m-2" label="create" @click="checkValid()" />
-
+        <div class="p-d-flex p-jc-between p-mt-1">
           <Button class="p-button-danger p-ml-auto p-m-2 p-button-outlined" label="close" @click="display = false" />
+
+          <Button class="p-button-primary p-m-2" label="create" @click="checkValid()" />
         </div>
       </Dialog>
     </div>
@@ -186,11 +195,13 @@ export default class ChannelPage extends Vue {
     channels.forEach((element: any) => {
       if (element.name == this.channelName) {
         duplicate = true;
+        this.errorChannel = "duplicate channel name.";
+        this.invalidChannel = true;
       }
     });
 
     if (!falsy && !duplicate) {
-      this.created();
+      this.create();
     }
   }
 
@@ -198,12 +209,12 @@ export default class ChannelPage extends Vue {
     this.displaylog = true;
     let args: string[] = ["create"];
     args.push("-c", this.channelName);
-    await OSProcess.run_new(args);
-    await OSProcess.run_new(["join", "-c", this.channelName]);
-    await OSProcess.run_new(["channelquery", "-c", this.channelName]);
+    await OSProcess.run(args);
+    await OSProcess.run(["join", "-c", this.channelName]);
+    await OSProcess.run(["channelquery", "-c", this.channelName]);
 
     if (this.join) {
-      await OSProcess.run_new(["join", "-c", this.channelName]);
+      await OSProcess.run(["join", "-c", this.channelName]);
       this.join = false;
     }
     NetworkConfig.pushValueToArray("channel", {
@@ -232,7 +243,7 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["channelquery"];
     args.push("-c");
     args.push(this.channelSelected);
-    await OSProcess.run_new(args);
+    await OSProcess.run(args);
   }
 
   async channelUpdate() {
@@ -240,7 +251,7 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["channelsign,channelupdate"];
     args.push("-c");
     args.push(this.channelSelected);
-    await OSProcess.run_new(args);
+    await OSProcess.run(args);
     this.channelQuery();
   }
 }
