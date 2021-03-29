@@ -1,8 +1,28 @@
 <template>
   <div>
-    <div class="cc-list-header p-grid p-ai-center vertical-container">
+    <!-- <div class="cc-list-header p-grid p-ai-center vertical-container">
       ChainCode
+    </div> -->
+    <div @click="toggle()">
+      <div class="cc-list-header p-grid p-ai-center vertical-container">
+        ChainCode
+        <div
+          :class="{
+            'toggle-open': showSection,
+            'toggle p-mx-2': true,
+          }"
+        >
+          <i class="fas fa-angle-double-down"></i>
+        </div>
+      </div>
     </div>
+    <transition name="smooth">
+      <div v-show="showSection">
+        <div class="p-grid">
+          <ChaincodeList></ChaincodeList>
+        </div>
+      </div>
+    </transition>
 
     <div class="p-grid p-nogutter p-mr-3">
       <div class="p-col-8">
@@ -333,4 +353,35 @@ export default class CCconsole extends CCconsoleProps {
   font-size: 20px;
   font-weight: bold;
 }
+
+.smooth-enter,
+.smooth-leave-to {
+  overflow: hidden;
+  max-height: 0;
+}
+
+.smooth-enter-to,
+.smooth-leave {
+  overflow: hidden;
+  max-height: 1000px;
+}
+
+.smooth-leave-active {
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+
+.smooth-enter-active {
+  overflow: hidden;
+  transition: max-height 1s;
+}
+
+.toggle {
+  transition: transform 0.2s ease;
+}
+.toggle-open {
+  transform: rotate(180deg);
+  color: $primaryColor;
+}
+
 </style>

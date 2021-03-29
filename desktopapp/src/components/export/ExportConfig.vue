@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <Button @click="exportConfig()" label="export" />
-  </div>
+  
+    <Button @click="exportConfig()" icon="fas fa-file-export" label="configuration files" class="p-button-outlined p-button-primary p-button-sm" />
+  
 </template>
 
 <script lang="ts">

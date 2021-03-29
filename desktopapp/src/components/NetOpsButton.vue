@@ -2,7 +2,7 @@
   <div>
     <div class="p-d-flex">
       <Button
-        icon="fas fa-power-off"
+        icon="fas fa-play"
         class="p-button-success p-button-lg p-m-1 p-p-1 p-button-outlined"
         @click="display = true"
       />
@@ -39,7 +39,7 @@
             <InputText type="number" id="port" v-model="port" />
           </div>
         </div>
-          <div class="p-d-flex p-jc-between p-mt-1">
+          <div class="p-d-flex p-jc-between p-mt-1 ">
             <Button
               class="p-button-danger p-m-2 p-button-outlined p-button-sm"
               label="close"
@@ -113,6 +113,7 @@ export default class NetOpsButton extends Vue {
     this.displaylog = true;
     await OSProcess.run(["cleanup"]);
     this.$store.commit("docker/setActiveContainer");
+    this.$store.commit("setProcessStatus", true);
   }
 
   data() {

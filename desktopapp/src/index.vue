@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="p-grid p-jc-center">
-              <div class="p-col-8">
+              <div class="p-md-8 p-lg-5">
                 <ProgressBar
                   :value="
                     (this.$store.getters['docker/getActiveContainerCount'] /
@@ -53,13 +53,34 @@
     </div>
 
     <div class="container-footer">
-      <ExportConfig />
+      <div class="p-grid p-jc-end p-mr-5">
+        <div class="p-md-4 p-lg-2">
+          <div class="p-d-flex">
+            Export
+          </div>
+          <div class="p-d-flex  p-mt-1 p-fluid">
+            <Button
+              icon="fas fa-id-card"
+              label="connection profile"
+              class="p-button-outlined p-button-primary p-button-sm"
+              @click="exportAppDisplay = true"
+            />
+          </div>
 
-      <Button
-        label="ExportConnectionProfile"
-        class="p-button-outlined p-button-primary p-button-sm"
-        @click="exportAppDisplay = true"
-      />
+          <div class="p-d-flex p-mt-1 p-fluid">
+            <ExportConfig />
+          </div>
+
+          <div class="p-d-flex p-mt-1  p-fluid">
+            <Button
+              icon="fab fa-docker"
+              label="docker images"
+              class="p-button-outlined p-button-primary p-button-sm"
+              disabled
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- <div class="p-grid p-mt-2 p-mr-1">
@@ -72,7 +93,14 @@
        </div>
     </div> -->
 
-    <Dialog modal :dismissableMask="true" :closable="false" v-bind:visible="exportAppDisplay">
+    <Dialog
+      modal
+      :dismissableMask="true"
+      :closable="false"
+      v-bind:visible="exportAppDisplay"
+      :style="{ width: '300px', padding: '0px' }"
+      :contentStyle="{ overflow: 'visible' }"
+    >
       <template #header>
         <span>ExportConnectionProfile</span>
       </template>
@@ -97,7 +125,7 @@ import ExportConfig from "./components/export/ExportConfig.vue";
     LogView,
     ExplorerButton,
     ExportConnectionProfile,
-    ExportConfig
+    ExportConfig,
   },
 })
 export default class Index extends Vue {
@@ -218,7 +246,7 @@ export default class Index extends Vue {
 }
 
 .container-footer {
-  padding: 30px;
+  padding: 15px;
   height: 100%;
   font-size: 20px;
   font-weight: bold;

@@ -1,7 +1,6 @@
 <template>
   <div class="cc-list-wrapper">
-    <DataTable :value="ccList" class="cc-list" 
-    :paginator="true" :rows="5">
+    <DataTable :value="ccList" class="cc-list">
       <Column field="name" header="Name"></Column>
       <Column field="type" header="Language"></Column>
       <Column field="channel" header="Channel"></Column>
@@ -31,8 +30,7 @@ const ChaincodeListProps = Vue.extend({
   //   _display: Boolean,
   // },
 });
-@Component({
-})
+@Component({})
 export default class ChaincodeList extends ChaincodeListProps {
   ccName = "";
   ccType = CCtype.go;
@@ -65,7 +63,7 @@ export default class ChaincodeList extends ChaincodeListProps {
 .cc-list-wrapper {
   padding: 10px 20px 20px 20px;
   background-color: $SubBgColor;
-  width:100%
+  width: 100%;
 }
 
 .cc-list.p-datatable {

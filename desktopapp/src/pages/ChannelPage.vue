@@ -106,9 +106,9 @@
           </div>
         </div>
 
-        <!-- <div class="p-grid p-jc-center p-mb-2">
+        <div class="p-grid p-jc-center p-mb-2">
           <small class="text-error">*this operation cannot be undone</small>
-        </div> -->
+        </div>
 
         <div class="p-d-flex p-jc-between p-mt-1">
           <Button class="p-button-danger p-ml-auto p-m-2 p-button-outlined" label="close" @click="display = false" />
@@ -213,9 +213,14 @@ export default class ChannelPage extends Vue {
     await OSProcess.run(["join", "-c", this.channelName]);
     await OSProcess.run(["channelquery", "-c", this.channelName]);
 
+
     if (this.join) {
       await OSProcess.run(["join", "-c", this.channelName]);
       this.join = false;
+      this.$store.commit("setProcessStatus", true);
+    }
+    else{
+      this.$store.commit("setProcessStatus", true);
     }
     NetworkConfig.pushValueToArray("channel", {
       name: this.channelName,
@@ -244,6 +249,7 @@ export default class ChannelPage extends Vue {
     args.push("-c");
     args.push(this.channelSelected);
     await OSProcess.run(args);
+    this.$store.commit("setProcessStatus", true);
   }
 
   async channelUpdate() {

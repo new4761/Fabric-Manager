@@ -31,7 +31,7 @@
         class="p-button-outlined p-button-danger p-button-sm"
       />
     <Button
-      label="Generate"
+      label="Export"
       icon="pi pi-download"
       @click="generate()"
          class="p-button-outlined p-button-primary p-ml-auto p-px-3 p-button-sm"
