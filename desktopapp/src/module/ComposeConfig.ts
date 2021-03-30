@@ -1,4 +1,6 @@
 // Class for create configtx,yaml for NetworkConfig
+const path = require("path");
+import fs from "fs";
 const yaml = require('js-yaml');
 import { YamlConfig } from "yaml-config";
 import { FileYamlBuilder } from "../module/FileYamlBuilder";
@@ -41,8 +43,22 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
 
         src += yaml.safeDump({ services: this.services });
 
-        return (src);
+        // console.log(src);
+        this.saveFile(this.defaultOutputPath,src,"docker-compose.yaml")
     }
+
+    saveFile(outputPath: string, inputFileData: string, fileName: string) {
+        try {
+          // // check dev mode function
+          // // used this style for base to write function who work with files
+          // console.log(this.src)
+          let filePath = path.join(outputPath, fileName);
+          fs.writeFileSync(filePath, inputFileData, "utf-8");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
     editFile() { }
     updateNetworkConfig() { }
 

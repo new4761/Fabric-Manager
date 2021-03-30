@@ -97,7 +97,7 @@ import Component from "vue-class-component";
 import { CCtype, netWorkConfigPath } from "../../models/EnvProject";
 import FileManager from "../../module/FileManager";
 import InputArg from "../../components/chaincode/InputArg.vue";
-import ChainCodeProcess from "@/module/ChainCodeProcess";
+import ChainCodeProcess from "@/module/ChainCode/ChainCodeProcess";
 import NetworkConfig from "@/models/NetworkConfig";
 const DigSetupCCProps = Vue.extend({
   props: {

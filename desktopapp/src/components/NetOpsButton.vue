@@ -2,29 +2,18 @@
   <div>
     <div class="p-d-flex">
       <Button
-        icon="fas fa-power-off"
+        icon="fas fa-play"
         class="p-button-success p-button-lg p-m-1 p-p-1 p-button-outlined"
         @click="display = true"
       />
 
-      <Button
-        icon="fas fa-power-off"
-        class=" p-button-danger p-button-lg p-m-1 p-button-outlined"
-        @click="netdown()"
-      />
+      <Button icon="fas fa-power-off" class=" p-button-danger p-button-lg p-m-1 p-button-outlined" @click="netdown()" />
 
-      <Button
-        icon="fas fa-trash"
-        class=" p-button-secondary p-button-lg p-m-1 p-button-outlined"
-        @click="cleanup()"
-      />
+      <Button icon="fas fa-trash" class=" p-button-secondary p-button-lg p-m-1 p-button-outlined" @click="cleanup()" />
     </div>
 
     <div>
-      <ConsoleDialogue
-        :_displaylog="displaylog"
-        @update:_displaylog="(val) => (displaylog = val)"
-      />
+      <ConsoleDialogue :_displaylog="displaylog" @update:_displaylog="(val) => (displaylog = val)" />
     </div>
 
     <div>
@@ -33,43 +22,31 @@
         v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '40vw' }"
+        :style="{ width: '300px', padding: '0px' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-d-flex">
-          <div class="p-col-12 p-ml-5 p-my-1">
-            <span class="p-float-label">
-              <Dropdown
-                id="organization"
-                v-model="orgSelected"
-                :options="org"
-              />
-              <label for="organization">Default organization</label>
-            </span>
+        <div class="p-field p-grid p-fluid p-jc-center p-mt-1">
+          <div class="p-col-12 p-px-5">
+            <small>Selected Organization</small>
+            <br />
+            <Dropdown  v-model="orgSelected" :options="org" style="width:100%;"/>
           </div>
         </div>
-
-        <div class="p-col-12 p-d-flex">
-          <div class="p-ml-5 p-my-1">
-            <span class="p-float-label">
-              <InputText id="port" v-model="port" />
-              <label for="port">port (optional)</label>
-            </span>
+        <div class="p-field p-grid p-fluid  p-jc-center">
+          <div class="p-col-12 p-px-5">
+            <small>expose port (optional)</small>
+            <br />
+            <InputText type="number" id="port" v-model="port" />
           </div>
         </div>
-        <div class="p-d-flex p-jc-end p-mt-1">
-          <Button
-            class="p-button-primary p-m-2"
-            label="start"
-            @click="netup()"
-          />
-
-          <Button
-            class="p-button-danger p-ml-auto p-m-2 p-button-outlined"
-            label="close"
-            @click="display = false"
-          />
-        </div>
+          <div class="p-d-flex p-jc-between p-mt-1 ">
+            <Button
+              class="p-button-danger p-m-2 p-button-outlined p-button-sm"
+              label="close"
+              @click="display = false"
+            />
+            <Button class="p-button-primary  p-ml-auto p-m-2 p-button-sm" label="start" @click="netup()" />
+          </div>
       </Dialog>
     </div>
   </div>
@@ -80,7 +57,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ConsoleDialogue from "./ConsoleDialogue.vue";
 import NetworkConfig from "../models/NetworkConfig";
-import OSProcess from "../module/OSProcess";
+import OSProcess from "../module/OSProcess/OSProcess";
 import { OsType } from "../models/EnvProject";
 import ProjectConfig from "../models/ProjectConfig";
 
@@ -120,7 +97,7 @@ export default class NetOpsButton extends Vue {
       args.push("-e");
       args.push(this.port);
     }
-    await OSProcess.run_new(args);
+    await OSProcess.run(args);
     this.$store.commit("docker/setActiveContainer");
     this.$store.commit("setProcessStatus", true);
   }
@@ -128,14 +105,15 @@ export default class NetOpsButton extends Vue {
     this.$store.commit("setProcessContext", "netdown");
     this.displaylog = true;
     this.up = false;
-    await OSProcess.run_new(["down"]);
+    await OSProcess.run(["down"]);
     this.$store.commit("docker/setActiveContainer");
     this.$store.commit("setProcessStatus", true);
   }
   async cleanup() {
     this.displaylog = true;
-    await OSProcess.run_new(["cleanup"]);
+    await OSProcess.run(["cleanup"]);
     this.$store.commit("docker/setActiveContainer");
+    this.$store.commit("setProcessStatus", true);
   }
 
   data() {

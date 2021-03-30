@@ -1,7 +1,7 @@
 import { netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
-import MinifabricController from "../MinifabricController";
-import { getOrgData } from "../StringBuilder";
+import MinifabricController from "../Minifabric/MinifabricController";
+import { getOrgData } from "../OSProcess/StringBuilder";
 const { Gateway } = require("electron").remote.require("fabric-network");
 
 

@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import ChainCodeProcess from "@/module/ChainCodeProcess";
+import ChainCodeProcess from "@/module/ChainCode/ChainCodeProcess";
 import Vue from "vue";
 import Component from "vue-class-component";
 import FileManager from "../../module/FileManager";

@@ -1,19 +1,10 @@
 <template>
   <div class="project-wrapper">
     <ConfirmDialog />
-    <Dialog
-      :visible="display"
-      :closable="false"
-      :modal="true"
-      class="project-info"
-    >
+    <Dialog :visible="display" :closable="false" :modal="true" class="project-info">
       {{ dataSelected }}
       <div class="p-grid p-mt-5">
-        <Button
-          class="p-button-danger p-ml-auto p-my-2"
-          label="close"
-          @click="display = false"
-        />
+        <Button class="p-button-danger p-ml-auto p-my-2" label="close" @click="display = false" />
       </div>
     </Dialog>
 
@@ -22,13 +13,7 @@
         <h1>
           Projects
         </h1>
-        <DataView
-          :value="data"
-          :layout="layout"
-          :sortOrder="sortOrder"
-          :sortField="sortField"
-          class="project-table"
-        >
+        <DataView :value="data" :layout="layout" :sortOrder="sortOrder" :sortField="sortField" class="project-table">
           <template #header>
             <div class="p-grid p-nogutter">
               <div class="p-col-6" style="text-align: left">
@@ -59,16 +44,12 @@
               <div class="list-item" @click="confirmOpen(slotProps.data.id)">
                 <div class="list-detail p-grid p-ai-center vertical-container">
                   <div class="p-col-6">
-                    <div
-                      class="list-detail-name p-d-flex  p-ai-center p-jc-between p-my-1"
-                    >
+                    <div class="list-detail-name p-d-flex  p-ai-center p-jc-between p-my-1">
                       {{ slotProps.data.name }}
                     </div>
 
                     <div class="p-d-flex  p-ai-center p-jc-between  p-my-1">
-                      <div
-                        class="list-detail-directory p-text-nowrap p-text-truncate"
-                      >
+                      <div class="list-detail-directory p-text-nowrap p-text-truncate">
                         {{ slotProps.data.directory }}
                       </div>
                     </div>
@@ -79,7 +60,7 @@
                       <div class="list-detail-date">
                         create date:
                         <Chip class="p-mx-1">
-                          {{ toDate(slotProps.data.date_create) }}
+                          {{ convertDate(slotProps.data.date_create) }}
                         </Chip>
                       </div>
                     </div>
@@ -87,7 +68,7 @@
                       <div class="list-detail-date">
                         last updated:
                         <Chip class="p-mx-1">
-                          {{ toDate(slotProps.data.date_modify) }}
+                          {{ convertTime(slotProps.data.date_modify) }}
                         </Chip>
                       </div>
                     </div>
@@ -125,6 +106,7 @@ import Component from "vue-class-component";
 import data from "../../tests/projects.json";
 import ProjectConfig from "../models/ProjectConfig";
 import CreateNetButton from "../components/project/CreateNetButton.vue";
+import TimeConverter from "@/module/Util/TimeConverter";
 
 @Component({
   components: { CreateNetButton },
@@ -162,8 +144,9 @@ export default class ProjectPage extends Vue {
   }
 
   confirmOpen(id: number) {
+    let target = this.data.find((element: any) => element.id == id);
     this.$confirm.require({
-      message: " ?",
+      message: "open project " + target.name + " ?",
       header: "Confirmation",
       icon: "pi pi-info-circle",
       accept: () => {
@@ -186,11 +169,6 @@ export default class ProjectPage extends Vue {
       },
       reject: () => {},
     });
-  }
-
-  toDate(stamp: any) {
-    var date = new Date(stamp).toDateString();
-    return date;
   }
 
   onSortChange(event: any) {
@@ -218,6 +196,14 @@ export default class ProjectPage extends Vue {
     if (this.sortKey != null) {
       this.onSortChange({ value: this.sortKey });
     }
+  }
+
+  convertTime(unix: number) {
+    return TimeConverter.convertTime(unix);
+  }
+
+  convertDate(unix: number) {
+    return TimeConverter.convertDate(unix);
   }
 }
 </script>

@@ -1,39 +1,22 @@
 <template>
   <div class="">
-    <Dialog
-      header="Header"
-      v-bind:visible="display"
-      :style="{ width: '50vw' }"
-      :modal="true"
-    >
+    <Dialog header="Header" v-bind:visible="display" :style="{ width: '50vw' }" :modal="true">
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
       </p>
       <template #footer>
-        <Button
-          label="No"
-          icon="pi pi-times"
-          @click="display = false"
-          class="p-button-text"
-        />
-        <Button
-          label="Yes"
-          icon="pi pi-check"
-          @click="display = false"
-          autofocus
-        />
+        <Button label="No" icon="pi pi-times" @click="display = false" class="p-button-text" />
+        <Button label="Yes" icon="pi pi-check" @click="display = false" autofocus />
       </template>
     </Dialog>
 
     <table role="grid" class="p-my-1">
       <tbody class="p-datatable-tbody">
-        <tr @click="toggle()">
+        <tr @click="toggle()" class="orgcolumn-tr">
           <td>
             <div class="p-grid">
               <div
@@ -59,22 +42,59 @@
                 <Tag severity="danger" value="ca"></Tag>
               </span>
               <span class="p-mx-1" v-if="item.peer > 0">
-                <Tag
-                  class="p-mr-2"
-                  severity="info"
-                  value="peer"
-                  v-badge="item.peer"
-                ></Tag>
+                <Tag class="p-mr-2" severity="info" value="peer" v-badge="item.peer"></Tag>
               </span>
             </div>
           </td>
-          <td>{{ item.container.length }} running container</td>
+          <td>{{ Array.from(item.child).length }} container(s)</td>
         </tr>
       </tbody>
     </table>
     <transition name="smooth-org">
-      <div v-show="showSection" class="p-px-5 sub-table-wrapper">
-        <DataTable :value="item.container" :autoLayout="true" class="sub-table">
+      <div v-show="showSection" class="p-px-5 sub-table-wrapper p-mb-3">
+        <div v-if="item.container == 0">
+          <table role="grid" class="p-my-1">
+            <tbody class="p-datatable-tbody">
+              <tr v-for="(item, index) in Array.from(item.child)" :key="index">
+                <td>
+                  {{ item }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-else>
+          <table role="grid" class="p-my-1">
+            <tbody class="p-datatable-tbody">
+              <tr v-for="(item, index) in item.container" :key="index">
+                <td>
+                  <div class="p-text-nowrap p-text-truncate">
+                    {{ item.Names[0] }}
+                  </div>
+                </td>
+                <td>
+                   <div class="p-text-nowrap p-text-truncate">
+                    {{ item.Image }}
+                  </div>
+                </td>
+                <td>
+                  <a v-if="item.State == 'running'">●</a>
+                  {{ item.Status }}
+                </td>
+                <td>
+                  <Button
+                    icon="fas fa-terminal"
+                    class="p-button-outlined p-button-primary p-button-sm"
+                    @click="executeDocker(item.Names[0])"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- <DataTable :value="item.container" :autoLayout="true" class="sub-table" v-else>
           <Column>
             <template #body="slotProps">
               <div class="p-text-nowrap p-text-truncate">
@@ -98,7 +118,7 @@
               />
             </template>
           </Column>
-        </DataTable>
+        </DataTable> -->
       </div>
     </transition>
   </div>
@@ -169,6 +189,10 @@ export default class OrgColumn extends Vue {
 .smooth-org-enter-active {
   overflow: hidden;
   transition: max-height 1s;
+}
+
+.orgcolumn-tr:hover {
+  cursor: pointer;
 }
 
 .column-toggle {

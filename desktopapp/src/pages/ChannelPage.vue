@@ -28,7 +28,7 @@
               <Column field="name" header="Name"></Column>
               <Column header="Date create">
                 <template #body="slotProps">
-                  {{ toDate(slotProps.data.date_create) }}
+                  {{ convertDate(slotProps.data.date_create) }}
                 </template>
               </Column>
               <Column header="Last updated">
@@ -44,8 +44,6 @@
         </div>
       </div>
     </transition>
-
-    <hr />
     <div class="p-d-flex p-jc-between p-ai-center config-view-header">
       <div>
         Channel:
@@ -76,51 +74,46 @@
         </div>
       </div>
     </div>
-    <div class="p-d-flex">
-      <div class="p-col-12">
-        <ChannelEditPage :channelName="channelSelected" :key="componentKey" />
-      </div>
-    </div>
+
+    <ChannelEditPage :channelName="channelSelected" :key="componentKey" class="p-mt-3" />
 
     <div>
-      <ConsoleDialogue
-        :_displaylog="displaylog"
-        @update:_displaylog="(val) => (displaylog = val)"
-      />
+      <ConsoleDialogue :_displaylog="displaylog" @update:_displaylog="(val) => (displaylog = val)" />
     </div>
 
     <div>
       <Dialog
-        header="Create network"
+        header="Create new channel"
         v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '30vw' }"
+        :style="{ width: '300px' }"
         :contentStyle="{ overflow: 'visible' }"
       >
-        <div class="p-grid p-jc-center p-p-3">
-          <span class="p-float-label">
-            <InputText id="channelName" v-model="channelName" />
-            <label for="channelName">channelName</label>
-          </span>
+        <div class="p-field p-grid p-fluid  p-jc-center">
+          <div class="p-col-12 p-px-5">
+            <small>Channel name</small>
+            <br />
+            <InputText
+              id="channelName"
+              v-model="channelName"
+              :class="{
+                'p-invalid': invalidChannel,
+              }"
+            />
+            <br />
+            <small class="p-error" v-if="invalidChannel">{{ errorChannel }}</small>
+          </div>
         </div>
 
         <div class="p-grid p-jc-center p-mb-2">
           <small class="text-error">*this operation cannot be undone</small>
         </div>
 
-        <div class="p-d-flex p-jc-end p-mt-1">
-          <Button
-            class="p-button-primary p-m-2"
-            label="create"
-            @click="create()"
-          />
+        <div class="p-d-flex p-jc-between p-mt-1">
+          <Button class="p-button-danger p-ml-auto p-m-2 p-button-outlined" label="close" @click="display = false" />
 
-          <Button
-            class="p-button-danger p-ml-auto p-m-2 p-button-outlined"
-            label="close"
-            @click="display = false"
-          />
+          <Button class="p-button-primary p-m-2" label="create" @click="checkValid()" />
         </div>
       </Dialog>
     </div>
@@ -130,12 +123,12 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import OSProcess from "../module/OSProcess";
+import OSProcess from "../module/OSProcess/OSProcess";
 import NetworkConfig from "../models/NetworkConfig";
 import logger from "../module/Logger";
-import ChannelEditPage from "./ChannelEditPage.vue";
+import ChannelEditPage from "../components/channel/ChannelEdit.vue";
 import ConsoleDialogue from "../components/ConsoleDialogue.vue";
-import { OsType } from "../models/EnvProject";
+import TimeConverter from "../module/Util/TimeConverter";
 
 @Component({
   components: { ConsoleDialogue, ChannelEditPage },
@@ -150,7 +143,8 @@ export default class ChannelPage extends Vue {
   showSection: boolean = false;
   join: boolean = false;
   componentKey: number = 0;
-  private osType: OsType = OsType.WINDOW;
+  invalidChannel: boolean = false;
+  errorChannel: string = "";
 
   created() {
     this.init();
@@ -168,49 +162,65 @@ export default class ChannelPage extends Vue {
   }
 
   convertTime(unix: number) {
-    let dateNow: number = Date.now();
-    //  console.log(new Date(unix).getDate());
-    let dayNow = new Date(dateNow).getTime();
-    let dayUpdate = new Date(unix).getTime();
-    return this.msToTime(dayNow - dayUpdate);
-  }
-  msToTime(s: number) {
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = ((s - mins) / 60) % 24;
-    var day = Math.round((s - mins) / 60 / 24);
-    if (day >= 1) {
-      return day + " " + "Days ago";
-    } else if (hrs >= 1) {
-      return hrs + " " + "Hours ago";
-    } else {
-      return mins + " " + "Minutes ago";
-    }
+    return TimeConverter.convertTime(unix);
   }
 
-  toDate(stamp: any) {
-    var date = new Date(stamp).toDateString();
-    return date;
+  convertDate(unix: number) {
+    return TimeConverter.convertDate(unix);
   }
 
   toggle() {
     this.showSection = !this.showSection;
   }
 
+  checkValid() {
+    let channels = NetworkConfig.getValue("channel");
+    let duplicate = false;
+    let falsy = false;
+    this.invalidChannel = false;
+    console.log(channels);
+
+    if (!this.channelName) {
+      this.errorChannel = "cannot be empty.";
+      this.invalidChannel = true;
+      falsy = true;
+    }
+    //eslint-disable-next-line
+    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(this.channelName)) {
+      this.errorChannel = "cannot contain special character.";
+      this.invalidChannel = true;
+      falsy = true;
+    }
+
+    channels.forEach((element: any) => {
+      if (element.name == this.channelName) {
+        duplicate = true;
+        this.errorChannel = "duplicate channel name.";
+        this.invalidChannel = true;
+      }
+    });
+
+    if (!falsy && !duplicate) {
+      this.create();
+    }
+  }
+
   async create() {
     this.displaylog = true;
     let args: string[] = ["create"];
     args.push("-c", this.channelName);
-    await OSProcess.run_new(args);
-    await OSProcess.run_new(["join", "-c", this.channelName]);
-    await OSProcess.run_new(["channelquery", "-c", this.channelName]);
+    await OSProcess.run(args);
+    await OSProcess.run(["join", "-c", this.channelName]);
+    await OSProcess.run(["channelquery", "-c", this.channelName]);
+
 
     if (this.join) {
-      await OSProcess.run_new(["join", "-c", this.channelName]);
+      await OSProcess.run(["join", "-c", this.channelName]);
       this.join = false;
+      this.$store.commit("setProcessStatus", true);
+    }
+    else{
+      this.$store.commit("setProcessStatus", true);
     }
     NetworkConfig.pushValueToArray("channel", {
       name: this.channelName,
@@ -238,7 +248,8 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["channelquery"];
     args.push("-c");
     args.push(this.channelSelected);
-    await OSProcess.run_new(args);
+    await OSProcess.run(args);
+    this.$store.commit("setProcessStatus", true);
   }
 
   async channelUpdate() {
@@ -246,7 +257,7 @@ export default class ChannelPage extends Vue {
     let args: string[] = ["channelsign,channelupdate"];
     args.push("-c");
     args.push(this.channelSelected);
-    await OSProcess.run_new(args);
+    await OSProcess.run(args);
     this.channelQuery();
   }
 }

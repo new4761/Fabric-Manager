@@ -4,8 +4,8 @@ const fs = require("fs");
 // import ProjectConfig from "@/models/ProjectConfig";
 // import store from "../store/modules/project";
 import FileManager from "./FileManager";
-import MinifabricController from "./MinifabricController";
-import { fixOrgName } from "./StringBuilder";
+import MinifabricController from "./Minifabric/MinifabricController";
+import { fixOrgName } from "./OSProcess/StringBuilder";
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const path = require('path');
 class ExportAppProcess {

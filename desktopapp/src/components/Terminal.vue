@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { removeColorCode } from "../module/StringBuilder";
+import { removeColorCode } from "../module/OSProcess/StringBuilder";
 // import StdoutCapture from "../module/OSProcess/StdoutCapture";
 import { mapState } from "vuex";
 

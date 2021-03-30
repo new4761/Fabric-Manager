@@ -24,7 +24,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Terminal from "../components/Terminal.vue";
-import OSProcess from "../module/OSProcess";
+import OSProcess from "../module/OSProcess/OSProcess";
 const TerminalProps = Vue.extend({
   props: {
     command: String,
@@ -49,7 +49,7 @@ export default class SplashConsolePage extends TerminalProps {
   async run() {
     let args = this.command.split("#");
     console.log(args);
-    await OSProcess.run_new(args,this.directory);
+    await OSProcess.run(args,this.directory);
   }
 
   back() {

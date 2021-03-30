@@ -4,7 +4,7 @@ import { getProjectPath,netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 import FileManager from "@/module/FileManager";
 import MinifabricIdentityManger from "@/module/Minifabric/MinifabricIdentityManger";
-import { fixOrgName } from "@/module/StringBuilder";
+import { fixOrgName } from "@/module/OSProcess/StringBuilder";
 const path = require('path');
 // const {RegisterRequest} = require("electron").remote.require("fabric-common");
 class IdentityManger {

@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <Button @click="exportConfig()" label="export" />
-  </div>
+  
+    <Button @click="exportConfig()" icon="fas fa-file-export" label="configuration files" class="p-button-outlined p-button-primary p-button-sm" />
+  
 </template>
 
 <script lang="ts">
@@ -9,6 +9,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 const { dialog } = require("electron").remote;
 import FileManager from "../../module/FileManager";
+import ComposeConfig from "../../module/ComposeConfig";
 const path = require("path");
 @Component({
   components: {},
@@ -21,22 +22,33 @@ export default class ExportConfig extends Vue {
     let _configtx = path.join("vars", "configtx.yaml");
     let _core = path.join("vars", "core.yaml");
     let _cryptoConfig = path.join("vars", "crypto-config.yaml");
+    let _env = path.join("vars", "run");
     await this.getDestination();
-    FileManager.copyFilesDir(
-      path.join(this.$store.state.project.path, _configtx),
-      path.join(this.exportDir, "configtx.yaml")
-    );
 
-    FileManager.copyFilesDir(
-      path.join(this.$store.state.project.path, _core),
-      path.join(this.exportDir, "core.yaml")
-    );
+    if (this.exportDir) {
+      FileManager.createDir(this.$store.state.project.path, "docker");
+      FileManager.copyFilesDir(
+        path.join(this.$store.state.project.path, _configtx),
+        path.join(this.exportDir, "configtx.yaml")
+      );
 
-    FileManager.copyFilesDir(
-      path.join(this.$store.state.project.path, _cryptoConfig),
-      path.join(this.exportDir, "crypto-config.yaml")
-    );
-    FileManager.copyFilesDir;
+      FileManager.copyFilesDir(
+        path.join(this.$store.state.project.path, _core),
+        path.join(this.exportDir, "core.yaml")
+      );
+
+      FileManager.copyFilesDir(
+        path.join(this.$store.state.project.path, _cryptoConfig),
+        path.join(this.exportDir, "crypto-config.yaml")
+      );
+      FileManager.copyFileExtension(
+        path.join(this.$store.state.project.path, _env),
+        path.join(this.exportDir, "docker"),
+        ".env"
+      );
+      ComposeConfig.defaultOutputPath = path.join(this.exportDir, "docker");
+      ComposeConfig.createFile();
+    }
   }
 
   async getDestination() {

@@ -62,7 +62,7 @@
                       <span class="p-column-title">Role</span>
                     </th>
                     <th>
-                      <span class="p-column-title">Status</span>
+                      <span class="p-column-title">Count</span>
                     </th>
                   </tr>
                 </thead>

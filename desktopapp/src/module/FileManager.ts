@@ -139,5 +139,24 @@ class FileManager {
       });
     }
   }
+
+  copyFileExtension(sourceDir: any, destDir: any, extension: any) {
+    //console.log('Starting from dir '+startPath+'/');
+    if (!fs.existsSync(sourceDir)) {
+      console.log("no dir ", sourceDir);
+      return;
+    }
+    var files = fs.readdirSync(sourceDir);
+    console.log(files);
+    for (var i = 0; i < files.length; i++) {
+      // var filename = path.join(sourceDir, files[i]);
+      console.log(files[i])
+      if (files[i].toString().indexOf(extension) >= 0) {
+        console.log("-- found: ", files[i]);
+        console.log(path.join(destDir, files[i]));
+        this.copyFilesDir(path.join(sourceDir, files[i]), path.join(destDir, files[i]));
+      }
+    }
+  }
 }
 export default new FileManager();

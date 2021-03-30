@@ -1,18 +1,18 @@
 const { spawn } = require("child_process");
 
 const spawnSync = require("child-process-promise").spawn;
-import store from "../store/modules/project";
-import storeProcess from "../store";
+import store from "../../store/modules/project";
+import storeProcess from "../../store";
 import { strict } from "assert";
-import { getProjectPath, OsType } from "../models/EnvProject";
+import { getProjectPath, OsType } from "../../models/EnvProject";
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const events = require("events");
-import logger from "../module/Logger";
-import ChainCodeProcess from "./ChainCodeProcess";
-import DockerProcess from "./DockerProcess";
-import FileManager from "./FileManager";
-import StdoutCapture from "./OSProcess/StdoutCapture";
+import logger from "../Logger";
+import ChainCodeProcess from "../ChainCode/ChainCodeProcess";
+import DockerProcess from "../DockerProcess";
+import FileManager from "../FileManager";
+import StdoutCapture from "./StdoutCapture";
 import { removeColorCode } from "./StringBuilder";
 import ProjectConfig from "@/models/ProjectConfig";
 
@@ -22,7 +22,7 @@ class OSProcess {
     this.emitter = new events();
   }
 
-  run_new(args: string[], projectPath?: string): any {
+  run(args: string[], projectPath?: string): any {
     let ls: any;
     //set to minifab output
     if (projectPath == null) {
