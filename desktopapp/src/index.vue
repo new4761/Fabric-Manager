@@ -74,7 +74,7 @@
           <div class="p-d-flex p-mt-1  p-fluid">
             <Button
               icon="fab fa-docker"
-              label="docker images"
+              label="docker container"
               class="p-button-outlined p-button-primary p-button-sm"
               disabled
             />

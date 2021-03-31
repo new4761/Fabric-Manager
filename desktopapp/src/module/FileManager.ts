@@ -14,13 +14,13 @@ class FileManager {
     return dialog
       .showOpenDialog({ properties: ["openDirectory"] })
       .then((result) => {
-        //console.log(result.canceled)
-        // console.log(result.filePaths)
+        ////console.log(result.canceled)
+        // //console.log(result.filePaths)
         // this.copyFilesDir(result.filePaths[0], destDir)
         return result.filePaths[0];
       })
       .catch((err) => {
-        //  console.log(err)
+        //  //console.log(err)
         return err;
       });
   }
@@ -31,13 +31,13 @@ class FileManager {
     dialog
       .showOpenDialog({ properties: ["openFile"] })
       .then((result) => {
-        //console.log(result.canceled)
-        //console.log(result.filePaths)
+        ////console.log(result.canceled)
+        ////console.log(result.filePaths)
         // this.copyFile(result.filePaths[0], destDir)
         return result.filePaths[0];
       })
       .catch((err) => {
-        //console.log(err)
+        ////console.log(err)
         return err;
       });
   }
@@ -47,7 +47,7 @@ class FileManager {
       if (err) {
         throw err;
       }
-      console.log("File is deleted.");
+      //console.log("File is deleted.");
     });
   }
 
@@ -63,7 +63,7 @@ class FileManager {
     let configPath = path.join(destination, "net-config.json");
     let specPath = path.join(destination, "spec.yaml");
     let varsPath = path.join(destination, "vars");
-    console.log(miniPath);
+    //console.log(miniPath);
     this.removeFile(miniPath);
     this.removeFile(configPath);
     this.removeFile(specPath);
@@ -76,7 +76,7 @@ class FileManager {
         console.error(err);
         return;
       }
-      //console.log(data)
+      ////console.log(data)
       return data;
     });
   }
@@ -84,7 +84,7 @@ class FileManager {
   async writeDataToFile(destDir: string, data: any) {
     await fs.appendFile(destDir, data, function(err: any) {
       if (err) throw err;
-      console.log("Saved!");
+      //console.log("Saved!");
     });
   }
 
@@ -92,40 +92,40 @@ class FileManager {
     if (fs.existsSync(sourceDir)) {
       return fs.watch(sourceDir);
     } else {
-      // console.log("fuck u")
+      // //console.log("fuck u")
     }
   }
   //TODO : add overwrite condition
   createFile(destDir: string) {
-    //console.log(sourceDir)
+    ////console.log(sourceDir)
     if (!fs.existsSync(destDir)) {
       fs.writeFileSync(destDir, function(err: any) {
         if (err) throw err;
-        console.log("Saved!");
+        //console.log("Saved!");
       });
     }
   }
   async createFileWithData(destDir: string, data: string) {
-    //console.log(sourceDir)
+    ////console.log(sourceDir)
     await fs.writeFileSync(destDir, data, function(err: any) {
       if (err) throw err;
-      console.log("Saved!");
+      //console.log("Saved!");
     });
   }
 
   // call through to copy file
   copyFile(sourceDir: any, destDir: string) {
     let fileName = path.basename(sourceDir);
-    // console.log(fileName)
+    // //console.log(fileName)
     fs.copyFile(sourceDir, path.join(destDir, fileName), (err: any) => {
       if (err) throw err;
-      console.log("success");
+      // //console.log("success");
     });
   }
   // call through to copy files
   async copyFilesDir(sourceDir: any, destDir: string) {
     await fse.copySync(sourceDir, destDir);
-    // .then(() => console.log("copyFilesDir success!"))
+    // .then(() => //console.log("copyFilesDir success!"))
     // .catch((err: any) => console.error(err));
   }
   createDir(destDir: string, folderName: string) {
@@ -135,25 +135,25 @@ class FileManager {
         if (err) {
           return console.error(err);
         }
-        console.log("Directory created successfully!");
+        //console.log("Directory created successfully!");
       });
     }
   }
 
   copyFileExtension(sourceDir: any, destDir: any, extension: any) {
-    //console.log('Starting from dir '+startPath+'/');
+    ////console.log('Starting from dir '+startPath+'/');
     if (!fs.existsSync(sourceDir)) {
-      console.log("no dir ", sourceDir);
+      // //console.log("no dir ", sourceDir);
       return;
     }
     var files = fs.readdirSync(sourceDir);
-    console.log(files);
+    //console.log(files);
     for (var i = 0; i < files.length; i++) {
       // var filename = path.join(sourceDir, files[i]);
-      console.log(files[i])
+      //console.log(files[i])
       if (files[i].toString().indexOf(extension) >= 0) {
-        console.log("-- found: ", files[i]);
-        console.log(path.join(destDir, files[i]));
+        // //console.log("-- found: ", files[i]);
+        // //console.log(path.join(destDir, files[i]));
         this.copyFilesDir(path.join(sourceDir, files[i]), path.join(destDir, files[i]));
       }
     }

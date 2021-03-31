@@ -96,6 +96,9 @@ export default class NetOpsButton extends Vue {
     if (this.port != "") {
       args.push("-e");
       args.push(this.port);
+    }else{
+      args.push("-e");
+      args.push("true");
     }
     await OSProcess.run(args);
     this.$store.commit("docker/setActiveContainer");
