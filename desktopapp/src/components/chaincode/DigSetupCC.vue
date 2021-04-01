@@ -190,7 +190,6 @@ export default class DigSetupCC extends DigSetupCCProps {
       }
       await ChainCodeProcess.deployCCtoFabric(ccObj, this.useInit, this.args, this.selectedOrg);
     }
-  }
   this.close()
   this.$emit("openLog", false);
   }
