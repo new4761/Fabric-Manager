@@ -144,6 +144,7 @@ export default class DigUpgradeCC extends DigUpGradeCCProps {
     }
     await ChainCodeProcess.updateCCtoFabric(this._selectedCC, this.selectedOrg);
     this.$emit("hookccList");
+    this.close()
     //  this.hookCClist();
   }
 }

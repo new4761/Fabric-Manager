@@ -38,7 +38,7 @@
               ></Button>
             </div>
           </div>
-          <Panel>
+          <!-- <Panel>
             <div class="p-grid p-fluid">
               <div class="p-col-6">
                 <small>Selected Channel </small>
@@ -51,8 +51,7 @@
                 <Dropdown v-model="selectedOrg" :options="orgList" />
               </div>
             </div>
-          </Panel>
-          <br />
+          </Panel> -->
           <Panel>
             <div class="p-grid p-fluid p-nogutter">
               <div class="p-col-3">
@@ -60,7 +59,7 @@
                 <Dropdown v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
               </div>
               <div class="p-col-6">
-                <small>Name</small>
+                <small>ChainCode Name</small>
                 <Dropdown
                   v-model="selectedCC"
                   :options="ccList"
@@ -78,16 +77,33 @@
                   class="p-button-outlined p-button-primary"
                 />
               </div>
+               <div class="p-col-12 p-mt-2">
+                <small>Selected Peer Organization</small>
+                <br />
+                <Dropdown v-model="selectedOrg" :options="orgList" />
+              </div>
             </div>
+
           </Panel>
-          <Panel>
+           <div class="p-inputgroup p-my-2">
+                <SelectButton v-model="selecteInputActive" :options="selectedInput" optionLabel="name" />
+              </div>
+          <Panel v-if="selecteInputActive.active==0">
             <template #header>
               <small>Parameter List</small>
             </template>
             <div class="p-grid p-fluid p-nogutter">
-              <div v-for="(item, index) in args.length + 1" :key="index" class="p-col-12">
+              <div v-for="(item, index) in args.list.length + 1" :key="index" class="p-col-12">
                 <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)"></InputArg>
               </div>
+            </div>
+          </Panel>
+          <Panel v-if="selecteInputActive.active==1">
+            <template #header>
+              <small>Parameter Raw</small>
+            </template>
+            <div class="p-grid p-fluid p-nogutter">
+            <Textarea v-model="args.raw" rows="1" cols="30" :autoResize="true" />
             </div>
           </Panel>
           <br />
@@ -95,16 +111,16 @@
             <template #header>Response</template>
             <div class="p-col-12">
               <div class="p-inputgroup">
-                <SelectButton v-model="selectedActive" :options="selectedOutput" optionLabel="name" />
+                <SelectButton v-model="selectedOutputActive" :options="selectedOutput" optionLabel="name" />
               </div>
 
-              <Panel v-if="selectedActive.active == 0">
+              <Panel v-if="selectedOutputActive.active == 0">
                 <ScrollPanel style="width: 100%; height: 200px">
                   <p>{{ output.fabricPayload }}</p>
                 </ScrollPanel>
               </Panel>
 
-              <Panel v-if="selectedActive.active == 1">
+              <Panel v-if="selectedOutputActive.active == 1">
                 <ScrollPanel style="width: 100%; height: 200px">
                   <p v-for="(item, index) in output.response" :key="index">
                     {{ item }}
@@ -112,7 +128,7 @@
                 </ScrollPanel>
               </Panel>
 
-              <Panel v-if="selectedActive.active == 2">
+              <Panel v-if="selectedOutputActive.active == 2">
                 <ScrollPanel style="width: 100%; height: 200px">
                   <p v-for="(item, index) in output.rawData" :key="index">
                     {{ item }}
@@ -184,7 +200,10 @@ export default class CCconsole extends CCconsoleProps {
   orgList = [];
   selectedOrg = "";
   selectedChannel: any = "";
-  args: any = [];
+  args: any = {
+    list:[],
+    raw:""
+  };
   cmdLoading = false;
   //digBox var
   listCCdisplay = false;
@@ -192,7 +211,10 @@ export default class CCconsole extends CCconsoleProps {
   displaylog = false;
   selectedCC = {};
   output: any = {};
-  selectedActive: any = { name: "Response", active: 0 };
+    selectedInput = [
+    { name: "Parameter List", active: 0 },
+    { name: "Raw", active: 1 },
+  ];
   selectedOutput = [
     { name: "Response body", active: 0 },
     { name: "Debug", active: 1 },
@@ -205,7 +227,8 @@ export default class CCconsole extends CCconsoleProps {
     { label: "QUERY", value: "query" },
   ];
   showSection: boolean = false;
-
+  selecteInputActive:any =this.selectedInput[0]
+  selectedOutputActive: any = this.selectedOutput[0]
   $refs!: {
     info: CCDetails;
   };
@@ -242,8 +265,8 @@ export default class CCconsole extends CCconsoleProps {
   }
   hookCClist() {
     // console.log("hook")
-    let _ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
-    this.ccList = _ccList.filter((obj: ChainCode) => obj.channel == this.selectedChannel.name);
+    this.ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
+    // this.ccList = _ccList.filter((obj: ChainCode) => obj.channel == this.selectedChannel.name);
     if (this.ccList.length > 0) {
       this.selectedCC = this.ccList[0];
     }
@@ -268,12 +291,17 @@ export default class CCconsole extends CCconsoleProps {
   async callPeerCC(command: string) {
     this.cmdLoading = true;
     this.resetOutput();
-    let output = await ChainCodeProcess.callCC_command(this.selectedCC, this.args, command, this.selectedOrg);
+     let output;
+    if(this.selecteInputActive.active==0){
+     output = await ChainCodeProcess.callCC_command(this.selectedCC, this.args.list, command, this.selectedOrg);
+    }
+    else{
+     output = await ChainCodeProcess.callCC_command_string(this.selectedCC, this.args.raw, command, this.selectedOrg);
+    }
     this.output.rawData = output.rawData;
     this.output.response = output.response;
     this.output.fabricPayload = output.fabricPayload;
     this.cmdLoading = false;
-    //console.log(output)
   }
   // query() {}
   resetOutput() {
@@ -284,7 +312,7 @@ export default class CCconsole extends CCconsoleProps {
   // component function
   setArg(value: any, index: number) {
     //handle vue array change
-    this.$set(this.args, index, value);
+    this.$set(this.args.list, index, value);
   }
 
   displayLog(data: boolean) {
@@ -299,10 +327,10 @@ export default class CCconsole extends CCconsoleProps {
   }
   deleteArg(index: number) {
     if (index == 0) {
-      this.args = [];
+      this.args.list = [];
     } else {
       //console.log(index)
-      this.args.splice(index, index);
+      this.args.list.splice(index, index);
     }
   }
 }

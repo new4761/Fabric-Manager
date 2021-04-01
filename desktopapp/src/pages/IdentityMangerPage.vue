@@ -4,9 +4,11 @@
       Indentity Manager
     </div>
 
-    <div class="p-grid p-nogutter  identity-wrapper p-jc-center p-mt-5 ">
+    <div class="p-grid p-nogutter identity-wrapper p-jc-center p-mt-5">
       <div class="p-col-10">
-        <div class="p-d-flex p-jc-between p-ai-center identity-table-header p-py-2 p-px-1">
+        <div
+          class="p-d-flex p-jc-between p-ai-center identity-table-header p-py-2 p-px-1"
+        >
           <div class="p-col">
             <!-- <small>Peer Organization</small> <br />
                 <Dropdown
@@ -17,6 +19,12 @@
                 /> -->
             <div class="identity-table-header-text">
               Identity List
+              <Dropdown
+                class="p-mt-1"
+                v-model="showOrg"
+                :options="orgList"
+                @change="setUserDataList($event.value)"
+              />
             </div>
           </div>
           <div class="p-col p-text-right">
@@ -32,11 +40,15 @@
           <template #header>
             <div></div>
           </template>
-          <div v-if="userDataList.length === 0" class="table-indentity-blocked p-d-flex p-jc-center p-ai-center">
-            <div class="p-col p-text-center"><i class="fas fa-unlink"></i> no user indentity</div>
+          <div
+            v-if="userDataList.length === 0"
+            class="table-indentity-blocked p-d-flex p-jc-center p-ai-center"
+          >
+            <div class="p-col p-text-center">
+              <i class="fas fa-unlink"></i> no user indentity
+            </div>
           </div>
-
-          <DataTable :value="userDataList" class="table-indentity" v-else>
+          <DataTable :value="userDataList" class="table-indentity" :scrollable="true" scrollHeight="flex"  v-else>
             <Column field="name" header="Name"></Column>
             <Column field="role" header="Role"></Column>
           </DataTable>
@@ -68,14 +80,19 @@
                 class="p-mt-1"
                 :options="orgList"
                 v-model="selectedOrg"
-                @change="setUserDataList($event.value)"
               />
             </div>
 
             <div class="p-field p-col-12">
               <label>Username</label>
-              <InputText :class="{ 'p-invalid': inputGroup.inputName }" placeholder="Username" v-model="userName" />
-              <small v-if="inputGroup.inputName" class="p-error">Required input UserName </small>
+              <InputText
+                :class="{ 'p-invalid': inputGroup.inputName }"
+                placeholder="Username"
+                v-model="userName"
+              />
+              <small v-if="inputGroup.inputName" class="p-error"
+                >Required input UserName
+              </small>
             </div>
             <div class="p-field p-col-12">
               <label>Password</label>
@@ -85,7 +102,9 @@
                 placeholder="Password"
                 :toggleMask="true"
               />
-              <small v-if="inputGroup.inputPW" class="p-error">Required input Password </small>
+              <small v-if="inputGroup.inputPW" class="p-error"
+                >Required input Password
+              </small>
             </div>
 
             <div class="p-field p-col-12">
@@ -104,7 +123,7 @@
               label="Enroll"
               icon="pi pi-user-plus"
               class="p-button-outlined p-button-primary p-ml-auto p-px-3"
-              @click="enroll(), checkInputGroup()"
+              @click="enroll(), checkInputGroup(), (newUserDisplay = false)"
             />
           </div>
         </Dialog>
@@ -133,6 +152,7 @@ export default class IdentityManger extends IdentityMangerProps {
   userPassword: string = "";
   userRole: string = "";
   selectedOrg = "";
+  showOrg = "";
   inputGroup = {
     inputName: false,
     inputPW: false,
@@ -148,6 +168,7 @@ export default class IdentityManger extends IdentityMangerProps {
       this.orgList = _orgList;
       // this.orgUserList = _orgUserList
       this.selectedOrg = this.orgList[0];
+      this.showOrg = this.orgList[0];
       this.setUserDataList(this.orgList[0]);
     }
     //this.selectedChannel = this.channelList[0];
@@ -192,7 +213,12 @@ export default class IdentityManger extends IdentityMangerProps {
   }
   async enroll() {
     if (!(this.userName == "" || this.userPassword == "")) {
-      await FabricSDK.EnrollIdentity(this.selectedOrg, this.userName, this.userPassword, this.userRole);
+      await FabricSDK.EnrollIdentity(
+        this.selectedOrg,
+        this.userName,
+        this.userPassword,
+        this.userRole
+      );
       this.setUserDataList(this.selectedOrg);
     }
   }

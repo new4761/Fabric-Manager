@@ -250,6 +250,28 @@ class ChainCodeProcess {
       return this.getCallBackData(res);
     });
   }
+  
+  callCC_command_string(ccObj: any, ccArgs: any, command: string, org: string) {
+    let args: any = [];
+    args.push(command);
+    args = ArgsWrapper.basicCCWrapper(args, ccObj, org)
+    //for window case
+    const double_quote = /"/g;
+    ccArgs=ccArgs.replace(double_quote,'\\"')
+    const single_quote = /'/g;
+    ccArgs=ccArgs.replace(single_quote,'\\\'')
+    args.push("-p")
+    args.push(`"${ccArgs}"`)
+
+    //if (ccObj.state == CCstate.initCC) {
+    return OSProcess.run_CC_output(
+      args,
+      command,
+      ccObj.version
+    ).then((res: any[]) => {
+      return this.getCallBackData(res);
+    });
+  }
 
   async findFirstEndorser(projectPath: string, version: any) {
     //console.log(projectPath)

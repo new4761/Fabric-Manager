@@ -215,6 +215,8 @@ export default class DigSetupCC extends DigSetupCCProps {
       this.selectedOrg
     );
   }
+  this.close()
+  this.$emit("openLog", false);
   }
 }
 </script>
