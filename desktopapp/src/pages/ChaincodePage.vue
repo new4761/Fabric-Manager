@@ -59,7 +59,7 @@
                 <Dropdown v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
               </div>
               <div class="p-col-6">
-                <small>ChainCode Name</small>
+                <small>Chaincode name</small>
                 <Dropdown
                   v-model="selectedCC"
                   :options="ccList"
@@ -411,5 +411,4 @@ export default class CCconsole extends CCconsoleProps {
   transform: rotate(180deg);
   color: $primaryColor;
 }
-
 </style>

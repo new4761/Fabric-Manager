@@ -1,158 +1,160 @@
 // Class for create configtx,yaml for NetworkConfig
 const path = require("path");
 import fs from "fs";
-const yaml = require('js-yaml');
+const yaml = require("js-yaml");
 import { YamlConfig } from "yaml-config";
 import { FileYamlBuilder } from "../module/FileYamlBuilder";
+import ProjectConfig from "@/models/ProjectConfig";
+import NetworkConfig from "@/models/NetworkConfig";
+
+import store from "../store/modules/project";
 class ComposeConfig extends FileYamlBuilder implements YamlConfig {
+  fileName: string;
+  defaultOutputPath: string;
 
-    fileName: string;
-    defaultOutputPath: string;
+  volumes: any = {};
+  network: any = {};
+  services: any = {};
 
-    volumes: any = {}
-    network: any = {}
-    services: any = {}
+  envMap: any;
+  org: any;
 
-    constructor() {
-        super();
-        this.fileName = "compose.yaml";
-        this.defaultOutputPath = "./tests";
+  constructor() {
+    super();
+    this.fileName = "compose.yaml";
+    this.defaultOutputPath = "./tests";
+  }
+  getUserInput() {}
+  createFile() {
+    this.envMap = new Map();
+
+    let sourceDir = path.join(ProjectConfig.getPathResolve(store.state.id), "vars", "run");
+    if (!fs.existsSync(sourceDir)) {
+      return;
     }
-    getUserInput() { }
-    createFile() {
-
-        let src = "\n # This file is Generate from YamlClass \n";
-        this.addOrg("orderer.example.com");
-        this.addOrg("peer0.org1.example.com");
-        this.addOrg("peer0.org2.example.com");
-        src += yaml.safeDump({ volumes: this.volumes });
-
-        this.addNetwork("test");
-        src += yaml.safeDump({ networks: this.network });
-
-
-        let peer0 = this.addPeer("orderer","orderer",7050,0,"test");
-        let peer1 = this.addPeer("peer0.org1","peer",7051,1,"test");
-        let peer2 = this.addPeer("peer0.org2","peer",9051,2,"test");
-        let peer3 = this.addPeer("peer1.org1","peer",8051,1,"test");
-
-        this.addService("orderer.example.com", peer0);
-        this.addService("peer0.org1.example.com", peer1);
-        this.addService("peer1.org1.example.com", peer3);
-        this.addService("peer0.org2.example.com", peer2);
-
-        src += yaml.safeDump({ services: this.services });
-
-        // console.log(src);
-        this.saveFile(this.defaultOutputPath,src,"docker-compose.yaml")
-    }
-
-    saveFile(outputPath: string, inputFileData: string, fileName: string) {
-        try {
-          // // check dev mode function
-          // // used this style for base to write function who work with files
-          // console.log(this.src)
-          let filePath = path.join(outputPath, fileName);
-          fs.writeFileSync(filePath, inputFileData, "utf-8");
-        } catch (e) {
-          console.log(e);
-        }
+    var files = fs.readdirSync(sourceDir);
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].toString().indexOf(".env") >= 0) {
+        console.log("-- found: ", files[i]);
+        let envConfig = fs.readFileSync(path.join(sourceDir, files[i]), "utf8").split(/[\r\n]+/);
+        this.envMap.set(files[i].replace(".env", ""), envConfig);
       }
-
-    editFile() { }
-    updateNetworkConfig() { }
-
-    addOrg(orgUrl: string) {
-        this.volumes[orgUrl] = null;
     }
 
-    addNetwork(net: string) {
-        this.network[net] = null;
+    this.org = NetworkConfig.getOrgData();
+    // Object.values(org).forEach(element => console.log(Array.from(element.child)));
+    console.log(this.envMap);
+    console.log(this.org);
+
+    let src = "\n # This file is Generate from YamlClass \n";
+
+    Object.values(this.org).forEach((element) => {
+      //@ts-ignore
+      this.addOrg(element.fullname);
+      //@ts-ignore
+      let child = Array.from(element.child);
+      for (i = 0; i < child.length; i++) {
+        //@ts-ignore
+        let peer = this.addPeer(child[i], "peer", element.fullname, 7050, "test");
+        //@ts-ignore
+        this.addService(child[i], peer);
+      }
+    });
+
+    // let src = "\n # This file is Generate from YamlClass \n";
+    // this.addOrg("orderer.example.com");
+    // this.addOrg("peer0.org1.example.com");
+    // this.addOrg("peer0.org2.example.com");
+    src += yaml.safeDump({ volumes: this.volumes });
+
+    this.addNetwork("test");
+    src += yaml.safeDump({ networks: this.network });
+
+    // let peer0 = this.addPeer("orderer","orderer",7050,0,"test");
+    // let peer1 = this.addPeer("peer0.org1","peer",7051,1,"test");
+    // let peer2 = this.addPeer("peer0.org2","peer",9051,2,"test");
+    // let peer3 = this.addPeer("peer1.org1","peer",8051,1,"test");
+
+    // this.addService("orderer.example.com", peer0);
+    // this.addService("peer0.org1.example.com", peer1);
+    // this.addService("peer1.org1.example.com", peer3);
+    // this.addService("peer0.org2.example.com", peer2);
+
+    src += yaml.safeDump({ services: this.services });
+
+    // // console.log(src);
+    this.saveFile(this.defaultOutputPath, src, "docker-compose.yaml");
+  }
+
+  saveFile(outputPath: string, inputFileData: string, fileName: string) {
+    console.log(inputFileData);
+    try {
+      // // check dev mode function
+      // // used this style for base to write function who work with files
+      // console.log(this.src)
+      let filePath = path.join(outputPath, fileName);
+      fs.writeFileSync(filePath, inputFileData, "utf-8");
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    addService(service: string, peer: peer) {
-        this.services[service] = peer;
-    }
+  editFile() {}
+  updateNetworkConfig() {}
 
+  addOrg(orgUrl: string) {
+    this.volumes[orgUrl] = null;
+  }
 
+  addNetwork(net: string) {
+    this.network[net] = null;
+  }
 
-     addPeer(name:string,type:string,port:number,org:number,network:string) {
-         let node = new peer();
-         node.container_name = name.toLowerCase();+".example.com" //"orderer.example.com"
-         node.image = "hyperledger/fabric-"+type+":$IMAGE_TAG" //orderer,peer
-         if(type == "orderer"){
-            node.environment = [
-                "FABRIC_LOGGING_SPEC=INFO",
-                "ORDERER_GENERAL_LISTENADDRESS=0.0.0.0",
-                "ORDERER_GENERAL_LISTENPORT="+port,
-                "ORDERER_GENERAL_GENESISMETHOD=file",
-                "ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block",
-                "ORDERER_GENERAL_LOCALMSPID=OrdererMSP",
-                "ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp",
-                "ORDERER_GENERAL_TLS_ENABLED=true",
-                "ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key",
-                "ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt",
-                "ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]",
-                "ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1",
-                "ORDERER_KAFKA_VERBOSE=true",
-                "ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt",
-                "ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key",
-                "ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]",
-            ];
-            node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric";
-            node.command = "orderer";
-            node.volumes = [
-                "../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block",
-                "../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp",
-                "../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls",
-                "orderer.example.com:/var/hyperledger/production/orderer",
-            ];
-         }
-         else{
-            node.environment = [
-                "CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock",
-                "CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_test",
-                "FABRIC_LOGGING_SPEC=INFO",
-                "CORE_PEER_TLS_ENABLED=true",
-                "CORE_PEER_PROFILE_ENABLED=true",
-                "CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt",
-                "CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key",
-                "CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt",
-                "CORE_PEER_ID="+name.toLowerCase()+".example.com",
-                "CORE_PEER_ADDRESS="+name.toLowerCase()+".example.com:"+port,
-                "CORE_PEER_LISTENADDRESS=0.0.0.0:"+port,
-                "CORE_PEER_CHAINCODEADDRESS="+name.toLowerCase()+".example.com:"+(port+1),
-                "CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:"+(port+1),
-                "CORE_PEER_GOSSIP_BOOTSTRAP="+name.toLowerCase()+".example.com:"+port,
-                "CORE_PEER_GOSSIP_EXTERNALENDPOINT="+name.toLowerCase()+".example.com:"+port,
-                "CORE_PEER_LOCALMSPID=Org"+org+"MSP",
-            ];
-            node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric/peer";
-            node.command = "peer node start";
-            node.volumes = [
-                "/var/run/:/host/var/run/",
-                "../organizations/peerOrganizations/org"+org+".example.com/peers/"+name.toLowerCase()+".example.com/msp:/etc/hyperledger/fabric/msp",
-                "../organizations/peerOrganizations/org"+org+".example.com/peers/"+name.toLowerCase()+".example.com/tls:/etc/hyperledger/fabric/tls",
-                name.toLowerCase()+".example.com:/var/hyperledger/production"
-            ];
-         }
-         node.ports = [port+":"+port]
-         node.networks = [network]
+  addService(service: string, peer: peer) {
+    this.services[service] = peer;
+  }
 
-         return(node)
-     }
+  addPeer(name: any, type: string, org: string, port: number, network: string) {
+    let node = new peer();
+    node.container_name = name.toLowerCase();
+    node.image = "hyperledger/fabric-" + type + ":$IMAGE_TAG"; //orderer,peer
+    console.log(this.envMap);
+    console.log(name);
+    console.log(this.envMap.get(name));
+    node.environment = this.envMap.get(name);
+    node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric/peer";
+    node.command = "peer node start";
+    node.volumes = [
+      "/var/run/:/host/var/run/",
+      "../organizations/peerOrganizations/org" +
+        org +
+        ".example.com/peers/" +
+        name.toLowerCase() +
+        ".example.com/msp:/etc/hyperledger/fabric/msp",
+      "../organizations/peerOrganizations/org" +
+        org +
+        ".example.com/peers/" +
+        name.toLowerCase() +
+        ".example.com/tls:/etc/hyperledger/fabric/tls",
+      name.toLowerCase() + ".example.com:/var/hyperledger/production",
+    ];
 
+    node.ports = [port + ":" + port];
+    node.networks = [network];
+
+    return node;
+  }
 }
 
 export class peer {
-    container_name: string = "";
-    image: string = "";
-    environment: string[] = [""];
-    working_dir: string = ""
-    command: string = ""
-    volumes: string[] = [""];
-    ports: string[] = [""];
-    networks: string[] = [""];
+  container_name: string = "";
+  image: string = "";
+  environment: string[] = [""];
+  working_dir: string = "";
+  command: string = "";
+  volumes: string[] = [""];
+  ports: string[] = [""];
+  networks: string[] = [""];
 }
 
 export default new ComposeConfig();
