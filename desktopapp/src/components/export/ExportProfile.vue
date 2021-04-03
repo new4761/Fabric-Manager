@@ -70,6 +70,7 @@ export default class ExportConnectionProfile extends ExportConnectionProfileProp
   }
   generate() {
     ExportAppProcess.generateProcess(this.selectedChannel.name,this.orgList);
+    this.close()
   }
   setOrgList() {
     let newArray: Array<object> = [];
