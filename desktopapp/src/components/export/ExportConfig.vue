@@ -1,7 +1,45 @@
 <template>
-  
-    <Button @click="exportConfig()" icon="fas fa-file-export" label="configuration files" class="p-button-outlined p-button-primary p-button-sm" />
-  
+  <div class="p-col-12 ">
+    <Button
+      @click="display = true"
+      icon="fas fa-file-export"
+      label="configuration files"
+      class="p-button-outlined p-button-primary p-button-sm"
+    />
+
+    <Dialog
+      modal
+      :dismissableMask="true"
+      :closable="false"
+      v-bind:visible="display"
+      :style="{ width: '300px', padding: '0px' }"
+      :contentStyle="{ overflow: 'visible' }"
+    >
+      <template #header>
+        <span>ExportConnectionProfile</span>
+      </template>
+      <div>
+      <div class="p-grid">
+          <small>Selected config</small>
+          <hr />
+      </div>
+      <div class="p-d-flex p-jc-between">
+        <Button
+          label="close"
+          icon="pi pi-times"
+          @click="close()"
+          class="p-button-outlined p-button-danger p-button-sm p-mr-5"
+        />
+        <Button
+          label="export"
+          icon="pi pi-download"
+          @click="exportConfig()"
+          class="p-button-outlined p-button-primary p-button-sm p-ml-5"
+        />
+      </div>
+      </div>
+    </Dialog>
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,20 +47,19 @@ import Vue from "vue";
 import Component from "vue-class-component";
 const { dialog } = require("electron").remote;
 import FileManager from "../../module/FileManager";
-import ComposeConfig from "../../module/ComposeConfig";
 const path = require("path");
 @Component({
   components: {},
 })
 export default class ExportConfig extends Vue {
   exportDir: string = "";
+  display:boolean = false;
   async exportConfig() {
     this.$store.state.project.path;
 
     let _configtx = path.join("vars", "configtx.yaml");
     let _core = path.join("vars", "core.yaml");
     let _cryptoConfig = path.join("vars", "crypto-config.yaml");
-    let _env = path.join("vars", "run");
     await this.getDestination();
 
     if (this.exportDir) {
@@ -41,14 +78,9 @@ export default class ExportConfig extends Vue {
         path.join(this.$store.state.project.path, _cryptoConfig),
         path.join(this.exportDir, "crypto-config.yaml")
       );
-      FileManager.copyFileExtension(
-        path.join(this.$store.state.project.path, _env),
-        path.join(this.exportDir, "docker"),
-        ".env"
-      );
-      ComposeConfig.defaultOutputPath = path.join(this.exportDir, "docker");
-      ComposeConfig.createFile();
     }
+
+    this.close()
   }
 
   async getDestination() {
@@ -59,6 +91,10 @@ export default class ExportConfig extends Vue {
       .then((result) => {
         this.exportDir = result.filePaths[0];
       });
+  }
+
+    close(){
+    this.display = false;
   }
 }
 </script>
