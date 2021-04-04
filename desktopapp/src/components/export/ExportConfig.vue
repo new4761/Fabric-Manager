@@ -16,27 +16,42 @@
       :contentStyle="{ overflow: 'visible' }"
     >
       <template #header>
-        <span>ExportConnectionProfile</span>
+        <span>Export configuration files</span>
       </template>
-      <div>
-      <div class="p-grid">
+      <div class="p-p-2">
+        
           <small>Selected config</small>
           <hr />
-      </div>
-      <div class="p-d-flex p-jc-between">
-        <Button
-          label="close"
-          icon="pi pi-times"
-          @click="close()"
-          class="p-button-outlined p-button-danger p-button-sm p-mr-5"
-        />
-        <Button
-          label="export"
-          icon="pi pi-download"
-          @click="exportConfig()"
-          class="p-button-outlined p-button-primary p-button-sm p-ml-5"
-        />
-      </div>
+        
+        <div class="p-field-checkbox">
+          <Checkbox v-model="exportCore" :binary="true" />
+          <label>core.yaml</label>
+        </div>
+
+        <div class="p-field-checkbox">
+          <Checkbox v-model="exportCrypto" :binary="true" />
+          <label>cryptoconfig.yaml</label>
+        </div>
+
+        <div class="p-field-checkbox">
+          <Checkbox v-model="exportTx" :binary="true" />
+          <label>configtx.yaml</label>
+        </div>
+
+        <div class="p-d-flex p-jc-between">
+          <Button
+            label="close"
+            icon="pi pi-times"
+            @click="close()"
+            class="p-button-outlined p-button-danger p-button-sm p-mr-5"
+          />
+          <Button
+            label="export"
+            icon="pi pi-download"
+            @click="exportConfig()"
+            class="p-button-outlined p-button-primary p-button-sm p-ml-5"
+          />
+        </div>
       </div>
     </Dialog>
   </div>
@@ -53,7 +68,11 @@ const path = require("path");
 })
 export default class ExportConfig extends Vue {
   exportDir: string = "";
-  display:boolean = false;
+  exportCore: boolean = true;
+  exportTx: boolean = true;
+  exportCrypto: boolean = true;
+  display: boolean = false;
+
   async exportConfig() {
     this.$store.state.project.path;
 
@@ -64,23 +83,28 @@ export default class ExportConfig extends Vue {
 
     if (this.exportDir) {
       FileManager.createDir(this.$store.state.project.path, "docker");
-      FileManager.copyFilesDir(
-        path.join(this.$store.state.project.path, _configtx),
-        path.join(this.exportDir, "configtx.yaml")
-      );
 
-      FileManager.copyFilesDir(
-        path.join(this.$store.state.project.path, _core),
-        path.join(this.exportDir, "core.yaml")
-      );
-
-      FileManager.copyFilesDir(
-        path.join(this.$store.state.project.path, _cryptoConfig),
-        path.join(this.exportDir, "crypto-config.yaml")
-      );
+      if (this.exportTx) {
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, _configtx),
+          path.join(this.exportDir, "configtx.yaml")
+        );
+      }
+      if (this.exportCore) {
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, _core),
+          path.join(this.exportDir, "core.yaml")
+        );
+      }
+      if (this.exportCrypto) {
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, _cryptoConfig),
+          path.join(this.exportDir, "crypto-config.yaml")
+        );
+      }
     }
 
-    this.close()
+    this.close();
   }
 
   async getDestination() {
@@ -93,7 +117,7 @@ export default class ExportConfig extends Vue {
       });
   }
 
-    close(){
+  close() {
     this.display = false;
   }
 }

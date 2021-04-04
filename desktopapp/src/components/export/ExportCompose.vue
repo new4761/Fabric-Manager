@@ -16,12 +16,12 @@
       :contentStyle="{ overflow: 'visible' }"
     >
       <template #header>
-        <span>ExportConnectionProfile</span>
+        <span>Export compose files</span>
       </template>
       <div>
         <div class="p-grid p-fluid">
           <div class="p-col-12">
-            <small>Organization identity to exports</small>
+            <!-- <small>Organization identity to exports</small> -->
             <hr />
             <div class="p-field-checkbox">
               <Checkbox v-model="exportKey" :binary="true" />
