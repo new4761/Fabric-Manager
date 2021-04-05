@@ -186,8 +186,13 @@ export default class DefaultLayout extends Vue {
         }
         ,{
           label: "IdentityManager",
-          icon: "pi pi-fw pi-clone",
+          icon: "pi pi-id-card",
           to: "/identityManger",
+        },
+              {
+          label: "Log",
+          icon: "far fa-file-alt",
+          to: "/log",
         },
       ],
     };

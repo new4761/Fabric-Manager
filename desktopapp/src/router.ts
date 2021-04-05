@@ -84,6 +84,15 @@ export default new Router({
     },
 
     {
+      path: "/log",
+      name: "Log",
+      component: () => import("./pages/LogPage.vue"),
+      meta: {
+        layout: "default-layout",
+      },
+    },
+
+    {
       path: "/home",
       name: "home",
       component: () => import("./index.vue"),

@@ -44,7 +44,6 @@ export default class Terminal extends TerminalProps {
 
   mounted() {
     this.displayOutput();
-    this.test();
   }
 
   displayOutput() {
@@ -97,7 +96,6 @@ export default class Terminal extends TerminalProps {
     this.unsubscribe();
   }
 
-  test() {}
 }
 </script>
 

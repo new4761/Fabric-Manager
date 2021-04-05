@@ -1,9 +1,9 @@
 <template>
-  <div class="log-wrapper p-grid p-jc-center p-my-1">
-      <div class="log-header">
-        main log
-      </div>
-    <div class="log p-col-12 " id="log" v-html="highlight()"></div>
+  <div class="log-wrapper">
+    <div class="log-header p-grid p-ai-center vertical-container">
+      Log
+    </div>
+    <div class="log p-col-12 " ref="log" id="log" v-html="highlight()"></div>
   </div>
 </template>
 
@@ -19,14 +19,18 @@ import Component from "vue-class-component";
 export default class LogView extends Vue {
   log: string = "";
 
-  created() {
+  mounted() {
     this.readLog();
-    this.highlight();
   }
 
   readLog() {
     this.log = fs.readFileSync("./log/project.log", "utf8");
     this.highlight();
+  }
+
+  updated() {
+      //@ts-ignore
+    this.$refs.log.scrollTop = this.$refs.log.scrollHeight;
   }
 
   highlight() {
@@ -54,6 +58,7 @@ export default class LogView extends Vue {
     );
     return temp;
   }
+
 }
 </script>
 
@@ -61,34 +66,35 @@ export default class LogView extends Vue {
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
 
-
-.log-wrapper {
-  padding-left: 1em;
-  padding-right: 1em;
-}
-
 .log-header {
-  border-radius: 5px 5px 0px 0px;
-  width: 100%;
-  padding: 10px;
-  display: flex;
+  padding: 30px;
   align-items: center;
-  justify-content: space-between;
-  background-color: rgb(0, 0, 0);
+  background-color: $SubBgColor;
   color: white;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: bold;
+  height: 80px;
 }
 .log {
   background-color: rgb(56, 56, 56);
-  border-radius: 0px 0px 5px 5px;
   color: aliceblue;
   font-size: 12px;
   white-space: break-spaces;
-  word-break: break-all;
   padding: 1em;
   overflow: auto;
-  height: 250px;
+  height: calc(100vh - 112px);
+}
+
+.log::-webkit-scrollbar {
+  width: 10px;
+}
+
+.log::-webkit-scrollbar-track {
+  background-color: #414141;
+}
+
+.log::-webkit-scrollbar-thumb {
+  background: #a3a3a3;
 }
 
 .info {
