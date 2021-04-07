@@ -7,7 +7,7 @@
             <div class="p-col-12"></div>
           </div>
 
-          <div class="p-d-flex p-jc-center p-mt-3  p-mb-5">
+          <div class="p-d-flex p-jc-center p-mb-4">
             <net-ops-button />
           </div>
 
