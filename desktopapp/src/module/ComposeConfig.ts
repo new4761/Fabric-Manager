@@ -17,6 +17,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
   services: any = {};
 
   envMap: any;
+  portMap: any;
   org: any;
 
   constructor() {
@@ -27,71 +28,56 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
   getUserInput() {}
   createFile() {
     this.envMap = new Map();
-
+    this.portMap = new Map();
+    this.org = NetworkConfig.getOrgData();
     let sourceDir = path.join(ProjectConfig.getPathResolve(store.state.id), "vars", "run");
     if (!fs.existsSync(sourceDir)) {
       return;
     }
     var files = fs.readdirSync(sourceDir);
+
     for (var i = 0; i < files.length; i++) {
       if (files[i].toString().indexOf(".env") >= 0) {
-        console.log("-- found: ", files[i]);
-        let envConfig = fs.readFileSync(path.join(sourceDir, files[i]), "utf8").split(/[\r\n]+/);
-        this.envMap.set(files[i].replace(".env", ""), envConfig);
+        let name = files[i].replace(".env", "");
+        let envConfig = fs.readFileSync(path.join(sourceDir, files[i]), "utf8");
+        var port;
+        if (envConfig.includes("FABRIC_CA_HOME")) {
+          port = envConfig.match(new RegExp("FABRIC_CA_SERVER_PORT=" + "(.*)" + "\n"));
+        } else if (envConfig.includes("ORDERER_GENERAL")) {
+          port = envConfig.match(new RegExp(":" + "(.*)" + "\n"));
+        } else {
+          port = envConfig.match(new RegExp("CORE_PEER_LISTENADDRESS=0.0.0.0:" + "(.*)" + "\n"));
+        }
+        this.envMap.set(name, envConfig);
+        if (port !== null && port !== undefined) {
+          this.portMap.set(name, port[1]);
+        }
       }
     }
 
-    this.org = NetworkConfig.getOrgData();
-    // Object.values(org).forEach(element => console.log(Array.from(element.child)));
-    console.log(this.envMap);
-    console.log(this.org);
+    let src = "\n # This file is Generate from ****** \n";
 
-    let src = "\n # This file is Generate from YamlClass \n";
-
-    Object.values(this.org).forEach((element) => {
-      //@ts-ignore
-      this.addOrg(element.fullname);
-      //@ts-ignore
+    Object.values(this.org).forEach((element: any) => {
+      
       let child = Array.from(element.child);
       for (i = 0; i < child.length; i++) {
-        //@ts-ignore
-        let peer = this.addPeer(child[i], "peer", element.fullname, 7050, "test");
+        this.addOrg(child[i]);
+        let peer = this.addPeer(child[i], element.fullname, "test");
         //@ts-ignore
         this.addService(child[i], peer);
       }
     });
 
-    // let src = "\n # This file is Generate from YamlClass \n";
-    // this.addOrg("orderer.example.com");
-    // this.addOrg("peer0.org1.example.com");
-    // this.addOrg("peer0.org2.example.com");
     src += yaml.safeDump({ volumes: this.volumes });
 
     this.addNetwork("test");
     src += yaml.safeDump({ networks: this.network });
-
-    // let peer0 = this.addPeer("orderer","orderer",7050,0,"test");
-    // let peer1 = this.addPeer("peer0.org1","peer",7051,1,"test");
-    // let peer2 = this.addPeer("peer0.org2","peer",9051,2,"test");
-    // let peer3 = this.addPeer("peer1.org1","peer",8051,1,"test");
-
-    // this.addService("orderer.example.com", peer0);
-    // this.addService("peer0.org1.example.com", peer1);
-    // this.addService("peer1.org1.example.com", peer3);
-    // this.addService("peer0.org2.example.com", peer2);
-
     src += yaml.safeDump({ services: this.services });
-
-    // // console.log(src);
     this.saveFile(this.defaultOutputPath, src, "docker-compose.yaml");
   }
 
   saveFile(outputPath: string, inputFileData: string, fileName: string) {
-    console.log(inputFileData);
     try {
-      // // check dev mode function
-      // // used this style for base to write function who work with files
-      // console.log(this.src)
       let filePath = path.join(outputPath, fileName);
       fs.writeFileSync(filePath, inputFileData, "utf-8");
     } catch (e) {
@@ -102,7 +88,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
   editFile() {}
   updateNetworkConfig() {}
 
-  addOrg(orgUrl: string) {
+  addOrg(orgUrl: any) {
     this.volumes[orgUrl] = null;
   }
 
@@ -114,36 +100,45 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
     this.services[service] = peer;
   }
 
-  addPeer(name: any, type: string, org: string, port: number, network: string) {
+  addPeer(name: any, org: string, network: string) {
     let node = new peer();
-    node.container_name = name.toLowerCase();
-    node.image = "hyperledger/fabric-" + type + ":$IMAGE_TAG"; //orderer,peer
-    console.log(this.envMap);
-    console.log(name);
-    console.log(this.envMap.get(name));
-    node.environment = this.envMap.get(name);
-    node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric/peer";
-    node.command = "peer node start";
-    node.volumes = [
-      "/var/run/:/host/var/run/",
-      "../organizations/peerOrganizations/org" +
-        org +
-        ".example.com/peers/" +
-        name.toLowerCase() +
-        ".example.com/msp:/etc/hyperledger/fabric/msp",
-      "../organizations/peerOrganizations/org" +
-        org +
-        ".example.com/peers/" +
-        name.toLowerCase() +
-        ".example.com/tls:/etc/hyperledger/fabric/tls",
-      name.toLowerCase() + ".example.com:/var/hyperledger/production",
-    ];
-
-    node.ports = [port + ":" + port];
+    let env = this.envMap.get(name);
+    var type;
+    if (env.includes("FABRIC_CA_HOME")) {
+      type = "ca";
+      node.volumes = ["../keyfiles/peerOrganizations/" + org + ":/certs", name + ":/etc/hyperledger/fabric-ca-server"];
+      node.command = "sh -c 'fabric-ca-server start -b admin:adminpw -d'";
+    } else if (env.includes("ORDERER_GENERAL")) {
+      type = "orderer";
+      node.volumes = [
+        "../genesis.block:/var/hyperledger/orderer/orderer.genesis.block",
+        "../keyfiles/ordererOrganizations/" + org + "/orderers/" + name + "/msp:/var/hyperledger/orderer/msp",
+        "../keyfiles/ordererOrganizations/" + org + "/orderers/" + name + "/tls/:/var/hyperledger/orderer/tls",
+        name + ":/var/hyperledger/production/orderer",
+      ];
+      node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric";
+      node.command = "orderer";
+    } else {
+      type = "peer";
+      node.volumes = [
+        "/var/run/:/host/var/run/",
+        "../keyfiles/peerOrganizations/" + org + "/peers/" + name + "/msp:/etc/hyperledger/fabric/msp",
+        "../keyfiles/peerOrganizations/" + org + "/peers/" + name + "/tls:/etc/hyperledger/fabric/tls",
+        name + ":/var/hyperledger/production",
+      ];
+      node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric/peer";
+      node.command = "peer node start";
+    }
+    node.container_name = name;
+    node.image = "hyperledger/fabric-" + type + ":latest";
+    node.environment = env.split(/[\r\n]+/);
+    node.ports = [this.portMap.get(name) + ":" + this.portMap.get(name)];
     node.networks = [network];
 
     return node;
   }
+
+  addCa() {}
 }
 
 export class peer {

@@ -54,7 +54,7 @@
 
     <div class="container-footer">
       <div class="p-grid p-jc-end p-mr-5">
-        <div class="p-md-4 p-lg-2">
+        <div class="p-md-4 p-lg-3">
           <div class="p-d-flex">
             Export
           </div>
@@ -67,17 +67,12 @@
             />
           </div>
 
-          <div class="p-d-flex p-mt-1 p-fluid">
+          <div class="p-d-flex p-mt-1 p-fluid p-nogutter">
             <ExportConfig />
           </div>
 
-          <div class="p-d-flex p-mt-1  p-fluid">
-            <Button
-              icon="fab fa-docker"
-              label="docker container"
-              class="p-button-outlined p-button-primary p-button-sm"
-              disabled
-            />
+          <div class="p-d-flex p-mt-1  p-fluid p-nogutter">
+            <ExportCompose />
           </div>
         </div>
       </div>
@@ -113,11 +108,12 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import ContainerTable from "./components/container/ContainerTable.vue";
-import LogView from "./components/container/LogView.vue";
+import LogView from "./components/LogView.vue";
 import ExplorerButton from "./components/container/ExplorerButton.vue";
 import NetworkConfig from "./models/NetworkConfig";
 import ExportConnectionProfile from "@/components/export/ExportProfile.vue";
 import ExportConfig from "./components/export/ExportConfig.vue";
+import ExportCompose from "./components/export/ExportCompose.vue";
 /* eslint-disable no-unused-vars */
 @Component({
   components: {
@@ -126,6 +122,7 @@ import ExportConfig from "./components/export/ExportConfig.vue";
     ExplorerButton,
     ExportConnectionProfile,
     ExportConfig,
+    ExportCompose,
   },
 })
 export default class Index extends Vue {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="p-d-flex">
+    <!-- <div class="p-d-flex">
       <Button
         icon="fas fa-play"
         class="p-button-success p-button-lg p-m-1 p-p-1 p-button-outlined"
@@ -10,6 +10,10 @@
       <Button icon="fas fa-power-off" class=" p-button-danger p-button-lg p-m-1 p-button-outlined" @click="netdown()" />
 
       <Button icon="fas fa-trash" class=" p-button-secondary p-button-lg p-m-1 p-button-outlined" @click="cleanup()" />
+    </div> -->
+
+    <div class="p-d-flex p-jc-center">
+      <a class="power-button"><i class="fa fa-power-off"></i></a>
     </div>
 
     <div>
@@ -29,7 +33,7 @@
           <div class="p-col-12 p-px-5">
             <small>Selected Organization</small>
             <br />
-            <Dropdown  v-model="orgSelected" :options="org" style="width:100%;"/>
+            <Dropdown v-model="orgSelected" :options="org" style="width:100%;" />
           </div>
         </div>
         <div class="p-field p-grid p-fluid  p-jc-center">
@@ -39,14 +43,10 @@
             <InputText type="number" id="port" v-model="port" />
           </div>
         </div>
-          <div class="p-d-flex p-jc-between p-mt-1 ">
-            <Button
-              class="p-button-danger p-m-2 p-button-outlined p-button-sm"
-              label="close"
-              @click="display = false"
-            />
-            <Button class="p-button-primary  p-ml-auto p-m-2 p-button-sm" label="start" @click="netup()" />
-          </div>
+        <div class="p-d-flex p-jc-between p-mt-1 ">
+          <Button class="p-button-danger p-m-2 p-button-outlined p-button-sm" label="close" @click="display = false" />
+          <Button class="p-button-primary  p-ml-auto p-m-2 p-button-sm" label="start" @click="netup()" />
+        </div>
       </Dialog>
     </div>
   </div>
@@ -96,7 +96,7 @@ export default class NetOpsButton extends Vue {
     if (this.port != "") {
       args.push("-e");
       args.push(this.port);
-    }else{
+    } else {
       args.push("-e");
       args.push("true");
     }
@@ -134,5 +134,30 @@ export default class NetOpsButton extends Vue {
 }
 .p-dropdown {
   width: 200px;
+}
+
+a.power-button {
+  display: block;
+  width: 70px;
+  height: 70px;
+  font-size: 2.0em;
+  border: 2px solid #2c2c2c;
+  background-color: #353535;
+  text-align: center;
+  line-height: 70px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border-radius: 50%;
+  transition: color 0.8s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  // color:$primaryColor
+  color:$dangerBgColor;
+}
+.power-button:hover {
+ 
+}
+.power-button.off {
+ color:$dangerBgColor
 }
 </style>

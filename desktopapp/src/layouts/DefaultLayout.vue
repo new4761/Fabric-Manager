@@ -7,7 +7,7 @@
             <div class="p-col-12"></div>
           </div>
 
-          <div class="p-d-flex p-jc-center p-mt-3  p-mb-5">
+          <div class="p-d-flex p-jc-center p-mb-4">
             <net-ops-button />
           </div>
 
@@ -186,8 +186,13 @@ export default class DefaultLayout extends Vue {
         }
         ,{
           label: "IdentityManager",
-          icon: "pi pi-fw pi-clone",
+          icon: "pi pi-id-card",
           to: "/identityManger",
+        },
+              {
+          label: "Log",
+          icon: "far fa-file-alt",
+          to: "/log",
         },
       ],
     };

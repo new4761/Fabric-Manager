@@ -94,7 +94,7 @@
             </template>
             <div class="p-grid p-fluid p-nogutter">
               <div v-for="(item, index) in args.list.length + 1" :key="index" class="p-col-12">
-                <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)"></InputArg>
+                <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)" :_index= "index"></InputArg>
               </div>
             </div>
           </Panel>

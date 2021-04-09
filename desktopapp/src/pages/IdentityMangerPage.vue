@@ -4,26 +4,20 @@
       Indentity Manager
     </div>
 
-    <div class="p-grid p-nogutter identity-wrapper p-jc-center p-mt-5">
-      <div class="p-col-10">
+    <div class="p-grid p-nogutter identity-wrapper p-jc-center">
+      <div class="p-col-12">
         <div
-          class="p-d-flex p-jc-between p-ai-center identity-table-header p-py-2 p-px-1"
+          class="p-d-flex p-jc-between p-ai-center identity-table-header p-py-2"
         >
           <div class="p-col">
-            <!-- <small>Peer Organization</small> <br />
-                <Dropdown
-                  class="p-mt-1"
-                  :options="orgList"
-                  v-model="selectedOrg"
-                  @change="setUserDataList($event.value)"
-                /> -->
             <div class="identity-table-header-text">
               Identity List
               <Dropdown
-                class="p-mt-1"
+               class="indentity-dropdown p-ml-3"
                 v-model="showOrg"
                 :options="orgList"
                 @change="setUserDataList($event.value)"
+                
               />
             </div>
           </div>
@@ -31,7 +25,7 @@
             <Button
               label="ADD NEW USER"
               icon="pi pi-user-plus"
-              class="p-ml-auto p-button-outlined p-button-sm p-button-warning"
+              class="p-ml-auto p-button-outlined p-button-sm p-button-warning p-mr-3"
               @click="(newUserDisplay = true), resetInput()"
             />
           </div>
@@ -228,11 +222,11 @@ export default class IdentityManger extends IdentityMangerProps {
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
 .table-indentity {
-  height: calc(94vh - 350px);
+  height: calc((100vh - 40px) - 155.78px - 30px);
 }
 
 .table-indentity-blocked {
-  height: calc(94vh - 350px);
+  height: calc((100vh - 40px) - 155.78px - 30px);
 }
 
 .identity-header {
@@ -251,6 +245,13 @@ export default class IdentityManger extends IdentityMangerProps {
 .identity-table-header-text {
   color: $primaryColor;
   font-size: 18px;
+  font-weight: bold;
+  padding-left: 15px;
+}
+.indentity-dropdown .p-dropdown-label {
+  font-size: 15px;
+  padding: 5px 10px 5px 10px;
+  color: rgb(253, 253, 180);
   font-weight: bold;
 }
 </style>
