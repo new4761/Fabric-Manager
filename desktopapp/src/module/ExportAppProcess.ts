@@ -18,12 +18,12 @@ class ExportAppProcess {
         let profilePath = path.join(targetPath, "profiles")
         let walletPath = path.join(targetPath, "wallets")
         await MinifabricController.profileGen(channel);
+  
+        FileManager.createDir(targetPath, "profiles")
+        FileManager.createDir(targetPath, "wallets")
+        this.getChannelProfile(channel, profilePath)
 
-        await FileManager.createDir(targetPath, "profiles")
-        await FileManager.createDir(targetPath, "wallets")
-        await this.getChannelProfile(channel, profilePath)
-
-        //TODO: find better way
+        // //TODO: find better way
         await MinifabricController.fixWalletIdentitiesForWindow()
         await this.getWallet(walletPath, peerList)
         await this.getExampleGetaway(channel, targetPath, peerList)
@@ -31,10 +31,12 @@ class ExportAppProcess {
 
     }
     //only work on peer right now
-    async getWallet(targetPath: string, peerList: Array<object>) {
+   async  getWallet(targetPath: string, peerList: Array<object>) {
+        // await MinifabricController.fixWalletIdentitiesForWindow()
+        console.log("start getWallet")
         let walletPath = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets")
         //let peerList = NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath);
-        await peerList.forEach(async (res: any) => {
+       peerList.forEach(async (res: any) => {
             if (res.checked == true) {
                 let sourceDir = path.join(walletPath, res.name)
                 let newDir = path.join(targetPath, res.name)
@@ -42,6 +44,7 @@ class ExportAppProcess {
                 await FileManager.removeFile(path.join(newDir, "Admin.id"))
             }
         })
+        console.log("end getWallet")
         // console.log(targetPath)
     }
 

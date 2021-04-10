@@ -2,6 +2,7 @@ const { dialog } = require("electron").remote;
 const path = require("path");
 const fse = require("fs-extra");
 const fs = require("fs");
+const fsp = require('fs').promises;
 //const isDevelopment = process.env.NODE_ENV !== "production"
 class FileManager {
   // write all function who handle normal files (etc not yaml,json )
@@ -105,12 +106,12 @@ class FileManager {
       });
     }
   }
-  async createFileWithData(destDir: string, data: string) {
-    ////console.log(sourceDir)
-    await fs.writeFileSync(destDir, data, function(err: any) {
+  createFileWithData(destDir: string, data: string) {
+    console.log(destDir);
+    fs.writeFileSync(destDir, data, function(err: any) {
       if (err) throw err;
-      //console.log("Saved!");
     });
+    // console.log("createFileWithData!");
   }
 
   // call through to copy file

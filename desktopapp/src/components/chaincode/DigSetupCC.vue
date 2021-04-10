@@ -172,7 +172,7 @@ export default class DigSetupCC extends DigSetupCCProps {
       this.$emit("openLog", true);
       //TODO: fix channel
       let _ccList = NetworkConfig.getValue(netWorkConfigPath.ccPath);
-      console.log(_ccList);
+      // console.log(_ccList);
       let target = _ccList.find(
         (item: any) =>
           item.name == this.ccName && item.type == this.selectedCCtype.data && item.channel == this.selectedChannel.name
