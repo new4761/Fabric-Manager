@@ -81,6 +81,11 @@ export default class ExportCompose extends Vue {
           path.join(this.$store.state.project.path, _key),
           path.join(this.exportDir, "keyfiles")
         );
+
+         FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, "genesis.block"),
+          path.join(this.exportDir, "genesis.block")
+        );
       }
       ComposeConfig.defaultOutputPath = path.join(this.exportDir, "docker");
       ComposeConfig.createFile();

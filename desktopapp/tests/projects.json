@@ -4,7 +4,7 @@
     "name": "catest",
     "date_create": 1610698257055,
     "directory": "D:\\blockchain\\repo\\join",
-    "date_modify": 1617600843160
+    "date_modify": 1617972475352
   },
   {
     "id": 1,
@@ -187,5 +187,19 @@
     "directory": "C:\\Users\\User\\Desktop\\testnet",
     "id": 26,
     "date_modify": 1616998757811
+  },
+  {
+    "name": "test",
+    "date_create": 1618099127901,
+    "directory": "C:\\Users\\User\\Desktop\\copytest\\test",
+    "id": 27,
+    "date_modify": 1618099127901
+  },
+  {
+    "name": "testdup",
+    "date_create": 1618102926194,
+    "directory": "C:\\Users\\User\\Desktop\\copytest\\test2",
+    "id": 28,
+    "date_modify": 1618102926194
   }
 ]

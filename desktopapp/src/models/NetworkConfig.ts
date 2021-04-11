@@ -55,6 +55,7 @@ export class NetworkConfig {
       ]);
     }
     //save file
+    file.set("chain_codes",[])
     file.save();
     logger.log(
       "info",

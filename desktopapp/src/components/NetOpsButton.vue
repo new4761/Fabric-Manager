@@ -13,7 +13,12 @@
     </div> -->
 
     <div class="p-d-flex p-jc-center">
-      <a class="power-button"><i class="fa fa-power-off"></i></a>
+      <a class="power-button-offline" v-if="!this.$store.state.docker.isOnline" @click="display = true"
+        ><i class="fa fa-power-off"></i
+      ></a>
+      <a class="power-button-online" v-if="this.$store.state.docker.isOnline" @click="netdown()"
+        ><i class="fa fa-power-off"></i
+      ></a>
     </div>
 
     <div>
@@ -58,8 +63,10 @@ import Component from "vue-class-component";
 import ConsoleDialogue from "./ConsoleDialogue.vue";
 import NetworkConfig from "../models/NetworkConfig";
 import OSProcess from "../module/OSProcess/OSProcess";
-import { OsType } from "../models/EnvProject";
 import ProjectConfig from "../models/ProjectConfig";
+import FileManager from "../module/FileManager";
+const fs = require("fs");
+const path = require("path");
 
 @Component({
   components: { ConsoleDialogue },
@@ -73,8 +80,6 @@ export default class NetOpsButton extends Vue {
   orgSelected: string = "";
   org: any[] = [];
   port: string = "";
-
-  private osType: OsType = OsType.WINDOW;
 
   mounted() {
     this.init();
@@ -103,6 +108,19 @@ export default class NetOpsButton extends Vue {
     await OSProcess.run(args);
     this.$store.commit("docker/setActiveContainer");
     this.$store.commit("setProcessStatus", true);
+
+    try {
+      let _genesis = path.join(this.$store.state.project.path, "genesis.block");
+      if (!fs.existsSync(_genesis)) {
+        console.log("copy!!!")
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, "vars", "genesis.block"),
+          path.join(this.$store.state.project.path, "genesis.block")
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
   async netdown() {
     this.$store.commit("setProcessContext", "netdown");
@@ -136,11 +154,11 @@ export default class NetOpsButton extends Vue {
   width: 200px;
 }
 
-a.power-button {
+a.power-button-offline {
   display: block;
   width: 70px;
   height: 70px;
-  font-size: 2.0em;
+  font-size: 2em;
   border: 2px solid #2c2c2c;
   background-color: #353535;
   text-align: center;
@@ -152,12 +170,30 @@ a.power-button {
   transition: color 0.8s;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   // color:$primaryColor
-  color:$dangerBgColor;
+  color: $dangerBgColor;
 }
-.power-button:hover {
- 
+.power-button-offline:hover {
+  color: $primaryColor;
 }
-.power-button.off {
- color:$dangerBgColor
+
+a.power-button-online {
+  display: block;
+  width: 70px;
+  height: 70px;
+  font-size: 2em;
+  border: 2px solid #2c2c2c;
+  background-color: #353535;
+  text-align: center;
+  line-height: 70px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border-radius: 50%;
+  transition: color 0.8s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  color: $primaryColor;
+}
+.power-button-online:hover {
+  color: $dangerBgColor;
 }
 </style>
