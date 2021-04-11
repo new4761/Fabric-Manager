@@ -8,6 +8,7 @@ const state = {
   container: [],
   orgContainer: [],
   activeContainer: [],
+  isOnline: false,
 };
 
 // getters
@@ -49,15 +50,13 @@ const mutations = {
 
   setOrgContainer() {
     try {
-      state.orgContainer = NetworkConfig.getValue(
-        "project_config.fabric.orderers"
-      ).concat(
+      state.orgContainer = NetworkConfig.getValue("project_config.fabric.orderers").concat(
         NetworkConfig.getValue("project_config.fabric.cas"),
         NetworkConfig.getValue("project_config.fabric.peers")
       );
     } catch (error) {
       //TODO error
-      return
+      return;
     }
   },
 
@@ -68,15 +67,18 @@ const mutations = {
     let temp = [];
     try {
       state.container.forEach((element: any, index: number) => {
-        var el = state.orgContainer.find((a: string) =>
-          a.includes(element.Names[0].replace(/\//g, ""))
-        );
+        var el = state.orgContainer.find((a: string) => a.includes(element.Names[0].replace(/\//g, "")));
 
         if (el !== undefined) {
           // @ts-ignore
           temp.push(element);
         }
       });
+      if (temp.length > 0) {
+        state.isOnline = true;
+      } else {
+        state.isOnline = false;
+      }
       // @ts-ignore
       state.activeContainer = temp;
     } catch (e) {

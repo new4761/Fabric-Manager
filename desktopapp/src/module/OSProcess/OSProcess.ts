@@ -91,7 +91,6 @@ class OSProcess {
             console.log("OSProcess error:"+(error));
             return null;
           }
-
     }
       callback(ls: any) {
         ls.stdout.on("data", (data: any) => {

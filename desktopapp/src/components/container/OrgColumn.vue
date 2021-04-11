@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Dialog header="Header" v-bind:visible="display" :style="{ width: '50vw' }" :modal="true">
+    <!-- <Dialog header="Header" v-bind:visible="display" :style="{ width: '50vw' }" :modal="true">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -12,7 +12,7 @@
         <Button label="No" icon="pi pi-times" @click="display = false" class="p-button-text" />
         <Button label="Yes" icon="pi pi-check" @click="display = false" autofocus />
       </template>
-    </Dialog>
+    </Dialog> -->
 
     <table role="grid" class="p-my-1">
       <tbody class="p-datatable-tbody">
@@ -46,7 +46,7 @@
               </span>
             </div>
           </td>
-          <td>{{ Array.from(item.child).length }} container(s)</td>
+          <td class="p-text-center">{{ Array.from(item.child).length }}</td>
         </tr>
       </tbody>
     </table>
@@ -58,6 +58,9 @@
               <tr v-for="(item, index) in Array.from(item.child)" :key="index">
                 <td>
                   {{ item }}
+                </td>
+                <td>
+                  offline
                 </td>
               </tr>
             </tbody>

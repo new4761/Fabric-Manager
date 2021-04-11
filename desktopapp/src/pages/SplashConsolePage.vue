@@ -7,14 +7,14 @@
     </div>
     <div class="p-d-flex p-jc-between">
       <div class="p-col">
-        <Button
+        <!-- <Button
           label="back"
           class="p-button-outlined p-button-secondary"
           @click="back()"
-        />
+        /> -->
       </div>
       <div class="p-col p-text-right">
-        <Button label="next" class="p-button-outlined" @click="next()" />
+        <Button label="next" class="p-button-outlined" @click="next()"  v-if="this.$store.state.processStatus" />
       </div>
     </div>
   </div>
@@ -25,6 +25,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Terminal from "../components/Terminal.vue";
 import OSProcess from "../module/OSProcess/OSProcess";
+import FileManager from "../module/FileManager";
+const fs = require("fs");
+const path = require("path");
 const TerminalProps = Vue.extend({
   props: {
     command: String,
@@ -50,6 +53,20 @@ export default class SplashConsolePage extends TerminalProps {
     let args = this.command.split("#");
     console.log(args);
     await OSProcess.run(args,this.directory);
+    this.$store.commit("setProcessStatus", true);
+
+    try {
+      let _genesis = path.join(this.$store.state.project.path, "genesis.block");
+      if (!fs.existsSync(_genesis)) {
+        console.log("copy!!!")
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, "vars", "genesis.block"),
+          path.join(this.$store.state.project.path, "genesis.block")
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   back() {
@@ -57,6 +74,7 @@ export default class SplashConsolePage extends TerminalProps {
   }
 
   next() {
+    this.$store.commit("setProcessStatus", false);
     this.$store.commit("project/setId", this.id);
     this.$router.push("/home");
   }
