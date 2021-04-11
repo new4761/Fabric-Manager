@@ -25,7 +25,7 @@
     "name": "cccc",
     "date_create": 1610698257055,
     "directory": "D:\\hyperledger_project\\testproject\\test21\\testq",
-    "date_modify": 1619998257080
+    "date_modify": 1617956482154
   },
   {
     "id": 4,
@@ -189,17 +189,10 @@
     "date_modify": 1616998757811
   },
   {
-    "name": "test",
-    "date_create": 1618099127901,
-    "directory": "C:\\Users\\User\\Desktop\\copytest\\test",
+    "name": "test_basic_tranfer",
+    "date_create": 1617956682739,
+    "directory": "D:\\hyperledger_project\\demo_appCC\\network",
     "id": 27,
-    "date_modify": 1618099127901
-  },
-  {
-    "name": "testdup",
-    "date_create": 1618102926194,
-    "directory": "C:\\Users\\User\\Desktop\\copytest\\test2",
-    "id": 28,
-    "date_modify": 1618102926194
+    "date_modify": 1618117117374
   }
 ]
