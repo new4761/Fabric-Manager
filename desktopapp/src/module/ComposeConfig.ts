@@ -133,7 +133,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
         "../keyfiles/ordererOrganizations/" + org + "/orderers/" + name + "/tls/:/var/hyperledger/orderer/tls",
         name + ":/var/hyperledger/production/orderer",
       ];
-      node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric";
+      node.working_dir = "/etc/hyperledger/fabric/";
       node.command = "orderer";
     } else {
       type = "peer";
@@ -145,7 +145,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
         "../keyfiles/peerOrganizations/" + org + "/peers/" + name + "/tls:/etc/hyperledger/fabric/tls",
         name + ":/var/hyperledger/production",
       ];
-      node.working_dir = "/etc/hyperledger/fabric";
+      node.working_dir = "/etc/hyperledger/fabric/peer";
       node.command = "peer node start";
     }
     node.container_name = name;
