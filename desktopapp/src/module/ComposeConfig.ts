@@ -15,7 +15,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
   volumes: any = {};
   network: any = {};
   services: any = {};
-  peer: Array<string> = [];
+  peer:any = new Set();
 
   envMap: any;
   portMap: any;
@@ -66,21 +66,21 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
         // let peer = this.addPeer(child[i], element.fullname, "test");
         // //@ts-ignore
         // this.addService(child[i], peer);
-        orgs.push(child[i]);
+        orgs.push({name:child[i],org:element.fullname});
       }
     });
 
     console.log(orgs);
 
     for (i = 0; i < orgs.length; i++) {
-      this.addOrg(orgs[i]);
-      let peer = this.addPeer(orgs[i], orgs[i].fullname, "test", (7000+i));
+      this.addOrg(orgs[i].name);
+      let peer = this.addPeer(orgs[i].name, orgs[i].org, "test", (7000+i));
       //@ts-ignore
-      this.addService(orgs[i], peer);
+      this.addService(orgs[i].name, peer);
     }
 
     let _cli = new cli();
-    _cli.depends_on = this.peer;
+    _cli.depends_on = Array.from(this.peer);
     this.addService("cli", _cli);
 
     src += yaml.safeDump({ volumes: this.volumes });
@@ -137,7 +137,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
       node.command = "orderer";
     } else {
       type = "peer";
-      this.peer.push(name);
+      this.peer.add(name);
       node.image = "hyperledger/fabric-peer:2.3.0";
       node.volumes = [
         "/var/run/:/host/var/run/",
