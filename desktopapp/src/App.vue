@@ -5,7 +5,7 @@
     <div class="title-bar">
       <div class="title-content">
         <div class="title">
-          {{ this.$store.state.project.id }}
+       
         </div>
 
         <div class="title-btn">

@@ -58,15 +58,26 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
 
     let src = "\n # This file is Generate from ****** \n";
 
+    let orgs: any[] = [];
     Object.values(this.org).forEach((element: any) => {
       let child = Array.from(element.child);
       for (i = 0; i < child.length; i++) {
-        this.addOrg(child[i]);
-        let peer = this.addPeer(child[i], element.fullname, "test");
-        //@ts-ignore
-        this.addService(child[i], peer);
+        // this.addOrg(child[i]);
+        // let peer = this.addPeer(child[i], element.fullname, "test");
+        // //@ts-ignore
+        // this.addService(child[i], peer);
+        orgs.push(child[i]);
       }
     });
+
+    console.log(orgs);
+
+    for (i = 0; i < orgs.length; i++) {
+      this.addOrg(orgs[i]);
+      let peer = this.addPeer(orgs[i], orgs[i].fullname, "test", (7000+i));
+      //@ts-ignore
+      this.addService(orgs[i], peer);
+    }
 
     let _cli = new cli();
     _cli.depends_on = this.peer;
@@ -104,15 +115,18 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
     this.services[service] = container;
   }
 
-  addPeer(name: any, org: string, network: string) {
+  addPeer(name: any, org: string, network: string, port:number) {
     let node = new peer();
+    let type;
     let env = this.envMap.get(name);
     if (env.includes("FABRIC_CA_HOME")) {
+      type = "ca";
       node.image = "hyperledger/fabric-ca:1.4";
       node.volumes = ["../keyfiles/peerOrganizations/" + org + ":/certs", name + ":/etc/hyperledger/fabric-ca-server"];
       node.command = "sh -c 'fabric-ca-server start -b admin:adminpw -d'";
     } else if (env.includes("ORDERER_GENERAL")) {
       node.image = "hyperledger/fabric-orderer:2.3.0";
+      type = "orderer";
       node.volumes = [
         "../genesis.block:/var/hyperledger/orderer/orderer.genesis.block",
         "../keyfiles/ordererOrganizations/" + org + "/orderers/" + name + "/msp:/var/hyperledger/orderer/msp",
@@ -122,6 +136,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
       node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric";
       node.command = "orderer";
     } else {
+      type = "peer";
       this.peer.push(name);
       node.image = "hyperledger/fabric-peer:2.3.0";
       node.volumes = [
@@ -130,14 +145,17 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
         "../keyfiles/peerOrganizations/" + org + "/peers/" + name + "/tls:/etc/hyperledger/fabric/tls",
         name + ":/var/hyperledger/production",
       ];
-      node.working_dir = "/opt/gopath/src/github.com/hyperledger/fabric/peer";
+      node.working_dir = "/etc/hyperledger/fabric";
       node.command = "peer node start";
     }
     node.container_name = name;
     let envArray = env.split(/[\r\n]+/);
     envArray.pop();
+    if (type === "peer") {
+      envArray.push("CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp/users/Admin@" + org + "/msp");
+    }
     node.environment = envArray;
-    node.ports = [this.portMap.get(name)];
+    node.ports = [ port + ":" + this.portMap.get(name)];
     node.networks = [network];
 
     return node;
@@ -165,12 +183,9 @@ export class cli {
     "CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock",
     "FABRIC_LOGGING_SPEC=INFO",
   ];
-  working_dir: string = "/opt/gopath/src/github.com/hyperledger/fabric/peer";
+  working_dir: string = "/etc/hyperledger/fabric";
   command: string = "/bin/bash";
-  volumes: string[] = [
-    "/var/run/:/host/var/run/",
-    "../keyfiles:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations",
-  ];
+  volumes: string[] = ["/var/run/:/host/var/run/", "../keyfiles:/etc/hyperledger/fabric/peer/organizations"];
   depends_on: string[] = [""];
   networks: string[] = ["test"];
 }
