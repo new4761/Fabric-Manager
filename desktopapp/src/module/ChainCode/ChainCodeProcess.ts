@@ -171,22 +171,22 @@ class ChainCodeProcess {
     org: string
   ) {
     if (ccObj.state == CCstate.unSetupCC) {
-    ccObj =  this.setupFolder(ccObj);
+    ccObj = await this.setupFolder(ccObj);
   }
     if (ccObj.state == CCstate.setupDir) {
-      ccObj =  this.installCC(ccObj, org, useInti);
+      ccObj =await  this.installCC(ccObj, org, useInti);
     }
     if (ccObj.state == CCstate.installCC) {
-      ccObj =  this.approve(ccObj, org);
+      ccObj = await this.approve(ccObj, org);
     }
     if (ccObj.state == CCstate.approveCC) {
-      ccObj =  this.commit(ccObj, org);
+      ccObj = await this.commit(ccObj, org);
     }
     if (ccObj.state == CCstate.commitCC) {
       if (useInti) {
         ccObj.useInit = true;
         this.setInitArgs(ccObj, args);
-        ccObj =  this.initCC(ccObj, args, org);
+        ccObj = await this.initCC(ccObj, args, org);
       }
     }
     
@@ -195,12 +195,12 @@ class ChainCodeProcess {
   async updateCCtoFabric(ccObj: any, org: string) {
     this.setDate(ccObj);
     this.updateVersion(ccObj);
-    ccObj =  this.upDateFolder(ccObj);
-    ccObj =  this.installCC(ccObj, org, ccObj.useInit);
-    ccObj =  this.approve(ccObj, org);
-    ccObj =  this.commit(ccObj, org);
+    ccObj = await this.upDateFolder(ccObj);
+    ccObj = await this.installCC(ccObj, org, ccObj.useInit);
+    ccObj =  await this.approve(ccObj, org);
+    ccObj = await this.commit(ccObj, org);
     if (ccObj.useInit == true) {
-      ccObj =  this.initCC(ccObj, ccObj.initArgs, org);
+      ccObj = await this.initCC(ccObj, ccObj.initArgs, org);
     }
   }
   setInitArgs(ccObj: ChainCode, args: any) {
