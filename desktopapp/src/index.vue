@@ -114,6 +114,9 @@ import NetworkConfig from "./models/NetworkConfig";
 import ExportConnectionProfile from "@/components/export/ExportProfile.vue";
 import ExportConfig from "./components/export/ExportConfig.vue";
 import ExportCompose from "./components/export/ExportCompose.vue";
+import FileManager from "./module/FileManager";
+const fs = require("fs");
+const path = require("path");
 /* eslint-disable no-unused-vars */
 @Component({
   components: {
@@ -199,6 +202,20 @@ export default class Index extends Vue {
     this.container = this.$store.state.docker.activeContainer;
     this.org = NetworkConfig.getOrgData();
     this.filter();
+
+     try {
+      let _genesis = path.join(this.$store.state.project.path, "genesis.block");
+      if (!fs.existsSync(_genesis)) {
+        console.log("copy!!!")
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, "vars", "genesis.block"),
+          path.join(this.$store.state.project.path, "genesis.block")
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
   }
 
   filter() {
