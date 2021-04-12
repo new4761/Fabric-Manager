@@ -175,7 +175,7 @@ export class peer {
 
 export class cli {
   container_name: string = "cli";
-  image: string = "image: hyperledger/fabric-tools:2.3.0";
+  image: string = "hyperledger/fabric-tools:2.3.0";
   tty: boolean = true;
   stdin_open: boolean = true;
   environment: string[] = [
