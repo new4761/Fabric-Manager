@@ -107,7 +107,7 @@ class FileManager {
     }
   }
   createFileWithData(destDir: string, data: string) {
-    console.log(destDir);
+    // console.log(destDir);
     fs.writeFileSync(destDir, data, function(err: any) {
       if (err) throw err;
     });

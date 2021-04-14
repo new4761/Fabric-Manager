@@ -3,7 +3,7 @@ import NetworkConfig from "@/models/NetworkConfig";
 import ExportAppProcess from "../ExportAppProcess";
 import FileManager from "../FileManager";
 
-const { Gateway, Wallets } = require("electron").remote.require("fabric-network");
+const { Gateway, Wallets } = require("fabric-network");
 import OSProcess from "../OSProcess/OSProcess";
 const path = require('path');
 const fs = require("fs");
@@ -29,24 +29,7 @@ class MinifabricController {
     async fixWalletIdentitiesForWindow() {
         // console.log("start fixWalletIdentitiesForWindow ")
         let sourceDir = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets")
-        // ile =  fs.readdirSync(sourceDir,  (err: any, files: any) => {
-        //     if (err) {
-        //         console.error("Could not list the directory.", err);
-        //         process.exit(1);
-        //     }
-        //      files.forEach( (file: any) => {
-        //         let fileDir = path.join(sourceDir, file)
-        //         fs.readdir(fileDir, (err: any, idFile: any)=> {
-        //              idFile.forEach(async (file: any) => {
-        //                 let idFilePath = path.join(fileDir, file)
-        //                 let data = await FileManager.readFile(idFilePath);
-        //                 let regexWindow = /\s\\n/g
-        //                 data = data.replace(regexWindow, '\\n')
-        //                 await FileManager.createFileWithData(idFilePath, data)
-        //             })
-        //         })
-        //         // console.log(file)
-        //     })
+ 
         // })
         let files = fs.readdirSync(sourceDir)
         await files.forEach(async (file: any) => {

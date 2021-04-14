@@ -205,6 +205,7 @@ export default class IdentityManger extends IdentityMangerProps {
       this.inputGroup.inputPW = false;
     }
   }
+  // TODO: add pop up error handle
   async enroll() {
     if (!(this.userName == "" || this.userPassword == "")) {
       await FabricSDK.EnrollIdentity(
