@@ -2,9 +2,7 @@ import { netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
 import MinifabricController from "../Minifabric/MinifabricController";
 import { getOrgData } from "../OSProcess/StringBuilder";
-const { Gateway } = require("electron").remote.require("fabric-network");
-
-
+const { Gateway } =require("fabric-network");
 class NetworkGateway {
     org: string;
     //get org
@@ -13,15 +11,15 @@ class NetworkGateway {
         this.org = org
         //console.log(this.gateway)
     }
-    //TODO: fix it !!! 
     async connectGateWay() {
         let gateway = new Gateway();
         let channel = NetworkConfig.getValue(netWorkConfigPath.channelPath);
         let connectionProfile = await MinifabricController.getChannelProfile(channel[0].name);
         // console.log(connectionProfile.certificateAuthorities)
         try {
-            this.org = getOrgData(NetworkConfig.getValue(netWorkConfigPath.caPath)[0]);
-            let wallet = await MinifabricController.getWalletIdentities(this.org);
+            // this.org = getOrgData(NetworkConfig.getValue(netWorkConfigPath.caPath)[0]);
+            // let wallet = await MinifabricController.getWalletIdentities(this.org);
+            let wallet = await MinifabricController.getWalletIdentities("ca1."+this.org);
             const identity = await wallet.get('Admin');
             // console.log(identity)
             this.gateway = await gateway.connect(connectionProfile, {

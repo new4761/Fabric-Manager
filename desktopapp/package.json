@@ -10,7 +10,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "rebuild": "electron-rebuild"
+    "rebuild": "electron-rebuild -w fabric-protos fabric-network fabric-ca-client fabric-common"
   },
   "main": "background.js",
   "dependencies": {
@@ -26,7 +26,9 @@
     "electron-rebuild": "^2.3.4",
     "eslint-plugin-vue": "^7.5.0",
     "fabric-ca-client": "^2.2.5",
+    "fabric-common": "^2.2.5",
     "fabric-network": "^2.2.5",
+    "fabric-protos": "^2.2.5",
     "file-system": "^1.2.2",
     "js-yaml": "^3.14.1",
     "mitt": "^2.1.0",
@@ -60,7 +62,8 @@
     "@vue/compiler-sfc": "^3.0.5",
     "@vue/eslint-config-typescript": "^5.0.2",
     "babel-eslint": "^10.1.0",
-    "electron": "^11.2.2",
+    "copy-webpack-plugin": "^5.1.2",
+    "electron": "^11.4.2",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
     "typescript": "~3.9.3",

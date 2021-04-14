@@ -144,6 +144,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
         "../keyfiles/peerOrganizations/" + org + "/peers/" + name + "/msp:/etc/hyperledger/fabric/msp",
         "../keyfiles/peerOrganizations/" + org + "/peers/" + name + "/tls:/etc/hyperledger/fabric/tls",
         name + ":/var/hyperledger/production",
+        "../keyfiles/peerOrganizations/" + org + "/users:/etc/hyperledger/fabric/msp/users"
       ];
       node.working_dir = "/etc/hyperledger/fabric/peer";
       node.command = "peer node start";
