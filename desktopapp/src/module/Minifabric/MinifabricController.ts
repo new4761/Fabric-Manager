@@ -1,8 +1,9 @@
 import { getProjectPath, netWorkConfigPath } from "@/models/EnvProject";
 import NetworkConfig from "@/models/NetworkConfig";
+import ExportAppProcess from "../ExportAppProcess";
 import FileManager from "../FileManager";
 
-const { Gateway, Wallets } = require("electron").remote.require("fabric-network");
+const { Gateway, Wallets } = require("fabric-network");
 import OSProcess from "../OSProcess/OSProcess";
 const path = require('path');
 const fs = require("fs");
@@ -25,28 +26,25 @@ class MinifabricController {
 
 
     }
-    fixWalletIdentitiesForWindow() {
+    async fixWalletIdentitiesForWindow() {
+        // console.log("start fixWalletIdentitiesForWindow ")
         let sourceDir = path.join(getProjectPath(), "vars", "profiles", "vscode", "wallets")
-        fs.readdir(sourceDir, function (err: any, files: any) {
-            if (err) {
-                console.error("Could not list the directory.", err);
-                process.exit(1);
-            }
-            files.forEach((file: any) => {
-                let fileDir = path.join(sourceDir, file)
-                fs.readdir(fileDir, function (err: any, idFile: any) {
-                    idFile.forEach(async (file: any) => {
-                        let idFilePath = path.join(fileDir,file)
+ 
+        // })
+        let files = fs.readdirSync(sourceDir)
+        await files.forEach(async (file: any) => {
+            let fileDir = path.join(sourceDir, file)
+            let idFile =  fs.readdirSync(fileDir)
+           await idFile.forEach(async (file: any) => {
+                        let idFilePath = path.join(fileDir, file)
                         let data = await FileManager.readFile(idFilePath);
-                        let regexWindow =/\s\\n/g
-                        data = data.replace(regexWindow,'\\n')
-                        await FileManager.createFileWithData(idFilePath, data)
+                        let regexWindow = /\s\\n/g
+                        data = data.replace(regexWindow, '\\n')
+                        FileManager.createFileWithData(idFilePath, data)
                     })
-                })
-                //console.log(file)
-            })
-
         })
+        // console.log("end fixWalletIdentitiesForWindow ")
+        // ExportAppProcess.getWallet(targetPath, peerList)
     }
     //return Identity in org
     async getWalletIdentities(org: string) {

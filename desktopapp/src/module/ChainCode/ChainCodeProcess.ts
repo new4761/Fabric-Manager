@@ -174,7 +174,7 @@ class ChainCodeProcess {
     ccObj = await this.setupFolder(ccObj);
   }
     if (ccObj.state == CCstate.setupDir) {
-      ccObj = await this.installCC(ccObj, org, useInti);
+      ccObj =await  this.installCC(ccObj, org, useInti);
     }
     if (ccObj.state == CCstate.installCC) {
       ccObj = await this.approve(ccObj, org);
@@ -195,10 +195,9 @@ class ChainCodeProcess {
   async updateCCtoFabric(ccObj: any, org: string) {
     this.setDate(ccObj);
     this.updateVersion(ccObj);
-    // console.log(ccObj)
     ccObj = await this.upDateFolder(ccObj);
     ccObj = await this.installCC(ccObj, org, ccObj.useInit);
-    ccObj = await this.approve(ccObj, org);
+    ccObj =  await this.approve(ccObj, org);
     ccObj = await this.commit(ccObj, org);
     if (ccObj.useInit == true) {
       ccObj = await this.initCC(ccObj, ccObj.initArgs, org);

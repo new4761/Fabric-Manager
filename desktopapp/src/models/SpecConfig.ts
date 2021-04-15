@@ -58,13 +58,25 @@ class SpecConfig extends FileYamlBuilder implements YamlConfig {
   setUpFileStructure(outputPath: string) {
     let minifabFileName = "minifab.cmd";
     //let minifabFileName ="minifab"
-    let minifabPath = path.join(
+   let minifabPath ;
+    if(isDevelopment){
+     minifabPath = path.join(
       process.cwd(),
       "src",
       "assets",
       "minifab",
       minifabFileName
     );
+    }
+    else{
+      minifabPath = path.join(
+        process.cwd(),
+        "resources",
+        "extraResources",
+        "bin",
+        minifabFileName
+      );
+    }
     //console.log(minifabPath);
     fs.copyFileSync(minifabPath, path.join(outputPath, minifabFileName));
     // fs.copyFile();

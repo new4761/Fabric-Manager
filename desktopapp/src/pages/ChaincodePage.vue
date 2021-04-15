@@ -298,10 +298,10 @@ export default class CCconsole extends CCconsoleProps {
     else{
      output = await ChainCodeProcess.callCC_command_string(this.selectedCC, this.args.raw, command, this.selectedOrg);
     }
+    this.cmdLoading = false;
     this.output.rawData = output.rawData;
     this.output.response = output.response;
     this.output.fabricPayload = output.fabricPayload;
-    this.cmdLoading = false;
   }
   // query() {}
   resetOutput() {

@@ -182,9 +182,9 @@ Vue.component("Tree", Tree);
 Vue.component("TriStateCheckbox", TriStateCheckbox);
 
 
-Vue.component("Splitter", Splitter );
-Vue.component("SplitterPanel", SplitterPanel );
-
+Vue.component("Splitter", Splitter);
+Vue.component("SplitterPanel", SplitterPanel);
+// process.noAsar = true;
 const app = new Vue({
   data() {
     return { loading: false };
@@ -193,13 +193,20 @@ const app = new Vue({
   store,
   render: (h) => h(App),
 }).$mount("#app");
-
 router.beforeEach((to, from, next) => {
+  // console.log(process)
+  
   app.loading = true;
   next();
 });
 router.afterEach(() => {
   app.loading = false;
+ 
   // setTimeout(() => (app.loading = false), 15000); // timeout for demo purposes
 });
+
 store.commit("setPlatform", process.platform);
+// try {
+//   require("fabric-ca-client");
+// }
+// catch (e) { console.log(e) }

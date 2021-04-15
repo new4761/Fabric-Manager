@@ -5,7 +5,7 @@ import NetworkConfig from "@/models/NetworkConfig";
 import MinifabricController from "../../Minifabric/MinifabricController";
 import { getOrgData } from "@/module/OSProcess/StringBuilder";
 import IdentityManger from "./IdentityManger";
-const FabricCAServices = require("electron").remote.require('fabric-ca-client');
+const FabricCAServices =require('fabric-ca-client');
 
 
 class CaGateway extends NetworkGateway {
@@ -15,8 +15,10 @@ class CaGateway extends NetworkGateway {
         let connectionProfile = await MinifabricController.getChannelProfile(channel[0].name);
         // console.log(connectionProfile.certificateAuthorities)
         try {
-            this.org = NetworkConfig.getValue(netWorkConfigPath.caPath)[0];
-            const caInfo = connectionProfile.certificateAuthorities[this.org];
+            // this.org = NetworkConfig.getValue(netWorkConfigPath.caPath)[0];
+            // console.log(NetworkConfig.getValue(netWorkConfigPath.caPath))
+            // console.log("ca."+this.org)
+            const caInfo =await connectionProfile.certificateAuthorities["ca1."+this.org];
             const caTLSCACerts = caInfo.tlsCACerts.pem;
             this.gateway = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
          // console.log(getOrgData(this.org))
