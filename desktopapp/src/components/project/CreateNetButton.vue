@@ -58,9 +58,9 @@
           <small class="text-error"> *you cannot modify, delete organizations and channel after its creation</small>
         </div>
         <template #footer>
-          <div class="p-d-flex p-jc-between">
-            <Button label="No" icon="pi pi-times" @click="closeConfirm()" class="p-button-text text-error" />
-            <Button label="Yes" icon="pi pi-check" @click="createNetwork()" class="p-button-primary" />
+          <div class="p-d-flex p-jc-end">
+            <Button label="Cancel" icon="pi pi-times" @click="closeConfirm()" class="p-button-text text-error p-px-3" />
+            <Button label="Confirm" icon="pi pi-check" @click="createNetwork()" class="p-button-primary" />
           </div>
         </template>
       </Dialog>
@@ -135,6 +135,7 @@
           <div class="p-grid p-fluid p-field p-mt-3">
             <OrgInputText @new-org="newOrgTolist"></OrgInputText>
           </div>
+
           <div class="p-fluid p-formgrid p-grid p-my-0">
             <div class="p-field-checkbox p-col p-my-0">
               <Checkbox id="quick" v-model="quick" :binary="true" />
@@ -161,17 +162,20 @@
           </div>
 
           <div class="p-fluid p-formgrid p-grid p-my-0">
-            <div class="p-field p-col p-my-0"></div>
+            <div class="p-field p-col p-my-0">
+              <small>immedieatly starts network after creation</small>
+            </div>
 
             <div class="p-field p-col p-my-0">
               <small class="p-error" v-if="invalidChannel">{{ errorChannel }}</small>
+              <small v-else>create default channel</small>
             </div>
           </div>
         </div>
         <template #footer>
-          <div class="p-grid">
-            <Button class="p-button-danger p-button-outlined p-m-2 p-my-2" label="close" @click="closeDialogue()" />
-            <Button class="p-button-primary  p-ml-auto p-my-2" label="create" @click="checkInput()" />
+          <div class="p-grid p-jc-end">
+            <Button class="p-button-danger p-button-outlined p-mx-5 p-my-2" label="close" @click="closeDialogue()" />
+            <Button class="p-button-primary  p-my-2" label="create" @click="checkInput()" />
           </div>
         </template>
       </Dialog>
@@ -310,7 +314,7 @@ export default class CreateNetButton extends Vue {
   }
 
   closeDialogue() {
-    this.object.resetData();
+    // this.object.resetData();
     this.display = false;
   }
 

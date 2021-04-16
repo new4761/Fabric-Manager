@@ -108,10 +108,10 @@
         <div class="p-grid p-jc-center p-mb-2">
           <small class="text-error">*this operation cannot be undone</small>
         </div>
-        <div class="p-d-flex p-jc-between p-mt-1">
-          <Button class="p-button-danger p-ml-auto p-m-2 p-button-outlined" label="close" @click="display = false" />
+        <div class="p-d-flex p-jc-end p-mt-1">
+          <Button class="p-button-sm p-button-danger p-m-2 p-button-outlined" label="close" @click="display = false" />
 
-          <Button class="p-button-primary p-m-2" label="create" @click="checkValid()" />
+          <Button class="p-button-sm p-button-primary p-m-2" label="create" @click="checkValid()" />
         </div>
       </Dialog>
     </div>

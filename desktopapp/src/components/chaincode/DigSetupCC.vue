@@ -54,7 +54,7 @@
         <br />
         <Panel v-if="useInit">
           <template #header>
-            <small>Parameter List</small>
+            <small>Init parameters</small>
           </template>
           <div v-for="(item, index) in args.length + 1" :key="index">
             <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)"></InputArg>
@@ -64,13 +64,13 @@
     </div>
     <br />
     <br />
-    <div class="p-grid">
-      <Button label="Cancle" icon="pi pi-times" @click="close()" class="p-button-outlined p-button-danger" />
+    <div class="p-grid p-jc-end">
+      <Button label="Cancel" icon="pi pi-times" @click="close()" class="p-button-sm p-button-outlined p-button-danger p-mx-2" />
       <Button
         label="Deploy"
         icon="pi pi-upload"
         @click="deployCC(), checkInputgroup()"
-        class="p-button-outlined p-button-primary p-ml-auto p-px-3"
+        class="p-button-sm p-button-outlined p-button-primary p-mx-2 p-px-3"
       />
     </div>
   </div>
@@ -198,4 +198,6 @@ export default class DigSetupCC extends DigSetupCCProps {
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
+
+
 </style>

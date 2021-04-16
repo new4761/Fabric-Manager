@@ -48,7 +48,7 @@
             <InputText type="number" id="port" v-model="port" />
           </div>
         </div>
-        <div class="p-d-flex p-jc-between p-mt-1 ">
+        <div class="p-d-flex p-jc-end p-mt-1 ">
           <Button class="p-button-danger p-m-2 p-button-outlined p-button-sm" label="close" @click="display = false" />
           <Button class="p-button-primary  p-ml-auto p-m-2 p-button-sm" label="start" @click="netup()" />
         </div>

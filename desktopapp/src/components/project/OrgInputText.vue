@@ -21,7 +21,7 @@
             <Checkbox v-model="isOrderer" :binary="true" />
             <label for="binary" class="p-ml-2">Orderer</label>
           </span>
-          <Button icon="pi pi-plus" class="p-button-success" @click="added" />
+          <Button icon="pi pi-plus" label="add" class="p-button-success" @click="added" />
         </div>
       </div>
       <div class="p-col-12">
