@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- <div class="cc-list-header p-grid p-ai-center vertical-container">
-      ChainCode
-    </div> -->
     <div @click="toggle()">
       <div class="cc-list-header p-grid p-ai-center vertical-container">
         ChainCode
@@ -33,33 +30,15 @@
               <Button
                 class="p-ml-auto p-button-outlined p-button-sm p-button-primary"
                 icon="pi pi-plus"
-                label="Deploy new CC"
+                label="Deploy new Chaincode"
                 @click.stop="setUpCCdisplay = true"
               ></Button>
             </div>
           </div>
-          <!-- <Panel>
-            <div class="p-grid p-fluid">
-              <div class="p-col-6">
-                <small>Selected Channel </small>
-                <br />
-                <Dropdown v-model="selectedChannel" :options="channelList" optionLabel="name" @change="hookCClist" />
-              </div>
-              <div class="p-col-6">
-                <small>Selected Peer Organization</small>
-                <br />
-                <Dropdown v-model="selectedOrg" :options="orgList" />
-              </div>
-            </div>
-          </Panel> -->
           <Panel>
             <div class="p-grid p-fluid p-nogutter">
-              <div class="p-col-3">
-                <small>Command</small>
-                <Dropdown v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
-              </div>
               <div class="p-col-6">
-                <small>Chaincode name</small>
+                <small>Selected Chaincode</small>
                 <Dropdown
                   v-model="selectedCC"
                   :options="ccList"
@@ -68,42 +47,56 @@
                   @change="setSelectedCC, updateInfo($event)"
                 />
               </div>
-              <div class="p-col-3">
-                <br />
-                <Button
-                  label="SEND"
-                  @click="callCommand()"
-                  style="height: 45px"
-                  class="p-button-outlined p-button-primary"
-                />
-              </div>
-               <div class="p-col-12 p-mt-2">
+
+              <div class="p-col-6">
                 <small>Selected Peer Organization</small>
                 <br />
                 <Dropdown v-model="selectedOrg" :options="orgList" />
               </div>
             </div>
-
           </Panel>
-           <div class="p-inputgroup p-my-2">
+          <br />
+          <!-- <div class="p-col-3">
+            <small>Command</small>
+            <Dropdown v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
+          </div>
+
+          <div class="p-col-3">
+            <br />
+            <Button
+              label="SEND"
+              @click="callCommand()"
+              style="height: 45px"
+              class="p-button-outlined p-button-primary"
+            />
+          </div> -->
+          <Panel>
+            <template #header>Operation</template>
+            <div class="p-d-flex p-ai-center">
+              <div class="p-col p-inputgroup p-mb-1">
                 <SelectButton v-model="selecteInputActive" :options="selectedInput" optionLabel="name" />
               </div>
-          <Panel v-if="selecteInputActive.active==0">
-            <template #header>
-              <small>Parameter List</small>
-            </template>
-            <div class="p-grid p-fluid p-nogutter">
-              <div v-for="(item, index) in args.list.length + 1" :key="index" class="p-col-12">
-                <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)" :_index= "index"></InputArg>
+
+
+                <Dropdown class="chaincode-dropdown p-mx-2" v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
+
+
+                <Button label="SEND" @click="callCommand()" class="p-mx-2 p-button-sm p-button-outlined p-button-primary " />
+
+            </div>
+            <div v-if="selecteInputActive.active == 0">
+              <!-- <small>Parameter List</small> -->
+              <div class="p-grid p-fluid p-nogutter">
+                <div v-for="(item, index) in args.list.length + 1" :key="index" class="p-col-12">
+                  <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)" :_index="index"></InputArg>
+                </div>
               </div>
             </div>
-          </Panel>
-          <Panel v-if="selecteInputActive.active==1">
-            <template #header>
-              <small>Parameter Raw</small>
-            </template>
-            <div class="p-grid p-fluid p-nogutter">
-            <Textarea v-model="args.raw" rows="1" cols="30" :autoResize="true" />
+            <div v-if="selecteInputActive.active == 1">
+              <!-- <small>Parameter Raw</small> -->
+              <div class="p-grid p-fluid p-nogutter">
+                <Textarea v-model="args.raw" rows="1" cols="30" :autoResize="true" />
+              </div>
             </div>
           </Panel>
           <br />
@@ -201,8 +194,8 @@ export default class CCconsole extends CCconsoleProps {
   selectedOrg = "";
   selectedChannel: any = "";
   args: any = {
-    list:[],
-    raw:""
+    list: [],
+    raw: "",
   };
   cmdLoading = false;
   //digBox var
@@ -211,7 +204,7 @@ export default class CCconsole extends CCconsoleProps {
   displaylog = false;
   selectedCC = {};
   output: any = {};
-    selectedInput = [
+  selectedInput = [
     { name: "Parameter List", active: 0 },
     { name: "Raw", active: 1 },
   ];
@@ -227,8 +220,8 @@ export default class CCconsole extends CCconsoleProps {
     { label: "QUERY", value: "query" },
   ];
   showSection: boolean = false;
-  selecteInputActive:any =this.selectedInput[0]
-  selectedOutputActive: any = this.selectedOutput[0]
+  selecteInputActive: any = this.selectedInput[0];
+  selectedOutputActive: any = this.selectedOutput[0];
   $refs!: {
     info: CCDetails;
   };
@@ -291,12 +284,11 @@ export default class CCconsole extends CCconsoleProps {
   async callPeerCC(command: string) {
     this.cmdLoading = true;
     this.resetOutput();
-     let output;
-    if(this.selecteInputActive.active==0){
-     output = await ChainCodeProcess.callCC_command(this.selectedCC, this.args.list, command, this.selectedOrg);
-    }
-    else{
-     output = await ChainCodeProcess.callCC_command_string(this.selectedCC, this.args.raw, command, this.selectedOrg);
+    let output;
+    if (this.selecteInputActive.active == 0) {
+      output = await ChainCodeProcess.callCC_command(this.selectedCC, this.args.list, command, this.selectedOrg);
+    } else {
+      output = await ChainCodeProcess.callCC_command_string(this.selectedCC, this.args.raw, command, this.selectedOrg);
     }
     this.cmdLoading = false;
     this.output.rawData = output.rawData;
@@ -337,7 +329,7 @@ export default class CCconsole extends CCconsoleProps {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/style/_variables.scss";
 .vl {
   border-left: 6px solid rgb(20, 34, 20);
@@ -410,5 +402,13 @@ export default class CCconsole extends CCconsoleProps {
 .toggle-open {
   transform: rotate(180deg);
   color: $primaryColor;
+}
+
+.chaincode-dropdown .p-dropdown-label {
+  font-size: 15px;
+  padding: 8px 10px 8px 10px;
+  color: $primaryColor;
+  font-weight: bold;
+  // z-index: 99 !important;
 }
 </style>
