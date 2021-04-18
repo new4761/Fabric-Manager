@@ -38,12 +38,12 @@
           <label>configtx.yaml</label>
         </div>
 
-        <div class="p-d-flex p-jc-between">
+        <div class="p-d-flex p-jc-end">
           <Button
             label="close"
             icon="pi pi-times"
             @click="close()"
-            class="p-button-outlined p-button-danger p-button-sm p-mr-5"
+            class="p-button-outlined p-button-danger p-button-sm p-mx-3"
           />
           <Button
             label="export"

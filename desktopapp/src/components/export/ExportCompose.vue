@@ -30,18 +30,18 @@
           </div>
         </div>
 
-        <div class="p-d-flex p-jc-between">
+        <div class="p-d-flex p-jc-end">
           <Button
             label="close"
             icon="pi pi-times"
             @click="display = false"
-            class="p-button-outlined p-button-danger p-button-sm p-mr-5"
+            class="p-button-outlined p-button-danger p-button-sm p-mx-3"
           />
           <Button
             label="export"
             icon="pi pi-download"
             @click="exportCompose()"
-            class="p-button-outlined p-button-primary p-button-sm p-ml-5"
+            class="p-button-outlined p-button-primary p-button-sm"
           />
         </div>
       </div>

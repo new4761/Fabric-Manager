@@ -106,17 +106,17 @@
               <Dropdown v-model="userRole" :options="roleType" />
             </div>
           </div>
-          <div class="p-grid p-mx-1 p-mt-1">
+          <div class="p-grid p-mx-1 p-mt-1 p-jc-end">
             <Button
               label="Close"
               icon="pi pi-times"
               @click="newUserDisplay = false"
-              class="p-button-outlined p-button-danger"
+              class="p-button-outlined p-button-danger p-mx-3"
             />
             <Button
               label="Enroll"
               icon="pi pi-user-plus"
-              class="p-button-outlined p-button-primary p-ml-auto p-px-3"
+              class="p-button-outlined p-button-primary p-px-3"
               @click="enroll(), checkInputGroup(), (newUserDisplay = false)"
             />
           </div>

@@ -76,7 +76,7 @@
         v-bind:visible="display"
         :closable="false"
         modal
-        :style="{ width: '60vw' }"
+        :style="{ width: '650px' }"
         :breakpoints="{ '960px': '80vw', '640px': '80vw' }"
         :contentStyle="{ overflow: 'auto' }"
         class="create-net"

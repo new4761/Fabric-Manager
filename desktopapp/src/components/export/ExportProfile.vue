@@ -23,18 +23,18 @@
         </div>
       </div>
     </div>
-    <div class="p-grid">
+    <div class="p-grid p-jc-end">
              <Button
         label="Cancle"
         icon="pi pi-times"
         @click="close()"
-        class="p-button-outlined p-button-danger p-button-sm"
+        class="p-button-outlined p-button-danger p-button-sm p-mx-3"
       />
     <Button
       label="Export"
       icon="pi pi-download"
       @click="generate()"
-         class="p-button-outlined p-button-primary p-ml-auto p-px-3 p-button-sm"
+         class="p-button-outlined p-button-primary p-px-3 p-button-sm"
     />
      </div>
   </div>
