@@ -20,6 +20,7 @@ export class ProjectConfig {
         "projects.json"
       );
       this.file = editJsonFile(filePath);
+      console.log(filePath)
     } catch (e) {
       logger.log("error", "projects.json path");
     }
