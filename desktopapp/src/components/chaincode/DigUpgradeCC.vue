@@ -134,6 +134,7 @@ export default class DigUpgradeCC extends DigUpGradeCCProps {
     }
   }
   async upGradeCC() {
+    this.$store.commit("setProcessContext", "upgrade Chaincode");
     this.$emit("openLog", true);
     this._selectedCC.directory = this.path;
     this._selectedCC.useInit = this.useInit;
@@ -144,8 +145,10 @@ export default class DigUpgradeCC extends DigUpGradeCCProps {
     }
     await ChainCodeProcess.updateCCtoFabric(this._selectedCC, this.selectedOrg);
     this.$emit("hookccList");
+    this.$store.commit("setProcessStatus", true);
     this.close()
     //  this.hookCClist();
+    
   }
 }
 </script>

@@ -7,13 +7,10 @@
     "date_modify": 1618211295215
   },
   {
-    "name": "basic",
-    "date_create": 1618217039027,
-    "directory": "D:\\hyperledger_project\\demo_appCC\\basic_2network",
-    "id": 1,
     "name": "test project2",
     "date_create": 2010698257055,
     "directory": "D:\\blockchain\\dev_Hyperledger_Blockchain\\desktopapp\\tests",
+    "id": 1,
     "date_modify": 2110699257079
   },
   {
@@ -217,6 +214,6 @@
     "date_create": 1618184684325,
     "directory": "C:\\Users\\User\\Desktop\\copytest\\test3",
     "id": 30,
-    "date_modify": 1619155108630
+    "date_modify": 1619416936706
   }
 ]

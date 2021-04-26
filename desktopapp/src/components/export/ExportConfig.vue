@@ -47,11 +47,11 @@
             <small>network container</small>
             <hr />
             <div class="p-field-checkbox">
-              <Checkbox v-model="burn" :binary="true" />
+              <Checkbox v-model="exportKey" :binary="true" />
               <label>export MSP</label>
             </div>
             <div class="p-field-checkbox">
-              <Checkbox v-model="burn" :binary="true" />
+              <Checkbox v-model="exportKey" :binary="true" />
               <label>export Docker-compose.yaml</label>
             </div>
           </div>
@@ -83,6 +83,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 const { dialog } = require("electron").remote;
 import FileManager from "../../module/FileManager";
+import ComposeConfig from "../../module/ComposeConfig";
 const path = require("path");
 @Component({
   components: {},
@@ -93,7 +94,8 @@ export default class ExportConfig extends Vue {
   exportTx: boolean = true;
   exportCrypto: boolean = true;
   display: boolean = false;
-  burn: boolean = true;
+  exportKey: boolean = true;
+  exportCompsoe: boolean = true;
 
   async exportConfig() {
     this.$store.state.project.path;
@@ -101,6 +103,8 @@ export default class ExportConfig extends Vue {
     let _configtx = path.join("vars", "configtx.yaml");
     let _core = path.join("vars", "core.yaml");
     let _cryptoConfig = path.join("vars", "crypto-config.yaml");
+    let _env = path.join("vars", "run");
+    let _key = path.join("vars", "keyfiles");
     await this.getDestination();
 
     if (this.exportDir) {
@@ -123,6 +127,26 @@ export default class ExportConfig extends Vue {
           path.join(this.$store.state.project.path, _cryptoConfig),
           path.join(this.exportDir, "crypto-config.yaml")
         );
+      }
+      FileManager.copyFileExtension(
+        path.join(this.$store.state.project.path, _env),
+        path.join(this.exportDir, "docker"),
+        ".env"
+      );
+      if (this.exportKey) {
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, _key),
+          path.join(this.exportDir, "keyfiles")
+        );
+
+        FileManager.copyFilesDir(
+          path.join(this.$store.state.project.path, "genesis.block"),
+          path.join(this.exportDir, "genesis.block")
+        );
+      }
+      if (this.exportCompsoe) {
+        ComposeConfig.defaultOutputPath = path.join(this.exportDir, "docker");
+        ComposeConfig.createFile();
       }
     }
 

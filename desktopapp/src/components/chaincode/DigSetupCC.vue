@@ -168,6 +168,7 @@ export default class DigSetupCC extends DigSetupCCProps {
     }
   }
   async deployCC() {
+    this.$store.commit("setProcessContext", "install Chaincode");
     if (!(this.ccName == "" || this.path == "")) {
       this.$emit("openLog", true);
       //TODO: fix channel
@@ -189,6 +190,7 @@ export default class DigSetupCC extends DigSetupCCProps {
         ccObj = target;
       }
       await ChainCodeProcess.deployCCtoFabric(ccObj, this.useInit, this.args, this.selectedOrg);
+      this.$store.commit("setProcessStatus", true);
     }
   this.close()
   this.$emit("openLog", false);
