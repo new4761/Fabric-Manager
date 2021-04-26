@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="identity-header p-grid p-ai-center vertical-container">
-      Indentity Manager
+      Identity Manager 
     </div>
 
     <div class="p-grid p-nogutter identity-wrapper p-jc-center">
@@ -56,7 +56,7 @@
           :contentStyle="{ overflow: 'visible' }"
         >
           <template #header>
-            <span>Add newuser</span>
+            <span>create identity</span>
             <!-- <span
               >Add newuser to <b>{{ selectedOrg }}</b></span
             >

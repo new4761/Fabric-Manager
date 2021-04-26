@@ -3,7 +3,7 @@
     <Button
       @click="display = true"
       icon="fas fa-file-export"
-      label="configuration files"
+      label="network config"
       class="p-button-outlined p-button-primary p-button-sm"
     />
 
@@ -16,13 +16,12 @@
       :contentStyle="{ overflow: 'visible' }"
     >
       <template #header>
-        <span>Export configuration files</span>
+        <span>Export network</span>
       </template>
       <div class="p-p-2">
-        
-          <small>Selected config</small>
-          <hr />
-        
+        <small>config files and artifacts</small>
+        <hr />
+
         <div class="p-field-checkbox">
           <Checkbox v-model="exportCore" :binary="true" />
           <label>core.yaml</label>
@@ -37,6 +36,28 @@
           <Checkbox v-model="exportTx" :binary="true" />
           <label>configtx.yaml</label>
         </div>
+
+        <div class="p-field-checkbox">
+          <Checkbox v-model="exportTx" :binary="true" />
+          <label>genesis.block</label>
+        </div>
+
+        <div class="p-grid p-fluid">
+          <div class="p-col-12">
+            <small>network container</small>
+            <hr />
+            <div class="p-field-checkbox">
+              <Checkbox v-model="burn" :binary="true" />
+              <label>export MSP</label>
+            </div>
+            <div class="p-field-checkbox">
+              <Checkbox v-model="burn" :binary="true" />
+              <label>export Docker-compose.yaml</label>
+            </div>
+          </div>
+        </div>
+
+        <br />
 
         <div class="p-d-flex p-jc-end">
           <Button
@@ -72,6 +93,7 @@ export default class ExportConfig extends Vue {
   exportTx: boolean = true;
   exportCrypto: boolean = true;
   display: boolean = false;
+  burn: boolean = true;
 
   async exportConfig() {
     this.$store.state.project.path;
