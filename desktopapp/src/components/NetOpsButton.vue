@@ -11,7 +11,7 @@
 
       <Button icon="fas fa-trash" class=" p-button-secondary p-button-lg p-m-1 p-button-outlined" @click="cleanup()" />
     </div> -->
-
+    <ConfirmDialog></ConfirmDialog>
     <div class="p-d-flex p-jc-center">
       <a class="power-button-offline" v-if="!this.$store.state.docker.isOnline" @click="display = true"
         ><i class="fa fa-power-off"></i
@@ -112,7 +112,7 @@ export default class NetOpsButton extends Vue {
     try {
       let _genesis = path.join(this.$store.state.project.path, "genesis.block");
       if (!fs.existsSync(_genesis)) {
-        console.log("copy!!!")
+        console.log("copy!!!");
         FileManager.copyFilesDir(
           path.join(this.$store.state.project.path, "vars", "genesis.block"),
           path.join(this.$store.state.project.path, "genesis.block")
@@ -123,12 +123,22 @@ export default class NetOpsButton extends Vue {
     }
   }
   async netdown() {
-    this.$store.commit("setProcessContext", "netdown");
-    this.displaylog = true;
-    this.up = false;
-    await OSProcess.run(["down"]);
-    this.$store.commit("docker/setActiveContainer");
-    this.$store.commit("setProcessStatus", true);
+    this.$confirm.require({
+      message: "Do you want to shutdown the network?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: async () => {
+        this.$store.commit("setProcessContext", "netdown");
+        this.displaylog = true;
+        this.up = false;
+        await OSProcess.run(["down"]);
+        this.$store.commit("docker/setActiveContainer");
+        this.$store.commit("setProcessStatus", true);
+      },
+      reject: () => {
+        //callback to execute when user rejects the action
+      },
+    });
   }
   async cleanup() {
     this.displaylog = true;

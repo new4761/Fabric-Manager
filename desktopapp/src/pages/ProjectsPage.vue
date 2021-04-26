@@ -1,100 +1,102 @@
 <template>
-  <div class="project-wrapper">
-    <ConfirmDialog />
-    <Dialog :visible="display" :closable="false" :modal="true" class="project-info">
-      {{ dataSelected }}
-      <div class="p-grid p-mt-5">
-        <Button class="p-button-danger p-ml-auto p-my-2" label="close" @click="display = false" />
-      </div>
-    </Dialog>
+  <div class="dirty-fix">
+    <div class="project-wrapper">
+      <ConfirmDialog />
+      <Dialog :visible="display" :closable="false" :modal="true" class="project-info">
+        {{ dataSelected }}
+        <div class="p-grid p-mt-5">
+          <Button class="p-button-danger p-ml-auto p-my-2" label="close" @click="display = false" />
+        </div>
+      </Dialog>
 
-    <div class="p-grid p-jc-center">
-      <div class="project-table-wrapper p-col">
-        <h1>
-          Projects
-        </h1>
-        <DataView :value="data" :layout="layout" :sortOrder="sortOrder" :sortField="sortField" class="project-table">
-          <template #header>
-            <div class="p-grid p-nogutter">
-              <div class="p-col-6" style="text-align: left">
-                <Dropdown
-                  v-model="sortKey"
-                  :options="sortOptions"
-                  optionLabel="label"
-                  placeholder="Sort"
-                  @change="onSortChange($event)"
-                />
-                <Button
-                  :icon="icon"
-                  class="p-button-rounded p-button-text p-button-plain p-mx-1"
-                  @click="switchSort()"
-                />
-              </div>
-              <div class="p-col-6">
-                <div class="p-d-flex  p-ai-center p-jc-end">
-                  <CreateNetButton class="p-mx-1" />
-                  <!-- <DataViewLayoutOptions v-model="layout" /> -->
+      <div class="p-grid p-jc-center">
+        <div class="project-table-wrapper p-col">
+          <h1>
+            Projects
+          </h1>
+          <DataView :value="data" :layout="layout" :sortOrder="sortOrder" :sortField="sortField" class="project-table">
+            <template #header>
+              <div class="p-grid p-nogutter">
+                <div class="p-col-6" style="text-align: left">
+                  <Dropdown
+                    v-model="sortKey"
+                    :options="sortOptions"
+                    optionLabel="label"
+                    placeholder="Sort"
+                    @change="onSortChange($event)"
+                  />
+                  <Button
+                    :icon="icon"
+                    class="p-button-rounded p-button-text p-button-plain p-mx-1"
+                    @click="switchSort()"
+                  />
+                </div>
+                <div class="p-col-6">
+                  <div class="p-d-flex  p-ai-center p-jc-end">
+                    <CreateNetButton class="p-mx-1" />
+                    <!-- <DataViewLayoutOptions v-model="layout" /> -->
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
+            </template>
 
-          <template #list="slotProps">
-            <div class="p-col-12 p-my-1">
-              <div class="list-item" @click="confirmOpen(slotProps.data.id)">
-                <div class="list-detail p-grid p-ai-center vertical-container">
-                  <div class="p-col-6">
-                    <div class="list-detail-name p-d-flex  p-ai-center p-jc-between p-my-1">
-                      {{ slotProps.data.name }}
-                    </div>
+            <template #list="slotProps">
+              <div class="p-col-12 p-my-1">
+                <div class="list-item" @click="confirmOpen(slotProps.data.id)">
+                  <div class="list-detail p-grid p-ai-center vertical-container">
+                    <div class="p-col-6">
+                      <div class="list-detail-name p-d-flex  p-ai-center p-jc-between p-my-1">
+                        {{ slotProps.data.name }}
+                      </div>
 
-                    <div class="p-d-flex  p-ai-center p-jc-between  p-my-1">
-                      <div class="list-detail-directory p-text-nowrap p-text-truncate">
-                        {{ slotProps.data.directory }}
+                      <div class="p-d-flex  p-ai-center p-jc-between  p-my-1">
+                        <div class="list-detail-directory p-text-nowrap p-text-truncate">
+                          {{ slotProps.data.directory }}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div class="p-col-5">
-                    <div class="p-d-flex  p-ai-center  p-jc-end  p-my-1">
-                      <div class="list-detail-date">
-                        create date:
-                        <Chip class="p-mx-1">
-                          {{ convertDate(slotProps.data.date_create) }}
-                        </Chip>
+                    <div class="p-col-5">
+                      <div class="p-d-flex  p-ai-center  p-jc-end  p-my-1">
+                        <div class="list-detail-date">
+                          create date:
+                          <Chip class="p-mx-1">
+                            {{ convertDate(slotProps.data.date_create) }}
+                          </Chip>
+                        </div>
+                      </div>
+                      <div class="p-d-flex  p-ai-center  p-jc-end p-my-1">
+                        <div class="list-detail-date">
+                          last updated:
+                          <Chip class="p-mx-1">
+                            {{ convertTime(slotProps.data.date_modify) }}
+                          </Chip>
+                        </div>
                       </div>
                     </div>
-                    <div class="p-d-flex  p-ai-center  p-jc-end p-my-1">
-                      <div class="list-detail-date">
-                        last updated:
-                        <Chip class="p-mx-1">
-                          {{ convertTime(slotProps.data.date_modify) }}
-                        </Chip>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-col-1">
-                    <div class="p-d-flex  p-ai-center p-my-1  p-jc-center">
-                      <div class="list-detail-date">
-                        <Button
-                          icon="pi pi-trash"
-                          class="p-button-sm p-button-danger p-mx-2 p-button-outlined"
-                          @click.stop="confirmDelete(slotProps.data.id)"
-                        />
+                    <div class="p-col-1">
+                      <div class="p-d-flex  p-ai-center p-my-1  p-jc-center">
+                        <div class="list-detail-date">
+                          <Button
+                            icon="pi pi-trash"
+                            class="p-button-sm p-button-danger p-mx-2 p-button-outlined"
+                            @click.stop="confirmDelete(slotProps.data.id)"
+                          />
 
-                        <!-- <Button
+                          <!-- <Button
                       icon="fas fa-info"
                       class="p-button-sm p-button-info p-button-outlined"
                       @click.stop="openInfo(slotProps.data.id)"
                     /> -->
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </DataView>
+            </template>
+          </DataView>
+        </div>
       </div>
     </div>
   </div>
@@ -174,17 +176,22 @@ export default class ProjectPage extends Vue {
   onSortChange(event: any) {
     const value = event.value.value;
     const sortValue = event.value;
-
+    var order = 1;
     if (this.desc) {
-      this.sortOrder = -1;
+      order *= -1;
+    }
+
+    if (value.indexOf("!") === 0) {
+      this.sortOrder = 1 * order;
       this.sortField = value.substring(1, value.length);
       this.sortKey = sortValue;
     } else {
-      this.sortOrder = 1;
+      this.sortOrder = -1 * order;
       this.sortField = value;
       this.sortKey = sortValue;
     }
   }
+
   switchSort() {
     this.desc = !this.desc;
     if (this.desc) {
@@ -210,9 +217,14 @@ export default class ProjectPage extends Vue {
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
+
+.project-fix {
+  overflow: hidden;
+}
 .project-wrapper {
   background-color: $bodyBgColorDarker;
   padding: 80px;
+  height: calc(100vh);
 }
 
 .project-table .p-dataview-content {

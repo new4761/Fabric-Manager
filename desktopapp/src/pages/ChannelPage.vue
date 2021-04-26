@@ -204,6 +204,7 @@ export default class ChannelPage extends Vue {
   }
 
   async create() {
+    this.$store.commit("setProcessContext", "create channel");
     this.displaylog = true;
     let args: string[] = ["create"];
     args.push("-c", this.channelName);
@@ -240,6 +241,7 @@ export default class ChannelPage extends Vue {
   }
 
   async channelQuery() {
+     this.$store.commit("setProcessContext", "query channel config");
     this.displaylog = true;
     let args: string[] = ["channelquery"];
     args.push("-c");
@@ -249,6 +251,7 @@ export default class ChannelPage extends Vue {
   }
 
   async channelUpdate() {
+     this.$store.commit("setProcessContext", "update channel config");
     this.displaylog = true;
     let args: string[] = ["channelsign,channelupdate"];
     args.push("-c");

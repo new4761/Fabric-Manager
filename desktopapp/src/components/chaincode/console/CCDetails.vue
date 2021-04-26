@@ -80,7 +80,7 @@
       </div>
       <Dialog modal :dismissableMask="true" :closable="false" v-bind:visible="upgradeCCdisplay">
         <template #header>
-          <span>Upgrade selected ChainCode</span>
+          <span>Upgrade ChainCode</span>
           <Button
             @click="upgradeCCdisplay = false"
             icon="pi pi-times"
