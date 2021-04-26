@@ -1,12 +1,15 @@
 [
   {
-    "id": 0,
-    "name": "test project",
-    "date_create": 1610698257055,
-    "directory": "D:\\blockchain\\repo\\join",
-    "date_modify": 1618208895414
+    "name": "test_network",
+    "date_create": 1618211295215,
+    "directory": "D:\\hyperledger_project\\demo_appCC\\network_demo",
+    "id": 31,
+    "date_modify": 1618211295215
   },
   {
+    "name": "basic",
+    "date_create": 1618217039027,
+    "directory": "D:\\hyperledger_project\\demo_appCC\\basic_2network",
     "id": 1,
     "name": "test project2",
     "date_create": 2010698257055,
