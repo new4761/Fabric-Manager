@@ -34,6 +34,9 @@ export enum netWorkConfigPath{
     peerPath="project_config.fabric.peers",
     userPath="users"
 }
+export enum exportConfigPath{
+    folder_cli="cli",
+}
 
 export class ccOutputPayload {
   rawData: Array<string> = [];
