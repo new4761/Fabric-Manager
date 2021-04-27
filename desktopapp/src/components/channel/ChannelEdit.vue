@@ -1,111 +1,117 @@
 <template>
-  <div v-if="channel">
-    <div class=" p-grid p-jc-center">
-      <div class="channel-edit-config-view">
-        <div class="edit-config-panel">
-          <div class="p-grid">
-            <div class="edit-config-menu p-col-3">
-              <PanelMenu :model="items" />
-            </div>
-            <div class="p-col">
-              <div class="edit-config-content p-p-5 p-grid p-jc-center">
-                <div class="p-col-9">
-                  <ScrollPanel class="edit-config-scroll">
-                    <div v-show="selectedMenu === '_app'">
-                      <h3 class="p-text-bold">Application</h3>
-                      <hr class="dott" />
+  <div>
+    <div v-if="channel">
+      <div class=" p-grid p-jc-center">
+        <div class="channel-edit-config-view">
+          <div class="edit-config-panel">
+            <div class="p-grid">
+              <div class="edit-config-menu p-col-3">
+                <PanelMenu :model="items" />
+              </div>
+              <div class="p-col">
+                <div class="edit-config-content p-p-5 p-grid p-jc-center">
+                  <div class="p-col-9">
+                    <ScrollPanel class="edit-config-scroll">
+                      <div v-show="selectedMenu === '_app'">
+                        <h3 class="p-text-bold">Application</h3>
+                        <hr class="dott" />
 
-                      <InputForm
-                        :data="channelApplication"
-                        :jsonKey="'channel_group.groups.Application'"
-                        :channel="channelName"
-                      />
+                        <InputForm
+                          :data="channelApplication"
+                          :jsonKey="'channel_group.groups.Application'"
+                          :channel="channelName"
+                        />
 
-                      <!-- <ValueForm
+                        <!-- <ValueForm
                     :data="channelApplication"
                     :jsonKey="'channel_group.groups.Application'"
                     :channel="channelName"
                   /> -->
-                    </div>
-                    <div v-show="selectedMenu === '_orderer'">
-                      <h3 class="p-text-bold">Orderer</h3>
-                      <hr class="dott" />
-                      <InputForm
-                        :data="channelOrderer"
-                        :jsonKey="'channel_group.groups.Orderer'"
-                        :channel="channelName"
-                      />
-
-                      <ValueForm
-                        :data="channelOrderer"
-                        :jsonKey="'channel_group.groups.Orderer'"
-                        :channel="channelName"
-                      />
-                    </div>
-                    <div v-show="selectedMenu === '_channel'">
-                      <h3 class="p-text-bold">Channel</h3>
-                      <hr class="dott" />
-                      <InputForm :data="channel" :jsonKey="'channel_group'" :channel="channelName" />
-
-                      <ValueForm :data="channel" :jsonKey="'channel_group'" :channel="channelName" />
-                    </div>
-                    <div v-show="selectedMenu === '_apporg'">
-                      <h3 class="p-text-bold">Application Organization</h3>
-                      <hr class="dott" />
-                      <div
-                        v-for="(item, index) in Object.keys(channelApplication.groups)"
-                        :key="index + 'app'"
-                        class="p-my-2"
-                        v-show="selectedMenu === '_apporg'"
-                      >
-                        <h5>{{ item }}</h5>
+                      </div>
+                      <div v-show="selectedMenu === '_orderer'">
+                        <h3 class="p-text-bold">Orderer</h3>
+                        <hr class="dott" />
                         <InputForm
-                          :data="channelApplication.groups[item]"
-                          :jsonKey="'channel_group.groups.Application.groups'"
-                          :groupKey="item"
+                          :data="channelOrderer"
+                          :jsonKey="'channel_group.groups.Orderer'"
                           :channel="channelName"
                         />
 
                         <ValueForm
-                          :data="channelApplication.groups[item]"
-                          :jsonKey="'channel_group.groups.Application.groups'"
-                          :groupKey="item"
+                          :data="channelOrderer"
+                          :jsonKey="'channel_group.groups.Orderer'"
                           :channel="channelName"
                         />
                       </div>
-                    </div>
-                    <div v-show="selectedMenu === '_ordererorg'">
-                      <h3 class="p-text-bold">orderer Organization</h3>
-                      <hr class="dott" />
-                      <div
-                        v-for="(item, index) in Object.keys(channelOrderer.groups)"
-                        :key="index + 'ord'"
-                        class="p-my-2"
-                        v-show="selectedMenu === '_ordererorg'"
-                      >
-                        <h5>{{ item }}</h5>
-                        <InputForm
-                          :data="channelOrderer.groups[item]"
-                          :jsonKey="'channel_group.groups.Orderer.groups'"
-                          :groupKey="item"
-                          :channel="channelName"
-                        />
+                      <div v-show="selectedMenu === '_channel'">
+                        <h3 class="p-text-bold">Channel</h3>
+                        <hr class="dott" />
+                        <InputForm :data="channel" :jsonKey="'channel_group'" :channel="channelName" />
 
-                        <ValueForm
-                          :data="channelOrderer.groups[item]"
-                          :jsonKey="'channel_group.groups.Orderer.groups'"
-                          :groupKey="item"
-                          :channel="channelName"
-                        />
+                        <ValueForm :data="channel" :jsonKey="'channel_group'" :channel="channelName" />
                       </div>
-                    </div>
-                  </ScrollPanel>
+                      <div v-show="selectedMenu === '_apporg'">
+                        <h3 class="p-text-bold">Application Organization</h3>
+                        <hr class="dott" />
+                        <div
+                          v-for="(item, index) in Object.keys(channelApplication.groups)"
+                          :key="index + 'app'"
+                          class="p-my-2"
+                          v-show="selectedMenu === '_apporg'"
+                        >
+                          <h5>{{ item }}</h5>
+                          <InputForm
+                            :data="channelApplication.groups[item]"
+                            :jsonKey="'channel_group.groups.Application.groups'"
+                            :groupKey="item"
+                            :channel="channelName"
+                          />
+
+                          <ValueForm
+                            :data="channelApplication.groups[item]"
+                            :jsonKey="'channel_group.groups.Application.groups'"
+                            :groupKey="item"
+                            :channel="channelName"
+                          />
+                        </div>
+                      </div>
+                      <div v-show="selectedMenu === '_ordererorg'">
+                        <h3 class="p-text-bold">orderer Organization</h3>
+                        <hr class="dott" />
+                        <div
+                          v-for="(item, index) in Object.keys(channelOrderer.groups)"
+                          :key="index + 'ord'"
+                          class="p-my-2"
+                          v-show="selectedMenu === '_ordererorg'"
+                        >
+                          <h5>{{ item }}</h5>
+                          <InputForm
+                            :data="channelOrderer.groups[item]"
+                            :jsonKey="'channel_group.groups.Orderer.groups'"
+                            :groupKey="item"
+                            :channel="channelName"
+                          />
+
+                          <ValueForm
+                            :data="channelOrderer.groups[item]"
+                            :jsonKey="'channel_group.groups.Orderer.groups'"
+                            :groupKey="item"
+                            :channel="channelName"
+                          />
+                        </div>
+                      </div>
+                    </ScrollPanel>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-else class="table-channel-blocked p-d-flex p-jc-center p-ai-center">
+      <div class="p-col p-text-center"><i class="fas fa-unlink"></i> no channel</div>
     </div>
 
     <div>
@@ -281,5 +287,10 @@ export default class ChannelEditPage extends ChannelProps {
 .dirty-fix {
   overflow: hidden;
   height: calc(100vh - 40px);
+}
+
+.table-channel-blocked {
+  height: calc((100vh - 40px) - 155.78px);
+  background-color: rgb(43, 43, 43);
 }
 </style>

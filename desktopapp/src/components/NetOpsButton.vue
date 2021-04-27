@@ -36,14 +36,14 @@
       >
         <div class="p-field p-grid p-fluid p-jc-center p-mt-1">
           <div class="p-col-12 p-px-5">
-            <small>Selected Organization</small>
+            <small>Organization (optional)</small>
             <br />
             <Dropdown v-model="orgSelected" :options="org" style="width:100%;" />
           </div>
         </div>
         <div class="p-field p-grid p-fluid  p-jc-center">
           <div class="p-col-12 p-px-5">
-            <small>expose port (optional)</small>
+            <small>Expose port (optional)</small>
             <br />
             <InputText type="number" id="port" v-model="port" />
           </div>
@@ -89,11 +89,19 @@ export default class NetOpsButton extends Vue {
     this.org = Object.keys(NetworkConfig.getOrgData());
   }
   async netup() {
-    this.$store.commit("setProcessContext", "netup");
+
+
+    let command = "restart";
+
+     if (!fs.existsSync(path.join(this.$store.state.project.path, "vars"))) {
+       command = "netup"
+      }
+
+    this.$store.commit("setProcessContext", command);
     this.display = false;
     this.displaylog = true;
     this.up = true;
-    let args: string[] = ["restart"];
+    let args: string[] = [command];
     if (this.orgSelected != "") {
       args.push("-o");
       args.push(this.orgSelected);
@@ -179,7 +187,6 @@ a.power-button-offline {
   border-radius: 50%;
   transition: color 0.8s;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-  // color:$primaryColor
   color: $dangerBgColor;
 }
 .power-button-offline:hover {

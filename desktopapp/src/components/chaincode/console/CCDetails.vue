@@ -8,6 +8,7 @@
           icon="pi pi-arrow-circle-up"
           label="Upgrade CC"
           @click.stop="upgradeCCdisplay = true"
+            :disabled = "!this.$store.state.docker.isOnline"
         ></Button>
       </div>
     </div>
@@ -160,4 +161,5 @@ export default class CCDetails extends CCDetailsProps {
 
 <style lang="scss">
 @import "@/assets/style/_variables.scss";
+
 </style>

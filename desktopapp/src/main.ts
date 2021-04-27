@@ -84,6 +84,7 @@ import DefaultLayout from "./layouts/DefaultLayout.vue";
 
 import Splitter from 'primevue/splitter';
 import SplitterPanel from 'primevue/splitterpanel';
+import BlockUI from 'primevue/blockui';
 // import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 import "primevue/resources/themes/mdc-dark-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -110,6 +111,7 @@ Vue.config.productionTip = false;
 Vue.component("default-layout", DefaultLayout);
 Vue.component("clean-layout", CleanLayout);
 
+Vue.component("BlockUI", BlockUI);
 Vue.component("Accordion", Accordion);
 Vue.component("AccordionTab", AccordionTab);
 Vue.component("AutoComplete", AutoComplete);
