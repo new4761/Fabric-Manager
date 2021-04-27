@@ -27,6 +27,7 @@
               icon="pi pi-user-plus"
               class="p-ml-auto p-button-outlined p-button-sm p-button-warning p-mr-3"
               @click="(newUserDisplay = true), resetInput()"
+                :disabled = "!this.$store.state.docker.isOnline"
             />
           </div>
         </div>

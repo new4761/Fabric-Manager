@@ -21,42 +21,43 @@
       </div>
     </transition>
 
-    <div class="p-grid p-nogutter p-mr-3">
-      <div class="p-col-8">
-        <div class="cc-console-wrapper">
-          <div class="p-d-flex p-my-2">
-            <h6 class="p-text-bold p-my-2">ChainCode Operation</h6>
-            <div class="p-ml-auto p-mt-1">
-              <Button
-                class="p-ml-auto p-button-outlined p-button-sm p-button-primary"
-                icon="pi pi-plus"
-                label="Deploy new Chaincode"
-                @click.stop="setUpCCdisplay = true"
-              ></Button>
-            </div>
-          </div>
-          <Panel>
-            <div class="p-grid p-fluid p-nogutter">
-              <div class="p-col-6">
-                <small>Selected Chaincode</small>
-                <Dropdown
-                  v-model="selectedCC"
-                  :options="ccList"
-                  optionLabel="name"
-                  @before-show="hookCClist"
-                  @change="setSelectedCC, updateInfo($event)"
-                />
+      <div class="p-grid p-nogutter p-mr-3">
+        <div class="p-col-8">
+          <div class="cc-console-wrapper">
+            <div class="p-d-flex p-my-2">
+              <h6 class="p-text-bold p-my-2">ChainCode Operation</h6>
+              <div class="p-ml-auto p-mt-1">
+                <Button
+                  class="p-ml-auto p-button-outlined p-button-sm p-button-primary"
+                  icon="pi pi-plus"
+                  label="Deploy new Chaincode"
+                  @click.stop="setUpCCdisplay = true"
+                    :disabled = "!this.$store.state.docker.isOnline"
+                ></Button>
               </div>
+            </div>
+            <Panel>
+              <div class="p-grid p-fluid p-nogutter">
+                <div class="p-col-6">
+                  <small>Selected Chaincode</small>
+                  <Dropdown
+                    v-model="selectedCC"
+                    :options="ccList"
+                    optionLabel="name"
+                    @before-show="hookCClist"
+                    @change="setSelectedCC, updateInfo($event)"
+                  />
+                </div>
 
-              <div class="p-col-6">
-                <small>Selected Peer Organization</small>
-                <br />
-                <Dropdown v-model="selectedOrg" :options="orgList" />
+                <div class="p-col-6">
+                  <small>Selected Peer Organization</small>
+                  <br />
+                  <Dropdown v-model="selectedOrg" :options="orgList" />
+                </div>
               </div>
-            </div>
-          </Panel>
-          <br />
-          <!-- <div class="p-col-3">
+            </Panel>
+            <br />
+            <!-- <div class="p-col-3">
             <small>Command</small>
             <Dropdown v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
           </div>
@@ -70,86 +71,103 @@
               class="p-button-outlined p-button-primary"
             />
           </div> -->
-          <Panel>
-            <template #header>Operation</template>
-            <div class="p-d-flex p-ai-center">
-              <div class="p-col p-inputgroup p-mb-1">
-                <SelectButton v-model="selecteInputActive" :options="selectedInput" optionLabel="name" />
+            <Panel>
+              <template #header>Operation</template>
+              <div class="p-d-flex p-ai-center">
+                <div class="p-col p-inputgroup p-mb-1">
+                  <SelectButton v-model="selecteInputActive" :options="selectedInput" optionLabel="name" />
+                </div>
+
+                <Dropdown
+                  class="chaincode-dropdown p-mx-2"
+                  v-model="ccComnand"
+                  :options="ccCommandOption"
+                  optionLabel="label"
+                />
+
+                <Button
+                  label="SEND"
+                  @click="callCommand()"
+                  class="p-mx-2 p-button-sm p-button-outlined p-button-primary "
+                    :disabled = "!this.$store.state.docker.isOnline"
+                />
               </div>
-
-
-                <Dropdown class="chaincode-dropdown p-mx-2" v-model="ccComnand" :options="ccCommandOption" optionLabel="label" />
-
-
-                <Button label="SEND" @click="callCommand()" class="p-mx-2 p-button-sm p-button-outlined p-button-primary " />
-
-            </div>
-            <div v-if="selecteInputActive.active == 0">
-              <!-- <small>Parameter List</small> -->
-              <div class="p-grid p-fluid p-nogutter">
-                <div v-for="(item, index) in args.list.length + 1" :key="index" class="p-col-12">
-                  <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)" :_index="index"></InputArg>
+              <div v-if="selecteInputActive.active == 0">
+                <!-- <small>Parameter List</small> -->
+                <div class="p-grid p-fluid p-nogutter">
+                  <div v-for="(item, index) in args.list.length + 1" :key="index" class="p-col-12">
+                    <InputArg @setArg="setArg($event, index)" @deleteArg="deleteArg(index)" :_index="index"></InputArg>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-if="selecteInputActive.active == 1">
-              <!-- <small>Parameter Raw</small> -->
-              <div class="p-grid p-fluid p-nogutter">
-                <Textarea v-model="args.raw" rows="1" cols="30" :autoResize="true" />
+              <div v-if="selecteInputActive.active == 1">
+                <!-- <small>Parameter Raw</small> -->
+                <div class="p-grid p-fluid p-nogutter">
+                  <Textarea v-model="args.raw" rows="1" cols="30" :autoResize="true" />
+                </div>
               </div>
-            </div>
-          </Panel>
-          <br />
-          <Panel>
-            <template #header>Response</template>
-            <div class="p-col-12">
-              <div class="p-inputgroup">
-                <SelectButton v-model="selectedOutputActive" :options="selectedOutput" optionLabel="name" />
+            </Panel>
+            <br />
+            <Panel>
+              <template #header>Response</template>
+              <div class="p-col-12">
+                <div class="p-inputgroup">
+                  <SelectButton v-model="selectedOutputActive" :options="selectedOutput" optionLabel="name" />
+                </div>
+
+                <Panel v-if="selectedOutputActive.active == 0">
+                  <ScrollPanel style="width: 100%; height: 200px">
+                    <p>{{ output.fabricPayload }}</p>
+                  </ScrollPanel>
+                </Panel>
+
+                <Panel v-if="selectedOutputActive.active == 1">
+                  <ScrollPanel style="width: 100%; height: 200px">
+                    <p v-for="(item, index) in output.response" :key="index">
+                      {{ item }}
+                    </p>
+                  </ScrollPanel>
+                </Panel>
+
+                <Panel v-if="selectedOutputActive.active == 2">
+                  <ScrollPanel style="width: 100%; height: 200px">
+                    <p v-for="(item, index) in output.rawData" :key="index">
+                      {{ item }}
+                    </p>
+                  </ScrollPanel>
+                </Panel>
               </div>
-
-              <Panel v-if="selectedOutputActive.active == 0">
-                <ScrollPanel style="width: 100%; height: 200px">
-                  <p>{{ output.fabricPayload }}</p>
-                </ScrollPanel>
-              </Panel>
-
-              <Panel v-if="selectedOutputActive.active == 1">
-                <ScrollPanel style="width: 100%; height: 200px">
-                  <p v-for="(item, index) in output.response" :key="index">
-                    {{ item }}
-                  </p>
-                </ScrollPanel>
-              </Panel>
-
-              <Panel v-if="selectedOutputActive.active == 2">
-                <ScrollPanel style="width: 100%; height: 200px">
-                  <p v-for="(item, index) in output.rawData" :key="index">
-                    {{ item }}
-                  </p>
-                </ScrollPanel>
-              </Panel>
-            </div>
-          </Panel>
+            </Panel>
+          </div>
+        </div>
+        <div class="p-col-fixed p-nogutter p-mt-3">
+          <div style="border-left: 3px solid rgba(134, 224, 200, 0.178); height: 100%"></div>
+        </div>
+        <div class="p-col p-ml-3 cc-detail-wrapper">
+          <CCDetails
+            :_selectedCC="selectedCC"
+            ref="info"
+            :selectedOrg="selectedOrg"
+            @hookccList="hookCClist"
+          ></CCDetails>
+        </div>
+        <Dialog modal :dismissableMask="true" :closable="false" v-bind:visible="setUpCCdisplay">
+          <template #header>
+            <span>Deploy New ChainCode</span>
+            <Button
+              @click="setUpCCdisplay = false"
+              icon="pi pi-times"
+              class="p-button-text p-ml-auto p-button-rounded"
+            />
+          </template>
+          <DigSetupCC @openLog="displayLog" @closeDig="setUpCCDisplay" :_display="setUpCCdisplay"></DigSetupCC>
+        </Dialog>
+        <div>
+          <ConsoleDialogue :_displaylog="displaylog" @update:_displaylog="(val) => (displaylog = val)" />
+          <CommandLoading :_display="cmdLoading"></CommandLoading>
         </div>
       </div>
-      <div class="p-col-fixed p-nogutter p-mt-3">
-        <div style="border-left: 3px solid rgba(134, 224, 200, 0.178); height: 100%"></div>
-      </div>
-      <div class="p-col p-ml-3 cc-detail-wrapper">
-        <CCDetails :_selectedCC="selectedCC" ref="info" :selectedOrg="selectedOrg" @hookccList="hookCClist"></CCDetails>
-      </div>
-      <Dialog modal :dismissableMask="true" :closable="false" v-bind:visible="setUpCCdisplay">
-        <template #header>
-          <span>Deploy New ChainCode</span>
-          <Button @click="setUpCCdisplay = false" icon="pi pi-times" class="p-button-text p-ml-auto p-button-rounded" />
-        </template>
-        <DigSetupCC @openLog="displayLog" @closeDig="setUpCCDisplay" :_display="setUpCCdisplay"></DigSetupCC>
-      </Dialog>
-      <div>
-        <ConsoleDialogue :_displaylog="displaylog" @update:_displaylog="(val) => (displaylog = val)" />
-        <CommandLoading :_display="cmdLoading"></CommandLoading>
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -231,6 +249,7 @@ export default class CCconsole extends CCconsoleProps {
   }
   created() {
     // this.demoOutput();
+    console.log(this.$store.state.docker.isOnline);
     try {
       let _channelList = NetworkConfig.getValue(netWorkConfigPath.channelPath);
       //

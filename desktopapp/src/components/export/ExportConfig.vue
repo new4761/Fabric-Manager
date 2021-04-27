@@ -5,6 +5,7 @@
       icon="fas fa-file-export"
       label="network config"
       class="p-button-outlined p-button-primary p-button-sm"
+      :disabled = "!this.$store.state.docker.isOnline"
     />
 
     <Dialog

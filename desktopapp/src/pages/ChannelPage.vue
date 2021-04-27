@@ -13,17 +13,18 @@
         </div>
 
         <Button
-          class="p-ml-auto p-button-sm p-button-primary"
+          class="p-ml-auto p-button-sm p-button-primary p-button-outlined"
           icon="pi pi-plus"
           label="Create new channel"
           @click.stop="display = true"
+          :disabled = "!this.$store.state.docker.isOnline"
         ></Button>
       </div>
     </div>
     <transition name="channel-smooth">
       <div v-show="showSection">
         <div class="channel-list-wrapper p-grid p-jc-center p-my-4">
-          <div v-if="channels">
+          <div>
             <DataTable :value="channels" class="channel-list">
               <Column field="name" header="Name"></Column>
               <Column header="Date create">
@@ -38,9 +39,9 @@
               </Column>
             </DataTable>
           </div>
-          <div v-else class="channel-list-empty p-text-center">
+          <!-- <div v-else class="channel-list-empty p-text-center">
             <i class="fas fa-exclamation-circle"></i> no channel
-          </div>
+          </div> -->
         </div>
       </div>
     </transition>
@@ -63,6 +64,7 @@
             class="p-button-sm p-button-secondary p-mx-3"
             label="query config"
             @click="channelQuery()"
+            :disabled = "!this.$store.state.docker.isOnline"
           />
 
           <Button
@@ -70,6 +72,7 @@
             class="p-button-sm p-button-secondary"
             label="update config"
             @click="channelUpdate()"
+            :disabled = "!this.$store.state.docker.isOnline"
           />
         </div>
       </div>

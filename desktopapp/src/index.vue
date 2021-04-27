@@ -64,6 +64,7 @@
               label="connection profile"
               class="p-button-outlined p-button-primary p-button-sm"
               @click="exportAppDisplay = true"
+                :disabled = "!this.$store.state.docker.isOnline"
             />
           </div>
 
@@ -71,9 +72,9 @@
             <ExportConfig />
           </div>
 
-          <div class="p-d-flex p-mt-1  p-fluid p-nogutter">
+          <!-- <div class="p-d-flex p-mt-1  p-fluid p-nogutter">
             <ExportCompose />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
