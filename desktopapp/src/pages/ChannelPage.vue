@@ -17,7 +17,7 @@
           icon="pi pi-plus"
           label="Create new channel"
           @click.stop="display = true"
-          :disabled = "!this.$store.state.docker.isOnline"
+          :disabled="!this.$store.state.docker.isOnline"
         ></Button>
       </div>
     </div>
@@ -64,7 +64,7 @@
             class="p-button-sm p-button-secondary p-mx-3"
             label="query config"
             @click="channelQuery()"
-            :disabled = "!this.$store.state.docker.isOnline"
+            :disabled="!this.$store.state.docker.isOnline"
           />
 
           <Button
@@ -72,7 +72,7 @@
             class="p-button-sm p-button-secondary"
             label="update config"
             @click="channelUpdate()"
-            :disabled = "!this.$store.state.docker.isOnline"
+            :disabled="!this.$store.state.docker.isOnline"
           />
         </div>
       </div>
@@ -193,13 +193,15 @@ export default class ChannelPage extends Vue {
       falsy = true;
     }
 
-    channels.forEach((element: any) => {
-      if (element.name == this.channelName) {
-        duplicate = true;
-        this.errorChannel = "duplicate channel name.";
-        this.invalidChannel = true;
-      }
-    });
+    if (!channels === undefined) {
+      channels.forEach((element: any) => {
+        if (element.name == this.channelName) {
+          duplicate = true;
+          this.errorChannel = "duplicate channel name.";
+          this.invalidChannel = true;
+        }
+      });
+    }
 
     if (!falsy && !duplicate) {
       this.create();
@@ -244,7 +246,7 @@ export default class ChannelPage extends Vue {
   }
 
   async channelQuery() {
-     this.$store.commit("setProcessContext", "query channel config");
+    this.$store.commit("setProcessContext", "query channel config");
     this.displaylog = true;
     let args: string[] = ["channelquery"];
     args.push("-c");
@@ -254,7 +256,7 @@ export default class ChannelPage extends Vue {
   }
 
   async channelUpdate() {
-     this.$store.commit("setProcessContext", "update channel config");
+    this.$store.commit("setProcessContext", "update channel config");
     this.displaylog = true;
     let args: string[] = ["channelsign,channelupdate"];
     args.push("-c");
