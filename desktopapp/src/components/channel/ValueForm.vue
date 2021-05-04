@@ -56,7 +56,7 @@
         </Panel>
       </div>
 
-      <div v-if="formData.values.OrdererAddresses" class="p-my-3">
+      <!-- <div v-if="formData.values.OrdererAddresses" class="p-my-3">
         <Panel header="OrdererAddresses">
           <div
             v-for="(item, index) in formData.values.OrdererAddresses.value
@@ -89,7 +89,7 @@
             </div>
           </div>
         </Panel>
-      </div>
+      </div> -->
 
       <div v-if="formData.values.MSP" class="p-my-3">
         <Panel header="MSP">
