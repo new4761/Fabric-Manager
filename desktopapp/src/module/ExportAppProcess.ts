@@ -23,7 +23,7 @@ class ExportAppProcess {
         FileManager.createDir(targetPath, "wallets")
         this.getChannelProfile(channel, profilePath)
 
-        // //TODO: find better way to replace data
+        // TODO: find better way to replace data
         await MinifabricController.fixWalletIdentitiesForWindow()
         await this.getWallet(walletPath, peerList)
         await this.getExampleGetaway(channel, targetPath, peerList)

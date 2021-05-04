@@ -24,7 +24,6 @@ class MinifabricController {
         args.push(NetworkConfig.getUniqueOrgName(netWorkConfigPath.peerPath)[0])
         return await OSProcess.run(args)
 
-
     }
     async fixWalletIdentitiesForWindow() {
         // console.log("start fixWalletIdentitiesForWindow ")

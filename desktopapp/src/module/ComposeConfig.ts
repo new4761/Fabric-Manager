@@ -58,7 +58,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
       // console.log(this.portMap)
     }
 
-    let src = "\n # This file is Generate from ****** \n";
+    let src = "\n # This file is Generate from base project network \n";
 
     let orgs: any[] = [];
     Object.values(this.org).forEach((element: any) => {
@@ -98,7 +98,7 @@ class ComposeConfig extends FileYamlBuilder implements YamlConfig {
     let _cli = new cli();
     _cli.depends_on = Array.from(this.peer);
     this.addService("cli", _cli);
-    src+= {"version": '2.4'}
+    src+= yaml.safeDump({"version": '2.4'});
     src += yaml.safeDump({ volumes: this.volumes });
 
     this.addNetwork("test");

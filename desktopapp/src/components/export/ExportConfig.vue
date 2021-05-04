@@ -85,6 +85,7 @@ import Component from "vue-class-component";
 const { dialog } = require("electron").remote;
 import FileManager from "../../module/FileManager";
 import ComposeConfig from "../../module/ComposeConfig";
+import { exportConfigPath } from "@/models/EnvProject";
 const path = require("path");
 @Component({
   components: {},
@@ -114,19 +115,19 @@ export default class ExportConfig extends Vue {
       if (this.exportTx) {
         FileManager.copyFilesDir(
           path.join(this.$store.state.project.path, _configtx),
-          path.join(this.exportDir, "configtx.yaml")
+          path.join(this.exportDir,"docker",exportConfigPath.folder_cli, "configtx.yaml")
         );
       }
       if (this.exportCore) {
         FileManager.copyFilesDir(
           path.join(this.$store.state.project.path, _core),
-          path.join(this.exportDir, "core.yaml")
+          path.join(this.exportDir,"docker",exportConfigPath.folder_cli, "core.yaml")
         );
       }
       if (this.exportCrypto) {
         FileManager.copyFilesDir(
           path.join(this.$store.state.project.path, _cryptoConfig),
-          path.join(this.exportDir, "crypto-config.yaml")
+          path.join(this.exportDir,"docker",exportConfigPath.folder_cli, "crypto-config.yaml")
         );
       }
       FileManager.copyFileExtension(
@@ -137,12 +138,12 @@ export default class ExportConfig extends Vue {
       if (this.exportKey) {
         FileManager.copyFilesDir(
           path.join(this.$store.state.project.path, _key),
-          path.join(this.exportDir, "keyfiles")
+          path.join(this.exportDir,"docker",exportConfigPath.folder_cli, "keyfiles")
         );
 
         FileManager.copyFilesDir(
           path.join(this.$store.state.project.path, "genesis.block"),
-          path.join(this.exportDir, "genesis.block")
+          path.join(this.exportDir,"docker",exportConfigPath.folder_cli, "genesis.block")
         );
       }
       if (this.exportCompsoe) {
