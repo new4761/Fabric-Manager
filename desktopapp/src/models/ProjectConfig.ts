@@ -7,20 +7,16 @@ const path = require("path");
 
 export class ProjectConfig {
   file: any;
-
   constructor() {
     try {
       // check dev mode function
       // used this style for base to write function who work with files
-      if (!isDevelopment) {
-        // logger.log("info",(path.dirname(__dirname)))
-      }
       let filePath = path.join(
         !isDevelopment ? path.join(process.resourcesPath,"extraResources","config") : "tests",
         "projects.json"
       );
       this.file = editJsonFile(filePath);
-      console.log(filePath)
+      // console.log(this.file)
     } catch (e) {
       logger.log("error", "projects.json path");
     }
@@ -32,6 +28,7 @@ export class ProjectConfig {
     project.date_modify = +new Date();
     this.file.data[project.id] = project;
     this.file.save();
+    // console.log(this.getFileData())
     logger.log("info", "project-config: add new element");
     return project.id;
   }
@@ -63,7 +60,7 @@ export class ProjectConfig {
     return target.directory;
   }
 
-  //??
+  // ??
   getPathResolve(id: number) {
     let target = this.file.data.find((element: any) => element.id == id);
     return target.directory;
@@ -78,16 +75,10 @@ export class ProjectConfig {
     this.file.save();
     logger.log("info", "project-config: update date_modify");
   }
+  getFileData(){
+    // this.file.save();
+      return this.file.data
+  }
 
-  //update config using key
-  // updateProjectConfig(id: number, key: string, value: any) {
-  //   this.updateDate(id);
-  //   this.file.data[id].set(key, value);
-  //   this.file.save();
-  //   logger.log("info", "project-config: update key-value");
-  // }
-
-  //get config value using key
-  getValue(key: string) {}
 }
 export default new ProjectConfig();

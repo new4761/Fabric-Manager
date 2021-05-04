@@ -2,7 +2,8 @@
 
 import store from "../store/modules/project";
 import ProjectConfig from "./ProjectConfig";
-
+const isDevelopment = process.env.NODE_ENV !== 'production'
+const path = require('path');
 // use for set&check os type
 export enum OsType {
     WINDOW,
@@ -16,35 +17,42 @@ export enum CCtype {
     node = "node"
 }
 export enum CCstate {
-    unSetupCC="unSetupCC",
-    setupDir="setupDir",
-    installCC ="installCC",
-    approveCC ="approveCC",
-    commitCC ="commitCC",
-    initCC ="initCC",
- //   upGradeCC ="upGradeCC",
-   // unreadyCC ="unreadyCC",
+    unSetupCC = "unSetupCC",
+    setupDir = "setupDir",
+    installCC = "installCC",
+    approveCC = "approveCC",
+    commitCC = "commitCC",
+    initCC = "initCC",
+    //   upGradeCC ="upGradeCC",
+    // unreadyCC ="unreadyCC",
     // errorCC ="errorCC",
     // readyCC  ="readyCC"   
 }
-export enum netWorkConfigPath{
-    channelPath="channel",
-    caPath ="project_config.fabric.cas",
-    ccPath =  "chain_codes",
-    peerPath="project_config.fabric.peers",
-    userPath="users"
+export enum netWorkConfigPath {
+    channelPath = "channel",
+    caPath = "project_config.fabric.cas",
+    ccPath = "chain_codes",
+    peerPath = "project_config.fabric.peers",
+    userPath = "users"
 }
-export enum exportConfigPath{
-    folder_cli="cli",
+export enum exportConfigPath {
+    folder_cli = "cli",
 }
 
 export class ccOutputPayload {
-  rawData: Array<string> = [];
-  response: Array<string>  = [];
-  fabricPayload: string = "";
+    rawData: Array<string> = [];
+    response: Array<string> = [];
+    fabricPayload: string = "";
 
 }
-export function  getProjectPath(){
-//   console.log(await ProjectConfig.getPathResolve(store.state.id))
+export function getProjectPath() {
+    //   console.log(await ProjectConfig.getPathResolve(store.state.id))
     return ProjectConfig.getPathResolve(store.state.id);
 }
+export var LoggerPath = path.join(
+    !isDevelopment ? path.join(process.resourcesPath, "extraResources", "log") : "log",
+    "project.log"
+);
+export var LoggerDirectory = path.join(
+    !isDevelopment ? path.join(process.resourcesPath, "extraResources", "log") : "log"
+);

@@ -194,7 +194,6 @@ import NetworkConfig from "../../models/NetworkConfig";
 import ProjectConfig from "../../models/ProjectConfig";
 import Terminal from "../Terminal.vue";
 
-// import OrgData from "@/models/OrgData";
 @Component({
   components: {
     OrgInputText,
@@ -232,17 +231,17 @@ export default class CreateNetButton extends Vue {
     this.object.removeOrg(target);
   }
 
-  createNetwork() {
+ async createNetwork() {
     this.object.setUpFileStructure(this.projectDir);
     let project = {
       name: this.projectName,
       date_create: +new Date(),
       directory: this.projectDir,
     };
-    let id = ProjectConfig.addProject(project);
+    let id =await ProjectConfig.addProject(project);
 
     if (this.quick) {
-      let defaultOrg = NetworkConfig.createConfig(project, this.createChannel, this.channelName);
+      let defaultOrg =await NetworkConfig.createConfig(project, this.createChannel, this.channelName);
       let command: string[] = [];
       if (this.createChannel) {
         console.log(command);
@@ -260,9 +259,11 @@ export default class CreateNetButton extends Vue {
         },
       });
     } else {
-      NetworkConfig.createConfig(project);
+    await  NetworkConfig.createConfig(project);
     }
     this.display = false;
+    this.displayConfirm = false;
+    this.$emit("update",project);
   }
 
   checkInput() {

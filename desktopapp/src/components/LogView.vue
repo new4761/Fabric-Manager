@@ -11,7 +11,8 @@
 import fs from "fs";
 import Vue from "vue";
 import Component from "vue-class-component";
-
+const path = require("path");
+const isDevelopment = process.env.NODE_ENV !== "production";
 // import DockerProcess from "./module/DockerProcess";
 @Component({
   components: {},
@@ -24,7 +25,13 @@ export default class LogView extends Vue {
   }
 
   readLog() {
-    this.log = fs.readFileSync("./log/project.log", "utf8");
+    // console.log("call read log")
+  let filePath = path.join(
+        !isDevelopment ? path.join(process.resourcesPath,"extraResources","log","project.log") : "log",
+        "project.log"
+      );
+    console.log(filePath)
+    this.log = fs.readFileSync(filePath, "utf8");
     this.highlight();
   }
 

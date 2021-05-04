@@ -13,7 +13,6 @@ import LogView from "../components/LogView.vue";
 
 @Component({
   components: {
-
     LogView,
   },
 })

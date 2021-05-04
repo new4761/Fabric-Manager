@@ -12,7 +12,7 @@ module.exports = {
         win:{icon:ICONS_DIR},
         extraResources: [
           { from: "extraResources/example_code", to: "example_code" },
-          { from: "extraResources/example_code", to: "example_code" },
+          { from: "extraResources/log", to: "extraResources/log" },
           { from: "extraResources/bin", to: "extraResources/bin" },
           { from: "extraResources/config", to: "extraResources/config" },
         ],

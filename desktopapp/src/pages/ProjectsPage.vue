@@ -14,6 +14,7 @@
           <h1>
             Projects
           </h1>
+          {{data}}
           <DataView :value="data" :layout="layout" :sortOrder="sortOrder" :sortField="sortField" class="project-table">
             <template #header>
               <div class="p-grid p-nogutter">
@@ -33,7 +34,7 @@
                 </div>
                 <div class="p-col-6">
                   <div class="p-d-flex  p-ai-center p-jc-end">
-                    <CreateNetButton class="p-mx-1" />
+                    <CreateNetButton class="p-mx-1" @update="update" />
                     <!-- <DataViewLayoutOptions v-model="layout" /> -->
                   </div>
                 </div>
@@ -105,7 +106,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import data from "../../tests/projects.json";
+
 import ProjectConfig from "../models/ProjectConfig";
 import CreateNetButton from "../components/project/CreateNetButton.vue";
 import TimeConverter from "@/module/Util/TimeConverter";
@@ -129,18 +130,25 @@ export default class ProjectPage extends Vue {
     { label: "Name", value: "name" },
   ];
   mounted() {
+
     this.init();
   }
-
   init() {
-    this.data = data;
+    this.data = ProjectConfig.getFileData();
+    // console.log(this.data)
   }
 
   openInfo(id: number) {
-    this.dataSelected = data[id];
+    this.dataSelected = this.data[id];
     this.display = true;
   }
-
+  update(data:any){
+    // console.log("update")
+        console.log(this.data.length)
+    this.$set(this.data,this.data.length-1,data)
+    // this.data = ProjectConfig.getFileData();
+    // console.log(this.data)
+  }
   closeinfo() {
     this.display = false;
   }
