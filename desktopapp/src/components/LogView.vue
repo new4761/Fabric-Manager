@@ -27,7 +27,7 @@ export default class LogView extends Vue {
   readLog() {
     // console.log("call read log")
   let filePath = path.join(
-        !isDevelopment ? path.join(process.resourcesPath,"extraResources","log","project.log") : "log",
+        !isDevelopment ? path.join(process.resourcesPath,"extraResources","log") : "log",
         "project.log"
       );
     console.log(filePath)

@@ -14,7 +14,7 @@
           <h1>
             Projects
           </h1>
-          {{data}}
+          <!-- {{data}} -->
           <DataView :value="data" :layout="layout" :sortOrder="sortOrder" :sortField="sortField" class="project-table">
             <template #header>
               <div class="p-grid p-nogutter">
