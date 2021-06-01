@@ -1,9 +1,11 @@
 # dev_Hyperledger_Blockchain
-This is a graduation project from computer science KMITL 2020
-this application is a tool that helps developers to create, interact, and testing smart contract with Hyperledger Fabric network 
+This project is graduation project for computer science kmit 2020
+we working with Hyperledger fabric network to help developers can interact with smart contract faster and simply
 we use 
   - electron 
-  - node fabric SDK 2.2
+  - node fabric sdk 2.2
   - Minifabric
   - Vue.js
-  - PrimeVue
+  - primevue
+
+afther we finsih will update more details
