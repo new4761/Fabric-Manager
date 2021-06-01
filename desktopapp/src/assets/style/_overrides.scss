@@ -1,0 +1,96 @@
+//Suggested location to add your overrides so that migration would be easy by just updating the SASS folder in the future
+
+.p-ripple .p-ink {
+  background: rgba(134, 224, 200, 0.671) !important;
+}
+
+.p-button-primary:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $primaryColor !important;
+}
+
+.p-button-success:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $successBgColor !important;
+}
+
+.p-button-danger:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $dangerBgColor !important;
+}
+
+.p-button-warning:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $warningBgColor !important;
+}
+
+.p-button-secondary:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $secondaryBgColor !important;
+}
+
+.p-button-info:not(.p-button-outlined) {
+  color: white !important;
+  background-color: $infoBgColor !important;
+}
+
+.p-button-outlined.p-button-danger {
+  color: $dangerBgColor !important;
+}
+
+.p-button-outlined.p-button-secondary {
+  color: $secondaryBgColor !important;
+}
+
+.p-button-outlined.p-button-primary {
+  color: $primaryColor !important;
+}
+
+.p-inputtext:focus {
+  box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
+}
+
+.p-inputwrapper-focus,
+.p-inputwrapper:focus {
+  box-shadow: 0px 0px 1px 2px $primaryFocusColor !important;
+  border-color: $primaryFocusColor !important;
+}
+.p-dropdown-item.p-highlight {
+  background-color: rgba(134, 224, 200, 0.178) !important ;
+  color: $primaryColor !important;
+}
+
+.p-dropdown-item.p-ripple .p-ink {
+  background-color: rgba(134, 224, 200, 0.671) !important;
+}
+
+.p-highlight a {
+  color: $primaryColor !important;
+}
+.p-highlight a:focus {
+  background-color: rgba(134, 224, 200, 0.185) !important ;
+}
+.p-tabview-ink-bar {
+  color: $primaryColor !important;
+  background-color: $primaryColor !important;
+}
+.p-tag-primary {
+  background-color: $primaryColor !important;
+}
+.p-tabview {
+  width: 100% !important;
+}
+
+.p-confirm-dialog-reject {
+  color: rgb(180, 180, 180) !important;
+}
+
+.p-confirm-dialog-accept {
+  background-color: $primaryColor !important;
+}
+
+.p-checkbox-box.p-highlight {
+  background-color: $primaryHoverColor !important;
+  box-shadow: $primaryHoverColor !important;
+  border-color: $primaryHoverColor !important;
+}

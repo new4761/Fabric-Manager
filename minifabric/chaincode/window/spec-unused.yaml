@@ -1,0 +1,55 @@
+<<<<<<< Updated upstream
+fabric:
+  cas:
+    - ca1.test3.test
+    - ca1.test4.net
+    - ca1.test5.com
+    - ca1.yoyal.co.th
+  peers:
+    - peer1.test3.test
+    - peer2.test3.test
+    - peer3.test3.test
+    - peer1.test4.net
+    - peer2.test4.net
+    - peer3.test4.net
+    - peer1.test5.com
+    - peer2.test5.com
+    - peer3.test5.com
+    - peer1.yoyal.co.th
+    - peer2.yoyal.co.th
+    - peer3.yoyal.co.th
+  orderers:
+    - orderer1.test.test
+    - orderer2.test2.test
+  settings:
+    - ca: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - peer: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - orderer: 'FABRIC_LOGGING_SPEC: DEBUG'
+=======
+fabric:
+  cas:
+    - ca1.test3.test
+    - ca1.test4.net
+    - ca1.test5.com
+    - ca1.yoyal.co.th
+  peers:
+    - peer1.test3.test
+    - peer2.test3.test
+    - peer3.test3.test
+    - peer1.test4.net
+    - peer2.test4.net
+    - peer3.test4.net
+    - peer1.test5.com
+    - peer2.test5.com
+    - peer3.test5.com
+    - peer1.yoyal.co.th
+    - peer2.yoyal.co.th
+    - peer3.yoyal.co.th
+  orderers:
+    - orderer1.test.test
+    - orderer2.test2.test
+  settings:
+    - ca: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - peer: 'FABRIC_LOGGING_SPEC: DEBUG'
+    - orderer: 'FABRIC_LOGGING_SPEC: DEBUG'
+>>>>>>> Stashed changes

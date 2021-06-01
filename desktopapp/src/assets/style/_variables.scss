@@ -1,0 +1,42 @@
+/* General */
+$fontSize:16px;
+$bodyBgColorDarker:rgb(20,34,43);
+$bodyBgColor:rgb(39,52,59);
+// $SubBgColor:rgb(33, 40, 44);
+$SubBgColor:rgb(32, 44, 51);
+$SubBgColorHover:rgb(92, 92, 92);
+$textColor:#ffffff;
+$textprimaryColor:rgb(134, 224, 200);
+$textSecondaryColor:#c7c7c7;
+$borderRadius:3px;
+$dividerColor:#e3e3e3;
+$transitionDuration:.5s;
+$maskBgColor:#424242;
+$focusShadowColor:rgb(138, 230, 205);
+
+/* Menu Common */
+$menuitemBadgeBgColor:rgb(84,209,176);
+$menuitemBadgeColor:#ffffff;
+$submenuFontSize:12px;
+$menuitemActiveRouteColor:rgb(84,209,176);
+
+
+/* Menu Dark */
+$menuDarkBgColorFirst:rgb(20,34,43);
+$menuDarkBgColorLast:rgb(20,34,43);
+$menuitemDarkColor:#ffffff;
+$menuitemDarkHoverColor:rgb(84,209,176);
+$menuitemDarkActiveColor:rgb(134, 224, 200);
+$menuitemDarkActiveBgColor:rgb(0, 0, 0);
+$menuitemDarkBorderColor:rgba(52, 56, 65, 0.6);
+
+
+$primaryColor:rgb(84,209,176);
+$secondaryBgColor:rgb(92, 92, 92);
+$infoBgColor:rgb(76, 204, 221);
+$successBgColor:rgb(0, 189, 72);
+$dangerBgColor:rgb(255, 118, 118);
+$warningBgColor:rgb(255, 209, 111);
+
+$primaryHoverColor:rgb(22, 141, 109);
+$primaryFocusColor:rgba(134, 224, 200, 0.671);

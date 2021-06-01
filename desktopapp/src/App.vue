@@ -1,119 +1,112 @@
 <template>
   <div>
-    <Button
-      label="Submit"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="testFunnction()"
-    />
+    <Toast position="top-right" />
 
-    <Button
-      label="create"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="pushObject()"
-    />
+    <div class="title-bar">
+      <div class="title-content">
+        <div class="title">
+       
+        </div>
 
-    <Button
-      label="save"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="insertObject()"
-    />
-
-    <Button
-      label="check"
-      icon="pi pi-check"
-      iconPos="right"
-      @click="checkObject()"
-    />
-
-    <ScrollPanel style="width: 100%; height: 200px">
-      {{ output }}
-
-
-    </ScrollPanel>
-
-
-
-
+        <div class="title-btn">
+          <div class="minimize" @click="minimizeWindow()"></div>
+          <div class="maximize" @click="maximizeWindow()"></div>
+          <div class="close" @click="closeWindow()"></div>
+        </div>
+      </div>
+    </div>
+    <transition name="fade" mode="out-in">
+      <component :is="layout">
+        <div v-if="$root.loading">
+          <SplashScreen/>
+        </div>
+        <router-view v-else />
+      </component>
+    </transition>
   </div>
 </template>
+
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import HelloWorld from './components/HelloWorld.vue';
-import CaServerConfig  from './models/CaServerConfig';
+import Vue from "vue";
+import Component from "vue-class-component";
+import NetOpsButton from "./components/NetOpsButton.vue";
+import AppProfile from "./components/menu/AppProfile.vue";
+import AppMenu from "./components/menu/AppMenu.vue";
+import SplashScreen from "./components/SplashScreen.vue";
+const remote = require("electron").remote;
 
-// var Datastore = require("nedb");
-// var users = new Datastore();
-var people: { name: string; age: number; twitter: string }[] = [];
-
-var scott = {
-  name: "Scott Robinson",
-  age: 28,
-  twitter: "@ScottWRobinson",
-};
-
-var elon = {
-  name: "Elon Musk",
-  age: 44,
-  twitter: "@elonmusk",
-};
-
-var jack = {
-  name: "Jack Dorsey",
-  age: 39,
-  twitter: "@jack",
-};
-
+/* eslint-disable no-unused-vars */
 @Component({
-  components: {
-    HelloWorld
-  }
+  components: { NetOpsButton, AppProfile, AppMenu, SplashScreen },
 })
 export default class App extends Vue {
-  output: string = "";
-  
-  testFunnction() {
-  //console.log("called"); 
-  CaServerConfig.createFile();
-    
+  // @ts-ignore
+  unwatch: Function;
+  get layout() {
+    return this.$route.meta.layout || "clean-layout";
   }
 
-  pushObject() {
-    people.push(scott, elon, jack);
+  created() {
+    this.unwatch = this.$store.watch(
+      (state) => {
+        return this.$store.state.result; // could also put a Getter here
+      },
+      (newValue, oldValue) => {
+        //something changed do something
+        this.showToast(newValue.status, newValue.message);
+      },
+      //Optional Deep if you need it
+      {
+        deep: true,
+      }
+    );
   }
 
-  insertObject() {
-    // users.insert(people, function (err: any, docs: any[]) {
-    //   docs.forEach(function (d) {
-    //     console.log("Saved user:", d.name);
-    //   });
-    // });
+  beforeDestroy() {
+    this.unwatch();
   }
 
-  checkObject() {
-    // //OrdererConfig.updateNetworkConfig();
-    // users
-    //   .find({})
-    //   .sort({ name: 1 })
-    //   .exec(function (err: any, docs: any[]) {
-    //     docs.forEach(function (d) {
-    //       console.log("Found user:", d.name);
-    //     });
-    //   });
+  maximizeWindow() {
+    const window = remote.getCurrentWindow();
+    if (!window.isMaximized()) {
+      window.maximize();
+    } else {
+      window.unmaximize();
+    }
+  }
+
+  minimizeWindow() {
+    const window = remote.getCurrentWindow();
+    window.minimize();
+  }
+
+  closeWindow() {
+    const window = remote.getCurrentWindow();
+    window.close();
+  }
+
+  showToast(status: boolean, message: string) {
+    message = message.split(".").join("");
+    // console.log(message.replace(/./g, ""));
+    var severity;
+    var summary;
+    if (status) {
+      severity = "success";
+      summary = "Operation Success";
+    } else {
+      severity = "error";
+      summary = "Operation fail";
+    }
+    this.$toast.add({
+      severity: severity,
+      summary: summary,
+      detail: message,
+      life: 10000,
+    });
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+@import "@/assets/style/_variables.scss";
 </style>

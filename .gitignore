@@ -1,1 +1,9 @@
 .vscode
+project.log
+vars/*
+*/vars/*
+node_modules
+
+desktopapp/tests/*
+
+
