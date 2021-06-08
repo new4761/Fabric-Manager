@@ -65,7 +65,7 @@ Fabric-Manager is desktop application who communication with os and
 
 </p>
 <hr>
-<h2 id="prerequisites"> :notebook: Prerequisites</h2>
+<h2 id="prerequisites"> :wrench: Prerequisites</h2>
 <ul>
 <li> docker (18.03 or newer) environment </li>
 <li> node.js (optional) if you want to install with node package</li>
