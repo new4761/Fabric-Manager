@@ -104,7 +104,7 @@ vue-cli-service electron:build --win
 
 </p>
 <hr>
-<h2 id="example"> :floppy_disk: App Screenshots</h2>
+<h2 id="example"> :camera: App Screenshots</h2>
 
 <div align="center">
 <h3  align="left"><b>Create project</b></h3>
