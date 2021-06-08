@@ -37,7 +37,6 @@ to have a tools to help setup environment and testing you application or smart c
 Fabric-Manager is desktop application who communication with os and
 <a href="tps://www.hyperledger.or[g/use/fabricht](https://github.com/hyperledger-labs/minifabric)"><b>Minifabric</b></a> through the config file to setup and interactive with Hyperledger fabric that run on your docker environment.
 <br>
-<br>
 
 <h3><b>Feature Highlight</b></h3>
 <ol>
@@ -65,15 +64,12 @@ Fabric-Manager is desktop application who communication with os and
 > This project is graduate project for Bachelor's degree of computer science 2021 KMITL (King Mongkut's Institute of Technology Ladkrabang)
 
 </p>
-
 <hr>
-<br>
 <h2 id="prerequisites"> :notebook: Prerequisites</h2>
 <ul>
 <li> docker (18.03 or newer) environment </li>
 <li> node.js (optional) if you want to install with node package</li>
 </ul>
-<br>
 <hr>
 
 > Currently support only window platform
